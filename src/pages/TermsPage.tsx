@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext.tsx';
 import { SITE_CONFIG } from '../data/site.ts';
+import { SEOHead } from '../components/SEOHead.tsx';
 
 interface TermsPageProps {
   onNavigate: (path: string) => void;
@@ -99,7 +100,12 @@ export const TermsPage: React.FC<TermsPageProps> = ({ onNavigate }) => {
   ];
 
   return (
-    <div className="pt-28 pb-20 md:pt-36">
+    <div className="pt-28 pb-20 md:pt-36 relative overflow-x-hidden w-full max-w-full">
+      <SEOHead
+        title="Terms & Commercial Conditions | Click N Create (Saad M)"
+        description="Review Click N Create's commercial terms of service, payment schedules, IP ownership rights, code warranties, and client agreements."
+        canonicalPath="/terms"
+      />
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Top Back Navigation Bar */}
         <div className="flex items-center justify-between mb-8">

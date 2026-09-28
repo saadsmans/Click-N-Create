@@ -5,6 +5,7 @@ import { SectionHeading } from '../components/SectionHeading.tsx';
 import { MagneticButton } from '../components/MagneticButton.tsx';
 import { PROCESS_STAGES, SITE_CONFIG } from '../data/site.ts';
 import { useTheme } from '../context/ThemeContext.tsx';
+import { SEOHead } from '../components/SEOHead.tsx';
 
 interface ProcessPageProps {
   onNavigate: (path: string) => void;
@@ -15,7 +16,19 @@ export const ProcessPage: React.FC<ProcessPageProps> = ({ onNavigate }) => {
   const isDark = theme === 'dark';
 
   return (
-    <div className="pt-28 pb-20 md:pt-36">
+    <div className="pt-28 pb-20 md:pt-36 relative overflow-x-hidden w-full max-w-full">
+      <SEOHead
+        title="Development Process & Milestones | Click N Create — Saad M"
+        description="Discover Saad M's 5-stage freelance development methodology: Discovery & Scope, Wireframes & UI, Agile Coding, QA Testing, and Final Launch."
+        canonicalPath="/process"
+        keywords={[
+          'web development process',
+          'freelance developer workflow',
+          'agile development milestones',
+          'Click N Create process',
+          'website delivery stages'
+        ]}
+      />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* ===================== HERO SECTION ===================== */}
         <div className="max-w-3xl mb-16 md:mb-20">

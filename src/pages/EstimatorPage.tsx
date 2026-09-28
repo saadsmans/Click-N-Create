@@ -22,6 +22,7 @@ import {
 } from 'lucide-react';
 import { SITE_CONFIG } from '../data/site.ts';
 import { useTheme } from '../context/ThemeContext.tsx';
+import { SEOHead } from '../components/SEOHead.tsx';
 
 interface EstimatorPageProps {
   onNavigate: (path: string) => void;
@@ -728,7 +729,19 @@ WhatsApp: +44 7927 548123`;
   };
 
   return (
-    <div className="pt-28 pb-24 md:pt-36">
+    <div className="pt-28 pb-24 md:pt-36 relative overflow-x-hidden w-full max-w-full">
+      <SEOHead
+        title="Interactive Project Cost & Hour Estimator | Click N Create"
+        description="Calculate instant upfront website prices, development hours, and milestone scopes with Saad M's transparent £35/hr interactive project estimator."
+        canonicalPath="/estimator"
+        keywords={[
+          'website cost estimator',
+          'calculate website price',
+          'freelance developer cost calculator',
+          'hourly rate project calculator',
+          'Click N Create estimator'
+        ]}
+      />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Header in Plain English */}
         <div className="max-w-3xl mb-12">

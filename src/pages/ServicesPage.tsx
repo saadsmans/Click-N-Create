@@ -6,6 +6,7 @@ import { AdaptiveServiceImage } from '../components/AdaptiveServiceImage.tsx';
 import { SectionHeading } from '../components/SectionHeading.tsx';
 import { FinalCTA } from '../components/FinalCTA.tsx';
 import { useTheme } from '../context/ThemeContext.tsx';
+import { SEOHead } from '../components/SEOHead.tsx';
 
 interface ServicesPageProps {
   onNavigate: (path: string) => void;
@@ -16,7 +17,20 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({ onNavigate }) => {
   const isDark = theme === 'dark';
 
   return (
-    <div className="pt-28 pb-20 md:pt-36">
+    <div className="pt-28 pb-20 md:pt-36 relative overflow-x-hidden w-full max-w-full">
+      <SEOHead
+        title="Web Development & Design Services | Click N Create — Saad M"
+        description="Explore freelance services by Saad M: Custom Web Development, E-Commerce Stores, Branding & Vector Logos, Digital Marketing, Hosting Maintenance, and Web Apps."
+        canonicalPath="/services"
+        keywords={[
+          'freelance web development services',
+          'custom website design',
+          'ecommerce store setup',
+          'branding and logo design UK',
+          'website maintenance hosting',
+          'React web app development'
+        ]}
+      />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Page Hero */}
         <div className="max-w-3xl mb-16 md:mb-24">

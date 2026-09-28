@@ -16,9 +16,9 @@ import {
 } from 'lucide-react';
 import { SectionHeading } from '../components/SectionHeading.tsx';
 import { MagneticButton } from '../components/MagneticButton.tsx';
-import { SaadPortrait } from '../components/SaadPortrait.tsx';
 import { SITE_CONFIG } from '../data/site.ts';
 import { useTheme } from '../context/ThemeContext.tsx';
+import { SEOHead } from '../components/SEOHead.tsx';
 
 interface AboutPageProps {
   onNavigate: (path: string) => void;
@@ -29,16 +29,28 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
   const isDark = theme === 'dark';
 
   return (
-    <div className="pt-28 pb-20 md:pt-36">
+    <div className="pt-28 pb-20 md:pt-36 relative overflow-x-hidden w-full max-w-full">
+      <SEOHead
+        title="About Saad M | Click N Create Founder & Full-Stack Developer"
+        description="Learn about Saad M, the founder and independent engineer behind Click N Create. Background in Electronics & Communication Engineering, WordPress, and modern React."
+        canonicalPath="/about"
+        keywords={[
+          'about Saad M',
+          'freelance developer bio',
+          'Click N Create founder',
+          'independent web developer UK India',
+          'full stack freelance engineer'
+        ]}
+      />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* ===================== HERO SECTION ===================== */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center mb-16 md:mb-20">
           <div className="lg:col-span-8 max-w-3xl">
             <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border text-xs font-mono uppercase tracking-wider mb-4 ${
-              isDark ? 'border-white/10 bg-white/5 text-blue-400' : 'border-zinc-300 bg-white text-blue-600 shadow-2xs font-semibold'
+              isDark ? 'border-white/10 bg-white/5 text-[#00F0FF]' : 'border-cyan-300 bg-cyan-50 text-cyan-800 shadow-2xs font-semibold'
             }`}>
               <Sparkles className="w-3.5 h-3.5" />
-              <span>The Independent Developer</span>
+              <span>Independent Freelance Web Developer</span>
             </div>
 
             <h1 className={`text-4xl sm:text-6xl md:text-7xl font-black font-display tracking-tight leading-[1.05] ${
@@ -50,7 +62,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
             <p className={`mt-5 text-base sm:text-xl leading-relaxed ${
               isDark ? 'text-zinc-400' : 'text-zinc-600'
             }`}>
-              Freelance web developer and the creator behind <strong className={isDark ? 'text-white' : 'text-zinc-950'}>Click N Create</strong>. Engineering refined, high-performance websites and bespoke web applications with direct personal accountability.
+              Freelance web developer and founder of <strong className={isDark ? 'text-white' : 'text-zinc-950'}>Click N Create</strong>. Engineering high-performance React websites, e-commerce storefronts, and bespoke digital tools with direct 1-on-1 personal accountability.
             </p>
 
             {/* Quick Contact Bar */}
@@ -71,7 +83,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
                   isDark ? 'border-white/15 bg-white/5 hover:bg-white/10 text-zinc-300' : 'border-zinc-300 bg-white hover:bg-zinc-50 text-zinc-800 shadow-2xs'
                 }`}
               >
-                <Mail className="w-3.5 h-3.5 text-blue-500" />
+                <Mail className="w-3.5 h-3.5 text-cyan-500" />
                 <span>{SITE_CONFIG.email}</span>
               </a>
 
@@ -83,15 +95,62 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
                   isDark ? 'border-white/15 bg-white/5 hover:bg-white/10 text-zinc-300' : 'border-zinc-300 bg-white hover:bg-zinc-50 text-zinc-800 shadow-2xs'
                 }`}
               >
-                <Linkedin className="w-3.5 h-3.5 text-blue-500" />
+                <Linkedin className="w-3.5 h-3.5 text-cyan-500" />
                 <span>LinkedIn Profile</span>
                 <ArrowUpRight className="w-3 h-3 text-zinc-400" />
               </a>
             </div>
           </div>
 
-          <div className="lg:col-span-4 flex justify-center lg:justify-end">
-            <SaadPortrait size="lg" showUploadBadge={true} />
+          {/* Clean High-Tech Developer Overview Bento Card (No Image) */}
+          <div className="lg:col-span-4">
+            <div className={`p-6 sm:p-7 rounded-3xl border space-y-5 shadow-xl ${
+              isDark ? 'border-[#00F0FF]/25 bg-[#0A0A16]/90' : 'border-zinc-200 bg-white'
+            }`}>
+              <div className="flex items-center justify-between pb-3 border-b border-black/[0.08] dark:border-white/[0.08]">
+                <div className="flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 rounded-full bg-[#00F0FF] animate-pulse" />
+                  <span className="font-mono text-xs font-bold text-[#00F0FF] uppercase tracking-wider">
+                    Saad M · Click N Create
+                  </span>
+                </div>
+                <span className="text-[10px] font-mono text-emerald-500 font-bold">
+                  ● ACTIVE
+                </span>
+              </div>
+
+              <div className="space-y-3 font-mono text-xs">
+                <div className="flex items-center justify-between py-1 border-b border-black/[0.05] dark:border-white/[0.05]">
+                  <span className="text-zinc-500">Role</span>
+                  <span className="font-bold">Lead Developer & Founder</span>
+                </div>
+                <div className="flex items-center justify-between py-1 border-b border-black/[0.05] dark:border-white/[0.05]">
+                  <span className="text-zinc-500">Hourly Rate</span>
+                  <span className="font-bold text-cyan-500">£35 / hour</span>
+                </div>
+                <div className="flex items-center justify-between py-1 border-b border-black/[0.05] dark:border-white/[0.05]">
+                  <span className="text-zinc-500">Specialty</span>
+                  <span className="font-bold">React, TypeScript, E-Com</span>
+                </div>
+                <div className="flex items-center justify-between py-1 border-b border-black/[0.05] dark:border-white/[0.05]">
+                  <span className="text-zinc-500">Direct Contact</span>
+                  <span className="font-bold">1-on-1 No Middlemen</span>
+                </div>
+                <div className="flex items-center justify-between py-1">
+                  <span className="text-zinc-500">Delivery</span>
+                  <span className="font-bold text-emerald-500">Milestone-Based</span>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => onNavigate('/contact')}
+                className="w-full py-2.5 rounded-xl font-mono text-xs font-bold uppercase tracking-wider bg-[#00F0FF] hover:bg-[#38bdf8] text-black transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md"
+              >
+                <span>Hire Saad Directly</span>
+                <ArrowUpRight className="w-3.5 h-3.5" />
+              </button>
+            </div>
           </div>
         </div>
 

@@ -4,6 +4,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
+import { HelmetProvider } from 'react-helmet-async';
 import { ThemeProvider } from './context/ThemeContext.tsx';
 import { ScrollProgress } from './components/ScrollProgress.tsx';
 import { CustomCursor } from './components/CustomCursor.tsx';
@@ -128,7 +129,7 @@ function AppContent() {
   };
 
   return (
-    <div className="min-h-screen bg-[var(--bg-main)] text-[var(--text-main)] transition-colors duration-300 relative flex flex-col justify-between">
+    <div className="min-h-screen bg-[var(--bg-main)] text-[var(--text-main)] transition-colors duration-300 relative flex flex-col justify-between overflow-x-hidden w-full max-w-full">
       {/* Scroll Progress Indicator */}
       <ScrollProgress />
 
@@ -142,7 +143,7 @@ function AppContent() {
       <Navbar currentPath={currentPath} onNavigate={handleNavigate} />
 
       {/* Main Page Viewport */}
-      <main className="flex-1 w-full">
+      <main className="flex-1 w-full max-w-full overflow-x-hidden relative">
         {renderCurrentPage()}
       </main>
 
@@ -157,8 +158,10 @@ function AppContent() {
 
 export default function App() {
   return (
-    <ThemeProvider>
-      <AppContent />
-    </ThemeProvider>
+    <HelmetProvider>
+      <ThemeProvider>
+        <AppContent />
+      </ThemeProvider>
+    </HelmetProvider>
   );
 }

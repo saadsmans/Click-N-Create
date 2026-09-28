@@ -6,6 +6,7 @@ import { FAQAccordion } from '../components/FAQAccordion.tsx';
 import { MagneticButton } from '../components/MagneticButton.tsx';
 import { SectionHeading } from '../components/SectionHeading.tsx';
 import { useTheme } from '../context/ThemeContext.tsx';
+import { SEOHead } from '../components/SEOHead.tsx';
 
 interface ServiceDetailPageProps {
   slug: string;
@@ -20,6 +21,11 @@ export const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({ slug, onNa
   if (!service) {
     return (
       <div className="pt-40 pb-20 text-center px-4">
+        <SEOHead
+          title="Service Not Found | Click N Create"
+          description="The requested freelance service could not be located."
+          canonicalPath="/services"
+        />
         <h1 className="text-3xl font-display font-bold mb-4">Service Not Found</h1>
         <p className="text-zinc-500 mb-8">The requested service page does not exist.</p>
         <button
@@ -41,7 +47,34 @@ export const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({ slug, onNa
   }));
 
   return (
-    <div className="pt-28 pb-20 md:pt-36">
+    <div className="pt-28 pb-20 md:pt-36 relative overflow-x-hidden w-full max-w-full">
+      <SEOHead
+        title={`${service.title} | Click N Create — Saad M`}
+        description={service.shortDescription || `${service.title} services by freelance developer Saad M. Transparent rates, quick delivery, and high technical quality.`}
+        canonicalPath={`/services/${service.slug}`}
+        keywords={[
+          service.title.toLowerCase(),
+          `freelance ${service.title.toLowerCase()}`,
+          `${service.slug} developer`,
+          'hire freelance developer',
+          'Click N Create services'
+        ]}
+        schemaJson={{
+          '@context': 'https://schema.org',
+          '@type': 'Service',
+          name: service.title,
+          provider: {
+            '@type': 'ProfessionalService',
+            name: 'Click N Create — Saad M'
+          },
+          description: service.shortDescription,
+          offers: {
+            '@type': 'Offer',
+            price: '35',
+            priceCurrency: 'GBP'
+          }
+        }}
+      />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Back Link */}
         <div className="mb-8">

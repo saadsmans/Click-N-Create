@@ -14,6 +14,7 @@ import { SectionHeading } from '../components/SectionHeading.tsx';
 import { FAQS } from '../data/faqs.ts';
 import { SITE_CONFIG } from '../data/site.ts';
 import { useTheme } from '../context/ThemeContext.tsx';
+import { SEOHead } from '../components/SEOHead.tsx';
 
 interface HomePageProps {
   onNavigate: (path: string) => void;
@@ -34,6 +35,41 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
 
   return (
     <div className="relative overflow-hidden">
+      <SEOHead
+        title="Click N Create | Saad M — Freelance Web Developer & Custom Solutions"
+        description="Hire Saad M at Click N Create for high-performance React websites, e-commerce stores, custom interactive tools, and cyber-aesthetic web design at transparent £35/hr rates."
+        canonicalPath="/"
+        keywords={[
+          'freelance web developer UK',
+          'freelance website creator',
+          'hire React developer',
+          'custom web design agency',
+          'Click N Create Saad M',
+          'fast website developer',
+          'affordable freelance developer'
+        ]}
+        schemaJson={{
+          '@context': 'https://schema.org',
+          '@type': 'ProfessionalService',
+          name: 'Click N Create — Freelance Web Development',
+          image: 'https://clickncreate.co.uk/file_00000000440061f7b67bc59e52b0df8e.png',
+          url: 'https://clickncreate.co.uk',
+          telephone: '+919265129400',
+          priceRange: '£35/hr',
+          address: {
+            '@type': 'PostalAddress',
+            addressLocality: 'Bharuch',
+            addressRegion: 'Gujarat',
+            addressCountry: 'India'
+          },
+          founder: {
+            '@type': 'Person',
+            name: 'Saad M',
+            jobTitle: 'Founder & Full-Stack Web Developer'
+          },
+          description: 'Specialized freelance web development brand creating high-speed websites, e-commerce storefronts, and custom interactive digital solutions.'
+        }}
+      />
       {/* ===================== HERO SECTION ===================== */}
       <section className="relative min-h-[88vh] flex items-center justify-center pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden">
         <div className={`absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] blur-[140px] pointer-events-none transition-opacity ${

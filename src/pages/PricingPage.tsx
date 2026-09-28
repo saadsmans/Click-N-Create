@@ -5,6 +5,7 @@ import { SectionHeading } from '../components/SectionHeading.tsx';
 import { MagneticButton } from '../components/MagneticButton.tsx';
 import { SITE_CONFIG } from '../data/site.ts';
 import { useTheme } from '../context/ThemeContext.tsx';
+import { SEOHead } from '../components/SEOHead.tsx';
 
 interface PricingPageProps {
   onNavigate: (path: string) => void;
@@ -29,7 +30,19 @@ export const PricingPage: React.FC<PricingPageProps> = ({ onNavigate }) => {
   const totalEstimatedCost = baseCost + seoCost + ecommerceCost + maintenanceCost;
 
   return (
-    <div className="pt-28 pb-20 md:pt-36">
+    <div className="pt-28 pb-20 md:pt-36 relative overflow-x-hidden w-full max-w-full">
+      <SEOHead
+        title="Transparent Web Development Pricing & Hourly Rates | Click N Create"
+        description="Transparent freelance web development rates by Saad M (£35/hr). Calculate project costs, explore starter website packages, and get fixed milestone quotations."
+        canonicalPath="/pricing"
+        keywords={[
+          'freelance web developer rates UK',
+          'website development cost',
+          'hire freelance developer hourly rate £35',
+          'custom website quote',
+          'affordable website pricing'
+        ]}
+      />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* ===================== HERO SECTION ===================== */}
         <div className="max-w-3xl mb-16 md:mb-20">

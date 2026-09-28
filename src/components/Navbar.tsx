@@ -328,64 +328,6 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPath, onNavigate }) => {
                           </div>
                         </a>
                       </div>
-
-                      {/* Services Direct Quick Jump */}
-                      <div className="mt-3 pt-2.5 border-t border-black/[0.08] dark:border-white/[0.08]">
-                        <div className="flex items-center justify-between text-[10px] font-mono uppercase tracking-widest text-zinc-500 mb-1.5 px-1">
-                          <span>Services (6)</span>
-                          <a
-                            href="/services"
-                            onClick={(e) => handleLinkClick(e, '/services')}
-                            className="text-[#00F0FF] hover:underline"
-                          >
-                            All →
-                          </a>
-                        </div>
-                        <div className="grid grid-cols-2 gap-1 text-[10px] font-mono">
-                          <a
-                            href="/services/web-development"
-                            onClick={(e) => handleLinkClick(e, '/services/web-development')}
-                            className="p-1.5 rounded-lg border border-white/5 hover:border-[#00F0FF]/40 text-zinc-300 hover:text-white truncate"
-                          >
-                            Web Dev
-                          </a>
-                          <a
-                            href="/services/ecommerce-development"
-                            onClick={(e) => handleLinkClick(e, '/services/ecommerce-development')}
-                            className="p-1.5 rounded-lg border border-white/5 hover:border-pink-500/40 text-zinc-300 hover:text-white truncate"
-                          >
-                            E-Commerce
-                          </a>
-                          <a
-                            href="/services/branding-and-design"
-                            onClick={(e) => handleLinkClick(e, '/services/branding-and-design')}
-                            className="p-1.5 rounded-lg border border-white/5 hover:border-purple-500/40 text-zinc-300 hover:text-white truncate"
-                          >
-                            Branding
-                          </a>
-                          <a
-                            href="/services/digital-marketing"
-                            onClick={(e) => handleLinkClick(e, '/services/digital-marketing')}
-                            className="p-1.5 rounded-lg border border-white/5 hover:border-amber-500/40 text-zinc-300 hover:text-white truncate"
-                          >
-                            Marketing
-                          </a>
-                          <a
-                            href="/services/hosting-maintenance"
-                            onClick={(e) => handleLinkClick(e, '/services/hosting-maintenance')}
-                            className="p-1.5 rounded-lg border border-white/5 hover:border-emerald-500/40 text-zinc-300 hover:text-white truncate"
-                          >
-                            Hosting
-                          </a>
-                          <a
-                            href="/services/web-app-development"
-                            onClick={(e) => handleLinkClick(e, '/services/web-app-development')}
-                            className="p-1.5 rounded-lg border border-white/5 hover:border-indigo-500/40 text-zinc-300 hover:text-white truncate"
-                          >
-                            Web Apps
-                          </a>
-                        </div>
-                      </div>
                     </motion.div>
                   )}
                 </AnimatePresence>
@@ -469,12 +411,12 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPath, onNavigate }) => {
                     <ThemeToggle showLabel={false} />
                   </div>
 
-                  {/* Main Navigation Links Grid */}
-                  <div className="space-y-1 mb-3.5">
+                  {/* Main Navigation Pages Grid */}
+                  <div className="space-y-1 mb-4">
                     <div className="text-[10px] font-mono uppercase tracking-widest text-zinc-500 px-1 py-1">
-                      Main Pages
+                      Website Pages
                     </div>
-                    <div className="grid grid-cols-2 gap-1.5 font-mono text-xs">
+                    <div className="grid grid-cols-2 gap-2 font-mono text-xs">
                       {NAV_ITEMS.map((item) => {
                         const isActive =
                           currentPath === item.href ||
@@ -505,99 +447,6 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPath, onNavigate }) => {
                         );
                       })}
                     </div>
-                  </div>
-
-                  {/* All 6 Specialized Services Matrix */}
-                  <div className="space-y-1.5 pt-2 border-t border-black/[0.08] dark:border-white/[0.08] mb-3.5">
-                    <div className="flex items-center justify-between text-[10px] font-mono uppercase tracking-widest text-zinc-500 px-1 py-1">
-                      <span>Services Matrix (6)</span>
-                      <a
-                        href="/services"
-                        onClick={(e) => handleLinkClick(e, '/services')}
-                        className="text-[#00F0FF] hover:underline"
-                      >
-                        VIEW ALL →
-                      </a>
-                    </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 text-[11px] font-mono">
-                      {[
-                        { title: 'Web Development', slug: 'web-development', color: '#00F0FF' },
-                        { title: 'E-Commerce Services', slug: 'ecommerce-development', color: '#FF2A85' },
-                        { title: 'Branding & Design', slug: 'branding-and-design', color: '#C084FC' },
-                        { title: 'Digital Marketing', slug: 'digital-marketing', color: '#F59E0B' },
-                        { title: 'Hosting & Maintenance', slug: 'hosting-maintenance', color: '#10B981' },
-                        { title: 'Web App Development', slug: 'web-app-development', color: '#6366F1' },
-                      ].map((svc) => (
-                        <a
-                          key={svc.slug}
-                          href={`/services/${svc.slug}`}
-                          onClick={(e) => handleLinkClick(e, `/services/${svc.slug}`)}
-                          className={`p-2 rounded-xl border flex items-center gap-2 transition-all group ${
-                            currentPath === `/services/${svc.slug}`
-                              ? isDark
-                                ? 'border-[#00F0FF]/50 bg-[#00F0FF]/10 text-white font-bold'
-                                : 'border-cyan-500 bg-cyan-50 text-cyan-900 font-bold'
-                              : isDark
-                              ? 'border-white/5 bg-white/[0.02] text-zinc-300 hover:border-white/20 hover:text-white'
-                              : 'border-zinc-200/80 bg-zinc-50/80 text-zinc-700 hover:border-cyan-400 hover:text-zinc-950'
-                          }`}
-                        >
-                          <span
-                            className="w-2 h-2 rounded-full shrink-0"
-                            style={{ backgroundColor: svc.color }}
-                          />
-                          <span className="truncate">{svc.title}</span>
-                        </a>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Interactive Quick Tools */}
-                  <div className="space-y-1.5 pt-2 border-t border-black/[0.08] dark:border-white/[0.08] mb-3.5">
-                    <div className="text-[10px] font-mono uppercase tracking-widest text-zinc-500 px-1 py-1">
-                      Quick Tools & Intel
-                    </div>
-                    <a
-                      href="/estimator"
-                      onClick={(e) => handleLinkClick(e, '/estimator')}
-                      className={`flex items-center gap-2.5 p-2 rounded-xl text-xs font-mono transition-all ${
-                        isDark
-                          ? 'hover:bg-[#00F0FF]/10 text-zinc-200'
-                          : 'hover:bg-cyan-50 text-zinc-800'
-                      }`}
-                    >
-                      <div className="w-6 h-6 rounded-lg bg-[#00F0FF]/15 text-[#00F0FF] flex items-center justify-center shrink-0">
-                        <Calculator className="w-3.5 h-3.5" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="font-semibold truncate">Live Project Estimator</div>
-                        <div className="text-[10px] text-zinc-500 truncate">Calculate price & hours</div>
-                      </div>
-                      <span className="text-[9px] font-bold text-[#00F0FF] px-1.5 py-0.5 rounded border border-[#00F0FF]/30">
-                        CALC
-                      </span>
-                    </a>
-
-                    <a
-                      href="/standards"
-                      onClick={(e) => handleLinkClick(e, '/standards')}
-                      className={`flex items-center gap-2.5 p-2 rounded-xl text-xs font-mono transition-all ${
-                        isDark
-                          ? 'hover:bg-[#00F0FF]/10 text-zinc-200'
-                          : 'hover:bg-cyan-50 text-zinc-800'
-                      }`}
-                    >
-                      <div className="w-6 h-6 rounded-lg bg-indigo-500/15 text-indigo-400 flex items-center justify-center shrink-0">
-                        <Terminal className="w-3.5 h-3.5" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="font-semibold truncate">Technical Standards</div>
-                        <div className="text-[10px] text-zinc-500 truncate">Speed, SEO & Core Vitals</div>
-                      </div>
-                      <span className="text-[9px] font-bold text-indigo-400 px-1.5 py-0.5 rounded border border-indigo-500/30">
-                        ARCH
-                      </span>
-                    </a>
                   </div>
 
                   {/* Bottom Primary Contact CTA */}

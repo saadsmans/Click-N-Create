@@ -17,6 +17,7 @@ import {
 import { SectionHeading } from '../components/SectionHeading.tsx';
 import { SITE_CONFIG } from '../data/site.ts';
 import { useTheme } from '../context/ThemeContext.tsx';
+import { SEOHead } from '../components/SEOHead.tsx';
 
 interface StandardsPageProps {
   onNavigate: (path: string) => void;
@@ -125,7 +126,19 @@ export const StandardsPage: React.FC<StandardsPageProps> = ({ onNavigate }) => {
   ];
 
   return (
-    <div className="pt-28 pb-24 md:pt-36">
+    <div className="pt-28 pb-24 md:pt-36 relative overflow-x-hidden w-full max-w-full">
+      <SEOHead
+        title="Technical Standards, Core Web Vitals & Speed | Click N Create"
+        description="Review Click N Create's rigorous technical standards: 98+ Google Lighthouse scores, sub-second load times, WCAG AA accessibility, and 100% clean code ownership."
+        canonicalPath="/standards"
+        keywords={[
+          'Core Web Vitals freelance developer',
+          'fast website developer',
+          'Google Lighthouse 98 score',
+          'accessible web development',
+          'clean TypeScript code standards'
+        ]}
+      />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Header */}
         <div className="max-w-3xl mb-16">

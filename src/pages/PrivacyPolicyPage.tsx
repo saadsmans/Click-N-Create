@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext.tsx';
 import { SITE_CONFIG } from '../data/site.ts';
+import { SEOHead } from '../components/SEOHead.tsx';
 
 interface PrivacyPolicyPageProps {
   onNavigate: (path: string) => void;
@@ -41,7 +42,12 @@ export const PrivacyPolicyPage: React.FC<PrivacyPolicyPageProps> = ({ onNavigate
   ];
 
   return (
-    <div className="pt-28 pb-20 md:pt-36">
+    <div className="pt-28 pb-20 md:pt-36 relative overflow-x-hidden w-full max-w-full">
+      <SEOHead
+        title="Privacy Policy | Click N Create (Saad M)"
+        description="Review Click N Create's UK GDPR and Data Protection Act 2018 compliance, data processing standards, and privacy safeguards."
+        canonicalPath="/privacy-policy"
+      />
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Back Navigation Bar */}
         <div className="flex items-center justify-between mb-8">

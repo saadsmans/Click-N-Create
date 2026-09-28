@@ -4,6 +4,7 @@ import { FAQS, FaqItem } from '../data/faqs.ts';
 import { FAQAccordion } from '../components/FAQAccordion.tsx';
 import { MagneticButton } from '../components/MagneticButton.tsx';
 import { useTheme } from '../context/ThemeContext.tsx';
+import { SEOHead } from '../components/SEOHead.tsx';
 
 interface FAQPageProps {
   onNavigate: (path: string) => void;
@@ -33,8 +34,34 @@ export const FAQPage: React.FC<FAQPageProps> = ({ onNavigate }) => {
     return matchesCategory && matchesQuery;
   });
 
+  const schemaFaqItems = FAQS.slice(0, 10).map((f) => ({
+    '@type': 'Question',
+    name: f.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: f.answer,
+    },
+  }));
+
   return (
-    <div className="pt-28 pb-20 md:pt-36">
+    <div className="pt-28 pb-20 md:pt-36 relative overflow-x-hidden w-full max-w-full">
+      <SEOHead
+        title="Frequently Asked Questions (FAQ) | Click N Create — Saad M"
+        description="Get instant answers about pricing (£35/hr), turnarounds, contracts, intellectual property rights, maintenance, and working directly with Saad M."
+        canonicalPath="/faq"
+        keywords={[
+          'freelance web development FAQ',
+          'website developer pricing questions',
+          'freelance developer contract terms',
+          'Click N Create questions',
+          'hire Saad M FAQ'
+        ]}
+        schemaJson={{
+          '@context': 'https://schema.org',
+          '@type': 'FAQPage',
+          mainEntity: schemaFaqItems,
+        }}
+      />
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Header */}
         <div className="text-center max-w-2xl mx-auto mb-12">

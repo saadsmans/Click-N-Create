@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'motion/react';
 import { MagneticButton } from '../components/MagneticButton.tsx';
 import { useTheme } from '../context/ThemeContext.tsx';
+import { SEOHead } from '../components/SEOHead.tsx';
 
 interface NotFoundPageProps {
   onNavigate: (path: string) => void;
@@ -12,7 +13,11 @@ export const NotFoundPage: React.FC<NotFoundPageProps> = ({ onNavigate }) => {
   const isDark = theme === 'dark';
 
   return (
-    <div className="min-h-[80vh] flex items-center justify-center pt-28 pb-20 px-4">
+    <div className="min-h-[80vh] flex items-center justify-center pt-28 pb-20 px-4 relative overflow-x-hidden w-full max-w-full">
+      <SEOHead
+        title="404 — Page Not Found | Click N Create"
+        description="The requested page could not be found on Click N Create."
+      />
       <div className={`max-w-md w-full rounded-3xl border p-8 sm:p-10 text-center shadow-xl relative z-10 space-y-6 backdrop-blur-2xl transition-colors ${
         isDark ? 'border-white/10 bg-[#0E0E12]/85' : 'border-zinc-200 bg-white/95'
       }`}>

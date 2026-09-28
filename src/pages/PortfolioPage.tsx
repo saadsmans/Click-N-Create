@@ -33,6 +33,7 @@ import { SAAD_PORTFOLIO, PortfolioProject, SkillCategory } from '../data/portfol
 import { generateCvPdf } from '../utils/cvPdfGenerator.ts';
 import { useTheme } from '../context/ThemeContext.tsx';
 import { SITE_CONFIG } from '../data/site.ts';
+import { SEOHead } from '../components/SEOHead.tsx';
 
 interface PortfolioPageProps {
   onNavigate: (path: string) => void;
@@ -120,7 +121,20 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
   };
 
   return (
-    <div className="pt-28 pb-24 md:pt-36">
+    <div className="pt-28 pb-24 md:pt-36 relative overflow-x-hidden w-full max-w-full">
+      <SEOHead
+        title="Portfolio & CV Resume · Saad M | Click N Create Web Developer"
+        description="Explore Saad M's freelance web development portfolio, Click N Create platform architecture, verified credentials, tech skills matrix, and official downloadable CV PDF."
+        canonicalPath="/portfolio"
+        keywords={[
+          'Saad M portfolio',
+          'freelance web developer portfolio',
+          'download CV PDF web developer',
+          'Click N Create projects',
+          'React developer resume',
+          'front end developer portfolio'
+        ]}
+      />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* ===================== HERO PROFILE BANNER ===================== */}
         <div
