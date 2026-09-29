@@ -1,6 +1,6 @@
 /**
  * Types and architecture for future real-time collaboration & presence.
- * Prepared for WebSocket, Supabase Realtime, or Firebase integration.
+ * Prepared for WebSocket or server-sent events integration.
  */
 
 export interface RemotePointer {
