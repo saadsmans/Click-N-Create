@@ -30,6 +30,7 @@ import {
   Terminal,
 } from 'lucide-react';
 import { SAAD_PORTFOLIO, PortfolioProject, SkillCategory } from '../data/portfolio.ts';
+import { ClickNCreateLogo } from '../components/ClickNCreateLogo.tsx';
 import { generateCvPdf } from '../utils/cvPdfGenerator.ts';
 import { useTheme } from '../context/ThemeContext.tsx';
 import { SITE_CONFIG } from '../data/site.ts';
@@ -40,13 +41,155 @@ interface PortfolioPageProps {
 }
 
 // Project visual card helper that never breaks
-const ProjectVisualCard: React.FC<{ projectId: string; title: string; category: string }> = ({
+const ProjectVisualCard: React.FC<{ projectId: string; title: string; category: string; liveUrl?: string }> = ({
   projectId,
   title,
   category,
+  liveUrl,
 }) => {
   const { theme } = useTheme();
   const isDark = theme === 'dark';
+
+  if (projectId === 'owais-academic-portfolio') {
+    return (
+      <div
+        className={`w-full aspect-video rounded-2xl border p-3.5 sm:p-5 flex flex-col justify-between relative overflow-hidden transition-all group ${
+          isDark
+            ? 'border-cyan-500/30 bg-gradient-to-br from-[#0b0c1e] via-[#080916] to-[#04040a] shadow-[0_15px_35px_rgba(0,240,255,0.15)]'
+            : 'border-cyan-300 bg-gradient-to-br from-cyan-50 via-white to-sky-50 shadow-md'
+        }`}
+      >
+        <div className="absolute -top-12 -right-12 w-48 h-48 rounded-full blur-3xl opacity-35 pointer-events-none bg-[#00F0FF]" />
+        <div className="absolute -bottom-10 -left-10 w-44 h-44 rounded-full blur-3xl opacity-25 pointer-events-none bg-indigo-500" />
+
+        {/* Browser Top Window Bar */}
+        <div className="flex items-center justify-between pb-2.5 border-b border-black/10 dark:border-white/10 relative z-10">
+          <div className="flex items-center gap-1.5">
+            <span className="w-2.5 h-2.5 rounded-full bg-rose-500/90 shadow-xs" />
+            <span className="w-2.5 h-2.5 rounded-full bg-amber-500/90 shadow-xs" />
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/90 shadow-xs" />
+            <div className="ml-2 px-2.5 py-0.5 rounded-md bg-black/10 dark:bg-white/10 font-mono text-[10px] text-cyan-600 dark:text-cyan-300 flex items-center gap-1.5">
+              <span className="opacity-60">https://</span>
+              <span className="font-bold">owaisdashboard.vercel.app</span>
+            </div>
+          </div>
+
+          <span className="text-[10px] font-mono px-2 py-0.5 rounded-full border border-emerald-500/40 bg-emerald-500/10 text-emerald-400 font-bold flex items-center gap-1">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            <span>LIVE CLIENT WORK</span>
+          </span>
+        </div>
+
+        {/* Dashboard Preview Cards Layout (Clean, without OD logo) */}
+        <div className="my-auto py-2 relative z-10 space-y-2">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2.5">
+              <div className="w-9 h-9 rounded-xl bg-cyan-500/15 border border-cyan-500/30 text-cyan-400 flex items-center justify-center shrink-0 shadow-sm">
+                <GraduationCap className="w-5 h-5" />
+              </div>
+              <div>
+                <h4 className="font-display font-black text-sm sm:text-base leading-tight">
+                  Owais <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00F0FF] to-indigo-400">Portfolio & Dashboard</span>
+                </h4>
+                <span className="text-[10px] font-mono text-zinc-400 block">
+                  Academic Trajectory & Technical Skills
+                </span>
+              </div>
+            </div>
+
+            <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 text-[10px] font-mono text-zinc-400">
+              <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
+              <span>Full Academic Records</span>
+            </div>
+          </div>
+
+          {/* Mini Dashboard Widget Pills */}
+          <div className="grid grid-cols-3 gap-2 pt-1 font-mono text-[10px]">
+            <div className="p-2 rounded-xl border border-cyan-500/25 bg-cyan-500/5 text-cyan-400 flex flex-col justify-between">
+              <span className="text-zinc-400 text-[9px] uppercase">Education</span>
+              <span className="font-bold truncate">Academic Record</span>
+            </div>
+            <div className="p-2 rounded-xl border border-indigo-500/25 bg-indigo-500/5 text-indigo-300 flex flex-col justify-between">
+              <span className="text-zinc-400 text-[9px] uppercase">Skills Matrix</span>
+              <span className="font-bold truncate">Tech & Soft Skills</span>
+            </div>
+            <div className="p-2 rounded-xl border border-emerald-500/25 bg-emerald-500/5 text-emerald-400 flex flex-col justify-between">
+              <span className="text-zinc-400 text-[9px] uppercase">Hosting</span>
+              <span className="font-bold truncate">Vercel Edge</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Footer Bar with Live Site Link */}
+        <div className="flex items-center justify-between text-[11px] font-mono text-zinc-500 border-t border-black/10 dark:border-white/10 pt-2 relative z-10">
+          <span className="flex items-center gap-1.5 text-cyan-500 font-semibold">
+            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+            <span>Built & Delivered by Saad M</span>
+          </span>
+          <a
+            href="https://owaisdashboard.vercel.app"
+            target="_blank"
+            rel="noreferrer"
+            className="flex items-center gap-1 font-bold text-[#00F0FF] hover:underline"
+          >
+            <span>owaisdashboard.vercel.app</span>
+            <ArrowUpRight className="w-3 h-3" />
+          </a>
+        </div>
+      </div>
+    );
+  }
+
+  if (projectId === 'click-n-create-platform') {
+    return (
+      <div
+        className={`w-full aspect-video rounded-2xl border p-3.5 sm:p-5 flex flex-col justify-between relative overflow-hidden transition-all group ${
+          isDark
+            ? 'border-cyan-500/30 bg-gradient-to-br from-[#0c0d1e] via-[#070714] to-black shadow-[0_15px_35px_rgba(0,240,255,0.15)]'
+            : 'border-cyan-300 bg-gradient-to-br from-cyan-50 via-white to-sky-50 shadow-md'
+        }`}
+      >
+        <div className="absolute -top-12 -right-12 w-48 h-48 rounded-full blur-3xl opacity-35 pointer-events-none bg-[#00F0FF]" />
+        <div className="absolute -bottom-10 -left-10 w-44 h-44 rounded-full blur-3xl opacity-20 pointer-events-none bg-purple-500" />
+
+        {/* Top Window Bar */}
+        <div className="flex items-center justify-between pb-2.5 border-b border-black/10 dark:border-white/10 relative z-10">
+          <div className="flex items-center gap-1.5">
+            <span className="w-2.5 h-2.5 rounded-full bg-rose-500/90 shadow-xs" />
+            <span className="w-2.5 h-2.5 rounded-full bg-amber-500/90 shadow-xs" />
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/90 shadow-xs" />
+            <div className="ml-2 px-2.5 py-0.5 rounded-md bg-black/10 dark:bg-white/10 font-mono text-[10px] text-cyan-600 dark:text-cyan-300 flex items-center gap-1.5">
+              <span className="opacity-60">https://</span>
+              <span className="font-bold">clickncreate.co.uk</span>
+            </div>
+          </div>
+
+          <span className="text-[10px] font-mono px-2 py-0.5 rounded-full border border-cyan-500/40 bg-cyan-500/10 text-[#00F0FF] font-bold">
+            FLAGSHIP PLATFORM
+          </span>
+        </div>
+
+        {/* Middle Brand Showcase with Click N Create Logo */}
+        <div className="my-auto py-3 relative z-10 flex flex-col items-center justify-center text-center space-y-2">
+          <div className="p-2 rounded-2xl bg-black/40 dark:bg-white/[0.04] border border-black/10 dark:border-white/10 backdrop-blur-md">
+            <ClickNCreateLogo size="md" />
+          </div>
+          <p className="text-[11px] font-mono text-zinc-400">
+            Freelance Web Development & Custom Estimator
+          </p>
+        </div>
+
+        {/* Bottom Status */}
+        <div className="flex items-center justify-between text-[11px] font-mono text-zinc-500 border-t border-black/10 dark:border-white/10 pt-2 relative z-10">
+          <span className="flex items-center gap-1.5 text-cyan-500 font-semibold">
+            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+            <span>Founder & Lead Developer · Saad M</span>
+          </span>
+          <span className="text-[#00F0FF] font-bold">clickncreate.co.uk</span>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div
@@ -60,21 +203,9 @@ const ProjectVisualCard: React.FC<{ projectId: string; title: string; category: 
 
       <div className="flex items-center justify-between relative z-10">
         <div className="flex items-center gap-2">
-          {projectId === 'click-n-create-platform' && (
-            <div className="p-2 rounded-xl bg-[#00F0FF]/15 text-[#00F0FF]">
-              <Code2 className="w-5 h-5" />
-            </div>
-          )}
-          {projectId === 'click-n-create-brand-identity' && (
-            <div className="p-2 rounded-xl bg-purple-500/15 text-purple-400">
-              <Palette className="w-5 h-5" />
-            </div>
-          )}
-          {projectId === 'click-n-create-infrastructure' && (
-            <div className="p-2 rounded-xl bg-emerald-500/15 text-emerald-400">
-              <Cpu className="w-5 h-5" />
-            </div>
-          )}
+          <div className="p-2 rounded-xl bg-[#00F0FF]/15 text-[#00F0FF]">
+            <Code2 className="w-5 h-5" />
+          </div>
           <span className="text-[10px] font-mono text-zinc-400 uppercase tracking-wider">
             {category}
           </span>
@@ -339,6 +470,7 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
                       projectId={proj.id}
                       title={proj.title}
                       category={proj.category}
+                      liveUrl={proj.liveUrl}
                     />
 
                     <div className="flex items-center justify-between pt-2">
@@ -413,99 +545,6 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
                   </div>
                 </div>
               ))}
-
-              {/* 4th Card: Your Next Project Slot */}
-              <div
-                className={`rounded-3xl border-2 border-dashed p-6 sm:p-8 flex flex-col justify-between transition-all group ${
-                  isDark
-                    ? 'border-[#00F0FF]/30 bg-[#0A0A16]/50 hover:border-[#00F0FF] hover:bg-[#00F0FF]/[0.03]'
-                    : 'border-cyan-400 bg-cyan-50/40 hover:border-cyan-600 shadow-sm'
-                }`}
-              >
-                <div className="space-y-4">
-                  <div
-                    className={`w-full aspect-video rounded-2xl border p-6 flex flex-col justify-between relative overflow-hidden transition-all ${
-                      isDark
-                        ? 'border-white/10 bg-gradient-to-br from-[#0e1026] via-[#090818] to-black'
-                        : 'border-zinc-200 bg-gradient-to-br from-cyan-50 via-white to-zinc-50'
-                    }`}
-                  >
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <div className="p-2 rounded-xl bg-emerald-500/15 text-emerald-400">
-                          <Sparkles className="w-5 h-5" />
-                        </div>
-                        <span className="text-[10px] font-mono text-[#00F0FF] uppercase tracking-wider font-bold">
-                          Next Slot Available
-                        </span>
-                      </div>
-                      <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 font-bold">
-                        OPEN FOR HIRE
-                      </span>
-                    </div>
-
-                    <div className="space-y-1 my-auto">
-                      <div className="text-xs font-mono text-[#00F0FF]">// your-next-project</div>
-                      <div className="text-xl font-bold font-display leading-tight">
-                        Your Custom Website or Brand
-                      </div>
-                    </div>
-
-                    <div className="flex items-center justify-between text-[11px] font-mono text-zinc-500 border-t border-black/10 dark:border-white/10 pt-2">
-                      <span className="text-emerald-400">Standard Rate: £35 / Hour</span>
-                      <span>1 – 3 Wks Turnaround</span>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center justify-between pt-2">
-                    <span className="text-[10px] font-mono text-emerald-400 uppercase tracking-wider font-bold">
-                      Bespoke Freelance Engineering
-                    </span>
-                    <span className="text-xs text-zinc-500 font-mono">
-                      2026 Season
-                    </span>
-                  </div>
-
-                  <h3
-                    className={`text-xl sm:text-2xl font-bold font-display ${
-                      isDark ? 'text-white' : 'text-zinc-950'
-                    }`}
-                  >
-                    Have a Website, App or Brand in Mind?
-                  </h3>
-
-                  <p
-                    className={`text-xs sm:text-sm leading-relaxed ${
-                      isDark ? 'text-zinc-400' : 'text-zinc-600'
-                    }`}
-                  >
-                    Work directly with Saad M. Fast turnaround, clean code, transparent pricing, and zero middle-agency overhead.
-                  </p>
-                </div>
-
-                <div className="pt-6 border-t border-black/[0.08] dark:border-white/[0.08] mt-6 flex items-center justify-between gap-3">
-                  <button
-                    type="button"
-                    onClick={() => onNavigate('/estimator')}
-                    className="px-4 py-2.5 rounded-xl bg-[#00F0FF] hover:bg-[#38bdf8] text-black text-xs font-mono font-bold flex items-center gap-1.5 transition-all cursor-pointer shadow-md"
-                  >
-                    <span>Calculate Instant Quote</span>
-                    <ArrowUpRight className="w-3.5 h-3.5" />
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => onNavigate('/contact')}
-                    className={`px-4 py-2.5 rounded-xl border text-xs font-mono transition-colors cursor-pointer ${
-                      isDark
-                        ? 'border-white/20 hover:bg-white/10 text-white'
-                        : 'border-zinc-300 hover:bg-zinc-100 text-zinc-900'
-                    }`}
-                  >
-                    <span>Get in Touch</span>
-                  </button>
-                </div>
-              </div>
             </div>
           </motion.div>
         )}
@@ -668,6 +707,137 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
                   >
                     {SAAD_PORTFOLIO.aboutBio}
                   </p>
+                </div>
+
+                {/* Dedicated Key Projects Section in CV */}
+                <div
+                  className={`p-6 sm:p-8 rounded-3xl border space-y-6 ${
+                    isDark ? 'border-white/10 bg-[#0A0A16]/80' : 'border-zinc-200 bg-white shadow-xs'
+                  }`}
+                >
+                  <div className="flex items-center justify-between pb-2 border-b border-black/[0.08] dark:border-white/[0.08]">
+                    <div className="flex items-center gap-2 text-[#00F0FF]">
+                      <Code2 className="w-5 h-5" />
+                      <h4 className="font-display font-bold text-base uppercase tracking-wider">
+                        Key Projects & Deliveries
+                      </h4>
+                    </div>
+                    <span className="text-[10px] font-mono text-zinc-500 uppercase">
+                      2 Verified Works
+                    </span>
+                  </div>
+
+                  <div className="space-y-6">
+                    {/* Project 1: Owais Academic Portfolio */}
+                    <div className="border-l-2 border-[#00F0FF] pl-4 sm:pl-6 space-y-2 relative">
+                      <div className="flex flex-wrap items-center justify-between gap-2">
+                        <div>
+                          <h5 className="font-bold text-base sm:text-lg">
+                            Owais Portfolio & Academic Dashboard
+                          </h5>
+                          <span className="text-xs font-mono text-[#00F0FF]">
+                            Client Project · Live on Vercel
+                          </span>
+                        </div>
+                        <a
+                          href="https://owaisdashboard.vercel.app"
+                          target="_blank"
+                          rel="noreferrer"
+                          className="inline-flex items-center gap-1 text-xs font-mono text-cyan-400 hover:underline"
+                        >
+                          <span>owaisdashboard.vercel.app</span>
+                          <ArrowUpRight className="w-3.5 h-3.5" />
+                        </a>
+                      </div>
+
+                      <p className={`text-xs sm:text-sm leading-relaxed ${isDark ? 'text-zinc-300' : 'text-zinc-700'}`}>
+                        Comprehensive personal portfolio and interactive student dashboard built for client Owais to showcase his entire academic background, qualifications, and skill proficiency.
+                      </p>
+
+                      <ul className="space-y-1 text-xs">
+                        <li className="flex items-start gap-2">
+                          <span className="text-[#00F0FF] font-bold">•</span>
+                          <span className={isDark ? 'text-zinc-300' : 'text-zinc-700'}>
+                            Engineered complete academic records, degree trajectory, and interactive technical & soft skills matrix.
+                          </span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span className="text-[#00F0FF] font-bold">•</span>
+                          <span className={isDark ? 'text-zinc-300' : 'text-zinc-700'}>
+                            Deployed live on Vercel edge infrastructure with sub-second page loads and mobile-responsive layout.
+                          </span>
+                        </li>
+                      </ul>
+
+                      <div className="flex flex-wrap gap-1.5 pt-1">
+                        {['React / Next.js', 'Tailwind CSS', 'Vercel Edge', 'Academic Dashboard', 'Client Delivery'].map((t, idx) => (
+                          <span
+                            key={idx}
+                            className={`text-[10px] font-mono px-2 py-0.5 rounded-full ${
+                              isDark ? 'bg-cyan-500/10 text-cyan-300 border border-cyan-500/30' : 'bg-cyan-50 text-cyan-800'
+                            }`}
+                          >
+                            {t}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Project 2: Click N Create */}
+                    <div className="border-l-2 border-indigo-500 pl-4 sm:pl-6 space-y-2 relative">
+                      <div className="flex flex-wrap items-center justify-between gap-2">
+                        <div>
+                          <h5 className="font-bold text-base sm:text-lg">
+                            Click N Create Web Platform & Brand System
+                          </h5>
+                          <span className="text-xs font-mono text-indigo-400">
+                            Flagship Freelance Platform
+                          </span>
+                        </div>
+                        <a
+                          href="https://clickncreate.co.uk"
+                          target="_blank"
+                          rel="noreferrer"
+                          className="inline-flex items-center gap-1 text-xs font-mono text-indigo-400 hover:underline"
+                        >
+                          <span>clickncreate.co.uk</span>
+                          <ArrowUpRight className="w-3.5 h-3.5" />
+                        </a>
+                      </div>
+
+                      <p className={`text-xs sm:text-sm leading-relaxed ${isDark ? 'text-zinc-300' : 'text-zinc-700'}`}>
+                        The official digital freelance platform featuring custom geometric vector logo, real-time cost estimator, dark/light theme engine, and direct client quotation pipeline.
+                      </p>
+
+                      <ul className="space-y-1 text-xs">
+                        <li className="flex items-start gap-2">
+                          <span className="text-indigo-400 font-bold">•</span>
+                          <span className={isDark ? 'text-zinc-300' : 'text-zinc-700'}>
+                            Engineered dynamic instant cost calculator with £35/hr and fixed milestone breakdown.
+                          </span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span className="text-indigo-400 font-bold">•</span>
+                          <span className={isDark ? 'text-zinc-300' : 'text-zinc-700'}>
+                            Designed complete brand identity, typography wordmark, and multi-device responsive UI.
+                          </span>
+                        </li>
+                      </ul>
+
+                      <div className="flex flex-wrap gap-1.5 pt-1">
+                        {['React 19', 'TypeScript', 'Tailwind CSS', 'Vector Logo', 'Interactive Estimator'].map((t, idx) => (
+                          <span
+                            key={idx}
+                            className={`text-[10px] font-mono px-2 py-0.5 rounded-full ${
+                              isDark ? 'bg-indigo-500/10 text-indigo-300 border border-indigo-500/30' : 'bg-indigo-50 text-indigo-800'
+                            }`}
+                          >
+                            {t}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Experience & Internship Section */}
@@ -979,52 +1149,110 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
                     </div>
                   </div>
 
-                  {/* Right Column: About Me, Experience, Internship */}
-                  <div className="sm:col-span-7 space-y-6">
+                  {/* Right Column: About Me, Projects, Experience, Internship */}
+                  <div className="sm:col-span-7 space-y-5">
                     {/* About Me */}
-                    <div className="space-y-2">
-                      <h4 className="font-bold text-xs uppercase tracking-wider text-zinc-950 border-b border-zinc-200 pb-1.5 flex items-center gap-1.5">
+                    <div className="space-y-1.5">
+                      <h4 className="font-bold text-xs uppercase tracking-wider text-zinc-950 border-b border-zinc-200 pb-1 flex items-center gap-1.5">
                         <UserCheck className="w-3.5 h-3.5 text-cyan-700" />
                         <span>About Me</span>
                       </h4>
-                      <p className="text-[11px] text-zinc-700 leading-relaxed pt-1">
-                        Motivated and enthusiastic Electronics & Communication Engineering student with a strong interest in communication technologies, satellite communication, wireless systems, and modern web development. Experienced in building full freelance websites (Click N Create) using WordPress with PHP and CSS customization, React, and responsive layouts. Proficient in AI tools for productivity, research, and innovative problem-solving.
+                      <p className="text-[11px] text-zinc-700 leading-relaxed pt-0.5">
+                        Motivated and enthusiastic Electronics & Communication Engineering student with a strong interest in communication technologies, satellite communication, wireless systems, and modern web development. Experienced in developing web applications using WordPress with PHP and CSS customization, React, and responsive UI layouts. Proficient in AI tools for productivity, technical research, and innovative problem-solving.
                       </p>
                     </div>
 
-                    {/* Experience */}
+                    {/* Dedicated Key Projects Section */}
                     <div className="space-y-2">
-                      <h4 className="font-bold text-xs uppercase tracking-wider text-zinc-950 border-b border-zinc-200 pb-1.5 flex items-center gap-1.5">
+                      <h4 className="font-bold text-xs uppercase tracking-wider text-zinc-950 border-b border-zinc-200 pb-1 flex items-center justify-between">
+                        <div className="flex items-center gap-1.5">
+                          <Code2 className="w-3.5 h-3.5 text-cyan-700" />
+                          <span>Key Projects & Web Deliveries</span>
+                        </div>
+                        <span className="text-[10px] text-zinc-500 font-mono">2 Verified Works</span>
+                      </h4>
+
+                      <div className="space-y-2 pt-0.5">
+                        {/* Project 1: Owais Dashboard */}
+                        <div className="p-2.5 rounded-xl border border-zinc-200 bg-zinc-50/70 space-y-1">
+                          <div className="flex items-center justify-between">
+                            <span className="font-bold text-zinc-950 text-[11px]">
+                              Owais Portfolio & Academic Dashboard
+                            </span>
+                            <a
+                              href="https://owaisdashboard.vercel.app"
+                              target="_blank"
+                              rel="noreferrer"
+                              className="text-[10px] font-mono text-cyan-700 hover:underline font-bold"
+                            >
+                              owaisdashboard.vercel.app ↗
+                            </a>
+                          </div>
+                          <div className="text-[10px] text-cyan-800 font-mono">
+                            Client Delivery · Academic Portfolio & Trajectory Dashboard (Vercel)
+                          </div>
+                          <p className="text-[10.5px] text-zinc-700 leading-tight">
+                            • Designed and deployed comprehensive student portfolio featuring verified academic records, degree milestones, and interactive technical & soft skills matrix with sub-second responsive performance.
+                          </p>
+                        </div>
+
+                        {/* Project 2: Click N Create */}
+                        <div className="p-2.5 rounded-xl border border-zinc-200 bg-zinc-50/70 space-y-1">
+                          <div className="flex items-center justify-between">
+                            <span className="font-bold text-zinc-950 text-[11px]">
+                              Click N Create Web Platform & Brand System
+                            </span>
+                            <a
+                              href="https://clickncreate.co.uk"
+                              target="_blank"
+                              rel="noreferrer"
+                              className="text-[10px] font-mono text-cyan-700 hover:underline font-bold"
+                            >
+                              clickncreate.co.uk ↗
+                            </a>
+                          </div>
+                          <div className="text-[10px] text-cyan-800 font-mono">
+                            Flagship Freelance Platform & Vector Brand Identity
+                          </div>
+                          <p className="text-[10.5px] text-zinc-700 leading-tight">
+                            • Built full-stack freelance website featuring custom geometric vector logo, real-time cost estimator (£35/hr & fixed packages), dark/light theme engine, and direct WhatsApp quote automation.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Experience */}
+                    <div className="space-y-1.5">
+                      <h4 className="font-bold text-xs uppercase tracking-wider text-zinc-950 border-b border-zinc-200 pb-1 flex items-center gap-1.5">
                         <Briefcase className="w-3.5 h-3.5 text-cyan-700" />
                         <span>Experience</span>
                       </h4>
-                      <div className="space-y-1.5 pt-1">
+                      <div className="space-y-1 pt-0.5">
                         <div className="font-bold text-zinc-950 text-xs">
                           Click N Create – clickncreate.co.uk
                         </div>
                         <div className="text-[10px] text-cyan-800 font-mono font-bold">
                           Lead Web Developer & Founder (2024 – Present)
                         </div>
-                        <ul className="space-y-1.5 text-[11px] text-zinc-700 list-disc pl-4 pt-1">
-                          <li>Designed and developed freelance web development website using WordPress, PHP, and modern CSS.</li>
+                        <ul className="space-y-1 text-[10.5px] text-zinc-700 list-disc pl-4 pt-0.5">
+                          <li>Designed and developed freelance web development website using WordPress, PHP, and modern CSS/React.</li>
                           <li>Configured web hosting, domain DNS, and website security protocols.</li>
                           <li>Created responsive pages tested across desktop and mobile devices.</li>
-                          <li>Implemented plugin management, speed optimization, and SEO practices.</li>
                         </ul>
                       </div>
                     </div>
 
                     {/* Internship */}
-                    <div className="space-y-2">
-                      <h4 className="font-bold text-xs uppercase tracking-wider text-zinc-950 border-b border-zinc-200 pb-1.5 flex items-center gap-1.5">
+                    <div className="space-y-1.5">
+                      <h4 className="font-bold text-xs uppercase tracking-wider text-zinc-950 border-b border-zinc-200 pb-1 flex items-center gap-1.5">
                         <Award className="w-3.5 h-3.5 text-cyan-700" />
                         <span>Internship</span>
                       </h4>
-                      <div className="space-y-1 pt-1">
+                      <div className="space-y-0.5 pt-0.5">
                         <div className="font-bold text-zinc-950 text-xs">
                           Spoken Tutorial Project – IIT Bombay
                         </div>
-                        <p className="text-[11px] text-zinc-700 leading-relaxed">
+                        <p className="text-[10.5px] text-zinc-700 leading-relaxed">
                           Electronic Circuit Simulation using <strong>eSim</strong> & <strong>CircuitJS</strong>. Analyzed circuit behavior, signal conversion, and frequency waveforms.
                         </p>
                       </div>

@@ -50,6 +50,7 @@ export const SAAD_PORTFOLIO = {
   location: 'Bharuch, Gujarat, India',
   availability: 'Available for Freelance Projects Worldwide',
 
+  // Purely personal bio as originally designed
   aboutBio: `Motivated and enthusiastic Electronics & Communication Engineering student with a strong interest in communication technologies, satellite communication, wireless systems, and modern web development.
 
 I have hands-on experience building my freelance brand website, Click N Create, using WordPress with PHP and CSS customization, alongside modern React and TypeScript, which has strengthened my understanding of website development, responsive design, cloud hosting, and user experience.
@@ -59,14 +60,14 @@ I am also proficient in using AI tools to enhance productivity, research, conten
   education: [
     {
       degree: 'Bachelor of Engineering (BE)',
-      field: 'Electronics And Communication Engineering',
+      field: 'Electronics & Communication Engineering',
       institution: 'Government Engineering College, Bharuch',
       timeline: '2023 – 2027',
       location: 'Bharuch, Gujarat, India',
       highlights: [
         'Specializing in communication systems, wireless networks, and digital signal processing',
         'Bridging hardware signal understanding with modern web software architecture',
-        'Academic excellence combined with active freelance web development projects'
+        'Academic excellence combined with active technical projects'
       ]
     }
   ],
@@ -78,13 +79,13 @@ I am also proficient in using AI tools to enhance productivity, research, conten
       website: 'https://clickncreate.co.uk',
       timeline: '2024 – Present',
       type: 'Freelance Digital Development',
-      description: 'Independent digital development brand building custom websites, e-commerce stores, and interactive estimators for business clients.',
+      description: 'Independent digital development brand designing and developing modern websites, custom client solutions, and brand identities.',
       keyResponsibilities: [
-        'Designed and developed the freelance web development platform using modern web technologies',
+        'Designed and developed freelance web development platform using modern web technologies',
         'Customized website architectures using PHP, CSS, React, and WordPress for seamless client self-editing',
-        'Configured cloud hosting, DNS domain routing, SSL certificates, and security protocols',
-        'Engineered responsive, mobile-first layouts tested across phones, tablets, and desktops',
-        'Implemented SEO best practices, structured schema, Google Search Console indexing, and speed optimization'
+        'Configured web hosting, domain DNS, and website security protocols',
+        'Created responsive pages tested across desktop and mobile devices',
+        'Implemented plugin management, speed optimization, and SEO practices'
       ],
       techStack: ['WordPress', 'React', 'PHP', 'Tailwind CSS', 'TypeScript', 'Shopify', 'SEO']
     },
@@ -103,39 +104,77 @@ I am also proficient in using AI tools to enhance productivity, research, conten
     }
   ],
 
+  // Dedicated Projects for CV & Portfolio
+  projects: [
+    {
+      id: 'owais-academic-portfolio',
+      title: 'Owais Portfolio & Academic Dashboard',
+      category: 'Client Project · Academic Portfolio & Dashboard',
+      clientOrRole: 'Client: Owais (Freelance Web Developer)',
+      timeline: '2026 (Recent Client Delivery)',
+      description: 'Comprehensive personal portfolio website and interactive academic background dashboard built for client Owais. Highlights his full academic history, educational trajectory, technical & soft skill proficiencies, projects, and personal achievements with a modern, high-speed responsive user interface.',
+      featuredImage: 'https://owaisdashboard.vercel.app',
+      tags: ['Client Project', 'Academic Dashboard', 'Portfolio Website', 'React / Next.js', 'Vercel Deployment', 'Tailwind CSS', 'Responsive UI'],
+      achievements: [
+        'Designed & engineered personal portfolio and academic showcase website for client Owais',
+        'Structured complete educational records, academic milestones, and interactive skill proficiency matrix',
+        'Deployed live on Vercel (owaisdashboard.vercel.app) with global edge CDN and zero downtime',
+        'Built modern mobile-first responsive layout with dark/light visual polish and instant page transitions'
+      ],
+      liveUrl: 'https://owaisdashboard.vercel.app'
+    },
+    {
+      id: 'click-n-create-platform',
+      title: 'Click N Create Web Platform & Brand Identity',
+      category: 'Freelance Web Platform & Brand System',
+      clientOrRole: 'Founder & Full-Stack Developer',
+      timeline: '2024 – Present (Flagship Platform)',
+      description: 'The official freelance digital development platform and brand identity for Click N Create. Built from scratch featuring custom geometric vector logo, real-time interactive cost estimator, responsive glassmorphism UI, high-contrast dark/light theme engine, sub-second speed performance, and 1-click WhatsApp quote generator.',
+      featuredImage: '/file_00000000440061f7b67bc59e52b0df8e.png',
+      tags: ['Official Brand & Logo', 'React 19', 'TypeScript', 'Tailwind CSS', 'Interactive Estimator', 'Responsive UI', 'Sub-Second Speed'],
+      achievements: [
+        'Crafted complete Click N Create brand identity, typography wordmark, and vector logo system',
+        'Engineered custom real-time quote estimator with transparent £35/hr and fixed milestone calculation',
+        'Built responsive mobile-first architecture with sub-second page loads and zero layout shift',
+        'Integrated seamless WhatsApp and direct email quotation pipelines for instant client onboarding'
+      ],
+      liveUrl: 'https://clickncreate.co.uk'
+    }
+  ],
+
   skillCategories: [
     {
       title: 'Web & E-Commerce Development',
       icon: 'Code2',
       skills: [
-        { name: 'Web Development (WordPress, Shopify, React)', level: 95, note: 'Custom themes, Liquid & component architecture' },
-        { name: 'E-commerce Setup & Website Optimization', level: 90, note: 'Cart drawers, Stripe checkout & inventory' },
-        { name: 'Mobile-First Responsive Design', level: 95, note: 'Flawless UI on iPhones, Androids & laptops' },
-        { name: 'Speed Tuning & Core Web Vitals', level: 90, note: 'Fast loading (<1s) & asset compression' }
-      ]
-    },
-    {
-      title: 'Digital Marketing & Design',
-      icon: 'TrendingUp',
-      skills: [
-        { name: 'Google Ads & SEO Basics', level: 85, note: 'Search indexing, keywords & rich snippets' },
-        { name: 'UI / UX Design & Typography', level: 90, note: 'Modern layouts, dark/light mode & user flows' },
-        { name: 'Social Media & Print Graphic Design', level: 85, note: 'Banners, flyers, posters & promo collateral' },
-        { name: 'Microsoft Office (Word, Excel, PowerPoint)', level: 95, note: 'Documentation, reports & client pitch decks' }
+        { name: 'Modern React & TypeScript', level: 95, note: 'Component architectures, state management & Vite tooling' },
+        { name: 'Tailwind CSS & Responsive UI', level: 98, note: 'Mobile-first design, fluid glassmorphism & dark/light themes' },
+        { name: 'WordPress & PHP Customization', level: 90, note: 'Custom themes, templates, hooks & plugin architectures' },
+        { name: 'Vercel & Cloud Deployment', level: 92, note: 'Edge CDN caching, DNS routing, SSL security & CI/CD' },
+        { name: 'E-Commerce (Shopify & WooCommerce)', level: 88, note: 'Store setup, product variants & conversion optimization' }
       ]
     },
     {
       title: 'Electronics & Communication Engineering',
-      icon: 'Cpu',
+      icon: 'Radio',
       skills: [
-        { name: 'Analog & Digital Signal Conversion', level: 88, note: 'Sampling, modulation & signal integrity' },
-        { name: 'Communication Systems Fundamentals', level: 85, note: 'Transmitters, receivers & data transmission' },
-        { name: 'Satellite & Wireless Communication', level: 82, note: 'RF propagation, antenna systems & links' },
-        { name: 'Circuit Simulation (eSim & CircuitJS)', level: 88, note: 'Schematic capture & circuit verification' }
+        { name: 'Analog & Digital Signal Conversion', level: 88, note: 'Sampling theorems, quantization, filtering & ADC/DAC circuits' },
+        { name: 'Communication Systems Fundamentals', level: 90, note: 'AM/FM/PM modulation, noise figures & transmission lines' },
+        { name: 'Satellite & Wireless Communication', level: 85, note: 'Link budgets, orbital propagation & cellular standards' },
+        { name: 'Circuit Simulation (eSim & CircuitJS)', level: 90, note: 'Schematic capture, transient analysis & frequency response' }
       ]
     },
     {
-      title: 'Modern AI Tools & Productivity',
+      title: 'Brand Identity & Digital Assets',
+      icon: 'Palette',
+      skills: [
+        { name: 'Vector Logo Design & Typography', level: 92, note: 'Geometric branding, scalable SVG wordmarks & icons' },
+        { name: 'Social Media & Graphic Design', level: 90, note: 'Banners, promotional collateral & marketing cards' },
+        { name: 'Technical SEO & OpenGraph', level: 92, note: 'Structured JSON-LD schema, Twitter cards & Google Search Console' }
+      ]
+    },
+    {
+      title: 'Tools, AI & Professional Workflow',
       icon: 'Sparkles',
       skills: [
         { name: 'Proficiency in AI Tools', level: 95, note: 'Productivity acceleration, research & automated workflows' },
@@ -149,56 +188,5 @@ I am also proficient in using AI tools to enhance productivity, research, conten
     { name: 'English', proficiency: 'Professional Working Proficiency', flag: '🇬🇧' },
     { name: 'Hindi', proficiency: 'Fluent', flag: '🇮🇳' },
     { name: 'Gujarati', proficiency: 'Native / Bilingual', flag: '🇮🇳' }
-  ],
-
-  projects: [
-    {
-      id: 'click-n-create-platform',
-      title: 'Click N Create Web Platform & Custom Estimator',
-      category: 'Full-Stack Web Development & Custom Tool',
-      clientOrRole: 'Founder & Full-Stack Developer',
-      timeline: '2024 – Present (Flagship Platform)',
-      description: 'The official freelance digital development platform for Click N Create. Built from scratch featuring an interactive real-time cost calculator, multi-page client hub, responsive glassmorphism UI, high-contrast dark/light theme engine, sub-second speed performance, and 1-click WhatsApp quote generator.',
-      featuredImage: '/file_00000000440061f7b67bc59e52b0df8e.png',
-      tags: ['React 19', 'TypeScript', 'Tailwind CSS', 'Interactive Estimator', 'Responsive UI', 'Sub-Second Speed'],
-      achievements: [
-        'Engineered custom real-time quote estimator with transparent £35/hr and fixed milestone calculation',
-        'Built responsive mobile-first architecture with sub-second page loads and zero layout shift',
-        'Integrated seamless WhatsApp and direct email quotation pipelines for instant client onboarding'
-      ],
-      liveUrl: 'https://clickncreate.co.uk'
-    },
-    {
-      id: 'click-n-create-brand-identity',
-      title: 'Click N Create Brand Identity & Vector Logo System',
-      category: 'Brand Identity & Graphic Design',
-      clientOrRole: 'Brand Designer & Creator',
-      timeline: '2024 – Present',
-      description: 'Complete visual identity system and logo design crafted for the Click N Create brand. Includes custom geometric typography wordmark, vector icon badge, dark/light high-contrast color palettes, social media banners, and digital promotional collateral.',
-      featuredImage: '/file_000000003c4c61f9a6295fced3c44012.png',
-      tags: ['Vector Logo Design', 'Brand Guidelines', 'Typography System', 'Dark/Light Palette', 'Social Media Assets'],
-      achievements: [
-        'Designed distinctive cyber-futuristic logo and typography wordmark for high legibility across screens',
-        'Crafted dark & light mode adaptable brand color schemes and glowing UI assets',
-        'Exported multi-resolution vector SVG, PNG, and print-ready graphic assets'
-      ],
-      liveUrl: 'https://clickncreate.co.uk'
-    },
-    {
-      id: 'click-n-create-infrastructure',
-      title: 'Production Cloud Infrastructure, Domain & Security Setup',
-      category: 'Cloud Deployment & DevOps',
-      clientOrRole: 'Lead Systems & Deployment Engineer',
-      timeline: '2024 – Present',
-      description: 'End-to-end cloud infrastructure configuration and production setup for Click N Create. Includes custom domain DNS routing, automated SSL/TLS 1.3 encryption, edge CDN caching, SEO meta tag architecture, Google Search Console indexing, and GDPR-compliant cookie consent.',
-      featuredImage: '/file_00000000dcbc61f9ac09271ea9b4755e.png',
-      tags: ['Cloud Hosting', 'DNS Management', 'SSL / TLS 1.3', 'Technical SEO', 'GDPR Compliance', '60fps Optimization'],
-      achievements: [
-        'Configured custom domain DNS records with automated HTTPS security and global edge CDN caching',
-        'Implemented technical SEO, OpenGraph social cards, and Schema.org structured data for search discovery',
-        'Engineered zero-lag, 60fps responsive performance with GPU hardware acceleration'
-      ],
-      liveUrl: 'https://clickncreate.co.uk'
-    }
   ]
 };

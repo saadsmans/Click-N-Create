@@ -4,6 +4,7 @@ import { ArrowDown, ArrowUpRight, Sparkles, MessageSquare, CheckCircle2, ShieldC
 import { HeroMotionGraphics } from '../components/HeroMotionGraphics.tsx';
 import { StickyStackingServices } from '../components/StickyStackingServices.tsx';
 import { CapabilitiesSection } from '../components/CapabilitiesSection.tsx';
+import { RecentWorksSection } from '../components/RecentWorksSection.tsx';
 import { WhyUsSection } from '../components/WhyUsSection.tsx';
 import { ProcessSection } from '../components/ProcessSection.tsx';
 import { FAQAccordion } from '../components/FAQAccordion.tsx';
@@ -344,6 +345,9 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
 
       {/* ===================== WHAT I CAN BUILD SECTION ===================== */}
       <CapabilitiesSection onEnquire={() => onNavigate('/contact')} />
+
+      {/* ===================== RECENT CLIENT WORKS & DELIVERIES ===================== */}
+      <RecentWorksSection onNavigate={onNavigate} />
 
       {/* ===================== WHY CLICK N CREATE ===================== */}
       <WhyUsSection />
