@@ -8,7 +8,7 @@ interface LogoProps {
 }
 
 /**
- * Pure Typographic Brandmark for Click N Create (no image logo, clean sleek typography)
+ * Pure Typographic Brandmark for Click N Create (clean sleek typography)
  */
 export const ClickNCreateLogo: React.FC<LogoProps> = ({
   className = '',
