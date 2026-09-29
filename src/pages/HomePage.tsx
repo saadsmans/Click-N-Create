@@ -138,7 +138,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
               <span className="block font-mono text-xs sm:text-sm tracking-widest text-[#00F0FF] uppercase drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
                 [ {SITE_CONFIG.brand} ]
               </span>
-              <h1 className={`text-4xl sm:text-6xl md:text-7xl font-black font-display tracking-tight leading-[1.08] text-balance drop-shadow-[0_3px_16px_rgba(0,0,0,0.8)] ${
+              <h1 className={`text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black font-display tracking-tight leading-tight sm:leading-[1.08] break-words drop-shadow-[0_3px_16px_rgba(0,0,0,0.8)] ${
                 isDark ? 'text-white' : 'text-zinc-950'
               }`}>
                 WEBSITES & ONLINE SHOPS <span className="text-cyber-gradient">THAT GET YOU CUSTOMERS.</span>
@@ -287,7 +287,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
               <span className="text-xs font-mono text-blue-500 uppercase font-semibold">
                 Clear & Predictable Pricing
               </span>
-              <h2 className={`text-3xl sm:text-4xl font-extrabold font-display tracking-tight ${
+              <h2 className={`text-2xl sm:text-3xl md:text-4xl font-extrabold font-display tracking-tight break-words ${
                 isDark ? 'text-white' : 'text-zinc-950'
               }`}>
                 HONEST £35/HR RATE OR FIXED-PRICE PACKAGES

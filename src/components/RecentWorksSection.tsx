@@ -91,7 +91,7 @@ export const RecentWorksSection: React.FC<RecentWorksSectionProps> = ({ onNaviga
                   </span>
                 </div>
 
-                <h3 className={`text-2xl sm:text-3xl md:text-4xl font-black font-display tracking-tight leading-tight ${
+                <h3 className={`text-2xl sm:text-3xl md:text-4xl font-black font-display tracking-tight leading-tight break-words ${
                   isDark ? 'text-white' : 'text-zinc-950'
                 }`}>
                   Owais Portfolio & <span className="text-cyber-gradient">Academic Dashboard</span>
@@ -351,7 +351,7 @@ export const RecentWorksSection: React.FC<RecentWorksSectionProps> = ({ onNaviga
                     </span>
                   </div>
 
-                  <h3 className={`text-2xl sm:text-3xl font-black font-display tracking-tight leading-tight ${
+                  <h3 className={`text-2xl sm:text-3xl font-black font-display tracking-tight leading-tight break-words ${
                     isDark ? 'text-white' : 'text-zinc-950'
                   }`}>
                     {clickNCreateProject.title}

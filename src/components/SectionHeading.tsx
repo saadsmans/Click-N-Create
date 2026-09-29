@@ -22,20 +22,20 @@ export const SectionHeading: React.FC<SectionHeadingProps> = ({
   const isDark = theme === 'dark';
 
   return (
-    <div className={`mb-12 md:mb-16 ${isCenter ? 'text-center mx-auto max-w-3xl' : 'max-w-2xl'} ${className}`}>
+    <div className={`mb-10 md:mb-16 w-full max-w-full overflow-hidden ${isCenter ? 'text-center mx-auto max-w-3xl' : 'max-w-2xl'} ${className}`}>
       {category && (
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.4 }}
-          className={`text-xs font-mono tracking-widest uppercase mb-3 flex items-center gap-2 ${
+          className={`text-xs font-mono tracking-widest uppercase mb-3 flex items-center gap-2 flex-wrap ${
             isDark ? 'text-[#00F0FF] font-bold' : 'text-cyan-800 font-bold'
           }`}
           style={{ justifyContent: isCenter ? 'center' : 'flex-start' }}
         >
-          <span className={`w-1.5 h-1.5 rounded-full ${isDark ? 'bg-[#00F0FF] shadow-[0_0_6px_#00F0FF]' : 'bg-cyan-600'}`} />
-          <span>[ {category} ]</span>
+          <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${isDark ? 'bg-[#00F0FF] shadow-[0_0_6px_#00F0FF]' : 'bg-cyan-600'}`} />
+          <span className="break-words">[ {category} ]</span>
         </motion.div>
       )}
 
@@ -44,7 +44,7 @@ export const SectionHeading: React.FC<SectionHeadingProps> = ({
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.5, delay: 0.1 }}
-        className={`text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight leading-[1.1] text-balance font-display ${
+        className={`text-2xl sm:text-4xl md:text-5xl font-extrabold tracking-tight leading-tight sm:leading-[1.1] break-words font-display ${
           isDark ? 'text-white' : 'text-zinc-950'
         }`}
       >
@@ -57,7 +57,7 @@ export const SectionHeading: React.FC<SectionHeadingProps> = ({
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className={`mt-4 text-base md:text-lg leading-relaxed text-balance ${
+          className={`mt-3 sm:mt-4 text-sm sm:text-base md:text-lg leading-relaxed break-words ${
             isDark ? 'text-zinc-400' : 'text-zinc-600'
           }`}
         >

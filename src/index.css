@@ -68,7 +68,13 @@
 
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-display);
-    letter-spacing: -0.03em;
+    letter-spacing: -0.02em;
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+
+  p, span, a, li, blockquote {
+    overflow-wrap: break-word;
   }
 }
 

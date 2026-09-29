@@ -48,7 +48,7 @@ export const FinalCTA: React.FC<FinalCTAProps> = ({ onStartProject, onExploreSer
           <div className="text-xl sm:text-2xl md:text-3xl font-mono tracking-wider uppercase text-zinc-500">
             HAVE AN IDEA?
           </div>
-          <h2 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black font-display tracking-tight leading-none">
+          <h2 className="text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-black font-display tracking-tight leading-tight sm:leading-none break-words">
             LET'S <span className="text-cyber-gradient">CREATE</span> IT.
           </h2>
         </motion.div>
