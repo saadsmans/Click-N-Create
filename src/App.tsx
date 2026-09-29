@@ -28,17 +28,30 @@ import { PrivacyPolicyPage } from './pages/PrivacyPolicyPage.tsx';
 import { TermsPage } from './pages/TermsPage.tsx';
 import { NotFoundPage } from './pages/NotFoundPage.tsx';
 
+function normalizePath(rawPath: string): string {
+  if (!rawPath) return '/';
+  let cleaned = rawPath.trim();
+  // Remove hash/search if passed as full pathname
+  if (cleaned.includes('?')) cleaned = cleaned.split('?')[0];
+  if (cleaned.includes('#') && !cleaned.startsWith('/#')) cleaned = cleaned.split('#')[0];
+  // Remove trailing slash unless root
+  if (cleaned.length > 1 && cleaned.endsWith('/')) {
+    cleaned = cleaned.slice(0, -1);
+  }
+  return cleaned.toLowerCase() || '/';
+}
+
 function AppContent() {
   const [currentPath, setCurrentPath] = useState<string>(() => {
     if (typeof window !== 'undefined') {
-      return window.location.pathname || '/';
+      return normalizePath(window.location.pathname);
     }
     return '/';
   });
 
   useEffect(() => {
     const handlePopState = () => {
-      setCurrentPath(window.location.pathname || '/');
+      setCurrentPath(normalizePath(window.location.pathname));
     };
 
     window.addEventListener('popstate', handlePopState);
@@ -48,7 +61,8 @@ function AppContent() {
   const handleNavigate = (path: string) => {
     if (path.startsWith('/#')) {
       const targetId = path.replace('/#', '');
-      if (currentPath !== '/') {
+      const normalizedCurrent = normalizePath(currentPath);
+      if (normalizedCurrent !== '/') {
         window.history.pushState({}, '', '/');
         setCurrentPath('/');
         setTimeout(() => {
@@ -62,9 +76,10 @@ function AppContent() {
       return;
     }
 
-    if (path !== currentPath) {
+    const normalizedTarget = normalizePath(path);
+    if (normalizedTarget !== currentPath) {
       window.history.pushState({}, '', path);
-      setCurrentPath(path);
+      setCurrentPath(normalizedTarget);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -72,56 +87,58 @@ function AppContent() {
   };
 
   const renderCurrentPage = () => {
-    if (currentPath === '/' || currentPath === '') {
+    const path = normalizePath(currentPath);
+
+    if (path === '/' || path === '') {
       return <HomePage onNavigate={handleNavigate} />;
     }
 
-    if (currentPath === '/services') {
+    if (path === '/services') {
       return <ServicesPage onNavigate={handleNavigate} />;
     }
 
-    if (currentPath === '/about') {
+    if (path === '/about') {
       return <AboutPage onNavigate={handleNavigate} />;
     }
 
-    if (currentPath === '/portfolio') {
+    if (path === '/portfolio') {
       return <PortfolioPage onNavigate={handleNavigate} />;
     }
 
-    if (currentPath === '/pricing') {
+    if (path === '/pricing') {
       return <PricingPage onNavigate={handleNavigate} />;
     }
 
-    if (currentPath === '/estimator') {
+    if (path === '/estimator') {
       return <EstimatorPage onNavigate={handleNavigate} />;
     }
 
-    if (currentPath === '/process') {
+    if (path === '/process') {
       return <ProcessPage onNavigate={handleNavigate} />;
     }
 
-    if (currentPath === '/standards') {
+    if (path === '/standards') {
       return <StandardsPage onNavigate={handleNavigate} />;
     }
 
-    if (currentPath === '/faq') {
+    if (path === '/faq') {
       return <FAQPage onNavigate={handleNavigate} />;
     }
 
-    if (currentPath === '/contact') {
+    if (path === '/contact') {
       return <ContactPage />;
     }
 
-    if (currentPath === '/privacy-policy') {
+    if (path === '/privacy-policy') {
       return <PrivacyPolicyPage onNavigate={handleNavigate} />;
     }
 
-    if (currentPath === '/terms') {
+    if (path === '/terms') {
       return <TermsPage onNavigate={handleNavigate} />;
     }
 
-    if (currentPath.startsWith('/services/')) {
-      const slug = currentPath.replace('/services/', '').replace(/\/$/, '');
+    if (path.startsWith('/services/')) {
+      const slug = path.replace('/services/', '').replace(/\/$/, '');
       return <ServiceDetailPage slug={slug} onNavigate={handleNavigate} />;
     }
 
