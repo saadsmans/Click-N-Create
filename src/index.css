@@ -3,7 +3,7 @@
 @theme {
   --font-display: 'Syne', sans-serif;
   --font-sans: 'Plus Jakarta Sans', sans-serif;
-  --font-mono: 'JetBrains Mono', monospace;
+  --font-mono: 'Hubot Sans', sans-serif;
 }
 
 @layer base {
