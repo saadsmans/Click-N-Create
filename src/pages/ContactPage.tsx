@@ -3,11 +3,18 @@ import { MessageSquare, Mail, Phone, Linkedin, Clock, ShieldCheck, Sparkles, Arr
 import { ContactForm } from '../components/ContactForm.tsx';
 import { SITE_CONFIG } from '../data/site.ts';
 import { useTheme } from '../context/ThemeContext.tsx';
+import { useCustomization } from '../context/CustomizationContext.tsx';
 import { SEOHead } from '../components/SEOHead.tsx';
 
 export const ContactPage: React.FC = () => {
   const { theme } = useTheme();
   const isDark = theme === 'dark';
+  const { getPageContent } = useCustomization();
+  const cms = getPageContent('contact');
+
+  const phoneDisplay = cms.phoneNumber || SITE_CONFIG.phone;
+  const emailDisplay = cms.emailAddress || SITE_CONFIG.email;
+  const whatsappDisplay = cms.whatsappNumber || SITE_CONFIG.phone;
 
   return (
     <div className="pt-28 pb-20 md:pt-36 relative overflow-x-hidden w-full max-w-full">
@@ -32,19 +39,19 @@ export const ContactPage: React.FC = () => {
                 isDark ? 'border-white/10 bg-white/5 text-blue-400' : 'border-zinc-300 bg-white text-blue-600 shadow-2xs font-semibold'
               }`}>
                 <Sparkles className="w-3.5 h-3.5" />
-                <span>Direct Inbound to Saad M</span>
+                <span>{cms.badgeText || 'Direct Inbound to Saad M'}</span>
               </div>
 
               <h1 className={`text-4xl sm:text-5xl md:text-6xl font-black font-display tracking-tight leading-[1.05] ${
                 isDark ? 'text-white' : 'text-zinc-950'
               }`}>
-                LET'S TALK ABOUT YOUR <span className="text-luxury-gradient">PROJECT.</span>
+                {cms.heroTitle || "LET'S TALK ABOUT YOUR"} <span className="text-luxury-gradient">{cms.heroHighlight || 'PROJECT.'}</span>
               </h1>
 
               <p className={`mt-5 text-base sm:text-lg leading-relaxed ${
                 isDark ? 'text-zinc-400' : 'text-zinc-600'
               }`}>
-                You communicate directly with <strong className={isDark ? 'text-white' : 'text-zinc-950'}>Saad M</strong>. Standard rate is <strong className="text-blue-500 font-bold">£35/hr</strong>, with custom milestone scopes available. Messages submit straight to my personal inbox.
+                {cms.heroSubtitle || 'You communicate directly with Saad M. Standard rate is £35/hr, with custom milestone scopes available. Messages submit straight to my personal inbox.'}
               </p>
             </div>
 
@@ -52,7 +59,7 @@ export const ContactPage: React.FC = () => {
             <div className="space-y-3 pt-1">
               {/* WhatsApp Card */}
               <a
-                href={SITE_CONFIG.whatsappUrl}
+                href={cms.whatsappNumber ? `https://wa.me/${cms.whatsappNumber.replace(/[^0-9]/g, '')}` : SITE_CONFIG.whatsappUrl}
                 target="_blank"
                 rel="noreferrer"
                 className={`p-4 rounded-2xl border flex items-center justify-between transition-all group ${
@@ -68,7 +75,7 @@ export const ContactPage: React.FC = () => {
                   <div>
                     <span className="text-xs font-mono text-zinc-500 uppercase block">WhatsApp (Direct Chat)</span>
                     <span className={`text-sm font-bold font-display ${isDark ? 'text-white' : 'text-zinc-950'}`}>
-                      {SITE_CONFIG.phone}
+                      {whatsappDisplay}
                     </span>
                   </div>
                 </div>
@@ -77,7 +84,7 @@ export const ContactPage: React.FC = () => {
 
               {/* Email Card */}
               <a
-                href={`mailto:${SITE_CONFIG.email}`}
+                href={`mailto:${emailDisplay}`}
                 className={`p-4 rounded-2xl border flex items-center justify-between transition-all group ${
                   isDark
                     ? 'border-white/10 bg-white/[0.025] hover:border-blue-500/40 hover:bg-blue-500/5'
@@ -91,7 +98,7 @@ export const ContactPage: React.FC = () => {
                   <div>
                     <span className="text-xs font-mono text-zinc-500 uppercase block">Direct Email</span>
                     <span className={`text-sm font-bold font-display ${isDark ? 'text-white' : 'text-zinc-950'}`}>
-                      {SITE_CONFIG.email}
+                      {emailDisplay}
                     </span>
                   </div>
                 </div>
@@ -100,7 +107,7 @@ export const ContactPage: React.FC = () => {
 
               {/* LinkedIn Card */}
               <a
-                href={SITE_CONFIG.linkedinUrl}
+                href={cms.linkedinUrl || SITE_CONFIG.linkedinUrl}
                 target="_blank"
                 rel="noreferrer"
                 className={`p-4 rounded-2xl border flex items-center justify-between transition-all group ${
@@ -132,9 +139,9 @@ export const ContactPage: React.FC = () => {
             }`}>
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                <span>Rate: £35/hr · Open for 2026 Projects</span>
+                <span>{cms.availabilityText || 'Rate: £35/hr · Open for 2026 Projects'}</span>
               </div>
-              <span className="font-bold">Active</span>
+              <span className="font-bold">{cms.availabilityStatus || 'Active'}</span>
             </div>
           </div>
 

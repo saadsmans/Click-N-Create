@@ -22,6 +22,7 @@ import {
 } from 'lucide-react';
 import { SITE_CONFIG } from '../data/site.ts';
 import { useTheme } from '../context/ThemeContext.tsx';
+import { useCustomization } from '../context/CustomizationContext.tsx';
 import { SEOHead } from '../components/SEOHead.tsx';
 
 interface EstimatorPageProps {
@@ -597,6 +598,8 @@ const DELIVERY_TIERS = [
 export const EstimatorPage: React.FC<EstimatorPageProps> = ({ onNavigate }) => {
   const { theme } = useTheme();
   const isDark = theme === 'dark';
+  const { getPageContent } = useCustomization();
+  const cms = getPageContent('estimator') || {};
 
   // State
   const [selectedArchetypeId, setSelectedArchetypeId] = useState<string>('branding-design');
@@ -717,13 +720,40 @@ Email: Mansurisaad28012@gmail.com
 WhatsApp: +44 7927 548123`;
   };
 
+  const saveQuoteToBackend = async () => {
+    try {
+      await fetch('/api/quotes', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          serviceId: selectedArchetypeId,
+          serviceName: currentArchetype.name,
+          baseHours: currentArchetype.baseHours,
+          selectedDeliverables,
+          pageCount: selectedArchetypeId === 'web-development' ? pageCount : undefined,
+          productCount: selectedArchetypeId === 'ecommerce-development' ? productCount : undefined,
+          deliveryTier,
+          deliveryMultiplier: currentTierObj.multiplier,
+          totalEstimatedHours,
+          hourlyRate: SITE_CONFIG.hourlyRateNumber,
+          totalCost,
+          timeline: currentArchetype.timeline,
+        }),
+      });
+    } catch (err) {
+      console.warn('Backend quote log fallback:', err);
+    }
+  };
+
   const handleCopyQuote = () => {
+    saveQuoteToBackend();
     navigator.clipboard.writeText(generateQuoteText());
     setCopiedQuote(true);
     setTimeout(() => setCopiedQuote(false), 2500);
   };
 
   const handleSendToWhatsApp = () => {
+    saveQuoteToBackend();
     const encoded = encodeURIComponent(generateQuoteText());
     window.open(`https://wa.me/447927548123?text=${encoded}`, '_blank');
   };
@@ -753,7 +783,7 @@ WhatsApp: +44 7927 548123`;
             }`}
           >
             <Calculator className="w-3.5 h-3.5" />
-            <span>Instant Price Calculator</span>
+            <span>{cms.badgeText || 'Instant Price Calculator'}</span>
           </div>
 
           <h1
@@ -761,7 +791,7 @@ WhatsApp: +44 7927 548123`;
               isDark ? 'text-white' : 'text-zinc-950'
             }`}
           >
-            PROJECT <span className="text-cyber-gradient">ESTIMATOR</span>
+            {cms.heroTitle || 'PROJECT'} <span className="text-cyber-gradient">{cms.heroHighlight || 'ESTIMATOR'}</span>
           </h1>
 
           <p
@@ -769,7 +799,11 @@ WhatsApp: +44 7927 548123`;
               isDark ? 'text-zinc-400' : 'text-zinc-600'
             }`}
           >
-            Calculate an honest, upfront price in 3 simple steps. Choose what your business needs in <strong>Step 1</strong>, pick your exact items in <strong>Step 2</strong> (like logos, banners, flyers, or search ranking), and get a transparent price with no hidden surprises.
+            {cms.heroSubtitle || (
+              <>
+                Calculate an honest, upfront price in 3 simple steps. Choose what your business needs in <strong>Step 1</strong>, pick your exact items in <strong>Step 2</strong> (like logos, banners, flyers, or search ranking), and get a transparent price with no hidden surprises.
+              </>
+            )}
           </p>
         </div>
 

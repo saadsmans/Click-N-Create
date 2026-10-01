@@ -112,38 +112,38 @@ export const TermsPage: React.FC<TermsPageProps> = ({ onNavigate }) => {
           <button
             type="button"
             onClick={() => onNavigate('/')}
-            className="inline-flex items-center gap-2 text-xs font-mono text-zinc-400 hover:text-white transition-colors cursor-pointer group"
+            className="inline-flex items-center gap-2 text-xs font-mono text-zinc-900 dark:text-zinc-200 hover:text-cyan-600 dark:hover:text-[#00F0FF] transition-colors cursor-pointer group font-bold"
           >
-            <ArrowLeft className="w-3.5 h-3.5 text-[#00F0FF] group-hover:-translate-x-1 transition-transform" />
+            <ArrowLeft className="w-3.5 h-3.5 text-cyan-600 dark:text-[#00F0FF] group-hover:-translate-x-1 transition-transform" />
             <span>Back to Home</span>
           </button>
 
-          <div className="flex items-center gap-2 text-[11px] font-mono text-zinc-500">
-            <span className="w-2 h-2 rounded-full bg-[#00F0FF] animate-pulse" />
+          <div className="flex items-center gap-2 text-[11px] font-mono text-zinc-800 dark:text-zinc-300 font-semibold">
+            <span className="w-2 h-2 rounded-full bg-cyan-600 dark:bg-[#00F0FF] animate-pulse" />
             <span>Commercial Terms · Saad M</span>
           </div>
         </div>
 
         {/* Hero Card */}
         <div
-          className={`rounded-3xl border p-8 sm:p-10 mb-10 backdrop-blur-2xl relative overflow-hidden ${
+          className={`rounded-3xl border p-8 sm:p-10 mb-10 backdrop-blur-2xl relative overflow-hidden transition-colors ${
             isDark
               ? 'border-[#00F0FF]/30 bg-[#060612]/90 shadow-[0_20px_60px_rgba(0,0,0,0.8)]'
               : 'border-zinc-200 bg-white shadow-xl'
           }`}
         >
-          <div className="absolute top-0 right-0 w-80 h-80 bg-[#00F0FF]/5 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute top-0 right-0 w-80 h-80 bg-cyan-500/10 dark:bg-[#00F0FF]/5 rounded-full blur-3xl pointer-events-none" />
 
-          <div className="flex items-center gap-2 text-xs font-mono text-[#00F0FF] uppercase tracking-wider mb-3 font-semibold">
+          <div className="flex items-center gap-2 text-xs font-mono text-cyan-700 dark:text-[#00F0FF] uppercase tracking-wider mb-3 font-bold">
             <FileText className="w-4 h-4" />
             <span>Freelance Engineering Agreement</span>
           </div>
 
-          <h1 className={`text-3xl sm:text-5xl font-display font-black tracking-tight ${isDark ? 'text-white' : 'text-zinc-950'}`}>
+          <h1 className="text-3xl sm:text-5xl font-display font-black tracking-tight text-black dark:text-white">
             Terms & Conditions
           </h1>
 
-          <div className="mt-4 flex flex-wrap items-center gap-4 text-xs font-mono text-zinc-400">
+          <div className="mt-4 flex flex-wrap items-center gap-4 text-xs font-mono text-zinc-900 dark:text-zinc-200 font-medium">
             <span><strong>Last Updated:</strong> September 2026</span>
             <span>·</span>
             <span><strong>Standard Rate:</strong> £35/hour</span>
@@ -151,8 +151,8 @@ export const TermsPage: React.FC<TermsPageProps> = ({ onNavigate }) => {
             <span><strong>Operator:</strong> Saad M (Click N Create)</span>
           </div>
 
-          <p className="mt-4 text-sm sm:text-base leading-relaxed text-zinc-300 max-w-3xl">
-            These terms establish a transparent, fair, and professional working relationship between you (the Client) and <strong className="text-white">Saad M</strong> operating as <strong className="text-white">Click N Create</strong>. No hidden fees, no confusing legal jargon — just clean engineering agreements.
+          <p className="mt-4 text-sm sm:text-base leading-relaxed text-black dark:text-white max-w-3xl font-medium">
+            These terms establish a transparent, fair, and professional working relationship between you (the Client) and <strong className="font-bold text-cyan-700 dark:text-[#00F0FF]">Saad M</strong> operating as <strong className="font-bold text-black dark:text-white">Click N Create</strong>. No hidden fees, no confusing legal jargon — just clean engineering agreements.
           </p>
         </div>
 
@@ -166,24 +166,24 @@ export const TermsPage: React.FC<TermsPageProps> = ({ onNavigate }) => {
                 className={`rounded-3xl border p-6 sm:p-8 backdrop-blur-xl transition-all ${
                   isDark
                     ? 'border-white/10 bg-[#070714]/80 hover:border-[#00F0FF]/30'
-                    : 'border-zinc-200 bg-white shadow-sm hover:border-cyan-400'
+                    : 'border-zinc-200 bg-white shadow-sm hover:border-cyan-500'
                 }`}
               >
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 pb-3 border-b border-black/[0.06] dark:border-white/[0.06]">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 pb-3 border-b border-zinc-200 dark:border-white/10">
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-xl bg-[#00F0FF]/15 text-[#00F0FF] flex items-center justify-center shrink-0">
+                    <div className="w-8 h-8 rounded-xl bg-cyan-500/15 dark:bg-[#00F0FF]/15 text-cyan-700 dark:text-[#00F0FF] flex items-center justify-center shrink-0">
                       <Icon className="w-4 h-4" />
                     </div>
-                    <h2 className={`text-lg sm:text-xl font-display font-bold ${isDark ? 'text-white' : 'text-zinc-950'}`}>
+                    <h2 className="text-lg sm:text-xl font-display font-bold text-black dark:text-white">
                       {sec.title}
                     </h2>
                   </div>
-                  <span className="text-xs font-mono font-bold text-[#00F0FF] px-2.5 py-1 rounded-full bg-[#00F0FF]/10 border border-[#00F0FF]/25 self-start sm:self-auto">
+                  <span className="text-xs font-mono font-bold text-cyan-700 dark:text-[#00F0FF] px-2.5 py-1 rounded-full bg-cyan-500/10 dark:bg-[#00F0FF]/10 border border-cyan-500/30 dark:border-[#00F0FF]/25 self-start sm:self-auto">
                     SECTION {sec.number}
                   </span>
                 </div>
 
-                <p className="text-sm sm:text-base text-zinc-300 leading-relaxed font-sans">
+                <p className="text-sm sm:text-base text-black dark:text-white leading-relaxed font-sans font-medium">
                   {sec.content}
                 </p>
               </div>
@@ -195,20 +195,20 @@ export const TermsPage: React.FC<TermsPageProps> = ({ onNavigate }) => {
         <div
           className={`mt-10 rounded-3xl border p-8 sm:p-10 backdrop-blur-xl ${
             isDark
-              ? 'border-[#00F0FF]/40 bg-[#08081A]/95 text-zinc-300 shadow-[0_20px_50px_rgba(0,0,0,0.9)]'
-              : 'border-cyan-400 bg-cyan-50/50 text-zinc-800 shadow-lg'
+              ? 'border-[#00F0FF]/40 bg-[#08081A]/95 text-white shadow-[0_20px_50px_rgba(0,0,0,0.9)]'
+              : 'border-cyan-400 bg-cyan-50/70 text-black shadow-lg'
           }`}
         >
           <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
             <div className="space-y-2 max-w-xl">
-              <span className="text-xs font-mono font-bold uppercase tracking-wider text-[#00F0FF] flex items-center gap-1.5">
+              <span className="text-xs font-mono font-bold uppercase tracking-wider text-cyan-700 dark:text-[#00F0FF] flex items-center gap-1.5">
                 <HelpCircle className="w-4 h-4" />
                 <span>Questions About These Terms?</span>
               </span>
-              <h3 className={`text-2xl font-display font-bold ${isDark ? 'text-white' : 'text-zinc-950'}`}>
+              <h3 className="text-2xl font-display font-bold text-black dark:text-white">
                 Have a specific project contract or NDA requirement?
               </h3>
-              <p className="text-sm text-zinc-400 leading-relaxed font-sans">
+              <p className="text-sm text-black dark:text-white leading-relaxed font-sans font-medium">
                 I am happy to review and sign mutual Non-Disclosure Agreements (NDAs) and customize milestone deliverables to suit your enterprise or startup requirements.
               </p>
             </div>
@@ -227,10 +227,10 @@ export const TermsPage: React.FC<TermsPageProps> = ({ onNavigate }) => {
                 className={`px-5 py-3.5 rounded-xl border font-mono text-xs flex items-center justify-center gap-2 transition-colors ${
                   isDark
                     ? 'border-white/10 hover:bg-white/10 text-white'
-                    : 'border-zinc-300 bg-white hover:bg-zinc-100 text-zinc-900'
+                    : 'border-zinc-300 bg-white hover:bg-zinc-100 text-black'
                 }`}
               >
-                <Mail className="w-3.5 h-3.5 text-[#00F0FF]" />
+                <Mail className="w-3.5 h-3.5 text-cyan-600 dark:text-[#00F0FF]" />
                 <span>Email Saad M</span>
               </a>
             </div>

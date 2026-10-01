@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ArrowUpRight, CheckCircle2, Sparkles, Layers, ShieldCheck, Zap } from 'lucide-react';
 import { SERVICES, ServiceItem } from '../data/services.ts';
@@ -16,25 +16,6 @@ export const StickyStackingServices: React.FC<StickyStackingServicesProps> = ({
 }) => {
   const { theme } = useTheme();
   const isDark = theme === 'dark';
-  const [activeCategory, setActiveCategory] = useState<string>('all');
-
-  const categories = [
-    { id: 'all', label: 'All Services (6)' },
-    { id: 'Websites', label: 'Business Websites' },
-    { id: 'E-Commerce', label: 'Online Shops' },
-    { id: 'Web Apps', label: 'Custom Web Apps' },
-    { id: 'SEO & Growth', label: 'SEO & Speed' },
-  ];
-
-  const filteredServices = activeCategory === 'all'
-    ? SERVICES
-    : SERVICES.filter((s) => {
-        if (activeCategory === 'Websites') return s.slug === 'custom-business-websites' || s.slug === 'managed-website-care';
-        if (activeCategory === 'E-Commerce') return s.slug === 'online-shops-ecommerce';
-        if (activeCategory === 'Web Apps') return s.slug === 'web-app-development';
-        if (activeCategory === 'SEO & Growth') return s.slug === 'get-found-on-google-seo' || s.slug === 'logo-brand-identity';
-        return true;
-      });
 
   return (
     <section id="services" className="relative py-20 md:py-28 overflow-hidden">
@@ -89,35 +70,10 @@ export const StickyStackingServices: React.FC<StickyStackingServicesProps> = ({
           </div>
         </div>
 
-        {/* Interactive Filter Pills */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-4 mb-8 scrollbar-none">
-          {categories.map((cat) => {
-            const isActive = activeCategory === cat.id;
-            return (
-              <button
-                key={cat.id}
-                type="button"
-                onClick={() => setActiveCategory(cat.id)}
-                className={`px-4 py-2 rounded-full font-mono text-xs whitespace-nowrap transition-all duration-200 cursor-pointer border select-none ${
-                  isActive
-                    ? isDark
-                      ? 'border-[#00F0FF] bg-[#00F0FF] text-black font-bold shadow-[0_0_15px_rgba(0,240,255,0.5)]'
-                      : 'border-cyan-600 bg-cyan-600 text-white font-bold shadow-sm'
-                    : isDark
-                    ? 'border-white/10 bg-white/[0.03] text-zinc-400 hover:border-white/20 hover:text-white'
-                    : 'border-zinc-200 bg-white text-zinc-600 hover:border-zinc-300 hover:text-zinc-950'
-                }`}
-              >
-                {cat.label}
-              </button>
-            );
-          })}
-        </div>
-
         {/* High-Performance Smooth Service Cards Grid (Zero Stutter, Native 60fps) */}
         <div className="grid grid-cols-1 gap-6 sm:gap-8">
           <AnimatePresence mode="popLayout">
-            {filteredServices.map((service: ServiceItem, index: number) => {
+            {SERVICES.map((service: ServiceItem, index: number) => {
               return (
                 <motion.div
                   key={service.id}

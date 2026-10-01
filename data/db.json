@@ -1,0 +1,2492 @@
+{
+  "inquiries": [],
+  "quotes": [],
+  "clients": [],
+  "projects": [],
+  "tasks": [],
+  "appointments": [],
+  "messages": [],
+  "expenses": [],
+  "emailTemplates": [
+    {
+      "id": "tmpl-quote",
+      "name": "Project Quotation Proposal",
+      "category": "quote",
+      "subject": "Click N Create · Project Quotation & Scope Breakdown for {{clientName}}",
+      "body": "Hi {{clientName}},\n\nThank you for reaching out to Click N Create!\n\nI have reviewed your project requirements and put together an itemized scope and price estimate for {{projectName}}.\n\n• Estimated Development Time: ~{{hours}} hours\n• Rate: £35/hr (Fixed Milestone Scope)\n• Total Estimated Investment: £{{totalCost}}\n• Expected Timeline: {{timeline}}\n\nYou can review your scope breakdown and project status directly in your Client Portal anytime.\n\nLet me know if you would like to book a quick 15-minute alignment call to get started!\n\nWarm regards,\nSaad M\nLead Engineer & Founder · Click N Create\n+44 7927 548123 | Mansurisaad28012@gmail.com"
+    },
+    {
+      "id": "tmpl-welcome",
+      "name": "Client Onboarding & Portal Access",
+      "category": "welcome",
+      "subject": "Welcome to Click N Create! Access Your Client Project Portal",
+      "body": "Hi {{clientName}},\n\nWelcome to Click N Create! I am excited to collaborate on {{projectName}}.\n\nYour secure client portal has been provisioned. You can track live sprint milestones, review design proofs, download invoices, and message me directly:\n\n👉 Portal URL: https://clickncreate.dev/portal\n🔑 Access Key: {{portalAccessKey}}\n\nLooking forward to bringing this vision to life!\n\nBest,\nSaad M · Click N Create"
+    },
+    {
+      "id": "tmpl-invoice",
+      "name": "Invoice Issued & Completion",
+      "category": "invoice",
+      "subject": "Invoice {{invoiceNumber}} from Click N Create Digital Studio",
+      "body": "Hi {{clientName}},\n\nPlease find attached your invoice {{invoiceNumber}} for {{projectTitle}}.\n\n• Total Amount: £{{totalDue}}\n• Due Date: {{dueDate}}\n• Status: {{status}}\n\nPayment can be made via direct UK Bank Transfer (Sort Code: 20-00-00, Account: 83920194) or online through your client portal.\n\nThank you for your business!\n\nSaad M · Click N Create"
+    },
+    {
+      "id": "tmpl-followup",
+      "name": "Lead 3-Day Follow-Up",
+      "category": "followup",
+      "subject": "Following up on your website project with Saad M",
+      "body": "Hi {{clientName}},\n\nJust following up on the project inquiry you sent regarding {{projectName}}.\n\nI have slots open in my development schedule for this month and would love to help you build this out. Do you have 10 minutes this week for a quick chat?\n\nBest regards,\nSaad M · Click N Create"
+    }
+  ],
+  "testimonials": [
+    {
+      "id": "test-1",
+      "author": "Marcus Vance",
+      "role": "CEO",
+      "company": "Apex Retail UK",
+      "content": "Saad delivered our custom Shopify store in under 2 weeks. Lightning fast, sub-second loads, and our conversions spiked by 310%. Hands down the best engineer we have worked with.",
+      "rating": 5,
+      "projectType": "E-commerce & Headless Web App",
+      "featured": true
+    },
+    {
+      "id": "test-2",
+      "author": "Dr. Sarah Jenkins",
+      "role": "Founder",
+      "company": "Aura Aesthetics London",
+      "content": "Working directly with Saad was effortless. No agency bureaucracy, honest £35/hr billing, and complete code ownership. The client portal made tracking progress seamless.",
+      "rating": 5,
+      "projectType": "Bespoke Luxury Website",
+      "featured": true
+    }
+  ],
+  "blogPosts": [],
+  "announcement": {
+    "id": "ann-1",
+    "title": "New 2026 Project Slots Open",
+    "message": "Now accepting bookings for Q4 2026 web & e-commerce builds at transparent £35/hr rate.",
+    "ctaText": "Calculate Price",
+    "ctaLink": "/estimator",
+    "type": "bar",
+    "enabled": true
+  },
+  "invoices": [],
+  "analytics": [
+    {
+      "sessionId": "sess_1790852988021_7e3q9",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "tablet",
+      "screen": "998x550",
+      "referrer": "https://aistudio.google.com/",
+      "id": "log_1790852988445_7cs5p",
+      "timestamp": "2026-10-01T11:09:48.445Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T11:21:46.053Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1790854414750_n029",
+      "sessionId": "sess_1790854414422_xbvwl",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "mobile",
+      "browser": "Chrome",
+      "os": "Android",
+      "screen": "0x0",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Organic Search",
+      "localTime": "17:03:34",
+      "timestamp": "2026-10-01T11:33:34.750Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T11:33:34.750Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1790854428536_l7zo",
+      "sessionId": "sess_1790854414422_xbvwl",
+      "path": "/portal",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "mobile",
+      "browser": "Chrome",
+      "os": "Android",
+      "screen": "384x675",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Organic Search",
+      "localTime": "17:03:48",
+      "timestamp": "2026-10-01T11:33:48.536Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/portal",
+          "timestamp": "2026-10-01T11:33:48.536Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1790854479504_po1b",
+      "sessionId": "sess_1790854414422_xbvwl",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "mobile",
+      "browser": "Chrome",
+      "os": "Android",
+      "screen": "384x675",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Organic Search",
+      "localTime": "17:04:39",
+      "timestamp": "2026-10-01T11:34:39.504Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T11:34:39.504Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1790854524144_dmc9",
+      "sessionId": "sess_1790854414422_xbvwl",
+      "path": "/portal",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "mobile",
+      "browser": "Chrome",
+      "os": "Android",
+      "screen": "384x675",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Organic Search",
+      "localTime": "17:05:23",
+      "timestamp": "2026-10-01T11:35:24.144Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/portal",
+          "timestamp": "2026-10-01T11:35:24.145Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1790854787844_z5o3",
+      "sessionId": "sess_1790854414422_xbvwl",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "mobile",
+      "browser": "Chrome",
+      "os": "Android",
+      "screen": "384x675",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Organic Search",
+      "localTime": "17:09:47",
+      "timestamp": "2026-10-01T11:39:47.844Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T11:39:47.844Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1790854820391_21pb",
+      "sessionId": "sess_1790852988021_7e3q9",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "tablet",
+      "browser": "Chrome",
+      "os": "Windows",
+      "screen": "998x550",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Organic Search",
+      "localTime": "05:10:19 PM",
+      "timestamp": "2026-10-01T11:40:20.391Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T11:40:20.391Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1790854936269_t7pd",
+      "sessionId": "sess_1790852988021_7e3q9",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "desktop",
+      "browser": "Chrome",
+      "os": "Windows",
+      "screen": "1536x646",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Organic Search",
+      "localTime": "05:12:15 PM",
+      "timestamp": "2026-10-01T11:42:16.269Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T11:42:16.269Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1790855368764_8owr",
+      "sessionId": "sess_1790852988021_7e3q9",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "tablet",
+      "browser": "Chrome",
+      "os": "Windows",
+      "screen": "998x550",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Organic Search",
+      "localTime": "05:19:28 PM",
+      "timestamp": "2026-10-01T11:49:28.764Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T11:49:28.764Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1790855798684_bkwj",
+      "sessionId": "sess_1790852988021_7e3q9",
+      "path": "/portal",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "tablet",
+      "browser": "Chrome",
+      "os": "Windows",
+      "screen": "998x550",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Organic Search",
+      "localTime": "05:26:38 PM",
+      "timestamp": "2026-10-01T11:56:38.684Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/portal",
+          "timestamp": "2026-10-01T11:56:38.684Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1790862153424_7b72",
+      "sessionId": "sess_1790857514322_odo31",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "desktop",
+      "browser": "Google Chrome",
+      "os": "Windows",
+      "screen": "1536x864",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Search",
+      "localTime": "07:12 PM",
+      "timestamp": "2026-10-01T13:42:33.424Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:42:33.424Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1790862153426_l6xa",
+      "sessionId": "sess_1790857514322_odo31",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "desktop",
+      "browser": "Google Chrome",
+      "os": "Windows",
+      "screen": "1536x864",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Search",
+      "localTime": "07:12 PM",
+      "timestamp": "2026-10-01T13:42:33.426Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:42:33.424Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:42:33.426Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1790862153429_pdh3",
+      "sessionId": "sess_1790852988021_7e3q9",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "tablet",
+      "browser": "Chrome",
+      "os": "Windows",
+      "screen": "998x550",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Organic Search",
+      "localTime": "07:12:33 PM",
+      "timestamp": "2026-10-01T13:42:33.429Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T11:21:46.053Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:42:33.429Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1790862214298_mugf",
+      "sessionId": "sess_1790862213008_ov7s6",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "tablet",
+      "browser": "Chrome",
+      "os": "Windows",
+      "screen": "998x550",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Organic Search",
+      "localTime": "07:13:33 PM",
+      "timestamp": "2026-10-01T13:43:34.298Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:43:34.298Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1790862214300_vv4w",
+      "sessionId": "sess_1790862213622_45lln",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "desktop",
+      "browser": "Google Chrome",
+      "os": "Windows",
+      "screen": "1536x864",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Search",
+      "localTime": "07:13 PM",
+      "timestamp": "2026-10-01T13:43:34.300Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:43:34.300Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1790862214302_yl8b",
+      "sessionId": "sess_1790862213622_45lln",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "desktop",
+      "browser": "Google Chrome",
+      "os": "Windows",
+      "screen": "1536x864",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Search",
+      "localTime": "07:13 PM",
+      "timestamp": "2026-10-01T13:43:34.302Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:43:34.300Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:43:34.302Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1790862222518_kk5k",
+      "sessionId": "sess_1790862213622_45lln",
+      "path": "/admin",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "desktop",
+      "browser": "Google Chrome",
+      "os": "Windows",
+      "screen": "1536x864",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Search",
+      "localTime": "07:13 PM",
+      "timestamp": "2026-10-01T13:43:42.518Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:43:34.300Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/admin",
+          "timestamp": "2026-10-01T13:43:42.518Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1790862257320_x5zc",
+      "sessionId": "sess_1790854414422_xbvwl",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "mobile",
+      "browser": "Chrome",
+      "os": "Android",
+      "screen": "384x675",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Organic Search",
+      "localTime": "19:14:17",
+      "timestamp": "2026-10-01T13:44:17.320Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T11:33:34.750Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:44:17.320Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1790862257325_5jn7",
+      "sessionId": "sess_1790858696559_hmk3v",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "mobile",
+      "browser": "Google Chrome",
+      "os": "Linux",
+      "screen": "384x832",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Search",
+      "localTime": "19:14",
+      "timestamp": "2026-10-01T13:44:17.325Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:44:17.325Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1790862257338_e18a",
+      "sessionId": "sess_1790858696559_hmk3v",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "mobile",
+      "browser": "Google Chrome",
+      "os": "Linux",
+      "screen": "384x832",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Search",
+      "localTime": "19:14",
+      "timestamp": "2026-10-01T13:44:17.338Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:44:17.325Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:44:17.338Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1790862262083_qpbl",
+      "sessionId": "sess_1790858696559_hmk3v",
+      "path": "/admin",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "mobile",
+      "browser": "Google Chrome",
+      "os": "Linux",
+      "screen": "384x832",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Search",
+      "localTime": "19:14",
+      "timestamp": "2026-10-01T13:44:22.083Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:44:17.325Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/admin",
+          "timestamp": "2026-10-01T13:44:22.083Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1790862270846_g878",
+      "sessionId": "sess_1790854414422_xbvwl",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "mobile",
+      "browser": "Chrome",
+      "os": "Android",
+      "screen": "384x675",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Organic Search",
+      "localTime": "19:14:30",
+      "timestamp": "2026-10-01T13:44:30.846Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T11:33:34.750Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:44:30.846Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1790862270848_nuze",
+      "sessionId": "sess_1790858696559_hmk3v",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "mobile",
+      "browser": "Google Chrome",
+      "os": "Linux",
+      "screen": "384x832",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Search",
+      "localTime": "19:14",
+      "timestamp": "2026-10-01T13:44:30.848Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:44:17.325Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:44:30.848Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1790862270849_vrsi",
+      "sessionId": "sess_1790858696559_hmk3v",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "mobile",
+      "browser": "Google Chrome",
+      "os": "Linux",
+      "screen": "384x832",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Search",
+      "localTime": "19:14",
+      "timestamp": "2026-10-01T13:44:30.849Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:44:17.325Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:44:30.849Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1790862274194_eenf",
+      "sessionId": "sess_1790858696559_hmk3v",
+      "path": "/admin",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "mobile",
+      "browser": "Google Chrome",
+      "os": "Linux",
+      "screen": "384x832",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Search",
+      "localTime": "19:14",
+      "timestamp": "2026-10-01T13:44:34.194Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:44:17.325Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/admin",
+          "timestamp": "2026-10-01T13:44:34.194Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1790862284793_rtr0",
+      "sessionId": "sess_1790854414422_xbvwl",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "mobile",
+      "browser": "Chrome",
+      "os": "Android",
+      "screen": "384x675",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Organic Search",
+      "localTime": "19:14:44",
+      "timestamp": "2026-10-01T13:44:44.793Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T11:33:34.750Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:44:44.793Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1790862284794_c8o0",
+      "sessionId": "sess_1790858696559_hmk3v",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "mobile",
+      "browser": "Google Chrome",
+      "os": "Linux",
+      "screen": "384x832",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Search",
+      "localTime": "19:14",
+      "timestamp": "2026-10-01T13:44:44.794Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:44:17.325Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:44:44.794Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1790862284799_15rb",
+      "sessionId": "sess_1790858696559_hmk3v",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "mobile",
+      "browser": "Google Chrome",
+      "os": "Linux",
+      "screen": "384x832",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Search",
+      "localTime": "19:14",
+      "timestamp": "2026-10-01T13:44:44.799Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:44:17.325Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:44:44.799Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1790862300643_0uci",
+      "sessionId": "sess_1790862213008_ov7s6",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "desktop",
+      "browser": "Chrome",
+      "os": "Windows",
+      "screen": "1536x646",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Organic Search",
+      "localTime": "07:14:59 PM",
+      "timestamp": "2026-10-01T13:45:00.643Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:43:34.298Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:45:00.643Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1790862300644_1cas",
+      "sessionId": "sess_1790862213622_45lln",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "desktop",
+      "browser": "Google Chrome",
+      "os": "Windows",
+      "screen": "1536x864",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Search",
+      "localTime": "07:15 PM",
+      "timestamp": "2026-10-01T13:45:00.644Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:43:34.300Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:45:00.644Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1790862300645_4pip",
+      "sessionId": "sess_1790862213622_45lln",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "desktop",
+      "browser": "Google Chrome",
+      "os": "Windows",
+      "screen": "1536x864",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Search",
+      "localTime": "07:15 PM",
+      "timestamp": "2026-10-01T13:45:00.645Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:43:34.300Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:45:00.645Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1790862312351_zs0m",
+      "sessionId": "sess_1790862213008_ov7s6",
+      "path": "/contact",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "desktop",
+      "browser": "Chrome",
+      "os": "Windows",
+      "screen": "1536x646",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Organic Search",
+      "localTime": "07:15:12 PM",
+      "timestamp": "2026-10-01T13:45:12.351Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:43:34.298Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/contact",
+          "timestamp": "2026-10-01T13:45:12.351Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1790862312409_3yom",
+      "sessionId": "sess_1790862213622_45lln",
+      "path": "/contact",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "desktop",
+      "browser": "Google Chrome",
+      "os": "Windows",
+      "screen": "1536x864",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Search",
+      "localTime": "07:15 PM",
+      "timestamp": "2026-10-01T13:45:12.409Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:43:34.300Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/contact",
+          "timestamp": "2026-10-01T13:45:12.409Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1790862316503_9057",
+      "sessionId": "sess_1790862213622_45lln",
+      "path": "/admin",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "desktop",
+      "browser": "Google Chrome",
+      "os": "Windows",
+      "screen": "1536x864",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Search",
+      "localTime": "07:15 PM",
+      "timestamp": "2026-10-01T13:45:16.503Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:43:34.300Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/admin",
+          "timestamp": "2026-10-01T13:45:16.503Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1790862325719_34p2",
+      "sessionId": "sess_1790862213008_ov7s6",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "desktop",
+      "browser": "Chrome",
+      "os": "Windows",
+      "screen": "1536x646",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Organic Search",
+      "localTime": "07:15:25 PM",
+      "timestamp": "2026-10-01T13:45:25.719Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:43:34.298Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:45:25.719Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1790862325721_wxfe",
+      "sessionId": "sess_1790862213622_45lln",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "desktop",
+      "browser": "Google Chrome",
+      "os": "Windows",
+      "screen": "1536x864",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Search",
+      "localTime": "07:15 PM",
+      "timestamp": "2026-10-01T13:45:25.721Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:43:34.300Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:45:25.721Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1790862325722_s4ef",
+      "sessionId": "sess_1790862213622_45lln",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "desktop",
+      "browser": "Google Chrome",
+      "os": "Windows",
+      "screen": "1536x864",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Search",
+      "localTime": "07:15 PM",
+      "timestamp": "2026-10-01T13:45:25.722Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:43:34.300Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:45:25.722Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1790862367393_o4m8",
+      "sessionId": "sess_1790862213008_ov7s6",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "tablet",
+      "browser": "Chrome",
+      "os": "Windows",
+      "screen": "998x550",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Organic Search",
+      "localTime": "07:16:06 PM",
+      "timestamp": "2026-10-01T13:46:07.393Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:43:34.298Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:46:07.393Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1790862367395_b4ul",
+      "sessionId": "sess_1790862213622_45lln",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "desktop",
+      "browser": "Google Chrome",
+      "os": "Windows",
+      "screen": "1536x864",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Search",
+      "localTime": "07:16 PM",
+      "timestamp": "2026-10-01T13:46:07.395Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:43:34.300Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:46:07.395Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1790862367396_i3ex",
+      "sessionId": "sess_1790862213622_45lln",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "desktop",
+      "browser": "Google Chrome",
+      "os": "Windows",
+      "screen": "1536x864",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Search",
+      "localTime": "07:16 PM",
+      "timestamp": "2026-10-01T13:46:07.396Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:43:34.300Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:46:07.396Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1790862375841_8g8m",
+      "sessionId": "sess_1790862213622_45lln",
+      "path": "/admin",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "desktop",
+      "browser": "Google Chrome",
+      "os": "Windows",
+      "screen": "1536x864",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Search",
+      "localTime": "07:16 PM",
+      "timestamp": "2026-10-01T13:46:15.841Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:43:34.300Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/admin",
+          "timestamp": "2026-10-01T13:46:15.841Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1790862442586_6lgc",
+      "sessionId": "sess_1790862213008_ov7s6",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "tablet",
+      "browser": "Chrome",
+      "os": "Windows",
+      "screen": "998x550",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Organic Search",
+      "localTime": "07:17:22 PM",
+      "timestamp": "2026-10-01T13:47:22.586Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:43:34.298Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:47:22.586Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1790862442588_zwzc",
+      "sessionId": "sess_1790862213622_45lln",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "desktop",
+      "browser": "Google Chrome",
+      "os": "Windows",
+      "screen": "1536x864",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Search",
+      "localTime": "07:17 PM",
+      "timestamp": "2026-10-01T13:47:22.588Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:43:34.300Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:47:22.588Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1790862442590_live",
+      "sessionId": "sess_1790862213622_45lln",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "desktop",
+      "browser": "Google Chrome",
+      "os": "Windows",
+      "screen": "1536x864",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Search",
+      "localTime": "07:17 PM",
+      "timestamp": "2026-10-01T13:47:22.590Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:43:34.300Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:47:22.590Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1790862505397_c5g5",
+      "sessionId": "sess_1790862213622_45lln",
+      "path": "/admin",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "desktop",
+      "browser": "Google Chrome",
+      "os": "Windows",
+      "screen": "1536x864",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Search",
+      "localTime": "07:18 PM",
+      "timestamp": "2026-10-01T13:48:25.397Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:43:34.300Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/admin",
+          "timestamp": "2026-10-01T13:48:25.397Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1790862512756_f238",
+      "sessionId": "sess_1790862213008_ov7s6",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "tablet",
+      "browser": "Chrome",
+      "os": "Windows",
+      "screen": "998x550",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Organic Search",
+      "localTime": "07:18:32 PM",
+      "timestamp": "2026-10-01T13:48:32.756Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:43:34.298Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:48:32.756Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1790862512772_doss",
+      "sessionId": "sess_1790862213622_45lln",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "desktop",
+      "browser": "Google Chrome",
+      "os": "Windows",
+      "screen": "1536x864",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Search",
+      "localTime": "07:18 PM",
+      "timestamp": "2026-10-01T13:48:32.772Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:43:34.300Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:48:32.772Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1790862512773_geo0",
+      "sessionId": "sess_1790862213622_45lln",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "desktop",
+      "browser": "Google Chrome",
+      "os": "Windows",
+      "screen": "1536x864",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Search",
+      "localTime": "07:18 PM",
+      "timestamp": "2026-10-01T13:48:32.773Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:43:34.300Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:48:32.773Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1790862514425_xd21",
+      "sessionId": "sess_1790862213008_ov7s6",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "tablet",
+      "browser": "Chrome",
+      "os": "Windows",
+      "screen": "998x550",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Organic Search",
+      "localTime": "07:18:34 PM",
+      "timestamp": "2026-10-01T13:48:34.425Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:43:34.298Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:48:34.425Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1790862514489_faz5",
+      "sessionId": "sess_1790862213622_45lln",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "desktop",
+      "browser": "Google Chrome",
+      "os": "Windows",
+      "screen": "1536x864",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Search",
+      "localTime": "07:18 PM",
+      "timestamp": "2026-10-01T13:48:34.489Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:43:34.300Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:48:34.489Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1790862514497_71l0",
+      "sessionId": "sess_1790862213622_45lln",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "desktop",
+      "browser": "Google Chrome",
+      "os": "Windows",
+      "screen": "1536x864",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Search",
+      "localTime": "07:18 PM",
+      "timestamp": "2026-10-01T13:48:34.497Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:43:34.300Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:48:34.497Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1790862515675_fqho",
+      "sessionId": "sess_1790862213008_ov7s6",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "tablet",
+      "browser": "Chrome",
+      "os": "Windows",
+      "screen": "998x550",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Organic Search",
+      "localTime": "07:18:35 PM",
+      "timestamp": "2026-10-01T13:48:35.675Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:43:34.298Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:48:35.675Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1790862515676_zikw",
+      "sessionId": "sess_1790862213622_45lln",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "desktop",
+      "browser": "Google Chrome",
+      "os": "Windows",
+      "screen": "1536x864",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Search",
+      "localTime": "07:18 PM",
+      "timestamp": "2026-10-01T13:48:35.676Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:43:34.300Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:48:35.676Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1790862515677_95ar",
+      "sessionId": "sess_1790862213622_45lln",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "desktop",
+      "browser": "Google Chrome",
+      "os": "Windows",
+      "screen": "1536x864",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Search",
+      "localTime": "07:18 PM",
+      "timestamp": "2026-10-01T13:48:35.677Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:43:34.300Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:48:35.677Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1790862518741_t8mw",
+      "sessionId": "sess_1790862213008_ov7s6",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "tablet",
+      "browser": "Chrome",
+      "os": "Windows",
+      "screen": "998x550",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Organic Search",
+      "localTime": "07:18:38 PM",
+      "timestamp": "2026-10-01T13:48:38.741Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:43:34.298Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:48:38.741Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1790862518743_osu9",
+      "sessionId": "sess_1790862213622_45lln",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "desktop",
+      "browser": "Google Chrome",
+      "os": "Windows",
+      "screen": "1536x864",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Search",
+      "localTime": "07:18 PM",
+      "timestamp": "2026-10-01T13:48:38.743Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:43:34.300Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:48:38.743Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1790862518744_nc6h",
+      "sessionId": "sess_1790862213622_45lln",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "desktop",
+      "browser": "Google Chrome",
+      "os": "Windows",
+      "screen": "1536x864",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Search",
+      "localTime": "07:18 PM",
+      "timestamp": "2026-10-01T13:48:38.744Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:43:34.300Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:48:38.744Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1790862521911_5au0",
+      "sessionId": "sess_1790862213008_ov7s6",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "tablet",
+      "browser": "Chrome",
+      "os": "Windows",
+      "screen": "998x550",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Organic Search",
+      "localTime": "07:18:41 PM",
+      "timestamp": "2026-10-01T13:48:41.911Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:43:34.298Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:48:41.911Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1790862521912_9dp4",
+      "sessionId": "sess_1790862213622_45lln",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "desktop",
+      "browser": "Google Chrome",
+      "os": "Windows",
+      "screen": "1536x864",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Search",
+      "localTime": "07:18 PM",
+      "timestamp": "2026-10-01T13:48:41.912Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:43:34.300Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:48:41.912Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1790862521913_2z5o",
+      "sessionId": "sess_1790862213622_45lln",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "desktop",
+      "browser": "Google Chrome",
+      "os": "Windows",
+      "screen": "1536x864",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Search",
+      "localTime": "07:18 PM",
+      "timestamp": "2026-10-01T13:48:41.913Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:43:34.300Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:48:41.913Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1790862968098_n4qn",
+      "sessionId": "sess_1790862213622_45lln",
+      "path": "/admin",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "desktop",
+      "browser": "Google Chrome",
+      "os": "Windows",
+      "screen": "1536x864",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Search",
+      "localTime": "07:26 PM",
+      "timestamp": "2026-10-01T13:56:08.098Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:43:34.300Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/admin",
+          "timestamp": "2026-10-01T13:56:08.098Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1790863048358_5743",
+      "sessionId": "sess_1790862213622_45lln",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "desktop",
+      "browser": "Google Chrome",
+      "os": "Windows",
+      "screen": "1536x864",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Search",
+      "localTime": "07:27 PM",
+      "timestamp": "2026-10-01T13:57:28.358Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:43:34.300Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:57:28.358Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1790863048360_vtyj",
+      "sessionId": "sess_1790862213008_ov7s6",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "tablet",
+      "browser": "Chrome",
+      "os": "Windows",
+      "screen": "998x550",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Organic Search",
+      "localTime": "07:27:27 PM",
+      "timestamp": "2026-10-01T13:57:28.360Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:43:34.298Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:57:28.360Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1790863048362_5ei0",
+      "sessionId": "sess_1790862213622_45lln",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "desktop",
+      "browser": "Google Chrome",
+      "os": "Windows",
+      "screen": "1536x864",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Search",
+      "localTime": "07:27 PM",
+      "timestamp": "2026-10-01T13:57:28.362Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:43:34.300Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:57:28.362Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1790864265014_1yqd",
+      "sessionId": "sess_1790862213622_45lln",
+      "path": "/admin",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "desktop",
+      "browser": "Google Chrome",
+      "os": "Windows",
+      "screen": "1536x864",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Search",
+      "localTime": "07:47 PM",
+      "timestamp": "2026-10-01T14:17:45.014Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-01T13:43:34.300Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/admin",
+          "timestamp": "2026-10-01T14:17:45.014Z",
+          "dwellSeconds": 1
+        }
+      ]
+    }
+  ],
+  "activeSessions": {
+    "sess_1790852988021_7e3q9": {
+      "sessionId": "sess_1790852988021_7e3q9",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "tablet",
+      "browser": "Chrome",
+      "os": "Windows",
+      "source": "Google Organic Search",
+      "lastSeen": 1790862153429,
+      "startedAt": "2026-10-01T11:56:38.684Z",
+      "pageHistory": [
+        "/portal",
+        "/"
+      ],
+      "totalDwellSeconds": 91
+    },
+    "sess_1790854414422_xbvwl": {
+      "sessionId": "sess_1790854414422_xbvwl",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "mobile",
+      "browser": "Chrome",
+      "os": "Android",
+      "source": "Google Organic Search",
+      "lastSeen": 1790862284793,
+      "startedAt": "2026-10-01T11:39:47.844Z",
+      "pageHistory": [
+        "/"
+      ],
+      "totalDwellSeconds": 4
+    },
+    "sess_1790857514322_odo31": {
+      "sessionId": "sess_1790857514322_odo31",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "desktop",
+      "browser": "Google Chrome",
+      "os": "Windows",
+      "source": "Google Search",
+      "lastSeen": 1790862185226,
+      "startedAt": "2026-10-01T13:31:25.240Z",
+      "pageHistory": [
+        "/admin",
+        "/"
+      ],
+      "totalDwellSeconds": 32
+    },
+    "sess_1790862213008_ov7s6": {
+      "sessionId": "sess_1790862213008_ov7s6",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "tablet",
+      "browser": "Chrome",
+      "os": "Windows",
+      "source": "Google Organic Search",
+      "lastSeen": 1790863048360,
+      "startedAt": "2026-10-01T13:43:34.298Z",
+      "pageHistory": [
+        "/",
+        "/contact"
+      ],
+      "totalDwellSeconds": 12
+    },
+    "sess_1790862213622_45lln": {
+      "sessionId": "sess_1790862213622_45lln",
+      "path": "/admin",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "desktop",
+      "browser": "Google Chrome",
+      "os": "Windows",
+      "source": "Google Search",
+      "lastSeen": 1790864849979,
+      "startedAt": "2026-10-01T13:43:34.300Z",
+      "pageHistory": [
+        "/",
+        "/admin",
+        "/contact"
+      ],
+      "totalDwellSeconds": 579
+    },
+    "sess_1790858696559_hmk3v": {
+      "sessionId": "sess_1790858696559_hmk3v",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "mobile",
+      "browser": "Google Chrome",
+      "os": "Linux",
+      "source": "Google Search",
+      "lastSeen": 1790862292796,
+      "startedAt": "2026-10-01T13:44:09.791Z",
+      "pageHistory": [
+        "/",
+        "/admin"
+      ],
+      "totalDwellSeconds": 8
+    }
+  },
+  "auditLogs": [
+    {
+      "id": "audit_1790864410005",
+      "action": "ADMIN_LOGIN_SUCCESS",
+      "actor": "mansurisaad28012@gmail.com",
+      "ip": "127.0.0.1",
+      "userAgent": "Browser Client",
+      "details": "Owner authentication verified",
+      "timestamp": "2026-10-01T14:20:10.005Z"
+    },
+    {
+      "id": "audit_1790854444385",
+      "action": "ADMIN_LOGIN_SUCCESS",
+      "actor": "mansurisaad28012@gmail.com",
+      "ip": "127.0.0.1",
+      "userAgent": "Browser Client",
+      "details": "Owner authentication verified",
+      "timestamp": "2026-10-01T11:34:04.385Z"
+    },
+    {
+      "id": "audit_1790854220695",
+      "action": "FAILED_LOGIN_ATTEMPT",
+      "actor": "random@gmail.com",
+      "ip": "unknown",
+      "userAgent": "Browser Client",
+      "details": "Invalid admin email address",
+      "timestamp": "2026-10-01T11:30:20.695Z"
+    },
+    {
+      "id": "audit_1790854215887",
+      "action": "ADMIN_LOGIN_SUCCESS",
+      "actor": "mansurisaad28012@gmail.com",
+      "ip": "127.0.0.1",
+      "userAgent": "Browser Client",
+      "details": "Owner authentication verified",
+      "timestamp": "2026-10-01T11:30:15.887Z"
+    }
+  ],
+  "activeUserSessions": [
+    {
+      "id": "sess_1790864410005",
+      "email": "mansurisaad28012@gmail.com",
+      "device": "Desktop / Authorized Workstation",
+      "browser": "Secure Chrome Session",
+      "os": "Admin Environment",
+      "ip": "127.0.0.1 (Direct)",
+      "lastActive": "2026-10-01T14:20:10.005Z",
+      "token": "saad_adm_1790864410005_6iuzb1x2"
+    },
+    {
+      "id": "sess_1790854444385",
+      "email": "mansurisaad28012@gmail.com",
+      "device": "Desktop / Authorized Workstation",
+      "browser": "Secure Chrome Session",
+      "os": "Admin Environment",
+      "ip": "127.0.0.1 (Direct)",
+      "lastActive": "2026-10-01T11:34:04.385Z",
+      "token": "saad_adm_1790854444385_47kfs65j"
+    },
+    {
+      "id": "sess_1790854215887",
+      "email": "mansurisaad28012@gmail.com",
+      "device": "Desktop / Authorized Workstation",
+      "browser": "Secure Chrome Session",
+      "os": "Admin Environment",
+      "ip": "127.0.0.1 (Direct)",
+      "lastActive": "2026-10-01T11:30:15.887Z",
+      "token": "saad_adm_1790854215887_06jro029"
+    }
+  ],
+  "adminUsers": [
+    {
+      "id": "adm-owner-1",
+      "name": "Saad M",
+      "email": "mansurisaad28012@gmail.com",
+      "role": "owner",
+      "status": "active",
+      "createdAt": "2026-01-01T00:00:00Z"
+    }
+  ],
+  "customization": {
+    "theme": {
+      "presetId": "cyber_cyan",
+      "presetName": "Cyber Neon Cyan (Default)",
+      "accentCyan": "#00F0FF",
+      "accentPurple": "#A855F7",
+      "accentGradient": "linear-gradient(135deg, #00F0FF 0%, #A855F7 50%, #FF0055 100%)",
+      "bgTone": "default",
+      "bgMainDark": "#07070F",
+      "bgSecondaryDark": "#0D0D1C",
+      "bgMainLight": "#F8FAFC",
+      "bgSecondaryLight": "#FFFFFF",
+      "fontDisplay": "Syne",
+      "fontSans": "Plus Jakarta Sans",
+      "fontMono": "Hubot Sans",
+      "borderRadius": "modern",
+      "borderWidth": "thin",
+      "glowIntensity": "cyber",
+      "buttonStyle": "glow",
+      "headerStyle": "floating_glass",
+      "backgroundPattern": "grid"
+    },
+    "seo": {
+      "siteTitle": "Click N Create | Saad M — Freelance Web Developer & Designer",
+      "titleTemplate": "%s | Click N Create",
+      "siteDescription": "Click N Create is the freelance digital development brand of Saad M. Bespoke high-performance web applications, modern e-commerce storefronts, and conversion-focused business platforms at £35/hr.",
+      "siteUrl": "https://clickncreate.dev",
+      "defaultKeywords": [
+        "freelance web developer",
+        "web designer UK",
+        "React TypeScript developer",
+        "custom e-commerce Shopify",
+        "Saad M developer",
+        "Click N Create",
+        "hire front-end engineer",
+        "bespoke website design"
+      ],
+      "defaultOgImage": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1200&auto=format&fit=crop",
+      "twitterHandle": "@ClickNCreate",
+      "googleSiteVerification": "google-site-verification-cnc-2026",
+      "jsonLdType": "ProfessionalService",
+      "companyLegalName": "Click N Create Digital Studio",
+      "founderName": "Saad M",
+      "priceRange": "£35/hr",
+      "serviceArea": "United Kingdom, Europe, North America & Global Remote",
+      "enableSitemap": true,
+      "enableRobotsTxt": true,
+      "pages": {
+        "/": {
+          "title": "Click N Create | Saad M — Freelance Web Developer & Designer",
+          "description": "Modern websites, e-commerce storefronts, and custom React web applications built with speed, precision, and transparent £35/hr pricing.",
+          "keywords": [
+            "freelance web developer",
+            "Click N Create",
+            "Saad M",
+            "custom web design"
+          ]
+        },
+        "/services": {
+          "title": "Engineering & Design Services | Click N Create",
+          "description": "Full spectrum digital services: custom web development, e-commerce storefronts, brand identity, and managed cloud hosting.",
+          "keywords": [
+            "web development services",
+            "Shopify development",
+            "UI/UX design",
+            "managed hosting"
+          ]
+        },
+        "/about": {
+          "title": "About Saad M & Studio Standards | Click N Create",
+          "description": "Meet Saad M — Full-Stack Developer & Designer behind Click N Create. Direct engineering collaboration without agency bloat.",
+          "keywords": [
+            "about Saad M",
+            "freelance software engineer",
+            "developer portfolio",
+            "independent studio"
+          ]
+        },
+        "/portfolio": {
+          "title": "Curated Portfolio & Case Studies | Click N Create",
+          "description": "Explore live web development case studies, headless storefronts, and full-stack React applications built for clients worldwide.",
+          "keywords": [
+            "web developer portfolio",
+            "case studies",
+            "recent client projects",
+            "e-commerce examples"
+          ]
+        },
+        "/pricing": {
+          "title": "Transparent Pricing & £35/hr Rates | Click N Create",
+          "description": "Honest, predictable rates with zero retainers. Transparent £35/hour billing or fixed milestone project packages.",
+          "keywords": [
+            "freelance web developer rates",
+            "website pricing",
+            "fixed quote web design"
+          ]
+        },
+        "/estimator": {
+          "title": "Instant Interactive Project Scope Estimator | Click N Create",
+          "description": "Calculate upfront development hours, itemized deliverables, and milestone investment for your web project in seconds.",
+          "keywords": [
+            "website cost calculator",
+            "project scope estimator",
+            "instant web quote"
+          ]
+        },
+        "/process": {
+          "title": "4-Stage Development Roadmap | Click N Create",
+          "description": "Our transparent development process from discovery and wireframing to full-stack engineering and SEO launch.",
+          "keywords": [
+            "web development process",
+            "project roadmap",
+            "milestone stages"
+          ]
+        },
+        "/standards": {
+          "title": "Core Web Vitals & Engineering Standards | Click N Create",
+          "description": "Strict speed, security, and accessibility benchmarks. Sub-second load times (<0.8s) and 100% source code ownership.",
+          "keywords": [
+            "Core Web Vitals",
+            "website performance standards",
+            "fast React websites"
+          ]
+        },
+        "/faq": {
+          "title": "Frequently Asked Questions & Rates Directory | Click N Create",
+          "description": "Clear, straightforward answers about working with Saad M, payment schedules, turnaround times, and hosting setup.",
+          "keywords": [
+            "freelance developer FAQ",
+            "website questions",
+            "hiring process"
+          ]
+        },
+        "/contact": {
+          "title": "Start a Project / Direct Inbound to Saad M | Click N Create",
+          "description": "Contact Saad M directly for a quote, discovery consultation, or technical question. Direct email and WhatsApp responses.",
+          "keywords": [
+            "hire Saad M",
+            "contact web developer",
+            "start a website project"
+          ]
+        }
+      }
+    },
+    "invoices": [],
+    "pages": {
+      "home": {
+        "heroTitle": "HIGH-PERFORMANCE WEBSITES",
+        "heroHighlight": "CRAFTED WITH PRECISION",
+        "heroSubtitle": "Click N Create is the independent digital studio operated by Saad M. I design and build lightning-fast web applications, modern e-commerce storefronts, and conversion-focused business platforms.",
+        "badgeText": "AVAILABLE FOR NEW 2026 PROJECTS · £35/HR",
+        "primaryCtaText": "Start a Project",
+        "primaryCtaLink": "/contact",
+        "secondaryCtaText": "Calculate Price",
+        "secondaryCtaLink": "/estimator",
+        "stat1Value": "£35/hr",
+        "stat1Label": "Transparent Rate",
+        "stat2Value": "< 0.8s",
+        "stat2Label": "Average Page Load",
+        "stat3Value": "100%",
+        "stat3Label": "Code Ownership",
+        "stat4Value": "24/7",
+        "stat4Label": "Direct Support",
+        "feature1Title": "High-Impact Web Design",
+        "feature1Desc": "Bespoke, brand-first UI crafted with modern typography, smooth micro-animations, and fluid responsive layouts.",
+        "feature2Title": "E-commerce & Payments",
+        "feature2Desc": "Custom Shopify and WooCommerce storefronts with optimized checkout flows and secure payment processing.",
+        "feature3Title": "Custom Web Apps & SPAs",
+        "feature3Desc": "Full-stack TypeScript React applications with real-time state, lightning-fast rendering, and production reliability."
+      },
+      "about": {
+        "heroTitle": "CRAFTING DIGITAL EXPERIENCES",
+        "heroHighlight": "WITH PASSION & PRECISION",
+        "heroSubtitle": "Meet Saad M — Full-Stack Developer & Founder behind Click N Create.",
+        "badgeText": "DIRECT COLLABORATION WITH SAAD M",
+        "bioParagraph1": "I am a dedicated software engineer and digital designer specializing in high-performance web applications, bespoke user interfaces, and scalable architectures. I believe great websites should look striking, load instantly, and drive measurable revenue.",
+        "bioParagraph2": "Operating independently under Click N Create, you get direct communication without agency overhead, transparent hourly rates (£35/hr), and complete ownership of your intellectual property.",
+        "approachTitle": "Architectural Philosophy",
+        "approachText": "Clean code, modern frameworks, zero bloat, and pixel-perfect design across all mobile and desktop screens.",
+        "techStack": [
+          "React",
+          "TypeScript",
+          "Tailwind CSS",
+          "Node.js",
+          "Express",
+          "Vite",
+          "Three.js",
+          "Next.js",
+          "PostgreSQL",
+          "GraphQL",
+          "Shopify",
+          "WordPress"
+        ]
+      },
+      "services": {
+        "heroTitle": "ENGINEERING & DESIGN",
+        "heroHighlight": "FULL SPECTRUM SERVICES",
+        "heroSubtitle": "From rapid MVPs to complete enterprise web overhauls, discover tailored digital capabilities built for velocity and conversions.",
+        "badgeText": "TRANSPARENT £35/HR RATE OR FIXED MILESTONES",
+        "servicesList": [
+          {
+            "id": "srv-web",
+            "title": "Custom Web Development",
+            "slug": "web-development",
+            "rate": "£35/hr or Fixed Milestone",
+            "turnaround": "1 – 2 Weeks",
+            "description": "Lightning-fast, mobile-first websites built with modern React, TypeScript, and clean semantic architecture.",
+            "deliverables": [
+              "Custom UI/UX Design",
+              "100% Mobile & Tablet Optimization",
+              "On-Page Google SEO Schema",
+              "Free SSL & Domain Setup",
+              "CMS Training Video"
+            ]
+          },
+          {
+            "id": "srv-ecom",
+            "title": "E-commerce Storefronts",
+            "slug": "ecommerce-development",
+            "rate": "£35/hr or Fixed Milestone",
+            "turnaround": "2 – 3 Weeks",
+            "description": "High-converting online stores powered by Shopify or WooCommerce with optimized checkout and payment systems.",
+            "deliverables": [
+              "Product Catalog Architecture",
+              "Stripe, Apple Pay & PayPal Integration",
+              "Cart & Checkout Conversion Engine",
+              "Inventory Management Setup",
+              "Automated Email Receipts"
+            ]
+          },
+          {
+            "id": "srv-brand",
+            "title": "Branding & Graphic Design",
+            "slug": "branding-design",
+            "rate": "£35/hr or Fixed Milestone",
+            "turnaround": "3 – 7 Days",
+            "description": "Distinctive brand identities, logos, social media banner suites, and print-ready business stationery.",
+            "deliverables": [
+              "Vector Logo Formats (SVG, PNG, EPS)",
+              "Social Media Banner Kits",
+              "Typography & Color Guide",
+              "Business Card Print Layouts",
+              "Full Commercial License"
+            ]
+          },
+          {
+            "id": "srv-host",
+            "title": "Hosting & Maintenance",
+            "slug": "hosting-maintenance",
+            "rate": "£35/hr or Monthly Plan",
+            "turnaround": "24h SLA",
+            "description": "Ultra-reliable cloud hosting, automated daily backups, security firewalls, and priority uptime support.",
+            "deliverables": [
+              "Global CDN Deployment",
+              "Automated Daily Backups",
+              "Free Managed SSL Security",
+              "Uptime Monitoring (99.9%)",
+              "Ongoing Content Updates"
+            ]
+          }
+        ]
+      },
+      "portfolio": {
+        "heroTitle": "CURATED CLIENT WORK &",
+        "heroHighlight": "FLAGSHIP CASE STUDIES",
+        "heroSubtitle": "Explore selected live projects built for businesses, brands, and creative ventures.",
+        "badgeText": "PROVEN PRODUCTION CASE STUDIES",
+        "projectsList": [
+          {
+            "id": "proj-1",
+            "title": "Nexus Commerce Engine",
+            "client": "Apex Retail UK",
+            "category": "E-commerce & Full-Stack",
+            "year": "2025",
+            "metric": "+310% Conversion Lift",
+            "description": "Custom headless storefront with instant sub-100ms search, instant cart drawer, and 99.8% checkout completion.",
+            "tags": [
+              "React",
+              "TypeScript",
+              "Shopify API",
+              "Tailwind CSS"
+            ],
+            "liveUrl": "https://example.com/nexus"
+          },
+          {
+            "id": "proj-2",
+            "title": "Vanguard Capital Partners",
+            "client": "Vanguard UK",
+            "category": "Corporate Web Platform",
+            "year": "2025",
+            "metric": "100/100 Core Web Vitals",
+            "description": "Luxury financial advisory website with interactive ROI forecasting tools and GDPR-compliant client intake.",
+            "tags": [
+              "Next.js",
+              "Tailwind CSS",
+              "Framer Motion",
+              "TypeScript"
+            ],
+            "liveUrl": "https://example.com/vanguard"
+          },
+          {
+            "id": "proj-3",
+            "title": "Aura Studio Visual Identity",
+            "client": "Aura Collective",
+            "category": "Brand & Creative Portfolio",
+            "year": "2024",
+            "metric": "Featured on DesignSpire",
+            "description": "Immersive dark-mode spatial portfolio with custom WebGL shader background and smooth kinetic typography.",
+            "tags": [
+              "Three.js",
+              "React",
+              "GLSL Shaders",
+              "Web Audio"
+            ],
+            "liveUrl": "https://example.com/aura"
+          }
+        ]
+      },
+      "pricing": {
+        "heroTitle": "HONEST, TRANSPARENT &",
+        "heroHighlight": "PREDICTABLE PRICING",
+        "heroSubtitle": "No retainers, no lock-in, and no hidden fees. Standard rate is £35/hr, with fixed milestone packages available for every project size.",
+        "hourlyRate": 35,
+        "currency": "GBP (£)",
+        "badgeText": "STANDARD RATE: £35/HR · FIXED QUOTES AVAILABLE",
+        "starterPrice": 495,
+        "proPrice": 1250,
+        "enterprisePrice": 2800
+      },
+      "estimator": {
+        "heroTitle": "PROJECT ESTIMATOR",
+        "heroHighlight": "CALCULATE YOUR INVESTMENT",
+        "heroSubtitle": "Interactive scope calculator based on £35/hr. Build your custom deliverables package and get an immediate cost and timeline estimate.",
+        "badgeText": "INSTANT LIVE SCOPE ESTIMATION",
+        "hourlyRate": 35,
+        "step1Title": "Step 01 · Select Project Archetype",
+        "step2Title": "Step 02 · Choose Deliverables & Extra Features",
+        "step3Title": "Step 03 · Delivery Timeline Pace"
+      },
+      "contact": {
+        "heroTitle": "LET'S TALK ABOUT YOUR",
+        "heroHighlight": "UPCOMING PROJECT.",
+        "heroSubtitle": "You communicate directly with Saad M. Standard rate is £35/hr, with custom milestone scopes available. Messages submit straight to my personal inbox.",
+        "badgeText": "DIRECT INBOUND TO SAAD M",
+        "whatsappNumber": "+44 7927 548123",
+        "phoneNumber": "+44 7927 548123",
+        "emailAddress": "Mansurisaad28012@gmail.com",
+        "linkedinUrl": "https://linkedin.com",
+        "availabilityStatus": "Active & Open",
+        "availabilityText": "Rate: £35/hr · Open for 2026 Projects"
+      },
+      "process": {
+        "heroTitle": "A PREDICTABLE 4-STAGE",
+        "heroHighlight": "DEVELOPMENT PROCESS",
+        "heroSubtitle": "From initial discovery message to final live deployment, every project follows a transparent, collaborative roadmap.",
+        "step1Title": "01 · Discovery & Blueprint",
+        "step1Desc": "We define your goals, target audience, page structures, and tech requirements with a crystal-clear fixed or hourly scope.",
+        "step2Title": "02 · Design & Wireframing",
+        "step2Desc": "Interactive wireframes and design mockups crafted to capture your brand visual identity and optimize user flow.",
+        "step3Title": "03 · Full-Stack Engineering",
+        "step3Desc": "Production development with clean TypeScript, lightning-fast component rendering, and responsive mobile testing.",
+        "step4Title": "04 · Testing, SEO & Launch",
+        "step4Desc": "Rigorous cross-browser checks, Google Search optimization, SSL setup, and seamless handover with complete ownership."
+      },
+      "standards": {
+        "heroTitle": "ENGINEERING EXCELLENCE &",
+        "heroHighlight": "QUALITY GUARANTEES",
+        "heroSubtitle": "Every website delivered by Click N Create is built according to stringent performance, accessibility, and security standards.",
+        "guarantee1": "100% Mobile & Tablet Optimization across all screen viewports",
+        "guarantee2": "Sub-second First Contentful Paint (<0.8s) for maximum conversions",
+        "guarantee3": "Clean Semantic HTML & Structured JSON-LD Schema for Google Search",
+        "guarantee4": "Zero Retainers or Lock-In: You own 100% of your source code and assets"
+      },
+      "faq": {
+        "heroTitle": "FREQUENTLY ASKED",
+        "heroHighlight": "QUESTIONS & ANSWERS",
+        "heroSubtitle": "Straightforward answers regarding rates, delivery timelines, payment terms, and working directly with Saad M.",
+        "faqsList": [
+          {
+            "id": "faq-1",
+            "question": "What is your standard rate and how do payments work?",
+            "answer": "My standard rate is £35/hour. For defined projects, I offer fixed milestone packages (e.g. 50% deposit upon start, 50% upon successful launch). All prices are completely transparent with zero hidden fees.",
+            "category": "Pricing"
+          },
+          {
+            "id": "faq-2",
+            "question": "How long does it take to build a website?",
+            "answer": "A standard 5-page business website typically takes 1 to 2 weeks. E-commerce shops take roughly 2 to 3 weeks. Express rush delivery is also available if you have an urgent launch deadline.",
+            "category": "Timeline"
+          },
+          {
+            "id": "faq-3",
+            "question": "Can I easily edit words and prices myself after launch?",
+            "answer": "Yes! Every project includes a personalized video walkthrough showing you exactly how to edit text, update prices, or add new photos yourself anytime without needing to write code.",
+            "category": "Management"
+          },
+          {
+            "id": "faq-4",
+            "question": "Do you provide website hosting and domain setup?",
+            "answer": "Yes, I handle connecting your domain, setting up high-speed cloud hosting, free SSL security locks, and automated daily backups.",
+            "category": "Hosting"
+          }
+        ]
+      }
+    },
+    "updatedAt": "2026-10-01T14:35:15.573Z"
+  },
+  "adminCredentials": {
+    "email": "mansurisaad28012@gmail.com",
+    "passwordHash": "saad2026"
+  },
+  "adminTokens": [
+    "saad-master-session-token-2026",
+    "saad_token_1790852972835_aqzwybaa",
+    "saad_token_1790853024943_315adtp1"
+  ]
+}

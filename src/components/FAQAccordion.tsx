@@ -84,10 +84,10 @@ export const FAQAccordion: React.FC<FAQAccordionProps> = ({
                   exit={{ height: 0, opacity: 0 }}
                   transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
                 >
-                  <div className={`px-6 pb-6 pt-1 text-sm sm:text-base leading-relaxed border-t ${
+                  <div className={`px-6 pb-6 pt-1 text-sm sm:text-base leading-relaxed border-t font-medium ${
                     isDark
-                      ? 'text-zinc-400 border-white/[0.04]'
-                      : 'text-zinc-600 border-zinc-200/60'
+                      ? 'text-zinc-100 border-white/[0.04]'
+                      : 'text-zinc-900 border-zinc-200/60'
                   }`}>
                     {item.answer}
                   </div>

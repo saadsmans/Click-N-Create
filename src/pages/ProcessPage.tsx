@@ -5,6 +5,7 @@ import { SectionHeading } from '../components/SectionHeading.tsx';
 import { MagneticButton } from '../components/MagneticButton.tsx';
 import { PROCESS_STAGES, SITE_CONFIG } from '../data/site.ts';
 import { useTheme } from '../context/ThemeContext.tsx';
+import { useCustomization } from '../context/CustomizationContext.tsx';
 import { SEOHead } from '../components/SEOHead.tsx';
 
 interface ProcessPageProps {
@@ -14,6 +15,8 @@ interface ProcessPageProps {
 export const ProcessPage: React.FC<ProcessPageProps> = ({ onNavigate }) => {
   const { theme } = useTheme();
   const isDark = theme === 'dark';
+  const { getPageContent } = useCustomization();
+  const cms = getPageContent('process') || {};
 
   return (
     <div className="pt-28 pb-20 md:pt-36 relative overflow-x-hidden w-full max-w-full">
@@ -36,19 +39,19 @@ export const ProcessPage: React.FC<ProcessPageProps> = ({ onNavigate }) => {
             isDark ? 'border-white/10 bg-white/5 text-blue-400' : 'border-zinc-300 bg-white text-blue-600 shadow-2xs font-semibold'
           }`}>
             <Sparkles className="w-3.5 h-3.5" />
-            <span>End-to-End Methodology</span>
+            <span>{cms.badgeText || 'End-to-End Methodology'}</span>
           </div>
 
           <h1 className={`text-4xl sm:text-6xl md:text-7xl font-black font-display tracking-tight leading-[1.05] ${
             isDark ? 'text-white' : 'text-zinc-950'
           }`}>
-            HOW WE <span className="text-luxury-gradient">COLLABORATE</span>
+            {cms.heroTitle || 'HOW WE'} <span className="text-luxury-gradient">{cms.heroHighlight || 'COLLABORATE'}</span>
           </h1>
 
           <p className={`mt-5 text-base sm:text-xl leading-relaxed ${
             isDark ? 'text-zinc-400' : 'text-zinc-600'
           }`}>
-            A structured 5-stage blueprint engineered to eliminate guesswork, keep you directly involved at every milestone, and deliver production-grade code on time and within budget.
+            {cms.heroSubtitle || 'A structured 5-stage blueprint engineered to eliminate guesswork, keep you directly involved at every milestone, and deliver production-grade code on time and within budget.'}
           </p>
         </div>
 

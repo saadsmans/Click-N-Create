@@ -1,32 +1,50 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
-  --font-display: 'Syne', sans-serif;
-  --font-sans: 'Plus Jakarta Sans', sans-serif;
-  --font-mono: 'Hubot Sans', sans-serif;
+  --font-display: var(--font-display, 'Syne', sans-serif);
+  --font-sans: var(--font-sans, 'Plus Jakarta Sans', sans-serif);
+  --font-mono: var(--font-mono, 'Hubot Sans', monospace);
 }
 
 @layer base {
   :root {
     --bg-main: #F8FAFC;
     --bg-secondary: #FFFFFF;
+    --card-bg: #FFFFFF;
+    --card-bg-subtle: #F1F5F9;
     --text-main: #0F172A;
     --text-muted: #475569;
     --border-main: rgba(0, 0, 0, 0.08);
-    --border-hover: rgba(2, 132, 199, 0.4);
+    --border-subtle: rgba(0, 0, 0, 0.05);
+    --border-hover: var(--accent-cyan, #0284C7);
     --accent-cyan: #0284C7;
     --accent-purple: #7C3AED;
+    --accent-gradient: linear-gradient(135deg, #0284C7 0%, #7C3AED 50%, #E11D48 100%);
+    --cyber-cyan: #0284C7;
+    --cyber-purple: #7C3AED;
+    --glow-color: rgba(2, 132, 199, 0.25);
+    --border-radius: 16px;
   }
 
   :root.dark {
     --bg-main: #07070F;
     --bg-secondary: #0D0D1C;
+    --card-bg: #0A0A18;
+    --card-bg-subtle: #121226;
     --text-main: #F8FAFC;
     --text-muted: #94A3B8;
     --border-main: rgba(255, 255, 255, 0.08);
-    --border-hover: rgba(0, 240, 255, 0.4);
+    --border-subtle: rgba(255, 255, 255, 0.04);
+    --border-hover: var(--accent-cyan, #00F0FF);
     --accent-cyan: #00F0FF;
     --accent-purple: #A855F7;
+    --accent-gradient: linear-gradient(135deg, #00F0FF 0%, #A855F7 50%, #FF0055 100%);
+    --cyber-cyan: #00F0FF;
+    --cyber-purple: #A855F7;
+    --glow-color: rgba(0, 240, 255, 0.4);
+    --border-radius: 16px;
   }
 
   html {
@@ -38,7 +56,7 @@
   }
 
   body {
-    font-family: var(--font-sans);
+    font-family: var(--font-sans, 'Plus Jakarta Sans', sans-serif);
     background-color: var(--bg-main);
     color: var(--text-main);
     overflow-x: hidden;
@@ -46,7 +64,7 @@
     width: 100%;
     position: relative;
     letter-spacing: -0.01em;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    transition: background-color 0.25s ease, color 0.25s ease;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -59,15 +77,8 @@
     position: relative;
   }
 
-  /* GPU Hardware Acceleration for smooth 60fps animations */
-  .transform-gpu {
-    transform: translate3d(0, 0, 0);
-    backface-visibility: hidden;
-    perspective: 1000px;
-  }
-
   h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-display);
+    font-family: var(--font-display, 'Syne', sans-serif);
     letter-spacing: -0.02em;
     overflow-wrap: break-word;
     word-break: break-word;
@@ -78,217 +89,97 @@
   }
 }
 
-/* Glassmorphism & Cyber Glow Panels */
-.glass-panel {
-  background: rgba(255, 255, 255, 0.88);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(2, 132, 199, 0.15);
-  box-shadow: 0 10px 30px -5px rgba(2, 132, 199, 0.08);
+/* Dynamic Theme Accent Utilities */
+.theme-accent-text {
+  color: var(--accent-cyan) !important;
 }
 
-.dark .glass-panel {
-  background: rgba(13, 13, 28, 0.65);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+.theme-accent-bg {
+  background-color: var(--accent-cyan) !important;
 }
 
-/* Cyber Neon Text Gradients - Saturated in Light Mode, High Contrast & Glow in Dark */
+.theme-accent-border {
+  border-color: var(--accent-cyan) !important;
+}
+
+.theme-accent-gradient-bg {
+  background: var(--accent-gradient) !important;
+}
+
+.theme-glow {
+  box-shadow: 0 0 25px var(--glow-color);
+}
+
+.theme-glow-sm {
+  box-shadow: 0 0 12px var(--glow-color);
+}
+
+/* Base custom utilities */
 .text-cyber-gradient {
-  background: linear-gradient(135deg, #0284C7 0%, #6366F1 45%, #D946EF 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 1px 2px rgba(2, 132, 199, 0.15));
-}
-
-.dark .text-cyber-gradient {
-  background: linear-gradient(135deg, #00F0FF 0%, #A855F7 50%, #FF0055 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 0 16px rgba(0, 240, 255, 0.35));
-}
-
-.text-luxury-gradient {
-  background: linear-gradient(135deg, #FFFFFF 0%, #A1A1AA 100%);
+  background: var(--accent-gradient, linear-gradient(135deg, #00F0FF 0%, #A855F7 50%, #FF0055 100%));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-/* Background Cyber Grid */
-.bg-grid-pattern {
+.bg-cyber-gradient {
+  background: var(--accent-gradient, linear-gradient(135deg, #00F0FF 0%, #A855F7 50%, #FF0055 100%));
+}
+
+.border-cyber-gradient {
+  border-image: var(--accent-gradient) 1;
+}
+
+.cyber-card {
+  position: relative;
+  background: var(--card-bg, #0A0A18);
+  border: 1px solid var(--border-main, rgba(255, 255, 255, 0.08));
+  border-radius: var(--border-radius, 16px);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cyber-card:hover {
+  border-color: var(--accent-cyan, #00F0FF);
+  box-shadow: 0 10px 30px -10px var(--glow-color, rgba(0, 240, 255, 0.3));
+}
+
+.noise-bg {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 0);
+  background-size: 24px 24px;
+}
+
+:root:not(.dark) .noise-bg {
+  background-image: radial-gradient(rgba(0, 0, 0, 0.04) 1px, transparent 0);
+  background-size: 24px 24px;
+}
+
+.grid-bg {
   background-size: 40px 40px;
-  background-image: 
-    linear-gradient(to right, rgba(0, 0, 0, 0.04) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(0, 0, 0, 0.04) 1px, transparent 1px);
-}
-
-.dark .bg-grid-pattern {
   background-image: 
     linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
 }
 
-/* Smooth Cyber Border Glows */
-.cyber-card {
-  position: relative;
-  border-radius: 1.25rem;
-  border: 1px solid var(--border-main);
-  background: var(--bg-secondary);
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+:root:not(.dark) .grid-bg {
+  background-image: 
+    linear-gradient(to right, rgba(0, 0, 0, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.04) 1px, transparent 1px);
 }
 
-.cyber-card:hover {
-  border-color: rgba(0, 240, 255, 0.4);
-  box-shadow: 0 0 25px -5px rgba(0, 240, 255, 0.2);
-}
-
-/* Custom Scrollbar */
+/* Custom scrollbars */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--bg-main);
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(100, 116, 139, 0.3);
-  border-radius: 4px;
+  background: rgba(148, 163, 184, 0.3);
+  border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 240, 255, 0.5);
+  background: rgba(148, 163, 184, 0.5);
 }
-
-/* ========================================================
-   HOLOGRAPHIC SOLAR SYSTEM CSS KEYFRAME ORBITAL ENGINE
-   ======================================================== */
-@keyframes solar-pulse {
-  0%, 100% {
-    transform: scale(1);
-    filter: drop-shadow(0 0 25px rgba(0, 240, 255, 0.7)) drop-shadow(0 0 60px rgba(168, 85, 247, 0.4));
-  }
-  50% {
-    transform: scale(1.08);
-    filter: drop-shadow(0 0 45px rgba(0, 240, 255, 0.95)) drop-shadow(0 0 90px rgba(168, 85, 247, 0.65));
-  }
-}
-
-@keyframes solar-corona-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes orbit-cw {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes orbit-counter-cw {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(-360deg);
-  }
-}
-
-@keyframes planet-wobble {
-  0%, 100% {
-    transform: translateY(0px) scale(1);
-  }
-  50% {
-    transform: translateY(-5px) scale(1.03);
-  }
-}
-
-@keyframes holo-scanline {
-  0% {
-    transform: translateY(-100%);
-    opacity: 0.1;
-  }
-  50% {
-    opacity: 0.4;
-  }
-  100% {
-    transform: translateY(100%);
-    opacity: 0.1;
-  }
-}
-
-.animate-solar-pulse {
-  animation: solar-pulse 4s ease-in-out infinite;
-}
-
-.animate-corona-spin {
-  animation: solar-corona-spin 25s linear infinite;
-}
-
-.animate-corona-spin-reverse {
-  animation: solar-corona-spin 35s linear infinite reverse;
-}
-
-.orbit-track-1 {
-  animation: orbit-cw 18s linear infinite;
-}
-.orbit-track-2 {
-  animation: orbit-cw 25s linear infinite;
-}
-.orbit-track-3 {
-  animation: orbit-cw 34s linear infinite;
-}
-.orbit-track-4 {
-  animation: orbit-cw 45s linear infinite;
-}
-.orbit-track-5 {
-  animation: orbit-cw 58s linear infinite;
-}
-.orbit-track-6 {
-  animation: orbit-cw 74s linear infinite;
-}
-
-.orbit-counter-1 {
-  animation: orbit-counter-cw 18s linear infinite;
-}
-.orbit-counter-2 {
-  animation: orbit-counter-cw 25s linear infinite;
-}
-.orbit-counter-3 {
-  animation: orbit-counter-cw 34s linear infinite;
-}
-.orbit-counter-4 {
-  animation: orbit-counter-cw 45s linear infinite;
-}
-.orbit-counter-5 {
-  animation: orbit-counter-cw 58s linear infinite;
-}
-.orbit-counter-6 {
-  animation: orbit-counter-cw 74s linear infinite;
-}
-
-.pause-on-hover:hover .orbit-track-1,
-.pause-on-hover:hover .orbit-track-2,
-.pause-on-hover:hover .orbit-track-3,
-.pause-on-hover:hover .orbit-track-4,
-.pause-on-hover:hover .orbit-track-5,
-.pause-on-hover:hover .orbit-track-6,
-.pause-on-hover:hover .orbit-counter-1,
-.pause-on-hover:hover .orbit-counter-2,
-.pause-on-hover:hover .orbit-counter-3,
-.pause-on-hover:hover .orbit-counter-4,
-.pause-on-hover:hover .orbit-counter-5,
-.pause-on-hover:hover .orbit-counter-6 {
-  animation-play-state: paused;
-}
-

@@ -18,6 +18,7 @@ import { SectionHeading } from '../components/SectionHeading.tsx';
 import { MagneticButton } from '../components/MagneticButton.tsx';
 import { SITE_CONFIG } from '../data/site.ts';
 import { useTheme } from '../context/ThemeContext.tsx';
+import { useCustomization } from '../context/CustomizationContext.tsx';
 import { SEOHead } from '../components/SEOHead.tsx';
 
 interface AboutPageProps {
@@ -27,6 +28,8 @@ interface AboutPageProps {
 export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
   const { theme } = useTheme();
   const isDark = theme === 'dark';
+  const { getPageContent } = useCustomization();
+  const cms = getPageContent('about') || {};
 
   return (
     <div className="pt-28 pb-20 md:pt-36 relative overflow-x-hidden w-full max-w-full">
@@ -50,19 +53,23 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
               isDark ? 'border-white/10 bg-white/5 text-[#00F0FF]' : 'border-cyan-300 bg-cyan-50 text-cyan-800 shadow-2xs font-semibold'
             }`}>
               <Sparkles className="w-3.5 h-3.5" />
-              <span>Independent Freelance Web Developer</span>
+              <span>{cms.badgeText || 'Independent Freelance Web Developer'}</span>
             </div>
 
             <h1 className={`text-4xl sm:text-6xl md:text-7xl font-black font-display tracking-tight leading-[1.05] ${
               isDark ? 'text-white' : 'text-zinc-950'
             }`}>
-              ABOUT <span className="text-luxury-gradient">SAAD M</span>
+              {cms.heroTitle || 'ABOUT'} <span className="text-luxury-gradient">{cms.heroHighlight || 'SAAD M'}</span>
             </h1>
 
             <p className={`mt-5 text-base sm:text-xl leading-relaxed ${
               isDark ? 'text-zinc-400' : 'text-zinc-600'
             }`}>
-              Freelance web developer and founder of <strong className={isDark ? 'text-white' : 'text-zinc-950'}>Click N Create</strong>. Engineering high-performance React websites, e-commerce storefronts, and bespoke digital tools with direct 1-on-1 personal accountability.
+              {cms.heroSubtitle || (
+                <>
+                  Freelance web developer and founder of <strong className={isDark ? 'text-white' : 'text-zinc-950'}>Click N Create</strong>. Engineering high-performance React websites, e-commerce storefronts, and bespoke digital tools with direct 1-on-1 personal accountability.
+                </>
+              )}
             </p>
 
             {/* Quick Contact Bar */}
@@ -166,10 +173,14 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
 
             <div className={`space-y-4 text-base sm:text-lg leading-relaxed ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>
               <p>
-                Click N Create was born out of a clear observation in the web design industry: traditional agencies are often bogged down by excessive overhead, layers of account managers, bloated turnaround times, and inflated fees that do not correlate to superior code quality.
+                {cms.bioParagraph1 || 'Click N Create was born out of a clear observation in the web design industry: traditional agencies are often bogged down by excessive overhead, layers of account managers, bloated turnaround times, and inflated fees that do not correlate to superior code quality.'}
               </p>
               <p>
-                As an independent developer, I offer an honest and straightforward alternative. When you engage Click N Create, you work directly with me—<strong className={isDark ? 'text-white' : 'text-zinc-950'}>Saad M</strong>. I personally architect the technical structure, write every component in TypeScript and React, calibrate the responsive layout for mobile screens, and manage your cloud deployment.
+                {cms.bioParagraph2 || (
+                  <>
+                    As an independent developer, I offer an honest and straightforward alternative. When you engage Click N Create, you work directly with me—<strong className={isDark ? 'text-white' : 'text-zinc-950'}>Saad M</strong>. I personally architect the technical structure, write every component in TypeScript and React, calibrate the responsive layout for mobile screens, and manage your cloud deployment.
+                  </>
+                )}
               </p>
               <p>
                 My rate is transparently set at <strong className="text-blue-500 font-bold">£35 per hour</strong> for flexible development, or structured as custom fixed-milestone pricing depending upon project scope. You know precisely what you are paying for, with itemized clarity and zero hidden fees.

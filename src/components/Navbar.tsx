@@ -11,6 +11,7 @@ import {
   Terminal,
   Sparkles,
   HelpCircle,
+  Server,
 } from 'lucide-react';
 import { ClickNCreateLogo } from './ClickNCreateLogo.tsx';
 import { NAV_ITEMS } from '../data/site.ts';
@@ -327,6 +328,38 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPath, onNavigate }) => {
                             </span>
                           </div>
                         </a>
+
+                        {/* Admin & Backend Page Link */}
+                        <div className="pt-2 mt-2 border-t border-black/[0.08] dark:border-white/[0.08]">
+                          <a
+                            href="/admin"
+                            onClick={(e) => handleLinkClick(e, '/admin')}
+                            className={`flex items-center gap-3 p-2.5 rounded-xl text-xs font-mono transition-all group ${
+                              currentPath === '/admin' || currentPath === '/backend'
+                                ? isDark
+                                  ? 'bg-[#00F0FF]/20 text-[#00F0FF] border border-[#00F0FF]/40'
+                                  : 'bg-cyan-100 text-cyan-800 border border-cyan-400 font-bold'
+                                : isDark
+                                ? 'hover:bg-[#00F0FF]/15 bg-[#00F0FF]/5 text-cyan-300 border border-[#00F0FF]/20'
+                                : 'hover:bg-cyan-100/70 bg-cyan-50/80 text-cyan-900 border border-cyan-300/60'
+                            }`}
+                          >
+                            <div className="w-7 h-7 rounded-lg bg-[#00F0FF]/20 text-[#00F0FF] flex items-center justify-center shrink-0">
+                              <ShieldCheck className="w-3.5 h-3.5" />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <div className="font-bold flex items-center justify-between">
+                                <span className="truncate">Admin & Backend</span>
+                                <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#00F0FF]/25 text-[#00F0FF] font-bold shrink-0">
+                                  OWNER
+                                </span>
+                              </div>
+                              <span className="text-[10px] text-zinc-500 block truncate">
+                                CMS, Server Ops & Telemetry
+                              </span>
+                            </div>
+                          </a>
+                        </div>
                       </div>
                     </motion.div>
                   )}
@@ -449,8 +482,40 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPath, onNavigate }) => {
                     </div>
                   </div>
 
-                  {/* Bottom Primary Contact CTA */}
-                  <div className="pt-2 border-t border-black/[0.08] dark:border-white/[0.08]">
+                  {/* Bottom Actions */}
+                  <div className="pt-2 border-t border-black/[0.08] dark:border-white/[0.08] space-y-2">
+                    <a
+                      href="/admin"
+                      onClick={(e) => handleLinkClick(e, '/admin')}
+                      className={`w-full p-2.5 rounded-xl border transition-all flex items-center justify-between group cursor-pointer ${
+                        currentPath === '/admin' || currentPath === '/backend'
+                          ? isDark
+                            ? 'border-[#00F0FF] bg-[#00F0FF]/15 text-[#00F0FF] font-bold shadow-[0_0_12px_rgba(0,240,255,0.25)]'
+                            : 'border-cyan-600 bg-cyan-50 text-cyan-900 font-bold'
+                          : isDark
+                          ? 'border-[#00F0FF]/30 bg-[#00F0FF]/5 hover:bg-[#00F0FF]/15 text-cyan-300'
+                          : 'border-cyan-400/50 bg-cyan-50/70 hover:bg-cyan-100 text-cyan-900'
+                      }`}
+                    >
+                      <div className="flex items-center gap-2.5">
+                        <div className="w-7 h-7 rounded-lg bg-[#00F0FF]/20 text-[#00F0FF] flex items-center justify-center shrink-0">
+                          <ShieldCheck className="w-4 h-4" />
+                        </div>
+                        <div className="text-left font-mono">
+                          <div className="text-xs font-bold flex items-center gap-1.5">
+                            <span>Admin & Backend Console</span>
+                            <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#00F0FF]/25 text-[#00F0FF] font-bold">
+                              OWNER
+                            </span>
+                          </div>
+                          <span className="text-[10px] text-zinc-500 block">
+                            CMS Editor, Server Ops & DB
+                          </span>
+                        </div>
+                      </div>
+                      <ArrowUpRight className="w-3.5 h-3.5 text-[#00F0FF] transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                    </a>
+
                     <button
                       type="button"
                       onClick={(e) => handleLinkClick(e, '/contact')}

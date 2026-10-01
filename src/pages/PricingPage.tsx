@@ -5,6 +5,7 @@ import { SectionHeading } from '../components/SectionHeading.tsx';
 import { MagneticButton } from '../components/MagneticButton.tsx';
 import { SITE_CONFIG } from '../data/site.ts';
 import { useTheme } from '../context/ThemeContext.tsx';
+import { useCustomization } from '../context/CustomizationContext.tsx';
 import { SEOHead } from '../components/SEOHead.tsx';
 
 interface PricingPageProps {
@@ -14,6 +15,11 @@ interface PricingPageProps {
 export const PricingPage: React.FC<PricingPageProps> = ({ onNavigate }) => {
   const { theme } = useTheme();
   const isDark = theme === 'dark';
+  const { getPageContent } = useCustomization();
+  const cms = getPageContent('pricing') || {};
+
+  // Rate: £35 / hr (or custom CMS rate)
+  const hourlyRate = cms.hourlyRateNumber || 35;
 
   // Interactive Project Cost Calculator State
   const [projectHours, setProjectHours] = useState<number>(30);
@@ -21,8 +27,6 @@ export const PricingPage: React.FC<PricingPageProps> = ({ onNavigate }) => {
   const [includeEcommerce, setIncludeEcommerce] = useState<boolean>(false);
   const [includeMaintenance, setIncludeMaintenance] = useState<boolean>(false);
 
-  // Rate: £35 / hr
-  const hourlyRate = 35;
   const baseCost = projectHours * hourlyRate;
   const seoCost = includeSeo ? 200 : 0;
   const ecommerceCost = includeEcommerce ? 350 : 0;
@@ -50,19 +54,23 @@ export const PricingPage: React.FC<PricingPageProps> = ({ onNavigate }) => {
             isDark ? 'border-white/10 bg-white/5 text-blue-400' : 'border-zinc-300 bg-white text-blue-600 shadow-2xs font-semibold'
           }`}>
             <Sparkles className="w-3.5 h-3.5" />
-            <span>Honest & Predictable</span>
+            <span>{cms.badgeText || 'Honest & Predictable'}</span>
           </div>
 
           <h1 className={`text-4xl sm:text-6xl md:text-7xl font-black font-display tracking-tight leading-[1.05] ${
             isDark ? 'text-white' : 'text-zinc-950'
           }`}>
-            TRANSPARENT <span className="text-luxury-gradient">PRICING</span>
+            {cms.heroTitle || 'TRANSPARENT'} <span className="text-luxury-gradient">{cms.heroHighlight || 'PRICING'}</span>
           </h1>
 
           <p className={`mt-5 text-base sm:text-xl leading-relaxed ${
             isDark ? 'text-zinc-400' : 'text-zinc-600'
           }`}>
-            Clear, honest rates with zero hidden markups. Standard rate is <strong className="text-blue-500 font-bold">£35 per hour</strong> for flexible development, alongside bespoke fixed-price quotes tailored to your exact project scope.
+            {cms.heroSubtitle || (
+              <>
+                Clear, honest rates with zero hidden markups. Standard rate is <strong className="text-blue-500 font-bold">£35 per hour</strong> for flexible development, alongside bespoke fixed-price quotes tailored to your exact project scope.
+              </>
+            )}
           </p>
         </div>
 

@@ -24,6 +24,18 @@ export async function submitContactForm(data: ContactFormData): Promise<{ succes
     throw new Error('Please fill in all required fields.');
   }
 
+  // 1. Save directly to backend Express Database
+  try {
+    await fetch('/api/inquiries', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+  } catch (backendErr) {
+    console.warn('Backend storage note:', backendErr);
+  }
+
+  // 2. Dispatch directly to personal inbox via FormSubmit API
   try {
     const response = await fetch('https://formsubmit.co/ajax/Mansurisaad28012@gmail.com', {
       method: 'POST',
@@ -51,7 +63,7 @@ export async function submitContactForm(data: ContactFormData): Promise<{ succes
     if (response.ok && result.success !== 'false') {
       return {
         success: true,
-        message: 'Your project enquiry has been sent directly to Saad M at Mansurisaad28012@gmail.com.',
+        message: 'Your project enquiry has been stored and dispatched directly to Saad M at Mansurisaad28012@gmail.com.',
       };
     }
   } catch (err) {
@@ -67,7 +79,7 @@ export async function submitContactForm(data: ContactFormData): Promise<{ succes
 
   return {
     success: true,
-    message: 'Your enquiry has been prepared and dispatched to Mansurisaad28012@gmail.com.',
+    message: 'Your enquiry has been saved and prepared for Mansurisaad28012@gmail.com.',
   };
 }
 

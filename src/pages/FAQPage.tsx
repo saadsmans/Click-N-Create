@@ -4,6 +4,7 @@ import { FAQS, FaqItem } from '../data/faqs.ts';
 import { FAQAccordion } from '../components/FAQAccordion.tsx';
 import { MagneticButton } from '../components/MagneticButton.tsx';
 import { useTheme } from '../context/ThemeContext.tsx';
+import { useCustomization } from '../context/CustomizationContext.tsx';
 import { SEOHead } from '../components/SEOHead.tsx';
 
 interface FAQPageProps {
@@ -15,6 +16,10 @@ export const FAQPage: React.FC<FAQPageProps> = ({ onNavigate }) => {
   const [activeCategory, setActiveCategory] = useState<string>('All');
   const { theme } = useTheme();
   const isDark = theme === 'dark';
+  const { getPageContent } = useCustomization();
+  const cms = getPageContent('faq') || {};
+
+  const activeFaqs: FaqItem[] = (cms.faqsList && cms.faqsList.length > 0) ? cms.faqsList : FAQS;
 
   const categories = [
     'All',
@@ -26,20 +31,24 @@ export const FAQPage: React.FC<FAQPageProps> = ({ onNavigate }) => {
     'Ownership & Legal',
   ];
 
-  const filteredFaqs = FAQS.filter((faq: FaqItem) => {
-    const matchesCategory = activeCategory === 'All' || faq.category === activeCategory;
+  const filteredFaqs = (activeFaqs || []).filter((faq: any) => {
+    if (!faq || !faq.question) return false;
+    const matchesCategory =
+      activeCategory === 'All' ||
+      faq.category === activeCategory ||
+      (activeCategory === 'Pricing & Rates' && (faq.category === 'Pricing' || faq.category === 'Pricing & Rates'));
     const matchesQuery =
-      faq.question.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      faq.answer.toLowerCase().includes(searchQuery.toLowerCase());
+      (faq.question || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (faq.answer || '').toLowerCase().includes(searchQuery.toLowerCase());
     return matchesCategory && matchesQuery;
   });
 
-  const schemaFaqItems = FAQS.slice(0, 10).map((f) => ({
+  const schemaFaqItems = (activeFaqs || []).slice(0, 10).map((f) => ({
     '@type': 'Question',
-    name: f.question,
+    name: f.question || '',
     acceptedAnswer: {
       '@type': 'Answer',
-      text: f.answer,
+      text: f.answer || '',
     },
   }));
 
@@ -69,19 +78,19 @@ export const FAQPage: React.FC<FAQPageProps> = ({ onNavigate }) => {
             isDark ? 'border-white/10 bg-white/5 text-blue-400' : 'border-zinc-300 bg-white text-blue-600 shadow-2xs font-semibold'
           }`}>
             <HelpCircle className="w-3.5 h-3.5" />
-            <span>Transparency & Answers</span>
+            <span>{cms.badgeText || 'Transparency & Answers'}</span>
           </div>
 
           <h1 className={`text-4xl sm:text-5xl font-black font-display tracking-tight leading-[1.1] ${
             isDark ? 'text-white' : 'text-zinc-950'
           }`}>
-            FREQUENTLY ASKED <span className="text-luxury-gradient">QUESTIONS</span>
+            {cms.heroTitle || 'FREQUENTLY ASKED'} <span className="text-luxury-gradient">{cms.heroHighlight || 'QUESTIONS'}</span>
           </h1>
 
           <p className={`mt-4 text-base sm:text-lg leading-relaxed ${
             isDark ? 'text-zinc-400' : 'text-zinc-600'
           }`}>
-            Straightforward, honest details about working with Saad M at Click N Create. No hidden fees, no agency runarounds.
+            {cms.heroSubtitle || 'Straightforward, honest details about working with Saad M at Click N Create. No hidden fees, no agency runarounds.'}
           </p>
         </div>
 

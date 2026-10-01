@@ -6,6 +6,7 @@ import { AdaptiveServiceImage } from '../components/AdaptiveServiceImage.tsx';
 import { SectionHeading } from '../components/SectionHeading.tsx';
 import { FinalCTA } from '../components/FinalCTA.tsx';
 import { useTheme } from '../context/ThemeContext.tsx';
+import { useCustomization } from '../context/CustomizationContext.tsx';
 import { SEOHead } from '../components/SEOHead.tsx';
 
 interface ServicesPageProps {
@@ -15,6 +16,26 @@ interface ServicesPageProps {
 export const ServicesPage: React.FC<ServicesPageProps> = ({ onNavigate }) => {
   const { theme } = useTheme();
   const isDark = theme === 'dark';
+  const { getPageContent } = useCustomization();
+  const cms = getPageContent('services') || {};
+
+  // Merge CMS customizations into SERVICES array so techStack, features, image, suitableFor remain 100% available
+  const activeServices = SERVICES.map((baseService) => {
+    const override = (cms.servicesList || []).find(
+      (s: any) => s.id === baseService.id || s.slug === baseService.slug
+    );
+    if (!override) return baseService;
+    return {
+      ...baseService,
+      title: override.title || baseService.title,
+      fullDescription: override.description || baseService.fullDescription,
+      pricingEstimate: override.rate || baseService.pricingEstimate,
+      typicalTimeline: override.turnaround || baseService.typicalTimeline,
+      features: (override.deliverables && override.deliverables.length > 0)
+        ? override.deliverables
+        : baseService.features,
+    };
+  });
 
   return (
     <div className="pt-28 pb-20 md:pt-36 relative overflow-x-hidden w-full max-w-full">
@@ -38,23 +59,23 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({ onNavigate }) => {
             isDark ? 'border-white/10 bg-white/5 text-blue-400' : 'border-zinc-300 bg-white text-blue-600 shadow-2xs font-semibold'
           }`}>
             <Sparkles className="w-3.5 h-3.5" />
-            <span>Digital Offerings</span>
+            <span>{cms.badgeText || 'Digital Offerings'}</span>
           </div>
           <h1 className={`text-4xl sm:text-5xl md:text-6xl font-black font-display tracking-tight leading-[1.1] ${
             isDark ? 'text-white' : 'text-zinc-950'
           }`}>
-            SERVICES & <span className="text-luxury-gradient">CAPABILITIES</span>
+            {cms.heroTitle || 'SERVICES &'} <span className="text-luxury-gradient">{cms.heroHighlight || 'CAPABILITIES'}</span>
           </h1>
           <p className={`mt-5 text-base sm:text-lg leading-relaxed ${
             isDark ? 'text-zinc-400' : 'text-zinc-600'
           }`}>
-            Click N Create provides focused, high-standard digital services tailored for businesses, founders, creators, and individuals. Every service is delivered with direct communication, clean architecture, and modern visual design.
+            {cms.heroSubtitle || 'Click N Create provides focused, high-standard digital services tailored for businesses, founders, creators, and individuals. Every service is delivered with direct communication, clean architecture, and modern visual design.'}
           </p>
         </div>
 
         {/* Services List - Large Glass Layouts */}
         <div className="space-y-16 md:space-y-24">
-          {SERVICES.map((service: ServiceItem, index: number) => {
+          {activeServices.map((service: any, index: number) => {
             const isEven = index % 2 === 1;
 
             return (
@@ -115,7 +136,7 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({ onNavigate }) => {
 
                       {/* Tech Stack Pills */}
                       <div className="flex flex-wrap gap-1.5 pt-3">
-                        {service.techStack.map((tech, tIdx) => (
+                        {(service.techStack || []).map((tech: string, tIdx: number) => (
                           <span
                             key={tIdx}
                             className={`text-[11px] font-mono px-2 py-0.5 rounded border ${
@@ -138,7 +159,7 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({ onNavigate }) => {
                         Key Deliverables & Features:
                       </h4>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                        {service.features.slice(0, 4).map((feat, idx) => (
+                        {(service.features || service.deliverables || []).slice(0, 4).map((feat: string, idx: number) => (
                           <div key={idx} className="flex items-start gap-2 text-xs sm:text-sm">
                             <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5 text-blue-500" />
                             <span className={isDark ? 'text-zinc-300' : 'text-zinc-700'}>{feat}</span>
@@ -154,7 +175,7 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({ onNavigate }) => {
                         <span>Ideal For:</span>
                       </div>
                       <div className="flex flex-wrap gap-1.5">
-                        {service.suitableFor.map((target, idx) => (
+                        {(service.suitableFor || []).map((target: string, idx: number) => (
                           <span
                             key={idx}
                             className={`text-xs font-mono px-2.5 py-1 rounded-md border ${

@@ -17,6 +17,7 @@ import {
 import { SectionHeading } from '../components/SectionHeading.tsx';
 import { SITE_CONFIG } from '../data/site.ts';
 import { useTheme } from '../context/ThemeContext.tsx';
+import { useCustomization } from '../context/CustomizationContext.tsx';
 import { SEOHead } from '../components/SEOHead.tsx';
 
 interface StandardsPageProps {
@@ -26,6 +27,8 @@ interface StandardsPageProps {
 export const StandardsPage: React.FC<StandardsPageProps> = ({ onNavigate }) => {
   const { theme } = useTheme();
   const isDark = theme === 'dark';
+  const { getPageContent } = useCustomization();
+  const cms = getPageContent('standards') || {};
 
   const BENCHMARKS = [
     {
@@ -150,7 +153,7 @@ export const StandardsPage: React.FC<StandardsPageProps> = ({ onNavigate }) => {
             }`}
           >
             <Terminal className="w-3.5 h-3.5" />
-            <span>Engineering Principles & Code Quality</span>
+            <span>{cms.badgeText || 'Engineering Principles & Code Quality'}</span>
           </div>
 
           <h1
@@ -158,7 +161,7 @@ export const StandardsPage: React.FC<StandardsPageProps> = ({ onNavigate }) => {
               isDark ? 'text-white' : 'text-zinc-950'
             }`}
           >
-            TECHNICAL <span className="text-luxury-gradient">STANDARDS</span>
+            {cms.heroTitle || 'TECHNICAL'} <span className="text-luxury-gradient">{cms.heroHighlight || 'STANDARDS'}</span>
           </h1>
 
           <p
@@ -166,7 +169,7 @@ export const StandardsPage: React.FC<StandardsPageProps> = ({ onNavigate }) => {
               isDark ? 'text-zinc-400' : 'text-zinc-600'
             }`}
           >
-            Behind the elevated design lies uncompromising frontend engineering. Here is how Saad M builds websites for speed, accessibility, bulletproof security, and seamless long-term scalability.
+            {cms.heroSubtitle || 'Behind the elevated design lies uncompromising frontend engineering. Here is how Saad M builds websites for speed, accessibility, bulletproof security, and seamless long-term scalability.'}
           </p>
         </div>
 

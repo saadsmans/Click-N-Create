@@ -5,6 +5,7 @@ interface LogoProps {
   className?: string;
   size?: 'sm' | 'md' | 'lg' | 'xl';
   showText?: boolean;
+  brandColorClass?: string;
 }
 
 /**
@@ -14,6 +15,7 @@ export const ClickNCreateLogo: React.FC<LogoProps> = ({
   className = '',
   size = 'md',
   showText = true,
+  brandColorClass,
 }) => {
   const { theme } = useTheme();
   const isDark = theme === 'dark';
@@ -48,10 +50,14 @@ export const ClickNCreateLogo: React.FC<LogoProps> = ({
       <div className="flex items-center gap-1.5">
         <span
           className={`font-display font-extrabold tracking-tight transition-colors duration-200 ${
-            isDark ? 'text-white group-hover:text-zinc-200' : 'text-zinc-950 group-hover:text-zinc-800'
+            brandColorClass
+              ? brandColorClass
+              : isDark
+              ? 'text-white group-hover:text-zinc-200'
+              : 'text-zinc-950 group-hover:text-zinc-800'
           } ${currentSize.brand}`}
         >
-          CLICK <span className="font-light text-zinc-400">N</span> CREATE
+          CLICK <span className="font-light text-zinc-500">N</span> CREATE
         </span>
         <span className={`rounded-full bg-[#00F0FF] shadow-[0_0_8px_#00F0FF] ${currentSize.dot}`} />
       </div>

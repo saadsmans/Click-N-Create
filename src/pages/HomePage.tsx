@@ -15,6 +15,7 @@ import { SectionHeading } from '../components/SectionHeading.tsx';
 import { FAQS } from '../data/faqs.ts';
 import { SITE_CONFIG } from '../data/site.ts';
 import { useTheme } from '../context/ThemeContext.tsx';
+import { useCustomization } from '../context/CustomizationContext.tsx';
 import { SEOHead } from '../components/SEOHead.tsx';
 
 interface HomePageProps {
@@ -24,6 +25,8 @@ interface HomePageProps {
 export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
   const { theme } = useTheme();
   const isDark = theme === 'dark';
+  const { getPageContent } = useCustomization();
+  const cms = getPageContent('home');
 
   const scrollToServices = () => {
     const el = document.getElementById('services');
@@ -119,7 +122,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
             >
               <span className="w-2 h-2 rounded-full bg-[#00F0FF] animate-pulse shadow-[0_0_8px_#00F0FF]" />
               <span className="tracking-wider uppercase font-bold">
-                {SITE_CONFIG.freelancer} · Web Developer & Designer
+                {cms.badgeText || `${SITE_CONFIG.freelancer} · Web Developer & Designer`}
               </span>
             </motion.div>
 
@@ -141,7 +144,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
               <h1 className={`text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black font-display tracking-tight leading-tight sm:leading-[1.08] break-words drop-shadow-[0_3px_16px_rgba(0,0,0,0.8)] ${
                 isDark ? 'text-white' : 'text-zinc-950'
               }`}>
-                WEBSITES & ONLINE SHOPS <span className="text-cyber-gradient">THAT GET YOU CUSTOMERS.</span>
+                {cms.heroTitle || 'WEBSITES & ONLINE SHOPS'} <span className="text-cyber-gradient">{cms.heroHighlight || 'THAT GET YOU CUSTOMERS.'}</span>
               </h1>
             </motion.div>
 
@@ -159,7 +162,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
                 isDark ? 'text-zinc-200' : 'text-zinc-700 font-medium'
               }`}
             >
-              I help business owners, shops, and creators get more calls and sales with clean websites that open fast on phones, look professional, and are easy for you to edit anytime.
+              {cms.heroSubtitle || 'I help business owners, shops, and creators get more calls and sales with clean websites that open fast on phones, look professional, and are easy for you to edit anytime.'}
             </motion.p>
 
             {/* Hero Action Buttons - Fade in & Slide up */}

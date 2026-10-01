@@ -1,6 +1,7 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { SITE_CONFIG } from '../data/site.ts';
+import { useCustomization } from '../context/CustomizationContext.tsx';
 
 export interface SEOHeadProps {
   title: string;
@@ -28,16 +29,24 @@ const DEFAULT_KEYWORDS = [
 ];
 
 export const SEOHead: React.FC<SEOHeadProps> = ({
-  title,
-  description,
+  title: defaultTitle,
+  description: defaultDesc,
   keywords = [],
   canonicalPath = '',
   ogType = 'website',
   ogImage = '/file_00000000440061f7b67bc59e52b0df8e.png',
   schemaJson
 }) => {
-  const fullTitle = title.includes('Click N Create') ? title : `${title} | Click N Create — Saad M`;
-  const combinedKeywords = Array.from(new Set([...keywords, ...DEFAULT_KEYWORDS])).join(', ');
+  const { customization } = useCustomization();
+  const seoConfig = customization?.seo;
+  const pageOverride = canonicalPath ? seoConfig?.pages?.[canonicalPath] : undefined;
+
+  const effectiveTitle = pageOverride?.title || defaultTitle;
+  const effectiveDesc = pageOverride?.description || defaultDesc;
+  const effectiveKeywords = pageOverride?.keywords && pageOverride.keywords.length > 0 ? pageOverride.keywords : keywords;
+
+  const fullTitle = effectiveTitle.includes('Click N Create') ? effectiveTitle : `${effectiveTitle} | Click N Create — Saad M`;
+  const combinedKeywords = Array.from(new Set([...effectiveKeywords, ...DEFAULT_KEYWORDS])).join(', ');
   
   const origin = typeof window !== 'undefined' ? window.location.origin : 'https://clickncreate.co.uk';
   const canonicalUrl = `${origin}${canonicalPath ? (canonicalPath.startsWith('/') ? canonicalPath : `/${canonicalPath}`) : ''}`;
@@ -48,7 +57,7 @@ export const SEOHead: React.FC<SEOHeadProps> = ({
       {/* Primary Metadata */}
       <title>{fullTitle}</title>
       <meta name="title" content={fullTitle} />
-      <meta name="description" content={description} />
+      <meta name="description" content={effectiveDesc} />
       <meta name="keywords" content={combinedKeywords} />
       <meta name="author" content="Saad M — Click N Create" />
       <meta name="robots" content="index, follow" />
@@ -58,7 +67,7 @@ export const SEOHead: React.FC<SEOHeadProps> = ({
       <meta property="og:type" content={ogType} />
       <meta property="og:site_name" content="Click N Create | Freelance Web Developer" />
       <meta property="og:title" content={fullTitle} />
-      <meta property="og:description" content={description} />
+      <meta property="og:description" content={effectiveDesc} />
       <meta property="og:url" content={canonicalUrl} />
       <meta property="og:image" content={fullOgImage} />
       <meta property="og:locale" content="en_GB" />
@@ -66,7 +75,7 @@ export const SEOHead: React.FC<SEOHeadProps> = ({
       {/* Twitter / X */}
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content={fullTitle} />
-      <meta name="twitter:description" content={description} />
+      <meta name="twitter:description" content={effectiveDesc} />
       <meta name="twitter:image" content={fullOgImage} />
       <meta name="twitter:creator" content="@ClickNCreate" />
 

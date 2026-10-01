@@ -6,12 +6,14 @@
 import React, { useState, useEffect } from 'react';
 import { HelmetProvider } from 'react-helmet-async';
 import { ThemeProvider } from './context/ThemeContext.tsx';
+import { CustomizationProvider } from './context/CustomizationContext.tsx';
 import { ScrollProgress } from './components/ScrollProgress.tsx';
 import { CustomCursor } from './components/CustomCursor.tsx';
 import { Navbar } from './components/Navbar.tsx';
 import { Footer } from './components/Footer.tsx';
 import { CookieConsent } from './components/CookieConsent.tsx';
 import { RealtimePresence } from './components/realtime/RealtimePresence.tsx';
+import { AnalyticsTracker } from './components/AnalyticsTracker.tsx';
 
 import { HomePage } from './pages/HomePage.tsx';
 import { ServicesPage } from './pages/ServicesPage.tsx';
@@ -26,7 +28,10 @@ import { EstimatorPage } from './pages/EstimatorPage.tsx';
 import { StandardsPage } from './pages/StandardsPage.tsx';
 import { PrivacyPolicyPage } from './pages/PrivacyPolicyPage.tsx';
 import { TermsPage } from './pages/TermsPage.tsx';
+import { AdminPage } from './pages/AdminPage.tsx';
+import { ClientPortalPage } from './pages/ClientPortalPage.tsx';
 import { NotFoundPage } from './pages/NotFoundPage.tsx';
+import { useVisitorTracker } from './hooks/useVisitorTracker.ts';
 
 function normalizePath(rawPath: string): string {
   if (!rawPath) return '/';
@@ -49,13 +54,28 @@ function AppContent() {
     return '/';
   });
 
+  // Advanced real-time visitor telemetry tracking
+  useVisitorTracker(currentPath);
+
   useEffect(() => {
     const handlePopState = () => {
       setCurrentPath(normalizePath(window.location.pathname));
     };
 
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Shortcut: Alt + A or Cmd/Ctrl + Shift + A to open Admin Hub
+      if ((e.altKey && e.key.toLowerCase() === 'a') || (e.shiftKey && (e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'a')) {
+        e.preventDefault();
+        handleNavigate('/admin');
+      }
+    };
+
     window.addEventListener('popstate', handlePopState);
-    return () => window.removeEventListener('popstate', handlePopState);
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+      window.removeEventListener('keydown', handleKeyDown);
+    };
   }, []);
 
   const handleNavigate = (path: string) => {
@@ -129,6 +149,14 @@ function AppContent() {
       return <ContactPage />;
     }
 
+    if (path === '/portal' || path === '/client-portal' || path === '/client') {
+      return <ClientPortalPage onNavigate={handleNavigate} />;
+    }
+
+    if (path === '/admin' || path === '/backend' || path === '/admin/backend' || path === '/dashboard') {
+      return <AdminPage onNavigate={handleNavigate} initialTab={path === '/backend' ? 'system_ops' : undefined} />;
+    }
+
     if (path === '/privacy-policy') {
       return <PrivacyPolicyPage onNavigate={handleNavigate} />;
     }
@@ -149,6 +177,9 @@ function AppContent() {
     <div className="min-h-screen bg-[var(--bg-main)] text-[var(--text-main)] transition-colors duration-300 relative flex flex-col justify-between overflow-x-hidden w-full max-w-full">
       {/* Scroll Progress Indicator */}
       <ScrollProgress />
+
+      {/* Global Real-Time Visitor Analytics Tracker */}
+      <AnalyticsTracker currentPath={currentPath} />
 
       {/* Desktop Custom Cursor */}
       <CustomCursor />
@@ -177,7 +208,9 @@ export default function App() {
   return (
     <HelmetProvider>
       <ThemeProvider>
-        <AppContent />
+        <CustomizationProvider>
+          <AppContent />
+        </CustomizationProvider>
       </ThemeProvider>
     </HelmetProvider>
   );
