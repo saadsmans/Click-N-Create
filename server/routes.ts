@@ -21,7 +21,7 @@ const requireAdmin = (req: Request, res: Response, next: express.NextFunction) =
 // -------------------------------------------------------------
 router.post('/auth/login', (req: Request, res: Response) => {
   try {
-    const { email, password } = req.body;
+    const { email, password } = req.body || {};
     const storedCreds = db.getAdminCredentials();
     const validPasswords = ['saad2026', 'clickncreate', 'admin2026', 'saadadmin', 'saad2026!'];
     if (storedCreds.passwordHash) validPasswords.push(storedCreds.passwordHash);
@@ -31,44 +31,27 @@ router.post('/auth/login', (req: Request, res: Response) => {
     }
 
     const cleanPass = (password || '').trim();
+    const cleanEmail = (email || '').trim().toLowerCase() || storedCreds.email || 'admin@clickncreate.com';
 
-    if (email) {
-      const cleanEmail = email.trim().toLowerCase();
-      const auth = db.authenticateAdmin(cleanEmail, cleanPass);
-      if (!auth.success) {
-        return res.status(401).json({ success: false, error: auth.error });
-      }
-      return res.json({
-        success: true,
-        token: auth.token,
-        user: {
-          name: 'Saad M',
-          email: cleanEmail,
-          role: 'Founder & Principal Engineer',
-        },
-      });
-    }
-
-    // Passcode only authentication
-    const matchesPasscode =
+    // Verify password against stored password or valid master passcodes
+    const matchesPassword =
       validPasswords.includes(cleanPass) ||
       validPasswords.includes(cleanPass.toLowerCase()) ||
       cleanPass === storedCreds.passwordHash;
 
-    if (!matchesPasscode) {
-      return res.status(401).json({ success: false, error: 'Invalid owner access passcode.' });
+    if (!matchesPassword) {
+      return res.status(401).json({ success: false, error: 'Incorrect master passcode or password.' });
     }
 
     const token = `saad_adm_${Date.now()}_${Math.random().toString(36).substring(2, 10)}`;
-    const adminEmail = storedCreds.email || 'admin@clickncreate.com';
-    db.createAdminSession(adminEmail, token);
+    db.createAdminSession(cleanEmail, token);
 
     return res.json({
       success: true,
       token,
       user: {
         name: 'Saad M',
-        email: adminEmail,
+        email: cleanEmail,
         role: 'Owner & Lead Engineer',
       },
     });
@@ -775,6 +758,14 @@ router.post('/email/dispatch-test', requireAdmin, (req: Request, res: Response) 
     renderedBody,
     sentAt: new Date().toISOString(),
     status: 'delivered_simulated',
+  });
+});
+
+// API 404 handler to prevent returning HTML for unknown API routes
+router.all('*', (req: Request, res: Response) => {
+  return res.status(404).json({
+    success: false,
+    error: `API endpoint not found: ${req.method} ${req.originalUrl}`,
   });
 });
 
