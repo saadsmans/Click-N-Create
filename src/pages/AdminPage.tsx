@@ -270,20 +270,8 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onNavigate, initialTab }) 
     }
 
     // 2. Seamless local credential validation fallback (for incognito/isolated previews/static hosting)
-    const localCustomPass = localStorage.getItem('cnc_custom_admin_pass') || 'saad2026';
-    const validPasswords = [
-      'saad2026',
-      'clickncreate',
-      'admin2026',
-      'saadadmin',
-      'saad2026!',
-      localCustomPass,
-    ];
-
-    const matchesPass =
-      validPasswords.includes(cleanPass) ||
-      validPasswords.includes(cleanPass.toLowerCase()) ||
-      cleanPass === localCustomPass;
+    const localCustomPass = (localStorage.getItem('cnc_custom_admin_pass') || 'saad2026').trim();
+    const matchesPass = cleanPass === localCustomPass;
 
     if (matchesPass) {
       const sessionToken = `saad_adm_live_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
@@ -408,22 +396,9 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onNavigate, initialTab }) 
       return;
     }
 
-    // Local validation check against valid passwords
-    const localCustomPass = localStorage.getItem('cnc_custom_admin_pass') || 'saad2026';
-    const validCurrentPasswords = [
-      'saad2026',
-      'clickncreate',
-      'admin2026',
-      'saadadmin',
-      'saad2026!',
-      localCustomPass,
-    ];
-
-    const isCurrentValidLocally =
-      !cleanCurr ||
-      validCurrentPasswords.includes(cleanCurr) ||
-      validCurrentPasswords.includes(cleanCurr.toLowerCase()) ||
-      cleanCurr === localCustomPass;
+    // Local validation check against current active password
+    const localCustomPass = (localStorage.getItem('cnc_custom_admin_pass') || 'saad2026').trim();
+    const isCurrentValidLocally = !cleanCurr || cleanCurr === localCustomPass;
 
     if (cleanCurr && !isCurrentValidLocally) {
       setCredsSaveError('Current master passcode/password is incorrect.');

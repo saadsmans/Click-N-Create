@@ -29,6 +29,8 @@ export interface ProcessStageItem {
 
 export const SITE_CONFIG = {
   brand: 'Click N Create',
+  domain: 'clickncreate.co.uk',
+  siteUrl: 'https://clickncreate.co.uk',
   freelancer: 'Saad M',
   role: 'Freelance Web Developer & Designer',
   headline: 'WEBSITES & ONLINE STORES BUILT TO GROW YOUR BUSINESS.',
@@ -40,6 +42,9 @@ export const SITE_CONFIG = {
   phone: '+44 7927 548123',
   whatsappUrl: 'https://wa.me/447927548123',
   linkedinUrl: 'https://www.linkedin.com/in/saad-m-aa54bb375?utm_source=share_via&utm_content=profile&utm_medium=member_android',
+  location: 'United Kingdom',
+  areaServed: 'United Kingdom, Europe, North America & Worldwide Remote',
+  priceRange: '£35/hr',
   aboutSummary: 'Click N Create is run by Saad M. I build websites that look great, load instantly, and are easy for you to manage—with simple £35/hr pricing or fixed project quotes so there are never any surprise bills.',
   copyright: `© ${new Date().getFullYear()} Click N Create. Operated by Saad M. All rights reserved.`
 };

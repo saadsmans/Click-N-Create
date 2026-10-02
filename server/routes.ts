@@ -1,5 +1,7 @@
 import express, { Request, Response } from 'express';
 import { db } from './db.ts';
+import { auditSeoConfig } from './seoAuditor.ts';
+import { runAiSeoImprovement } from './seoAiImprover.ts';
 
 const router = express.Router();
 
@@ -23,8 +25,7 @@ router.post('/auth/login', (req: Request, res: Response) => {
   try {
     const { email, password } = req.body || {};
     const storedCreds = db.getAdminCredentials();
-    const validPasswords = ['saad2026', 'clickncreate', 'admin2026', 'saadadmin', 'saad2026!'];
-    if (storedCreds.passwordHash) validPasswords.push(storedCreds.passwordHash);
+    const activePassword = (storedCreds.passwordHash || 'saad2026').trim();
     
     if (!password) {
       return res.status(400).json({ success: false, error: 'Password or passcode is required.' });
@@ -33,11 +34,8 @@ router.post('/auth/login', (req: Request, res: Response) => {
     const cleanPass = (password || '').trim();
     const cleanEmail = (email || '').trim().toLowerCase() || storedCreds.email || 'admin@clickncreate.com';
 
-    // Verify password against stored password or valid master passcodes
-    const matchesPassword =
-      validPasswords.includes(cleanPass) ||
-      validPasswords.includes(cleanPass.toLowerCase()) ||
-      cleanPass === storedCreds.passwordHash;
+    // Strictly verify against the current updated password only (old passwords completely rejected)
+    const matchesPassword = cleanPass === activePassword;
 
     if (!matchesPassword) {
       return res.status(401).json({ success: false, error: 'Incorrect master passcode or password.' });
@@ -91,13 +89,8 @@ router.post('/admin/credentials', requireAdmin, (req: Request, res: Response) =>
       if (!currentPassword) {
         return res.status(400).json({ success: false, error: 'Current passcode or password is required to save credential changes.' });
       }
-      const validPasswords = ['saad2026', 'clickncreate', 'admin2026', 'saadadmin', 'saad2026!'];
-      if (currentCreds.passwordHash) validPasswords.push(currentCreds.passwordHash);
-
-      const isValid =
-        validPasswords.includes(currentPassword.trim()) ||
-        validPasswords.includes(currentPassword.trim().toLowerCase()) ||
-        currentPassword.trim() === currentCreds.passwordHash;
+      const activePassword = (currentCreds.passwordHash || 'saad2026').trim();
+      const isValid = currentPassword.trim() === activePassword;
 
       if (!isValid) {
         return res.status(401).json({ success: false, error: 'Current passcode/password is incorrect.' });
@@ -512,6 +505,103 @@ router.get('/seo', (_req: Request, res: Response) => {
 
 router.put('/seo', requireAdmin, (req: Request, res: Response) => {
   return res.json({ success: true, seo: db.updateSeo(req.body) });
+});
+
+// SEO Scoring & Technical Audit Engine
+router.get('/seo/audit', (_req: Request, res: Response) => {
+  try {
+    const currentSeo = db.getSeo();
+    const report = auditSeoConfig(currentSeo);
+    return res.json({ success: true, report });
+  } catch (err: any) {
+    return res.status(500).json({ success: false, error: err?.message || 'Failed to calculate SEO score' });
+  }
+});
+
+router.post('/seo/audit', (req: Request, res: Response) => {
+  try {
+    const seoToAudit = req.body?.seo || db.getSeo();
+    const report = auditSeoConfig(seoToAudit);
+    return res.json({ success: true, report });
+  } catch (err: any) {
+    return res.status(500).json({ success: false, error: err?.message || 'Failed to calculate SEO score' });
+  }
+});
+
+// Gemini-Powered AI SEO Improver
+router.post('/seo/ai-improve', requireAdmin, async (req: Request, res: Response) => {
+  try {
+    const { targetPage, focusKeyword, customGoals, currentTitle, currentDescription, currentKeywords } = req.body || {};
+    const currentSeo = db.getSeo();
+
+    const result = await runAiSeoImprovement({
+      targetPage: targetPage || '/',
+      focusKeyword: focusKeyword || 'freelance web developer UK',
+      customGoals: customGoals || 'Maximize Google #1 ranking and CTR',
+      currentTitle: currentTitle || (targetPage === '/' ? currentSeo.siteTitle : currentSeo.pages?.[targetPage]?.title || currentSeo.siteTitle),
+      currentDescription: currentDescription || (targetPage === '/' ? currentSeo.siteDescription : currentSeo.pages?.[targetPage]?.description || currentSeo.siteDescription),
+      currentKeywords: currentKeywords || (currentSeo.pages?.[targetPage]?.keywords || currentSeo.defaultKeywords),
+      fullSeoConfig: currentSeo,
+    });
+
+    return res.json({ success: true, result });
+  } catch (err: any) {
+    return res.status(500).json({ success: false, error: err?.message || 'Failed to generate AI SEO improvements' });
+  }
+});
+
+// One-Click AI SEO Auto-Apply & Database Save
+router.post('/seo/ai-auto-apply', requireAdmin, async (req: Request, res: Response) => {
+  try {
+    const { targetPage, focusKeyword, customGoals } = req.body || {};
+    const currentSeo = db.getSeo();
+    const path = targetPage || '/';
+
+    const aiResult = await runAiSeoImprovement({
+      targetPage: path,
+      focusKeyword: focusKeyword || 'freelance web developer UK',
+      customGoals,
+      currentTitle: path === '/' ? currentSeo.siteTitle : currentSeo.pages?.[path]?.title,
+      currentDescription: path === '/' ? currentSeo.siteDescription : currentSeo.pages?.[path]?.description,
+      currentKeywords: path === '/' ? currentSeo.defaultKeywords : currentSeo.pages?.[path]?.keywords,
+      fullSeoConfig: currentSeo,
+    });
+
+    if (!aiResult.success) {
+      return res.status(500).json({ success: false, error: aiResult.error || 'AI generation failed' });
+    }
+
+    let updatedSeo = { ...currentSeo };
+
+    if (path === '/' || path === 'global') {
+      updatedSeo.siteTitle = aiResult.improvedTitle;
+      updatedSeo.siteDescription = aiResult.improvedDescription;
+      updatedSeo.defaultKeywords = aiResult.improvedKeywords;
+    } else {
+      updatedSeo.pages = {
+        ...(updatedSeo.pages || {}),
+        [path]: {
+          ...(updatedSeo.pages?.[path] || {}),
+          title: aiResult.improvedTitle,
+          description: aiResult.improvedDescription,
+          keywords: aiResult.improvedKeywords,
+        },
+      };
+    }
+
+    const saved = db.updateSeo(updatedSeo);
+    const newAudit = auditSeoConfig(saved);
+
+    return res.json({
+      success: true,
+      seo: saved,
+      aiResult,
+      newReport: newAudit,
+      message: `Successfully optimized SEO for "${path}" using Gemini AI.`,
+    });
+  } catch (err: any) {
+    return res.status(500).json({ success: false, error: err?.message || 'Failed to auto-apply AI SEO' });
+  }
 });
 
 router.get('/sitemap.xml', (_req: Request, res: Response) => {

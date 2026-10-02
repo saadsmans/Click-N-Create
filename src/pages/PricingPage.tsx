@@ -22,30 +22,45 @@ export const PricingPage: React.FC<PricingPageProps> = ({ onNavigate }) => {
   const hourlyRate = cms.hourlyRateNumber || 35;
 
   // Interactive Project Cost Calculator State
-  const [projectHours, setProjectHours] = useState<number>(30);
+  const [projectHours, setProjectHours] = useState<number>(20);
   const [includeSeo, setIncludeSeo] = useState<boolean>(true);
   const [includeEcommerce, setIncludeEcommerce] = useState<boolean>(false);
   const [includeMaintenance, setIncludeMaintenance] = useState<boolean>(false);
 
   const baseCost = projectHours * hourlyRate;
-  const seoCost = includeSeo ? 200 : 0;
-  const ecommerceCost = includeEcommerce ? 350 : 0;
-  const maintenanceCost = includeMaintenance ? 150 : 0;
+  const seoCost = includeSeo ? 85 : 0;
+  const ecommerceCost = includeEcommerce ? 180 : 0;
+  const maintenanceCost = includeMaintenance ? 85 : 0;
   const totalEstimatedCost = baseCost + seoCost + ecommerceCost + maintenanceCost;
 
   return (
     <div className="pt-28 pb-20 md:pt-36 relative overflow-x-hidden w-full max-w-full">
       <SEOHead
-        title="Transparent Web Development Pricing & Hourly Rates | Click N Create"
-        description="Transparent freelance web development rates by Saad M (£35/hr). Calculate project costs, explore starter website packages, and get fixed milestone quotations."
+        title="Web Development Pricing & Hourly Rates UK (£35/hr) | Click N Create"
+        description="Transparent freelance web development pricing by Saad M (£35/hr). Calculate project investment, view starter packages, and get fixed milestone quotations with zero hidden fees."
         canonicalPath="/pricing"
         keywords={[
           'freelance web developer rates UK',
-          'website development cost',
+          'website development cost UK',
           'hire freelance developer hourly rate £35',
-          'custom website quote',
-          'affordable website pricing'
+          'custom website quote UK',
+          'affordable website pricing UK',
+          'Click N Create pricing',
+          'fixed price web design quote'
         ]}
+        schemaJson={{
+          '@context': 'https://schema.org',
+          '@type': 'PriceSpecification',
+          name: 'Click N Create Web Development Pricing',
+          price: '35',
+          priceCurrency: 'GBP',
+          unitText: 'HOUR',
+          description: 'Transparent £35/hr rate for web development, UI design, Shopify e-commerce, and maintenance.',
+          eligibleRegion: {
+            '@type': 'Country',
+            name: 'United Kingdom'
+          }
+        }}
       />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* ===================== HERO SECTION ===================== */}
@@ -142,17 +157,17 @@ export const PricingPage: React.FC<PricingPageProps> = ({ onNavigate }) => {
                 </div>
                 <input
                   type="range"
-                  min="10"
-                  max="120"
-                  step="5"
+                  min="5"
+                  max="60"
+                  step="2"
                   value={projectHours}
                   onChange={(e) => setProjectHours(Number(e.target.value))}
                   className="w-full h-2 bg-zinc-200 dark:bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-blue-600"
                 />
                 <div className="flex justify-between text-[11px] font-mono text-zinc-500 mt-2">
-                  <span>10 hrs (Focused Page)</span>
-                  <span>40 hrs (Full Site)</span>
-                  <span>120 hrs (Web App)</span>
+                  <span>5 hrs (Focused Tweaks)</span>
+                  <span>15 hrs (Starter Website)</span>
+                  <span>60 hrs (Full Platform)</span>
                 </div>
               </div>
 
@@ -175,7 +190,7 @@ export const PricingPage: React.FC<PricingPageProps> = ({ onNavigate }) => {
                       <div className="text-[11px] text-zinc-500">Google search setup, star ratings & WhatsApp link preview cards</div>
                     </div>
                   </div>
-                  <span className="text-xs font-mono text-blue-500 font-bold">+£200</span>
+                  <span className="text-xs font-mono text-blue-500 font-bold">+£85</span>
                 </label>
 
                 <label className="flex items-center justify-between p-3.5 rounded-xl border border-black/10 dark:border-white/10 hover:border-blue-500/50 cursor-pointer transition-colors">
@@ -191,7 +206,7 @@ export const PricingPage: React.FC<PricingPageProps> = ({ onNavigate }) => {
                       <div className="text-[11px] text-zinc-500">Apple Pay, credit cards, PayPal & slide-out shopping cart</div>
                     </div>
                   </div>
-                  <span className="text-xs font-mono text-blue-500 font-bold">+£350</span>
+                  <span className="text-xs font-mono text-blue-500 font-bold">+£180</span>
                 </label>
 
                 <label className="flex items-center justify-between p-3.5 rounded-xl border border-black/10 dark:border-white/10 hover:border-blue-500/50 cursor-pointer transition-colors">
@@ -207,7 +222,7 @@ export const PricingPage: React.FC<PricingPageProps> = ({ onNavigate }) => {
                       <div className="text-[11px] text-zinc-500">Fast cloud hosting, connect your domain, secure lock & launch support</div>
                     </div>
                   </div>
-                  <span className="text-xs font-mono text-blue-500 font-bold">+£150</span>
+                  <span className="text-xs font-mono text-blue-500 font-bold">+£85</span>
                 </label>
               </div>
             </div>
@@ -244,19 +259,19 @@ export const PricingPage: React.FC<PricingPageProps> = ({ onNavigate }) => {
                 {includeSeo && (
                   <div className="flex justify-between">
                     <span>On-Page SEO Module:</span>
-                    <span className={isDark ? 'text-white' : 'text-zinc-900'}>£200</span>
+                    <span className={isDark ? 'text-white' : 'text-zinc-900'}>£85</span>
                   </div>
                 )}
                 {includeEcommerce && (
                   <div className="flex justify-between">
                     <span>Payment Integration:</span>
-                    <span className={isDark ? 'text-white' : 'text-zinc-900'}>£350</span>
+                    <span className={isDark ? 'text-white' : 'text-zinc-900'}>£180</span>
                   </div>
                 )}
                 {includeMaintenance && (
                   <div className="flex justify-between">
                     <span>Deployment & 30-Day QA:</span>
-                    <span className={isDark ? 'text-white' : 'text-zinc-900'}>£150</span>
+                    <span className={isDark ? 'text-white' : 'text-zinc-900'}>£85</span>
                   </div>
                 )}
               </div>
@@ -308,7 +323,7 @@ export const PricingPage: React.FC<PricingPageProps> = ({ onNavigate }) => {
                 <span className="text-xs font-mono text-zinc-500 uppercase">Package 01 · Quick Start</span>
                 <h3 className="text-xl font-bold font-display mt-1">Single-Page Website</h3>
                 <div className="text-3xl font-extrabold font-display my-4 text-blue-500">
-                  £500 – £850
+                  £280 – £480
                 </div>
                 <p className="text-xs text-zinc-500 leading-relaxed mb-6">
                   A focused, high-converting one-page website to promote your services, launch an offer, or run ads.
@@ -318,7 +333,7 @@ export const PricingPage: React.FC<PricingPageProps> = ({ onNavigate }) => {
                   <div className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-blue-500" /><span>Contact form sent directly to your email</span></div>
                   <div className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-blue-500" /><span>Dark & light reading mode</span></div>
                   <div className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-blue-500" /><span>Google search setup & WhatsApp link cards</span></div>
-                  <div className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-blue-500" /><span>Fast delivery: 5 – 7 days</span></div>
+                  <div className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-blue-500" /><span>Fast delivery: 3 – 5 days</span></div>
                 </div>
               </div>
               <button
@@ -343,7 +358,7 @@ export const PricingPage: React.FC<PricingPageProps> = ({ onNavigate }) => {
                 <span className="text-xs font-mono text-blue-500 uppercase font-semibold">Package 02 · Full Business</span>
                 <h3 className="text-xl font-bold font-display mt-1">Multi-Page Business Website</h3>
                 <div className="text-3xl font-extrabold font-display my-4 text-blue-500">
-                  £1,200 – £2,400
+                  £550 – £980
                 </div>
                 <p className="text-xs text-zinc-500 leading-relaxed mb-6">
                   Complete 4 to 8 page website for companies, consultants, salons, clinics, and local services.
@@ -354,7 +369,7 @@ export const PricingPage: React.FC<PricingPageProps> = ({ onNavigate }) => {
                   <div className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-blue-500" /><span>Customer inquiries sent straight to your email</span></div>
                   <div className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-blue-500" /><span>Domain connection, security lock & fast cloud hosting</span></div>
                   <div className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-blue-500" /><span>Personal video guide on how to change text yourself</span></div>
-                  <div className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-blue-500" /><span>Typical delivery: 2 – 3 weeks</span></div>
+                  <div className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-blue-500" /><span>Typical delivery: 1 – 2 weeks</span></div>
                 </div>
               </div>
               <button
@@ -374,7 +389,7 @@ export const PricingPage: React.FC<PricingPageProps> = ({ onNavigate }) => {
                 <span className="text-xs font-mono text-zinc-500 uppercase">Package 03 · Store or Custom Tool</span>
                 <h3 className="text-xl font-bold font-display mt-1">Online Store or Custom App</h3>
                 <div className="text-3xl font-extrabold font-display my-4 text-blue-500">
-                  From £2,800+
+                  From £950 – £1,800+
                 </div>
                 <p className="text-xs text-zinc-500 leading-relaxed mb-6">
                   Online retail storefronts or custom interactive tools (price estimators, client portals, calculators).
@@ -384,7 +399,7 @@ export const PricingPage: React.FC<PricingPageProps> = ({ onNavigate }) => {
                   <div className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-blue-500" /><span>Interactive price calculator or client booking portal</span></div>
                   <div className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-blue-500" /><span>Customer accounts & order tracking</span></div>
                   <div className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-blue-500" /><span>Direct priority WhatsApp support with Saad</span></div>
-                  <div className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-blue-500" /><span>Typical delivery: 3 – 5 weeks</span></div>
+                  <div className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-blue-500" /><span>Typical delivery: 2 – 3 weeks</span></div>
                 </div>
               </div>
               <button

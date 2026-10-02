@@ -12,9 +12,12 @@ import {
   Sparkles,
   HelpCircle,
   Server,
+  Sun,
+  Moon,
 } from 'lucide-react';
 import { ClickNCreateLogo } from './ClickNCreateLogo.tsx';
 import { NAV_ITEMS } from '../data/site.ts';
+import { ThemeToggle } from './ThemeToggle.tsx';
 import { useTheme } from '../context/ThemeContext.tsx';
 import { useCustomization } from '../context/CustomizationContext.tsx';
 import { getHeaderClass } from '../data/themes/themeArchitectureStyles.ts';
@@ -197,6 +200,17 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPath, onNavigate, onOpenT
                           [ DIRECTORY MATRIX ]
                         </span>
                         <span className="text-zinc-500">Saad M</span>
+                      </div>
+
+                      {/* Dark Mode Toggle in Pages Dropdown */}
+                      <div className="mb-3 p-2.5 rounded-2xl border border-black/[0.08] dark:border-white/[0.08] bg-black/[0.03] dark:bg-white/[0.03] flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs font-mono font-medium">Dark Mode</span>
+                          <span className="text-[10px] font-mono text-zinc-500">
+                            [{isDark ? 'DARK' : 'LIGHT'}]
+                          </span>
+                        </div>
+                        <ThemeToggle showLabel={false} />
                       </div>
 
                       <div className="space-y-1">
@@ -422,6 +436,22 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPath, onNavigate, onOpenT
                       </span>
                     </div>
                     <span className="text-zinc-500 text-[10px] font-mono">Saad M</span>
+                  </div>
+
+                  {/* Dark Mode Toggle Icon Row */}
+                  <div className="mb-3 p-2.5 rounded-2xl border border-black/[0.08] dark:border-white/[0.08] bg-black/[0.03] dark:bg-white/[0.03] flex items-center justify-between">
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-7 h-7 rounded-xl bg-cyan-500/15 text-[#00F0FF] flex items-center justify-center">
+                        {isDark ? <Moon className="w-3.5 h-3.5 text-cyan-400" /> : <Sun className="w-3.5 h-3.5 text-amber-500" />}
+                      </div>
+                      <div>
+                        <div className="text-xs font-mono font-medium">Dark Mode</div>
+                        <div className="text-[10px] font-mono text-zinc-500">
+                          {isDark ? 'Cyber Dark Mode' : 'Bright Light Mode'}
+                        </div>
+                      </div>
+                    </div>
+                    <ThemeToggle showLabel={false} />
                   </div>
 
                   {/* Main Navigation Pages Grid */}

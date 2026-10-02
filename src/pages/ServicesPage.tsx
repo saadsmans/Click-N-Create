@@ -40,17 +40,57 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({ onNavigate }) => {
   return (
     <div className="pt-28 pb-20 md:pt-36 relative overflow-x-hidden w-full max-w-full">
       <SEOHead
-        title="Web Development & Design Services | Click N Create — Saad M"
-        description="Explore freelance services by Saad M: Custom Web Development, E-Commerce Stores, Branding & Vector Logos, Digital Marketing, Hosting Maintenance, and Web Apps."
+        title="Web Development & Design Services UK | Click N Create — Saad M"
+        description="Explore freelance services by Saad M: Custom React Web Development, Shopify E-Commerce, WordPress, Branding Logos, Google SEO, and Hosting at £35/hr."
         canonicalPath="/services"
         keywords={[
-          'freelance web development services',
-          'custom website design',
-          'ecommerce store setup',
+          'freelance web development services UK',
+          'custom website design UK',
+          'Shopify store developer',
+          'WordPress website developer',
           'branding and logo design UK',
-          'website maintenance hosting',
-          'React web app development'
+          'website maintenance and cloud hosting',
+          'React web app development UK',
+          'Click N Create services',
+          'hire freelance developer £35/hr'
         ]}
+        schemaJson={{
+          '@context': 'https://schema.org',
+          '@type': 'Service',
+          serviceType: 'Web Development & Digital Design',
+          provider: {
+            '@type': 'ProfessionalService',
+            name: 'Click N Create — Saad M',
+            url: 'https://clickncreate.co.uk'
+          },
+          areaServed: {
+            '@type': 'Country',
+            name: 'United Kingdom'
+          },
+          hasOfferCatalog: {
+            '@type': 'OfferCatalog',
+            name: 'Click N Create Web Solutions',
+            itemListElement: activeServices.map((srv: any, idx: number) => ({
+              '@type': 'Offer',
+              itemOffered: {
+                '@type': 'Service',
+                name: srv.title,
+                description: srv.fullDescription || srv.shortDescription,
+                offers: {
+                  '@type': 'Offer',
+                  priceCurrency: 'GBP',
+                  price: '35',
+                  priceSpecification: {
+                    '@type': 'UnitPriceSpecification',
+                    price: '35',
+                    priceCurrency: 'GBP',
+                    unitText: 'HOUR'
+                  }
+                }
+              }
+            }))
+          }
+        }}
       />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Page Hero */}

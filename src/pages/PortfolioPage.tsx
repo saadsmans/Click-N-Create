@@ -254,17 +254,44 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
   return (
     <div className="pt-28 pb-24 md:pt-36 relative overflow-x-hidden w-full max-w-full">
       <SEOHead
-        title="Portfolio & CV Resume · Saad M | Click N Create Web Developer"
-        description="Explore Saad M's freelance web development portfolio, Click N Create platform architecture, verified credentials, tech skills matrix, and official downloadable CV PDF."
+        title="Web Developer Portfolio & Case Studies UK | Click N Create — Saad M"
+        description="Explore Saad M's freelance web development portfolio: high-converting React apps, Shopify e-commerce, custom UI design, and live verified client projects."
         canonicalPath="/portfolio"
         keywords={[
+          'freelance web developer portfolio UK',
           'Saad M portfolio',
-          'freelance web developer portfolio',
+          'Click N Create portfolio',
+          'clickncreate.co.uk portfolio',
+          'React web developer case studies',
+          'hire front end developer UK',
           'download CV PDF web developer',
-          'Click N Create projects',
-          'React developer resume',
-          'front end developer portfolio'
+          'custom e-commerce developer portfolio'
         ]}
+        schemaJson={{
+          '@context': 'https://schema.org',
+          '@type': 'ProfilePage',
+          mainEntity: {
+            '@type': 'Person',
+            name: 'Saad M',
+            jobTitle: 'Freelance Web Developer & UI Designer',
+            url: 'https://clickncreate.co.uk/about',
+            worksFor: {
+              '@type': 'Organization',
+              name: 'Click N Create',
+              url: 'https://clickncreate.co.uk'
+            },
+            knowsAbout: [
+              'React 19',
+              'TypeScript',
+              'Next.js',
+              'Tailwind CSS',
+              'Shopify Development',
+              'WordPress',
+              'Full-Stack Architecture',
+              'Technical SEO & Core Web Vitals'
+            ]
+          }
+        }}
       />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* ===================== HERO PROFILE BANNER ===================== */}

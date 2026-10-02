@@ -39,7 +39,7 @@ const DEFAULT_SEO: SeoConfig = {
   siteTitle: 'Click N Create | Saad M — Freelance Web Developer & Designer',
   titleTemplate: '%s | Click N Create',
   siteDescription: 'Click N Create is the freelance digital development brand of Saad M. Bespoke high-performance web applications, modern e-commerce storefronts, and conversion-focused business platforms at £35/hr.',
-  siteUrl: 'https://clickncreate.dev',
+  siteUrl: 'https://clickncreate.co.uk',
   defaultKeywords: [
     'freelance web developer',
     'web designer UK',
@@ -49,8 +49,9 @@ const DEFAULT_SEO: SeoConfig = {
     'Click N Create',
     'hire front-end engineer',
     'bespoke website design',
+    'clickncreate.co.uk',
   ],
-  defaultOgImage: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1200&auto=format&fit=crop',
+  defaultOgImage: 'https://clickncreate.co.uk/file_00000000440061f7b67bc59e52b0df8e.png',
   twitterHandle: '@ClickNCreate',
   googleSiteVerification: 'google-site-verification-cnc-2026',
   jsonLdType: 'ProfessionalService',
@@ -398,7 +399,7 @@ class JSONDatabase {
       '127.0.0.1',
       `Admin login credentials and security settings were updated.`
     );
-    this.scheduleSave();
+    this.saveSync(this.data);
 
     return { success: true, credentials: this.data.adminCredentials };
   }
@@ -439,20 +440,15 @@ class JSONDatabase {
       if (u.email) validEmails.push(u.email.toLowerCase());
     });
 
-    const validPasswords = ['saad2026', 'clickncreate', 'admin2026', 'saadadmin', 'saad2026!'];
-    if (storedCreds.passwordHash) {
-      validPasswords.push(storedCreds.passwordHash);
-    }
+    const activePassword = (storedCreds.passwordHash || 'saad2026').trim();
 
     if (!validEmails.includes(cleanEmail)) {
       this.logAudit('FAILED_LOGIN_ATTEMPT', cleanEmail, 'unknown', 'Unrecognized admin email');
       return { success: false, error: 'Access restricted: Unrecognized Admin Email.' };
     }
 
-    const matchesPassword =
-      validPasswords.includes(cleanPassword) ||
-      validPasswords.includes(cleanPassword.toLowerCase()) ||
-      cleanPassword === storedCreds.passwordHash;
+    // Strictly verify against the current active updated password only (reject old passwords)
+    const matchesPassword = cleanPassword === activePassword;
 
     if (!matchesPassword) {
       this.logAudit('FAILED_LOGIN_ATTEMPT', cleanEmail, 'unknown', 'Invalid admin password entered');

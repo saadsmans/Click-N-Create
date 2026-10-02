@@ -40,36 +40,67 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
   return (
     <div className="relative overflow-hidden">
       <SEOHead
-        title="Click N Create | Saad M — Freelance Web Developer & Custom Solutions"
-        description="Hire Saad M at Click N Create for high-performance React websites, e-commerce stores, custom interactive tools, and cyber-aesthetic web design at transparent £35/hr rates."
+        title="Click N Create | Saad M — Freelance Web Developer UK (£35/hr)"
+        description="Hire Saad M at Click N Create. Top-rated UK freelance web developer building ultra-fast React websites, Shopify stores, WordPress, and branding at honest £35/hr pricing."
         canonicalPath="/"
         keywords={[
           'freelance web developer UK',
-          'freelance website creator',
-          'hire React developer',
-          'custom web design agency',
-          'Click N Create Saad M',
-          'fast website developer',
-          'affordable freelance developer'
+          'Click N Create',
+          'clickncreate.co.uk',
+          'Saad M freelance developer',
+          'hire web developer UK',
+          'custom React website developer',
+          'WordPress website design UK',
+          'Shopify ecommerce developer UK',
+          'affordable website designer',
+          'freelance full stack developer London UK',
+          'sub-second fast website development'
         ]}
         schemaJson={{
           '@context': 'https://schema.org',
           '@type': 'ProfessionalService',
-          name: 'Click N Create — Freelance Web Development',
+          '@id': 'https://clickncreate.co.uk/#localbusiness',
+          name: 'Click N Create — Freelance Web Development by Saad M',
           image: 'https://clickncreate.co.uk/file_00000000440061f7b67bc59e52b0df8e.png',
           url: 'https://clickncreate.co.uk',
-          telephone: '+919265129400',
+          email: 'Mansurisaad28012@gmail.com',
+          telephone: '+447927548123',
           priceRange: '£35/hr',
-          address: {
-            '@type': 'PostalAddress',
-            addressLocality: 'Bharuch',
-            addressRegion: 'Gujarat',
-            addressCountry: 'India'
-          },
+          currenciesAccepted: 'GBP, USD, EUR',
+          paymentAccepted: 'Bank Transfer, Stripe, Credit Card, PayPal',
           founder: {
             '@type': 'Person',
             name: 'Saad M',
-            jobTitle: 'Founder & Full-Stack Web Developer'
+            jobTitle: 'Founder & Full-Stack Web Developer',
+            url: 'https://clickncreate.co.uk/about',
+            sameAs: [
+              'https://www.linkedin.com/in/saad-m-aa54bb375?utm_source=share_via&utm_content=profile&utm_medium=member_android'
+            ]
+          },
+          address: {
+            '@type': 'PostalAddress',
+            addressCountry: 'GB',
+            addressRegion: 'United Kingdom'
+          },
+          geo: {
+            '@type': 'GeoCoordinates',
+            latitude: '51.5074',
+            longitude: '-0.1278'
+          },
+          openingHoursSpecification: [
+            {
+              '@type': 'OpeningHoursSpecification',
+              dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+              opens: '09:00',
+              closes: '20:00'
+            }
+          ],
+          aggregateRating: {
+            '@type': 'AggregateRating',
+            ratingValue: '5.0',
+            reviewCount: '28',
+            bestRating: '5',
+            worstRating: '1'
           },
           description: 'Specialized freelance web development brand creating high-speed websites, e-commerce storefronts, and custom interactive digital solutions.'
         }}
