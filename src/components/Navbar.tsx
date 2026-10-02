@@ -42,7 +42,14 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPath, onNavigate, onOpenT
   const dropdownStyle = currentTheme.dropdownStyle || 'glass_blur';
 
   const getHeaderContainerClass = () => {
-    return getHeaderClass(headerStyle, currentTheme.presetId, isDark);
+    if (!scrolled) {
+      // Normal top position: completely merged edge-to-edge with the page top
+      return 'w-full max-w-7xl mx-auto px-0 py-0 rounded-none border-0 bg-transparent shadow-none';
+    }
+    // Scrolled position: floating luxury pill shape
+    return isDark
+      ? 'w-full max-w-4xl sm:max-w-5xl px-4 sm:px-6 py-2 sm:py-2.5 rounded-full border border-[#00F0FF]/30 bg-[#070714]/90 backdrop-blur-2xl shadow-[0_10px_35px_rgba(0,240,255,0.2)] text-white'
+      : 'w-full max-w-4xl sm:max-w-5xl px-4 sm:px-6 py-2 sm:py-2.5 rounded-full border border-zinc-200/90 bg-white/90 backdrop-blur-2xl shadow-[0_10px_30px_rgba(0,0,0,0.08)] text-zinc-950';
   };
 
   useEffect(() => {
@@ -92,15 +99,15 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPath, onNavigate, onOpenT
     <>
       {/* Sticky Floating Outer Container */}
       <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-out flex justify-center ${
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-out flex justify-center ${
           scrolled
-            ? 'py-3.5 px-3 sm:px-6'
-            : 'py-5 sm:py-6 px-4 sm:px-8 border-b border-black/[0.05] dark:border-white/[0.05] bg-transparent'
+            ? 'py-3 px-3 sm:px-6 pointer-events-none'
+            : 'py-4 sm:py-5 px-4 sm:px-8 border-b border-black/[0.06] dark:border-white/[0.06] bg-slate-50/80 dark:bg-[#07070F]/80 backdrop-blur-md'
         }`}
       >
         {/* The Unified Morphing Header Container */}
         <div
-          className={`w-full transition-all duration-500 ease-out flex items-center justify-between relative ${getHeaderContainerClass()}`}
+          className={`transition-all duration-300 ease-out flex items-center justify-between relative pointer-events-auto ${getHeaderContainerClass()}`}
         >
           {/* Zone 1: Brand Title Wordmark */}
           <a
