@@ -26,7 +26,9 @@ import {
   Crown,
   Boxes,
 } from 'lucide-react';
-import { THEME_PRESETS, FONT_CATALOG, ThemePreset, loadGoogleFont } from '../data/themeCatalog.ts';
+import { THEME_PRESETS, FONT_CATALOG, ThemePreset, loadGoogleFont, loadGoogleFontsBatch } from '../data/themeCatalog.ts';
+import { FontStudioGallery } from './FontStudioGallery.tsx';
+import { FontSelectDropdown } from './FontSelectDropdown.tsx';
 import { ThemeTokens } from '../types/index.ts';
 import { useCustomization } from '../context/CustomizationContext.tsx';
 import { useTheme } from '../context/ThemeContext.tsx';
@@ -52,14 +54,22 @@ export const AdvancedThemeCustomizer: React.FC<AdvancedThemeCustomizerProps> = (
   const [saveSuccess, setSaveSuccess] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<'presets' | 'finetune' | 'fonts' | 'live_preview'>('presets');
   const [previewDevice, setPreviewDevice] = useState<'desktop' | 'mobile'>('desktop');
+  const [fontCategory, setFontCategory] = useState<string>('All');
+  const [fontSearch, setFontSearch] = useState<string>('');
+  const [fontTarget, setFontTarget] = useState<'display' | 'sans' | 'mono'>('display');
+
+  // Load all 115 fonts into document head on mount
+  React.useEffect(() => {
+    loadGoogleFontsBatch(FONT_CATALOG.map((f) => f.family));
+  }, []);
 
   const categories = [
-    { id: 'All', label: 'All Themes', count: THEME_PRESETS.length },
-    { id: 'Cyber & Sci-Fi', label: 'Cyber & Sci-Fi', count: 10, icon: Zap },
-    { id: 'Luxury & Editorial', label: 'Luxury & Editorial', count: 10, icon: Crown },
-    { id: 'Modern SaaS & Tech', label: 'Modern SaaS & Tech', count: 10, icon: Boxes },
-    { id: 'Neo-Brutalist & Retro', label: 'Neo-Brutalist & Retro', count: 10, icon: Flame },
-    { id: 'Nature & Organic', label: 'Nature & Organic', count: 10, icon: Sparkles },
+    { id: 'All', label: 'All 100 Themes', count: THEME_PRESETS.length },
+    { id: 'Cyber & Sci-Fi', label: 'Cyber & Sci-Fi', count: 20, icon: Zap },
+    { id: 'Luxury & Editorial', label: 'Luxury & Editorial', count: 20, icon: Crown },
+    { id: 'Modern SaaS & Tech', label: 'Modern SaaS & Tech', count: 20, icon: Boxes },
+    { id: 'Neo-Brutalist & Retro', label: 'Neo-Brutalist & Retro', count: 20, icon: Flame },
+    { id: 'Nature & Organic', label: 'Nature & Organic', count: 20, icon: Sparkles },
   ];
 
   const filteredPresets = THEME_PRESETS.filter((p) => {
@@ -69,6 +79,9 @@ export const AdvancedThemeCustomizer: React.FC<AdvancedThemeCustomizerProps> = (
       p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       p.tagline.toLowerCase().includes(searchQuery.toLowerCase()) ||
       p.fontDisplay.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      p.headerStyle.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      p.footerStyle.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      p.dropdownStyle.toLowerCase().includes(searchQuery.toLowerCase()) ||
       p.category.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesCat && matchesSearch;
   });
@@ -99,6 +112,8 @@ export const AdvancedThemeCustomizer: React.FC<AdvancedThemeCustomizerProps> = (
       glowIntensity: preset.glowIntensity,
       buttonStyle: preset.buttonStyle,
       headerStyle: preset.headerStyle,
+      footerStyle: preset.footerStyle,
+      dropdownStyle: preset.dropdownStyle,
       backgroundPattern: preset.backgroundPattern,
       fontDisplay: preset.fontDisplay,
       fontSans: preset.fontSans,
@@ -112,6 +127,37 @@ export const AdvancedThemeCustomizer: React.FC<AdvancedThemeCustomizerProps> = (
     if (autoSave) {
       handleSave(updated);
     }
+  };
+
+  const handleFullSitePreview = (preset: ThemePreset) => {
+    handleSelectPreset(preset, false);
+    sessionStorage.setItem('cnc_live_preview_theme', JSON.stringify({
+      ...draft,
+      presetId: preset.id,
+      presetName: preset.name,
+      accentCyan: preset.accentPrimary,
+      accentPurple: preset.accentSecondary,
+      accentGradient: preset.accentGradient,
+      bgTone: preset.bgTone,
+      bgMainDark: preset.bgMainDark,
+      bgSecondaryDark: preset.bgSecondaryDark,
+      bgMainLight: preset.bgMainLight,
+      bgSecondaryLight: preset.bgSecondaryLight,
+      textColorDark: preset.textColorDark,
+      textColorLight: preset.textColorLight,
+      borderRadius: preset.borderRadius,
+      borderWidth: preset.borderWidth,
+      glowIntensity: preset.glowIntensity,
+      buttonStyle: preset.buttonStyle,
+      headerStyle: preset.headerStyle,
+      footerStyle: preset.footerStyle,
+      dropdownStyle: preset.dropdownStyle,
+      backgroundPattern: preset.backgroundPattern,
+      fontDisplay: preset.fontDisplay,
+      fontSans: preset.fontSans,
+      fontMono: preset.fontMono,
+    }));
+    window.dispatchEvent(new Event('cnc_preview_update'));
   };
 
   const handleSave = async (themeToSave?: ThemeTokens) => {
@@ -148,7 +194,7 @@ export const AdvancedThemeCustomizer: React.FC<AdvancedThemeCustomizerProps> = (
                   WordPress & Shopify Grade Theme Customizer
                 </h2>
                 <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono uppercase tracking-wider bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 font-bold">
-                  50 Full Themes
+                  100 Full Themes
                 </span>
               </div>
               <p className={`text-xs ${isDark ? 'text-zinc-400' : 'text-zinc-500'}`}>
@@ -188,10 +234,10 @@ export const AdvancedThemeCustomizer: React.FC<AdvancedThemeCustomizerProps> = (
         {/* Navigation Sub-Tabs */}
         <div className="flex flex-wrap gap-2 pt-4 mt-4 border-t border-black/[0.06] dark:border-white/[0.08]">
           {[
-            { id: 'presets', label: `50 Curated Themes (${THEME_PRESETS.length})`, icon: Palette },
+            { id: 'presets', label: `100 Curated Themes (${THEME_PRESETS.length})`, icon: Palette },
+            { id: 'fonts', label: `100+ Google Fonts Studio (${FONT_CATALOG.length})`, icon: Type },
             { id: 'live_preview', label: 'Live Theme Preview Canvas', icon: Eye },
             { id: 'finetune', label: 'Theme Fine-Tuner & Sliders', icon: SlidersHorizontal },
-            { id: 'fonts', label: `Google Fonts Pairing (${FONT_CATALOG.length})`, icon: Type },
           ].map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
@@ -216,7 +262,7 @@ export const AdvancedThemeCustomizer: React.FC<AdvancedThemeCustomizerProps> = (
         </div>
       </div>
 
-      {/* ================= TAB 1: 50 CURATED THEMES ================= */}
+      {/* ================= TAB 1: 100 CURATED THEMES ================= */}
       {activeTab === 'presets' && (
         <div className="space-y-5">
           {/* Categories Bar & Search Filter */}
@@ -290,7 +336,7 @@ export const AdvancedThemeCustomizer: React.FC<AdvancedThemeCustomizerProps> = (
             </button>
           </div>
 
-          {/* 50 Themes Grid */}
+          {/* 100 Themes Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {filteredPresets.map((preset) => {
               const isSelected = activePresetId === preset.id;
@@ -348,41 +394,98 @@ export const AdvancedThemeCustomizer: React.FC<AdvancedThemeCustomizerProps> = (
                   </div>
 
                   <div>
-                    {/* Mini Specimen Strip */}
-                    <div className={`p-2 rounded-xl border mb-3 text-[10px] font-mono flex items-center justify-between ${
-                      isDark ? 'bg-black/40 border-white/5' : 'bg-zinc-50 border-zinc-200'
+                    {/* Prominent Font Style & Sample Preview Box (Before Going for Preview) */}
+                    <div className={`p-2.5 rounded-xl border mb-2.5 space-y-1 transition-all ${
+                      isDark ? 'bg-black/40 border-cyan-500/20' : 'bg-cyan-50/70 border-cyan-200'
                     }`}>
-                      <span className="text-zinc-400 truncate">Font: {preset.fontDisplay}</span>
-                      <span className="text-cyan-400 shrink-0 capitalize">{preset.borderRadius}</span>
+                      <div className="flex items-center justify-between text-[10px] font-mono">
+                        <span className="flex items-center gap-1 font-bold text-cyan-600 dark:text-[#00F0FF] uppercase tracking-wider">
+                          <Type className="w-3 h-3" />
+                          <span>Font Style:</span>
+                        </span>
+                        <span className="text-[10px] text-zinc-400">{preset.borderRadius}</span>
+                      </div>
+
+                      {/* Font Name in its unique style look */}
+                      <div className="flex items-baseline justify-between gap-1">
+                        <div
+                          className="text-base font-bold tracking-tight truncate text-cyan-700 dark:text-[#00F0FF]"
+                          style={{ fontFamily: `'${preset.fontDisplay}', sans-serif` }}
+                          title={`Font: ${preset.fontDisplay}`}
+                        >
+                          {preset.fontDisplay}
+                        </div>
+                      </div>
+
+                      {/* Sample Preview of its unique style */}
+                      <div
+                        className={`text-xs font-semibold tracking-wide truncate px-2 py-1 rounded-lg border ${
+                          isDark ? 'bg-black/60 border-white/5 text-zinc-200' : 'bg-white border-zinc-200 text-zinc-900 shadow-2xs'
+                        }`}
+                        style={{ fontFamily: `'${preset.fontDisplay}', sans-serif` }}
+                      >
+                        Aa Bb Gg 123 · Style Look
+                      </div>
+                    </div>
+
+                    {/* Architecture Tags: Header, Dropdown, Footer */}
+                    <div className="grid grid-cols-3 gap-1 mb-3 text-[9px] font-mono text-center">
+                      <span className="px-1 py-0.5 rounded bg-black/20 dark:bg-white/5 text-cyan-300 truncate" title={`Header Style: ${preset.headerStyle}`}>
+                        H: {preset.headerStyle.replace('_', ' ')}
+                      </span>
+                      <span className="px-1 py-0.5 rounded bg-black/20 dark:bg-white/5 text-purple-300 truncate" title={`Dropdown Style: ${preset.dropdownStyle}`}>
+                        D: {preset.dropdownStyle.replace('_', ' ')}
+                      </span>
+                      <span className="px-1 py-0.5 rounded bg-black/20 dark:bg-white/5 text-emerald-300 truncate" title={`Footer Style: ${preset.footerStyle}`}>
+                        F: {preset.footerStyle.replace('_', ' ')}
+                      </span>
                     </div>
 
                     {/* Card Footer Actions */}
-                    <div className="flex items-center gap-1.5 pt-1">
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleSelectPreset(preset, false);
-                          setActiveTab('live_preview');
-                        }}
-                        className={`flex-1 py-1.5 px-2 rounded-lg text-[10px] font-mono font-semibold border transition-all text-center ${
-                          isDark
-                            ? 'border-white/10 bg-white/5 hover:bg-white/10 text-zinc-300'
-                            : 'border-zinc-300 bg-white hover:bg-zinc-100 text-zinc-800'
-                        }`}
-                      >
-                        Inspect Preview
-                      </button>
+                    <div className="flex flex-col gap-1.5 pt-1">
+                      <div className="flex items-center gap-1.5">
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleSelectPreset(preset, false);
+                            setActiveTab('live_preview');
+                          }}
+                          className={`flex-1 py-1.5 px-2 rounded-lg text-[10px] font-mono font-semibold border transition-all text-center ${
+                            isDark
+                              ? 'border-white/10 bg-white/5 hover:bg-white/10 text-zinc-300'
+                              : 'border-zinc-300 bg-white hover:bg-zinc-100 text-zinc-800'
+                          }`}
+                        >
+                          Inspect Specs
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleSelectPreset(preset, true);
+                          }}
+                          className="py-1.5 px-3 rounded-lg text-[10px] font-mono font-bold bg-[#00F0FF] text-black hover:brightness-110 transition-all shrink-0 cursor-pointer shadow-xs"
+                        >
+                          1-Click Apply
+                        </button>
+                      </div>
 
                       <button
                         type="button"
                         onClick={(e) => {
                           e.stopPropagation();
-                          handleSelectPreset(preset, true);
+                          handleFullSitePreview(preset);
                         }}
-                        className="py-1.5 px-3 rounded-lg text-[10px] font-mono font-bold bg-[#00F0FF] text-black hover:brightness-110 transition-all shrink-0 cursor-pointer shadow-xs"
+                        className={`w-full py-1.5 px-2 rounded-lg text-[10px] font-mono font-bold border transition-all text-center flex items-center justify-center gap-1 cursor-pointer ${
+                          isDark
+                            ? 'border-cyan-500/40 bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300'
+                            : 'border-cyan-600/40 bg-cyan-50 hover:bg-cyan-100 text-cyan-900'
+                        }`}
                       >
-                        1-Click Apply
+                        <Eye className="w-3 h-3" />
+                        <span>✨ Live Full-Site Preview</span>
                       </button>
                     </div>
                   </div>
@@ -735,56 +838,28 @@ export const AdvancedThemeCustomizer: React.FC<AdvancedThemeCustomizerProps> = (
         </div>
       )}
 
-      {/* ================= TAB 4: GOOGLE FONTS PAIRING ================= */}
+      {/* ================= TAB 4: 100+ GOOGLE FONTS STUDIO ================= */}
       {activeTab === 'fonts' && (
-        <div className={`p-6 rounded-2xl border space-y-6 ${
-          isDark ? 'bg-[#080814]/90 border-white/10' : 'bg-white border-zinc-200 shadow-sm'
-        }`}>
-          <div>
-            <h3 className={`text-base font-bold font-display ${isDark ? 'text-white' : 'text-zinc-950'}`}>
-              Curated Google Fonts Catalog ({FONT_CATALOG.length})
-            </h3>
-            <p className={`text-xs ${isDark ? 'text-zinc-400' : 'text-zinc-500'}`}>
-              Click any font to instantly pair it as your Primary Display Headline Font.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 max-h-[500px] overflow-y-auto pr-1">
-            {FONT_CATALOG.map((font) => {
-              const isSelected = draft.fontDisplay === font.family;
-
-              return (
-                <div
-                  key={font.family}
-                  onClick={() => {
-                    loadGoogleFont(font.family);
-                    const updated = { ...draft, fontDisplay: font.family };
-                    setDraft(updated);
-                    applyPreviewTokens(updated);
-                  }}
-                  className={`p-3.5 rounded-xl border transition-all cursor-pointer ${
-                    isSelected
-                      ? 'border-[#00F0FF] bg-cyan-500/10 text-cyan-300 ring-2 ring-[#00F0FF]'
-                      : isDark
-                      ? 'border-white/10 bg-black/40 text-zinc-300 hover:border-cyan-400'
-                      : 'border-zinc-200 bg-white text-zinc-800 hover:border-cyan-400'
-                  }`}
-                >
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-[10px] font-mono text-zinc-400 uppercase">{font.category}</span>
-                    {isSelected && <Check className="w-3.5 h-3.5 text-cyan-400" />}
-                  </div>
-                  <div className="text-base font-bold truncate" style={{ fontFamily: `'${font.family}', sans-serif` }}>
-                    {font.family}
-                  </div>
-                  <span className="text-[10px] text-zinc-500 block truncate mt-1">
-                    Quick brown fox jumps
-                  </span>
-                </div>
-              );
-            })}
-          </div>
-        </div>
+        <FontStudioGallery
+          currentDisplayFont={draft.fontDisplay}
+          currentSansFont={draft.fontSans}
+          currentMonoFont={draft.fontMono}
+          onSelectFont={(family, target) => {
+            const updated = {
+              ...draft,
+              fontDisplay: target === 'display' ? family : draft.fontDisplay,
+              fontSans: target === 'sans' ? family : draft.fontSans,
+              fontMono: target === 'mono' ? family : draft.fontMono,
+            };
+            setDraft(updated);
+            applyPreviewTokens(updated);
+            if (typeof window !== 'undefined') {
+              sessionStorage.setItem('cnc_live_preview_theme', JSON.stringify(updated));
+              window.dispatchEvent(new Event('cnc_preview_update'));
+            }
+          }}
+          isDark={isDark}
+        />
       )}
     </div>
   );

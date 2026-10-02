@@ -14,6 +14,8 @@ import { Footer } from './components/Footer.tsx';
 import { CookieConsent } from './components/CookieConsent.tsx';
 import { RealtimePresence } from './components/realtime/RealtimePresence.tsx';
 import { AnalyticsTracker } from './components/AnalyticsTracker.tsx';
+import { LivePreviewBar } from './components/LivePreviewBar.tsx';
+import { ThemeStudioModal } from './components/ThemeStudioModal.tsx';
 
 import { HomePage } from './pages/HomePage.tsx';
 import { ServicesPage } from './pages/ServicesPage.tsx';
@@ -47,6 +49,7 @@ function normalizePath(rawPath: string): string {
 }
 
 function AppContent() {
+  const [isThemeStudioOpen, setIsThemeStudioOpen] = useState(false);
   const [currentPath, setCurrentPath] = useState<string>(() => {
     if (typeof window !== 'undefined') {
       return normalizePath(window.location.pathname);
@@ -187,8 +190,19 @@ function AppContent() {
       {/* Architecture readiness for future realtime */}
       <RealtimePresence enabled={false} />
 
+      {/* Floating Interactive Live Theme Preview Controller */}
+      <LivePreviewBar
+        currentPath={currentPath}
+        onNavigate={handleNavigate}
+        onOpenThemeStudio={() => setIsThemeStudioOpen(true)}
+      />
+
       {/* Fixed Sticky Glass Navbar with Typographic Wordmark & Theme Toggle */}
-      <Navbar currentPath={currentPath} onNavigate={handleNavigate} />
+      <Navbar
+        currentPath={currentPath}
+        onNavigate={handleNavigate}
+        onOpenThemeStudio={() => setIsThemeStudioOpen(true)}
+      />
 
       {/* Main Page Viewport */}
       <main className="flex-1 w-full max-w-full overflow-x-hidden relative">
@@ -197,6 +211,12 @@ function AppContent() {
 
       {/* Footer */}
       <Footer onNavigate={handleNavigate} />
+
+      {/* WordPress & Shopify Grade 100 Themes & 115 Fonts Studio Modal */}
+      <ThemeStudioModal
+        isOpen={isThemeStudioOpen}
+        onClose={() => setIsThemeStudioOpen(false)}
+      />
 
       {/* GDPR / UK DPA Cookie Consent Banner */}
       <CookieConsent />

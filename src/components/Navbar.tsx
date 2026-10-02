@@ -15,15 +15,17 @@ import {
 } from 'lucide-react';
 import { ClickNCreateLogo } from './ClickNCreateLogo.tsx';
 import { NAV_ITEMS } from '../data/site.ts';
-import { ThemeToggle } from './ThemeToggle.tsx';
 import { useTheme } from '../context/ThemeContext.tsx';
+import { useCustomization } from '../context/CustomizationContext.tsx';
+import { getHeaderClass } from '../data/themes/themeArchitectureStyles.ts';
 
 interface NavbarProps {
   currentPath: string;
   onNavigate: (path: string) => void;
+  onOpenThemeStudio?: () => void;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ currentPath, onNavigate }) => {
+export const Navbar: React.FC<NavbarProps> = ({ currentPath, onNavigate, onOpenThemeStudio }) => {
   const [scrolled, setScrolled] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -31,6 +33,14 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPath, onNavigate }) => {
   const rightMenuRef = useRef<HTMLDivElement>(null);
   const { theme } = useTheme();
   const isDark = theme === 'dark';
+  const { customization } = useCustomization();
+  const currentTheme = customization?.theme || {};
+  const headerStyle = currentTheme.headerStyle || 'floating_glass';
+  const dropdownStyle = currentTheme.dropdownStyle || 'glass_blur';
+
+  const getHeaderContainerClass = () => {
+    return getHeaderClass(headerStyle, currentTheme.presetId, isDark);
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -87,13 +97,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPath, onNavigate }) => {
       >
         {/* The Unified Morphing Header Container */}
         <div
-          className={`w-full transition-all duration-500 ease-out flex items-center justify-between relative ${
-            scrolled
-              ? isDark
-                ? 'max-w-5xl px-4 sm:px-6 py-2.5 rounded-full border border-[#00F0FF]/35 bg-[#06060F]/90 backdrop-blur-2xl shadow-[0_10px_40px_-5px_rgba(0,240,255,0.22)]'
-                : 'max-w-5xl px-4 sm:px-6 py-2.5 rounded-full border border-cyan-500/40 bg-white/92 backdrop-blur-2xl shadow-[0_10px_35px_-5px_rgba(0,180,216,0.18)]'
-              : 'max-w-7xl px-0 py-0 rounded-none border-transparent bg-transparent shadow-none'
-          }`}
+          className={`w-full transition-all duration-500 ease-out flex items-center justify-between relative ${getHeaderContainerClass()}`}
         >
           {/* Zone 1: Brand Title Wordmark */}
           <a
@@ -184,10 +188,8 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPath, onNavigate }) => {
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, y: 8, scale: 0.96 }}
                       transition={{ duration: 0.18 }}
-                      className={`absolute top-full right-0 mt-3 w-80 p-4 rounded-3xl border shadow-2xl backdrop-blur-2xl z-50 ${
-                        isDark
-                          ? 'border-[#00F0FF]/40 bg-[#0A0A16]/98 shadow-[0_15px_50px_rgba(0,240,255,0.22)]'
-                          : 'border-cyan-400/50 bg-white/98 shadow-2xl'
+                      className={`absolute top-full right-0 mt-3 w-80 z-50 transition-all duration-200 rounded-3xl p-5 border border-black/10 dark:border-white/10 shadow-2xl backdrop-blur-2xl ${
+                        isDark ? 'bg-[#0A0A16]/95 text-white' : 'bg-white/95 text-zinc-950'
                       }`}
                     >
                       <div className="flex items-center justify-between pb-3 border-b border-black/[0.08] dark:border-white/[0.08] mb-3 text-[10px] font-mono">
@@ -195,17 +197,6 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPath, onNavigate }) => {
                           [ DIRECTORY MATRIX ]
                         </span>
                         <span className="text-zinc-500">Saad M</span>
-                      </div>
-
-                      {/* Theme Toggle inside Pages Dropdown Box */}
-                      <div className="mb-3 p-2.5 rounded-2xl border border-black/[0.08] dark:border-white/[0.08] bg-black/[0.03] dark:bg-white/[0.03] flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <span className="text-xs font-mono font-medium">Appearance</span>
-                          <span className="text-[10px] font-mono text-zinc-500">
-                            [{theme.toUpperCase()}]
-                          </span>
-                        </div>
-                        <ThemeToggle showLabel={false} />
                       </div>
 
                       <div className="space-y-1">
@@ -370,43 +361,45 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPath, onNavigate }) => {
 
           {/* Zone 3: Right-Side Menu Dropdown Trigger & Dropdown Box */}
           <div className="relative" ref={rightMenuRef}>
-            {/* Pure Icon Menu Button */}
-            <button
-              type="button"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className={`relative p-2.5 sm:p-3 rounded-full font-mono text-xs transition-all duration-300 cursor-pointer overflow-hidden border ${
-                mobileMenuOpen
-                  ? 'border-[#00F0FF] bg-[#00F0FF] text-black shadow-[0_0_25px_rgba(0,240,255,0.7)]'
-                  : 'border-[#00F0FF]/50 bg-[#00F0FF] hover:bg-[#38bdf8] text-black shadow-[0_0_15px_rgba(0,240,255,0.4)] hover:shadow-[0_0_25px_rgba(0,240,255,0.8)]'
-              } flex items-center justify-center`}
-              aria-label={mobileMenuOpen ? 'Close menu dropdown' : 'Open menu dropdown'}
-              aria-expanded={mobileMenuOpen}
-              title={mobileMenuOpen ? 'Close menu' : 'Open menu'}
-            >
-              <AnimatePresence mode="wait" initial={false}>
-                {mobileMenuOpen ? (
-                  <motion.div
-                    key="close"
-                    initial={{ rotate: -90, opacity: 0 }}
-                    animate={{ rotate: 0, opacity: 1 }}
-                    exit={{ rotate: 90, opacity: 0 }}
-                    transition={{ duration: 0.15 }}
-                  >
-                    <X className="w-4 h-4 sm:w-4.5 sm:h-4.5 stroke-[2.5]" />
-                  </motion.div>
-                ) : (
-                  <motion.div
-                    key="menu"
-                    initial={{ rotate: 90, opacity: 0 }}
-                    animate={{ rotate: 0, opacity: 1 }}
-                    exit={{ rotate: -90, opacity: 0 }}
-                    transition={{ duration: 0.15 }}
-                  >
-                    <Menu className="w-4 h-4 sm:w-4.5 sm:h-4.5 stroke-[2.5]" />
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </button>
+            <div className="flex items-center gap-1.5 sm:gap-2">
+              {/* Pure Icon Menu Button */}
+              <button
+                type="button"
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className={`relative p-2.5 sm:p-3 rounded-full font-mono text-xs transition-all duration-300 cursor-pointer overflow-hidden border ${
+                  mobileMenuOpen
+                    ? 'border-[#00F0FF] bg-[#00F0FF] text-black shadow-[0_0_25px_rgba(0,240,255,0.7)]'
+                    : 'border-[#00F0FF]/50 bg-[#00F0FF] hover:bg-[#38bdf8] text-black shadow-[0_0_15px_rgba(0,240,255,0.4)] hover:shadow-[0_0_25px_rgba(0,240,255,0.8)]'
+                } flex items-center justify-center`}
+                aria-label={mobileMenuOpen ? 'Close menu dropdown' : 'Open menu dropdown'}
+                aria-expanded={mobileMenuOpen}
+                title={mobileMenuOpen ? 'Close menu' : 'Open menu'}
+              >
+                <AnimatePresence mode="wait" initial={false}>
+                  {mobileMenuOpen ? (
+                    <motion.div
+                      key="close"
+                      initial={{ rotate: -90, opacity: 0 }}
+                      animate={{ rotate: 0, opacity: 1 }}
+                      exit={{ rotate: 90, opacity: 0 }}
+                      transition={{ duration: 0.15 }}
+                    >
+                      <X className="w-4 h-4 sm:w-4.5 sm:h-4.5 stroke-[2.5]" />
+                    </motion.div>
+                  ) : (
+                    <motion.div
+                      key="menu"
+                      initial={{ rotate: 90, opacity: 0 }}
+                      animate={{ rotate: 0, opacity: 1 }}
+                      exit={{ rotate: -90, opacity: 0 }}
+                      transition={{ duration: 0.15 }}
+                    >
+                      <Menu className="w-4 h-4 sm:w-4.5 sm:h-4.5 stroke-[2.5]" />
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </button>
+            </div>
 
             {/* Normal Right-Side Menu Dropdown Box (No Full-Page Takeover) */}
             <AnimatePresence>
@@ -416,10 +409,8 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPath, onNavigate }) => {
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: 10, scale: 0.95 }}
                   transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                  className={`absolute top-full right-0 mt-3 w-80 sm:w-92 max-h-[82vh] overflow-y-auto p-4 sm:p-5 rounded-3xl border shadow-2xl backdrop-blur-2xl z-50 scrollbar-thin ${
-                    isDark
-                      ? 'border-[#00F0FF]/40 bg-[#080814]/98 shadow-[0_20px_60px_rgba(0,240,255,0.25)] text-white'
-                      : 'border-cyan-500/40 bg-white/98 shadow-[0_20px_50px_rgba(0,180,216,0.22)] text-zinc-950'
+                  className={`absolute top-full right-0 mt-3 w-80 sm:w-92 max-h-[82vh] overflow-y-auto z-50 scrollbar-thin transition-all duration-200 rounded-3xl p-5 border border-black/10 dark:border-white/10 shadow-2xl backdrop-blur-2xl ${
+                    isDark ? 'bg-[#0A0A16]/95 text-white' : 'bg-white/95 text-zinc-950'
                   }`}
                 >
                   {/* Top Header Row in Dropdown */}
@@ -431,17 +422,6 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPath, onNavigate }) => {
                       </span>
                     </div>
                     <span className="text-zinc-500 text-[10px] font-mono">Saad M</span>
-                  </div>
-
-                  {/* Theme Switcher Bar */}
-                  <div className="mb-3.5 p-2.5 rounded-2xl border border-black/[0.08] dark:border-white/[0.08] bg-black/[0.03] dark:bg-white/[0.03] flex items-center justify-between">
-                    <div>
-                      <div className="text-xs font-mono font-medium">Display Mode</div>
-                      <div className="text-[10px] font-mono text-zinc-500">
-                        {isDark ? 'Cyber Dark' : 'Bright Light'}
-                      </div>
-                    </div>
-                    <ThemeToggle showLabel={false} />
                   </div>
 
                   {/* Main Navigation Pages Grid */}

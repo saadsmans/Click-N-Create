@@ -4,6 +4,8 @@ import { ClickNCreateLogo } from './ClickNCreateLogo.tsx';
 import { SITE_CONFIG, NAV_ITEMS } from '../data/site.ts';
 import { SERVICES } from '../data/services.ts';
 import { useTheme } from '../context/ThemeContext.tsx';
+import { useCustomization } from '../context/CustomizationContext.tsx';
+import { getFooterClass } from '../data/themes/themeArchitectureStyles.ts';
 
 interface FooterProps {
   onNavigate: (path: string) => void;
@@ -12,6 +14,13 @@ interface FooterProps {
 export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
   const { theme } = useTheme();
   const isDark = theme === 'dark';
+  const { customization } = useCustomization();
+  const currentTheme = customization?.theme || {};
+  const footerStyle = currentTheme.footerStyle || 'modern_columns';
+
+  const getFooterCardClass = () => {
+    return getFooterClass(footerStyle, currentTheme.presetId, isDark);
+  };
 
   const handleNav = (e: React.MouseEvent, path: string) => {
     e.preventDefault();
@@ -66,11 +75,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
         </div>
 
         {/* Main Architectural Card */}
-        <div className={`flex-1 w-full rounded-[2.5rem] sm:rounded-[3rem] p-6 sm:p-10 lg:p-12 border relative overflow-hidden transition-all duration-200 ${
-          isDark
-            ? 'border-[#00F0FF]/25 bg-[#06060E] text-white shadow-[0_25px_70px_rgba(0,0,0,0.8)]'
-            : 'border-cyan-300 bg-white text-zinc-950 shadow-[0_20px_50px_rgba(0,180,216,0.15)]'
-        }`}>
+        <div className={`flex-1 w-full border relative overflow-hidden transition-all duration-300 ${getFooterCardClass()}`}>
           {/* Subtle Ambient Background Glow */}
           <div className={`absolute top-0 right-0 w-80 h-80 rounded-full blur-3xl pointer-events-none ${
             isDark ? 'bg-[#00F0FF]/15' : 'bg-cyan-400/10'

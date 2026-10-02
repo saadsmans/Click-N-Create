@@ -930,6 +930,24 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onNavigate, initialTab }) 
         </div>
 
         <div className="flex items-center gap-2.5">
+          {/* Prominent Theme Changer Button at Backend */}
+          <button
+            type="button"
+            onClick={() => setActiveTab('themes')}
+            className={`px-3 py-2 rounded-xl text-xs font-mono font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-xs ${
+              activeTab === 'themes'
+                ? 'bg-[#00F0FF] text-black shadow-[0_0_15px_rgba(0,240,255,0.4)]'
+                : 'border border-cyan-500/40 bg-cyan-500/10 text-cyan-600 dark:text-[#00F0FF] hover:bg-cyan-500/20'
+            }`}
+            title="Open 100 Themes & 115 Fonts Studio in Backend"
+          >
+            <Palette className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline">Theme Changer:</span>
+            <span className="text-cyan-700 dark:text-cyan-300 font-bold truncate max-w-[140px]">
+              {customization?.theme?.presetName || 'Default Theme'}
+            </span>
+          </button>
+
           {/* Theme Quick Switcher in Admin Header */}
           <div className="p-1 rounded-2xl border border-zinc-200 dark:border-white/10 bg-white dark:bg-white/5 shadow-xs">
             <ThemeToggle showLabel={false} />
@@ -957,12 +975,54 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onNavigate, initialTab }) 
         </div>
       </div>
 
+      {/* Backend Quick Theme Status Strip */}
+      <div className="mb-6 p-3 rounded-2xl border border-cyan-500/30 bg-cyan-500/5 dark:bg-black/30 backdrop-blur-md flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
+        <div className="flex items-center gap-2.5 min-w-0">
+          <div className="w-8 h-8 rounded-xl bg-cyan-500/20 text-[#00F0FF] flex items-center justify-center shrink-0">
+            <Palette className="w-4 h-4" />
+          </div>
+          <div className="min-w-0">
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="font-bold text-zinc-950 dark:text-white">Backend Theme Engine:</span>
+              <span className="text-cyan-600 dark:text-[#00F0FF] font-bold">
+                {customization?.theme?.presetName || 'Cyber Neon Cyan (Default)'}
+              </span>
+              <span className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-500 font-bold">
+                ACTIVE
+              </span>
+            </div>
+            <div className="text-[11px] text-zinc-500 flex items-center gap-2 mt-0.5 flex-wrap">
+              <span>Headline Font: <strong className="text-cyan-600 dark:text-cyan-400" style={{ fontFamily: `'${customization?.theme?.fontDisplay || 'Syne'}', sans-serif` }}>{customization?.theme?.fontDisplay || 'Syne'}</strong></span>
+              <span>·</span>
+              <span>Body: <strong className="text-purple-600 dark:text-purple-400" style={{ fontFamily: `'${customization?.theme?.fontSans || 'Plus Jakarta Sans'}', sans-serif` }}>{customization?.theme?.fontSans || 'Plus Jakarta Sans'}</strong></span>
+              <span>·</span>
+              <span className="text-zinc-400">Header: {customization?.theme?.headerStyle?.replace(/_/g, ' ') || 'default'}</span>
+              <span>·</span>
+              <span className="text-zinc-400">Footer: {customization?.theme?.footerStyle?.replace(/_/g, ' ') || 'default'}</span>
+            </div>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          onClick={() => setActiveTab('themes')}
+          className={`px-3.5 py-1.5 rounded-xl font-bold text-xs font-mono transition-all flex items-center gap-1.5 cursor-pointer shadow-xs ${
+            activeTab === 'themes'
+              ? 'bg-[#00F0FF] text-black shadow-[0_0_15px_rgba(0,240,255,0.4)]'
+              : 'bg-[#00F0FF] hover:bg-[#38bdf8] text-black shadow-xs'
+          }`}
+        >
+          <Palette className="w-3.5 h-3.5" />
+          <span>{activeTab === 'themes' ? 'Currently Editing Theme' : 'Open 100 Themes & Fonts Studio'}</span>
+        </button>
+      </div>
+
       {/* Navigation Tabs Bar */}
       <div className="flex flex-wrap gap-2 pb-4 mb-6 border-b border-zinc-200 dark:border-white/10">
         {[
-          { id: 'page_editor', label: '🎨 Page Editor (CMS)', icon: Layout, isSuper: true },
+          { id: 'themes', label: '🎨 100 Themes & 115 Fonts Studio', icon: Palette },
+          { id: 'page_editor', label: 'Page Editor (CMS)', icon: Layout, isSuper: true },
           { id: 'security_credentials', label: '🔐 Login & Security Credentials', icon: Key, isSuper: true },
-          { id: 'themes', label: '🎨 50 Themes Studio (WP/Shopify)', icon: Palette, isSuper: true },
           { id: 'crm', label: `CRM Clients (${clients.length})`, icon: Users },
           { id: 'projects', label: `Projects (${projects.length})`, icon: FolderGit2 },
           { id: 'tasks', label: `Task Board (${tasks.length})`, icon: CheckSquare },

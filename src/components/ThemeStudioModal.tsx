@@ -26,7 +26,9 @@ import {
   Shield,
   HelpCircle,
 } from 'lucide-react';
-import { THEME_PRESETS, FONT_CATALOG, ThemePreset, loadGoogleFont } from '../data/themeCatalog.ts';
+import { THEME_PRESETS, FONT_CATALOG, ThemePreset, loadGoogleFont, loadGoogleFontsBatch } from '../data/themeCatalog.ts';
+import { FontStudioGallery } from './FontStudioGallery.tsx';
+import { FontSelectDropdown } from './FontSelectDropdown.tsx';
 import { useCustomization } from '../context/CustomizationContext.tsx';
 import { useTheme } from '../context/ThemeContext.tsx';
 import { ThemeTokens } from '../types/index.ts';
@@ -41,7 +43,7 @@ export const ThemeStudioModal: React.FC<ThemeStudioModalProps> = ({ isOpen, onCl
   const { theme: modeTheme } = useTheme();
   const isDark = modeTheme === 'dark';
 
-  const [activeTab, setActiveTab] = useState<'presets' | 'live_preview' | 'finetune'>('presets');
+  const [activeTab, setActiveTab] = useState<'presets' | 'fonts' | 'live_preview' | 'finetune'>('presets');
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [activePresetId, setActivePresetId] = useState<string>(customization.theme.presetId || 'cyber_cyan');
@@ -54,6 +56,13 @@ export const ThemeStudioModal: React.FC<ThemeStudioModalProps> = ({ isOpen, onCl
   // Draft customization for fine-tuning
   const [draftTheme, setDraftTheme] = useState<ThemeTokens>(customization.theme);
 
+  // Load all 115 fonts into head whenever modal is open
+  useEffect(() => {
+    if (isOpen) {
+      loadGoogleFontsBatch(FONT_CATALOG.map((f) => f.family));
+    }
+  }, [isOpen]);
+
   useEffect(() => {
     setDraftTheme(customization.theme);
     if (customization.theme.presetId) {
@@ -62,12 +71,12 @@ export const ThemeStudioModal: React.FC<ThemeStudioModalProps> = ({ isOpen, onCl
   }, [customization.theme]);
 
   const categories = [
-    { id: 'All', label: 'All Themes', count: THEME_PRESETS.length, icon: Palette },
-    { id: 'Cyber & Sci-Fi', label: 'Cyber & Sci-Fi', count: 10, icon: Zap },
-    { id: 'Luxury & Editorial', label: 'Luxury & Editorial', count: 10, icon: Crown },
-    { id: 'Modern SaaS & Tech', label: 'Modern SaaS & Tech', count: 10, icon: Boxes },
-    { id: 'Neo-Brutalist & Retro', label: 'Neo-Brutalist & Retro', count: 10, icon: Flame },
-    { id: 'Nature & Organic', label: 'Nature & Organic', count: 10, icon: Sparkles },
+    { id: 'All', label: 'All 100 Themes', count: THEME_PRESETS.length, icon: Palette },
+    { id: 'Cyber & Sci-Fi', label: 'Cyber & Sci-Fi', count: 20, icon: Zap },
+    { id: 'Luxury & Editorial', label: 'Luxury & Editorial', count: 20, icon: Crown },
+    { id: 'Modern SaaS & Tech', label: 'Modern SaaS & Tech', count: 20, icon: Boxes },
+    { id: 'Neo-Brutalist & Retro', label: 'Neo-Brutalist & Retro', count: 20, icon: Flame },
+    { id: 'Nature & Organic', label: 'Nature & Organic', count: 20, icon: Sparkles },
   ];
 
   const filteredPresets = THEME_PRESETS.filter((p) => {
@@ -77,6 +86,9 @@ export const ThemeStudioModal: React.FC<ThemeStudioModalProps> = ({ isOpen, onCl
       p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       p.tagline.toLowerCase().includes(searchQuery.toLowerCase()) ||
       p.fontDisplay.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      p.headerStyle.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      p.footerStyle.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      p.dropdownStyle.toLowerCase().includes(searchQuery.toLowerCase()) ||
       p.category.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesCat && matchesSearch;
   });
@@ -107,6 +119,8 @@ export const ThemeStudioModal: React.FC<ThemeStudioModalProps> = ({ isOpen, onCl
       glowIntensity: preset.glowIntensity,
       buttonStyle: preset.buttonStyle,
       headerStyle: preset.headerStyle,
+      footerStyle: preset.footerStyle,
+      dropdownStyle: preset.dropdownStyle,
       backgroundPattern: preset.backgroundPattern,
       fontDisplay: preset.fontDisplay,
       fontSans: preset.fontSans,
@@ -122,8 +136,46 @@ export const ThemeStudioModal: React.FC<ThemeStudioModalProps> = ({ isOpen, onCl
     }
   };
 
+  const handleFullSitePreview = (preset: ThemePreset) => {
+    handleSelectTheme(preset, false);
+    const updated: ThemeTokens = {
+      ...draftTheme,
+      presetId: preset.id,
+      presetName: preset.name,
+      accentCyan: preset.accentPrimary,
+      accentPurple: preset.accentSecondary,
+      accentGradient: preset.accentGradient,
+      bgTone: preset.bgTone,
+      bgMainDark: preset.bgMainDark,
+      bgSecondaryDark: preset.bgSecondaryDark,
+      bgMainLight: preset.bgMainLight,
+      bgSecondaryLight: preset.bgSecondaryLight,
+      textColorDark: preset.textColorDark,
+      textColorLight: preset.textColorLight,
+      borderRadius: preset.borderRadius,
+      borderWidth: preset.borderWidth,
+      glowIntensity: preset.glowIntensity,
+      buttonStyle: preset.buttonStyle,
+      headerStyle: preset.headerStyle,
+      footerStyle: preset.footerStyle,
+      dropdownStyle: preset.dropdownStyle,
+      backgroundPattern: preset.backgroundPattern,
+      fontDisplay: preset.fontDisplay,
+      fontSans: preset.fontSans,
+      fontMono: preset.fontMono,
+    };
+    if (typeof window !== 'undefined') {
+      sessionStorage.setItem('cnc_live_preview_theme', JSON.stringify(updated));
+      window.dispatchEvent(new Event('cnc_preview_update'));
+    }
+  };
+
   const handleApplyDraft = async (persist = false) => {
     applyPreviewTokens(draftTheme);
+    if (typeof window !== 'undefined') {
+      sessionStorage.setItem('cnc_live_preview_theme', JSON.stringify(draftTheme));
+      window.dispatchEvent(new Event('cnc_preview_update'));
+    }
     if (persist) {
       await saveThemeToBackend(draftTheme);
     }
@@ -134,6 +186,7 @@ export const ThemeStudioModal: React.FC<ThemeStudioModalProps> = ({ isOpen, onCl
     try {
       if (typeof window !== 'undefined') {
         localStorage.setItem('cnc_active_theme', JSON.stringify(themeToSave));
+        sessionStorage.removeItem('cnc_live_preview_theme');
       }
 
       // Try theme-specific endpoint
@@ -158,6 +211,7 @@ export const ThemeStudioModal: React.FC<ThemeStudioModalProps> = ({ isOpen, onCl
 
       setSaveSuccess(true);
       setTimeout(() => setSaveSuccess(false), 2500);
+      refreshCustomization();
     } catch (err) {
       console.warn('Theme save warning:', err);
     } finally {
@@ -169,6 +223,10 @@ export const ThemeStudioModal: React.FC<ThemeStudioModalProps> = ({ isOpen, onCl
     applyPreviewTokens(originalTheme);
     setActivePresetId(originalTheme.presetId || 'cyber_cyan');
     setDraftTheme(originalTheme);
+    if (typeof window !== 'undefined') {
+      sessionStorage.removeItem('cnc_live_preview_theme');
+      window.dispatchEvent(new Event('cnc_preview_update'));
+    }
   };
 
   return (
@@ -211,7 +269,7 @@ export const ThemeStudioModal: React.FC<ThemeStudioModalProps> = ({ isOpen, onCl
                       WordPress & Shopify Theme Studio
                     </h3>
                     <span className="text-[10px] px-2 py-0.5 rounded-full font-mono font-bold bg-[#00F0FF]/20 text-[#00F0FF] border border-[#00F0FF]/30">
-                      50 THEMES
+                      100 THEMES
                     </span>
                   </div>
                   <p className="text-[11px] text-zinc-400 font-mono">
@@ -246,7 +304,8 @@ export const ThemeStudioModal: React.FC<ThemeStudioModalProps> = ({ isOpen, onCl
             <div className="px-4 py-2.5 border-b border-black/[0.06] dark:border-white/[0.06] flex items-center justify-between shrink-0 bg-black/5 dark:bg-white/[0.02]">
               <div className="flex items-center gap-1.5 overflow-x-auto pb-0.5 scrollbar-none">
                 {[
-                  { id: 'presets', label: `50 Themes Catalog (${THEME_PRESETS.length})`, icon: Palette },
+                  { id: 'presets', label: `100 Themes Catalog (${THEME_PRESETS.length})`, icon: Palette },
+                  { id: 'fonts', label: `100+ Font Options (${FONT_CATALOG.length})`, icon: Type },
                   { id: 'live_preview', label: 'Interactive Live Preview Canvas', icon: Eye },
                   { id: 'finetune', label: 'Theme Fine-Tuner & Styles', icon: SlidersHorizontal },
                 ].map((tab) => {
@@ -321,7 +380,7 @@ export const ThemeStudioModal: React.FC<ThemeStudioModalProps> = ({ isOpen, onCl
                       <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400" />
                       <input
                         type="text"
-                        placeholder="Search 50 themes..."
+                        placeholder="Search 100 themes..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         className={`w-full pl-8 pr-3 py-1.5 text-xs font-mono rounded-xl border ${
@@ -391,47 +450,115 @@ export const ThemeStudioModal: React.FC<ThemeStudioModalProps> = ({ isOpen, onCl
                               </div>
                             </div>
 
-                            <p className="text-[11px] text-zinc-400 line-clamp-2 mb-3">
+                            <p className="text-[11px] text-zinc-400 line-clamp-2 mb-2.5">
                               {preset.tagline}
                             </p>
 
-                            {/* Theme Specs Pill Row */}
-                            <div className={`p-2 rounded-xl border text-[10px] font-mono flex items-center justify-between mb-3 ${
-                              isDark ? 'bg-black/30 border-white/5 text-zinc-400' : 'bg-zinc-50 border-zinc-200 text-zinc-600'
+                            {/* Architectural Signature Badges: Header, Dropdown, Footer, Pattern */}
+                            <div className="grid grid-cols-2 sm:grid-cols-4 gap-1 mb-2.5 text-[9px] font-mono text-center">
+                              <span className="px-1.5 py-0.5 rounded bg-cyan-500/10 text-cyan-300 truncate" title={`Header: ${preset.headerStyle}`}>
+                                H: {preset.headerStyle.replace('_', ' ')}
+                              </span>
+                              <span className="px-1.5 py-0.5 rounded bg-purple-500/10 text-purple-300 truncate" title={`Dropdown: ${preset.dropdownStyle}`}>
+                                D: {preset.dropdownStyle.replace('_', ' ')}
+                              </span>
+                              <span className="px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-300 truncate" title={`Footer: ${preset.footerStyle}`}>
+                                F: {preset.footerStyle.replace('_', ' ')}
+                              </span>
+                              <span className="px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-300 truncate" title={`Pattern: ${preset.backgroundPattern}`}>
+                                P: {preset.backgroundPattern}
+                              </span>
+                            </div>
+
+                            {/* Prominent Font Style & Sample Preview Box (Before Going for Preview) */}
+                            <div className={`p-3 rounded-2xl border mb-3 space-y-1.5 transition-all ${
+                              isDark
+                                ? 'bg-black/40 border-cyan-500/25 shadow-inner'
+                                : 'bg-cyan-50/70 border-cyan-200 shadow-2xs'
                             }`}>
-                              <span className="truncate">Font: <strong className="text-cyan-400">{preset.fontDisplay}</strong></span>
-                              <span className="capitalize">Style: <strong>{preset.buttonStyle}</strong></span>
-                              <span className="capitalize">Radius: <strong>{preset.borderRadius}</strong></span>
+                              <div className="flex items-center justify-between text-[10px] font-mono">
+                                <span className="flex items-center gap-1 font-bold text-cyan-600 dark:text-[#00F0FF] uppercase tracking-wider">
+                                  <Type className="w-3.5 h-3.5" />
+                                  <span>Theme Font Style:</span>
+                                </span>
+                                <span className="text-[10px] font-mono text-zinc-400">
+                                  {preset.buttonStyle} · {preset.borderRadius}
+                                </span>
+                              </div>
+
+                              {/* Font Name rendered in its OWN unique style look */}
+                              <div className="flex items-baseline justify-between gap-2">
+                                <div
+                                  className="text-lg sm:text-xl font-bold tracking-tight truncate text-cyan-700 dark:text-[#00F0FF]"
+                                  style={{ fontFamily: `'${preset.fontDisplay}', sans-serif` }}
+                                  title={`Font: ${preset.fontDisplay}`}
+                                >
+                                  {preset.fontDisplay}
+                                </div>
+                                <span className="text-[9px] font-mono px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-600 dark:text-cyan-300 border border-cyan-500/20 shrink-0 font-bold">
+                                  Headline
+                                </span>
+                              </div>
+
+                              {/* Sample preview of its unique style alongside the name */}
+                              <div
+                                className={`text-xs sm:text-sm font-semibold tracking-wide truncate px-2.5 py-1.5 rounded-xl border ${
+                                  isDark
+                                    ? 'bg-black/60 border-white/5 text-zinc-200'
+                                    : 'bg-white border-zinc-200 text-zinc-900 shadow-2xs'
+                                }`}
+                                style={{ fontFamily: `'${preset.fontDisplay}', sans-serif` }}
+                              >
+                                Aa Bb Gg Rr 123 · Style Preview
+                              </div>
                             </div>
                           </div>
 
                           {/* Action Buttons */}
-                          <div className="flex items-center gap-2 pt-2 border-t border-black/[0.06] dark:border-white/[0.06]">
-                            <button
-                              type="button"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleSelectTheme(preset, false);
-                                setActiveTab('live_preview');
-                              }}
-                              className={`flex-1 py-1.5 px-2.5 rounded-xl text-[10px] font-mono font-medium border text-center transition-colors cursor-pointer ${
-                                isDark
-                                  ? 'border-white/10 bg-white/5 hover:bg-white/10 text-zinc-300 hover:text-white'
-                                  : 'border-zinc-300 bg-white hover:bg-zinc-100 text-zinc-800'
-                              }`}
-                            >
-                              Inspect Preview
-                            </button>
+                          <div className="flex flex-col gap-1.5 pt-2 border-t border-black/[0.06] dark:border-white/[0.06]">
+                            <div className="flex items-center gap-2">
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleSelectTheme(preset, false);
+                                  setActiveTab('live_preview');
+                                }}
+                                className={`flex-1 py-1.5 px-2.5 rounded-xl text-[10px] font-mono font-medium border text-center transition-colors cursor-pointer ${
+                                  isDark
+                                    ? 'border-white/10 bg-white/5 hover:bg-white/10 text-zinc-300 hover:text-white'
+                                    : 'border-zinc-300 bg-white hover:bg-zinc-100 text-zinc-800'
+                                }`}
+                              >
+                                Inspect Specs
+                              </button>
+
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleSelectTheme(preset, true);
+                                }}
+                                className="py-1.5 px-3.5 rounded-xl text-[10px] font-mono font-bold bg-[#00F0FF] hover:bg-[#38bdf8] text-black transition-all cursor-pointer shadow-xs shrink-0"
+                              >
+                                1-Click Activate
+                              </button>
+                            </div>
 
                             <button
                               type="button"
                               onClick={(e) => {
                                 e.stopPropagation();
-                                handleSelectTheme(preset, true);
+                                handleFullSitePreview(preset);
                               }}
-                              className="py-1.5 px-3.5 rounded-xl text-[10px] font-mono font-bold bg-[#00F0FF] hover:bg-[#38bdf8] text-black transition-all cursor-pointer shadow-xs shrink-0"
+                              className={`w-full py-1.5 px-2.5 rounded-xl text-[10px] font-mono font-bold border transition-all text-center flex items-center justify-center gap-1.5 cursor-pointer ${
+                                isDark
+                                  ? 'border-cyan-500/40 bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300'
+                                  : 'border-cyan-600/40 bg-cyan-50 hover:bg-cyan-100 text-cyan-900'
+                              }`}
                             >
-                              1-Click Activate
+                              <Eye className="w-3 h-3" />
+                              <span>✨ Live Full-Site Preview (All Pages)</span>
                             </button>
                           </div>
                         </div>
@@ -439,6 +566,30 @@ export const ThemeStudioModal: React.FC<ThemeStudioModalProps> = ({ isOpen, onCl
                     })}
                   </div>
                 </div>
+              )}
+
+              {/* TAB 2: 100+ GOOGLE FONTS STUDIO */}
+              {activeTab === 'fonts' && (
+                <FontStudioGallery
+                  currentDisplayFont={draftTheme.fontDisplay}
+                  currentSansFont={draftTheme.fontSans}
+                  currentMonoFont={draftTheme.fontMono}
+                  onSelectFont={(family, target) => {
+                    const updated = {
+                      ...draftTheme,
+                      fontDisplay: target === 'display' ? family : draftTheme.fontDisplay,
+                      fontSans: target === 'sans' ? family : draftTheme.fontSans,
+                      fontMono: target === 'mono' ? family : draftTheme.fontMono,
+                    };
+                    setDraftTheme(updated);
+                    applyPreviewTokens(updated);
+                    if (typeof window !== 'undefined') {
+                      sessionStorage.setItem('cnc_live_preview_theme', JSON.stringify(updated));
+                      window.dispatchEvent(new Event('cnc_preview_update'));
+                    }
+                  }}
+                  isDark={isDark}
+                />
               )}
 
               {/* TAB 2: INTERACTIVE LIVE PREVIEW CANVAS */}
@@ -712,58 +863,62 @@ export const ThemeStudioModal: React.FC<ThemeStudioModalProps> = ({ isOpen, onCl
 
                   {/* Typography Pairing */}
                   <div className="p-4 rounded-2xl border bg-black/10 dark:bg-white/5 border-black/[0.06] dark:border-white/[0.08] space-y-4">
-                    <h4 className="text-xs font-bold font-mono uppercase tracking-wider text-cyan-400 flex items-center gap-2">
-                      <Type className="w-3.5 h-3.5" />
-                      <span>Typography & Font Engine</span>
-                    </h4>
+                    <div className="flex items-center justify-between">
+                      <h4 className="text-xs font-bold font-mono uppercase tracking-wider text-cyan-400 flex items-center gap-2">
+                        <Type className="w-3.5 h-3.5" />
+                        <span>Typography & Font Engine (115 Fonts)</span>
+                      </h4>
+
+                      <button
+                        type="button"
+                        onClick={() => setActiveTab('fonts')}
+                        className="px-3 py-1 rounded-xl text-[11px] font-mono font-bold bg-[#00F0FF]/15 text-[#00F0FF] border border-[#00F0FF]/30 hover:bg-[#00F0FF] hover:text-black transition-all flex items-center gap-1 cursor-pointer"
+                      >
+                        <Sparkles className="w-3 h-3" />
+                        <span>Browse 115+ Fonts Visually</span>
+                      </button>
+                    </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      {/* Display Font */}
-                      <div>
-                        <label className="text-xs font-mono text-zinc-400 block mb-1.5">
-                          Headlines & Display Font:
-                        </label>
-                        <select
-                          value={draftTheme.fontDisplay}
-                          onChange={(e) => {
-                            loadGoogleFont(e.target.value);
-                            const updated = { ...draftTheme, fontDisplay: e.target.value };
-                            setDraftTheme(updated);
-                            applyPreviewTokens(updated);
-                          }}
-                          className="w-full px-3 py-2 text-xs font-mono rounded-xl border bg-black/40 border-white/10 text-white cursor-pointer"
-                        >
-                          {FONT_CATALOG.filter((f) => f.category === 'Display' || f.category === 'Futuristic' || f.category === 'Serif').map((f) => (
-                            <option key={f.family} value={f.family} className="bg-zinc-900 text-white">
-                              {f.family} ({f.category})
-                            </option>
-                          ))}
-                        </select>
-                      </div>
+                      {/* Headlines & Display Font: 100+ Fonts Selection List With Font Style Look & Sample Previews */}
+                      <FontSelectDropdown
+                        label="Headlines & Display Font:"
+                        value={draftTheme.fontDisplay}
+                        target="display"
+                        isDark={isDark}
+                        filterCategories={['Display', 'Futuristic', 'Serif', 'Sans-Serif']}
+                        onChange={(family) => {
+                          loadGoogleFont(family);
+                          const updated = { ...draftTheme, fontDisplay: family };
+                          setDraftTheme(updated);
+                          applyPreviewTokens(updated);
+                        }}
+                      />
 
-                      {/* Body Font */}
-                      <div>
-                        <label className="text-xs font-mono text-zinc-400 block mb-1.5">
-                          Body & UI Font:
-                        </label>
-                        <select
-                          value={draftTheme.fontSans}
-                          onChange={(e) => {
-                            loadGoogleFont(e.target.value);
-                            const updated = { ...draftTheme, fontSans: e.target.value };
-                            setDraftTheme(updated);
-                            applyPreviewTokens(updated);
-                          }}
-                          className="w-full px-3 py-2 text-xs font-mono rounded-xl border bg-black/40 border-white/10 text-white cursor-pointer"
-                        >
-                          {FONT_CATALOG.filter((f) => f.category === 'Sans-Serif').map((f) => (
-                            <option key={f.family} value={f.family} className="bg-zinc-900 text-white">
-                              {f.family}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
+                      {/* Body & UI Font: 100+ Fonts Selection List With Font Style Look & Sample Previews */}
+                      <FontSelectDropdown
+                        label="Body & UI Font:"
+                        value={draftTheme.fontSans}
+                        target="sans"
+                        isDark={isDark}
+                        filterCategories={['Sans-Serif', 'Monospace', 'Serif']}
+                        onChange={(family) => {
+                          loadGoogleFont(family);
+                          const updated = { ...draftTheme, fontSans: family };
+                          setDraftTheme(updated);
+                          applyPreviewTokens(updated);
+                        }}
+                      />
                     </div>
+
+                    <button
+                      type="button"
+                      onClick={() => setActiveTab('fonts')}
+                      className="mt-3 text-xs font-mono text-cyan-400 hover:text-cyan-300 hover:underline flex items-center gap-1.5 cursor-pointer"
+                    >
+                      <Sparkles className="w-3.5 h-3.5" />
+                      <span>Open 100+ Fonts Visual Studio (All fonts named in their own styles) →</span>
+                    </button>
                   </div>
 
                   {/* Radii & Buttons */}

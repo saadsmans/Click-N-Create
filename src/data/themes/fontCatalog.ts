@@ -1,0 +1,142 @@
+import { FontOption } from './types.ts';
+
+export const FONT_CATALOG: FontOption[] = [
+  // ==========================================
+  // 1. DISPLAY & HEADLINES (25 FONTS)
+  // ==========================================
+  { family: 'Syne', category: 'Display', weights: ['600', '700', '800'], previewText: 'Bold Avant-Garde Statement' },
+  { family: 'Outfit', category: 'Display', weights: ['500', '700', '800'], previewText: 'Geometric Brand Headline' },
+  { family: 'Space Grotesk', category: 'Display', weights: ['500', '700'], previewText: 'Modern Tech Space Sans' },
+  { family: 'Epilogue', category: 'Display', weights: ['600', '700', '800'], previewText: 'Executive Editorial Impact' },
+  { family: 'Clash Display', category: 'Display', weights: ['600', '700'], previewText: 'Distinctive Custom Curve' },
+  { family: 'Cabinet Grotesk', category: 'Display', weights: ['700', '800'], previewText: 'High-Density Display Poster' },
+  { family: 'Archivo Black', category: 'Display', weights: ['400'], previewText: 'HEAVYWEIGHT IMPACT TITLE' },
+  { family: 'Bebas Neue', category: 'Display', weights: ['400'], previewText: 'TALL CONDENSED HEADLINE' },
+  { family: 'Righteous', category: 'Display', weights: ['400'], previewText: 'Deco Streamline Power' },
+  { family: 'Russo One', category: 'Display', weights: ['400'], previewText: 'HEAVY MODERN INDUSTRIAL' },
+  { family: 'Bungee', category: 'Display', weights: ['400'], previewText: 'VERTICAL URBAN SIGNAGE' },
+  { family: 'Black Han Sans', category: 'Display', weights: ['400'], previewText: 'ULTRA BOLD GEOMETRY' },
+  { family: 'Anton', category: 'Display', weights: ['400'], previewText: 'MONUMENTAL PRINT HEAD' },
+  { family: 'Oswald', category: 'Display', weights: ['500', '700'], previewText: 'CLASSIC DENSE HEADLINE' },
+  { family: 'Montserrat', category: 'Display', weights: ['700', '800', '900'], previewText: 'Clean Architectural Urban' },
+  { family: 'Raleway', category: 'Display', weights: ['700', '800'], previewText: 'Refined Elegance Display' },
+  { family: 'Work Sans', category: 'Display', weights: ['700', '800'], previewText: 'Industrial Workhorse' },
+  { family: 'Lexend', category: 'Display', weights: ['700', '800'], previewText: 'High-Readability Modern' },
+  { family: 'Unbounded', category: 'Display', weights: ['600', '800'], previewText: 'Wide Stance Horizon' },
+  { family: 'Syncopate', category: 'Display', weights: ['700'], previewText: 'WIDE PANORAMIC TITLE' },
+  { family: 'Comfortaa', category: 'Display', weights: ['700'], previewText: 'Curved Soft Geometry' },
+  { family: 'Fredoka', category: 'Display', weights: ['600', '700'], previewText: 'Chunky Playful Character' },
+  { family: 'Paytone One', category: 'Display', weights: ['400'], previewText: 'Solid Punchy Billboard' },
+  { family: 'Alfa Slab One', category: 'Display', weights: ['400'], previewText: 'VINTAGE WESTERN SLAB' },
+  { family: 'Dela Gothic One', category: 'Display', weights: ['400'], previewText: 'SOLID GOTHIC BLOCK' },
+
+  // ==========================================
+  // 2. SANS-SERIF BODY & UI (25 FONTS)
+  // ==========================================
+  { family: 'Plus Jakarta Sans', category: 'Sans-Serif', weights: ['400', '600', '700'], previewText: 'Modern UI & Mobile Body' },
+  { family: 'Inter', category: 'Sans-Serif', weights: ['400', '500', '600', '700'], previewText: 'Pixel-Perfect SaaS Standard' },
+  { family: 'Manrope', category: 'Sans-Serif', weights: ['400', '600', '700'], previewText: 'Clean Semi-Geometric Sans' },
+  { family: 'Poppins', category: 'Sans-Serif', weights: ['400', '500', '600', '700'], previewText: 'Friendly Geometric Curve' },
+  { family: 'Sora', category: 'Sans-Serif', weights: ['400', '600', '700'], previewText: 'Modernist Tech Geometry' },
+  { family: 'Urbanist', category: 'Sans-Serif', weights: ['400', '600', '700'], previewText: 'Contemporary Digital UI' },
+  { family: 'Rubik', category: 'Sans-Serif', weights: ['400', '500', '600'], previewText: 'Subtle Rounded Corners' },
+  { family: 'Nunito', category: 'Sans-Serif', weights: ['400', '600', '700'], previewText: 'Soft Balanced Well-Rounded' },
+  { family: 'Quicksand', category: 'Sans-Serif', weights: ['400', '600', '700'], previewText: 'Airy Modern Minimalist' },
+  { family: 'Figtree', category: 'Sans-Serif', weights: ['400', '600', '700'], previewText: 'Friendly Web Application' },
+  { family: 'DM Sans', category: 'Sans-Serif', weights: ['400', '500', '700'], previewText: 'Low-Contrast Clean Grid' },
+  { family: 'Public Sans', category: 'Sans-Serif', weights: ['400', '600', '700'], previewText: 'Official Design System' },
+  { family: 'Albert Sans', category: 'Sans-Serif', weights: ['400', '600', '700'], previewText: 'Scandi Modern Simplicity' },
+  { family: 'Red Hat Display', category: 'Sans-Serif', weights: ['500', '700'], previewText: 'Open Source Enterprise' },
+  { family: 'Barlow', category: 'Sans-Serif', weights: ['400', '600', '700'], previewText: 'Slightly Condensed Modern' },
+  { family: 'Jost', category: 'Sans-Serif', weights: ['400', '600', '700'], previewText: 'Futura-Inspired Elegance' },
+  { family: 'Cabin', category: 'Sans-Serif', weights: ['400', '600', '700'], previewText: 'Humanist Sans Clarity' },
+  { family: 'Karla', category: 'Sans-Serif', weights: ['400', '600', '700'], previewText: 'Quirky Grotesque Character' },
+  { family: 'Hanken Grotesk', category: 'Sans-Serif', weights: ['400', '600', '700'], previewText: 'Early Grotesque Revival' },
+  { family: 'Schibsted Grotesk', category: 'Sans-Serif', weights: ['400', '600', '700'], previewText: 'Nordic Digital Newsroom' },
+  { family: 'Onest', category: 'Sans-Serif', weights: ['400', '600', '700'], previewText: 'Smart Legible System' },
+  { family: 'Golos Text', category: 'Sans-Serif', weights: ['400', '600', '700'], previewText: 'Precise Paragraph Reading' },
+  { family: 'Be Vietnam Pro', category: 'Sans-Serif', weights: ['400', '600', '700'], previewText: 'Balanced Asian Geometric' },
+  { family: 'General Sans', category: 'Sans-Serif', weights: ['400', '600', '700'], previewText: 'Neutral Swiss Baseline' },
+  { family: 'Mulish', category: 'Sans-Serif', weights: ['400', '600', '700'], previewText: 'Crisp Screen Typography' },
+
+  // ==========================================
+  // 3. SERIF & EDITORIAL LUXURY (20 FONTS)
+  // ==========================================
+  { family: 'Playfair Display', category: 'Serif', weights: ['600', '700', '900'], previewText: 'High-Fashion Editorial Title' },
+  { family: 'Cinzel', category: 'Serif', weights: ['600', '700', '900'], previewText: 'Imperial Roman Inscription' },
+  { family: 'Cormorant Garamond', category: 'Serif', weights: ['500', '600', '700'], previewText: 'Classical Renaissance Poetry' },
+  { family: 'Prata', category: 'Serif', weights: ['400'], previewText: 'Didone Teardrop Elegance' },
+  { family: 'DM Serif Display', category: 'Serif', weights: ['400'], previewText: 'Post-Modern Editorial Punch' },
+  { family: 'Italiana', category: 'Serif', weights: ['400'], previewText: 'Milan Haute Horlogerie' },
+  { family: 'Bodoni Moda', category: 'Serif', weights: ['600', '700', '900'], previewText: 'Extreme Dramatic Contrast' },
+  { family: 'Fraunces', category: 'Serif', weights: ['500', '700', '900'], previewText: 'Warm Vintage Soft Serif' },
+  { family: 'Caudex', category: 'Serif', weights: ['400', '700'], previewText: 'Medieval Scholar Lettering' },
+  { family: 'Merriweather', category: 'Serif', weights: ['400', '700'], previewText: 'Comfortable Editorial Screen' },
+  { family: 'Lora', category: 'Serif', weights: ['500', '600', '700'], previewText: 'Contemporary Brushed Curves' },
+  { family: 'Libre Baskerville', category: 'Serif', weights: ['400', '700'], previewText: 'Traditional English Print' },
+  { family: 'EB Garamond', category: 'Serif', weights: ['400', '600', '700'], previewText: 'Historical Pure Book Type' },
+  { family: 'Spectral', category: 'Serif', weights: ['400', '600', '700'], previewText: 'Screen-Optimized Serif' },
+  { family: 'Newsreader', category: 'Serif', weights: ['400', '600', '700'], previewText: 'Modern Longform Journalism' },
+  { family: 'Marcellus', category: 'Serif', weights: ['400'], previewText: 'Trajan Column Monument' },
+  { family: 'Alice', category: 'Serif', weights: ['400'], previewText: 'Literary Wonderland Charm' },
+  { family: 'Castoro', category: 'Serif', weights: ['400'], previewText: 'Scholarly Academic Prose' },
+  { family: 'Rozha One', category: 'Serif', weights: ['400'], previewText: 'HEAVY DRAMATIC DIDONE' },
+  { family: 'Cinzel Decorative', category: 'Serif', weights: ['700'], previewText: 'ORNATE ROYAL CREST' },
+
+  // ==========================================
+  // 4. MONOSPACE & TECH TERMINAL (18 FONTS)
+  // ==========================================
+  { family: 'JetBrains Mono', category: 'Monospace', weights: ['400', '600', '700'], previewText: 'const code = clean(0x2A);' },
+  { family: 'Fira Code', category: 'Monospace', weights: ['400', '600', '700'], previewText: '=> !== === -> <= >= &&' },
+  { family: 'Space Mono', category: 'Monospace', weights: ['400', '700'], previewText: 'SYSTEM.SYS_STATUS: 100%' },
+  { family: 'Source Code Pro', category: 'Monospace', weights: ['400', '600', '700'], previewText: 'printf("Hello Studio\\n");' },
+  { family: 'Hubot Sans', category: 'Monospace', weights: ['500', '700'], previewText: 'DevOps Microservices Hub' },
+  { family: 'Roboto Mono', category: 'Monospace', weights: ['400', '600', '700'], previewText: '0123456789 ABCDEF' },
+  { family: 'Inconsolata', category: 'Monospace', weights: ['400', '700'], previewText: 'Clean Terminal Screen' },
+  { family: 'Share Tech Mono', category: 'Monospace', weights: ['400'], previewText: 'DEFCON 1 ACTIVE RADAR' },
+  { family: 'Anonymous Pro', category: 'Monospace', weights: ['400', '700'], previewText: 'Security Audit Verified' },
+  { family: 'IBM Plex Mono', category: 'Monospace', weights: ['400', '600', '700'], previewText: 'Mainframe Engineered 1964' },
+  { family: 'VT323', category: 'Monospace', weights: ['400'], previewText: 'CRT GREEN PHOSPHOR 80X24' },
+  { family: 'Cutive Mono', category: 'Monospace', weights: ['400'], previewText: 'Typewriter Ribbon Key' },
+  { family: 'Courier Prime', category: 'Monospace', weights: ['400', '700'], previewText: 'Hollywood Script 12pt' },
+  { family: 'Overpass Mono', category: 'Monospace', weights: ['400', '700'], previewText: 'Infrastructure Telemetry' },
+  { family: 'Major Mono Display', category: 'Monospace', weights: ['400'], previewText: 'aStRaCt cOdE gEoMeTrY' },
+  { family: 'Nova Mono', category: 'Monospace', weights: ['400'], previewText: 'Retro Scientific Meter' },
+  { family: 'Ubuntu Mono', category: 'Monospace', weights: ['400', '700'], previewText: 'apt-get install studio' },
+  { family: 'Syne Mono', category: 'Monospace', weights: ['400'], previewText: 'Avant-Garde Terminal' },
+
+  // ==========================================
+  // 5. FUTURISTIC & CYBER SCIFI (15 FONTS)
+  // ==========================================
+  { family: 'Orbitron', category: 'Futuristic', weights: ['600', '800', '900'], previewText: 'CYBER TELEMETRY 2077' },
+  { family: 'Chakra Petch', category: 'Futuristic', weights: ['500', '700'], previewText: 'MECHA COMBAT HUD' },
+  { family: 'Audiowide', category: 'Futuristic', weights: ['400'], previewText: 'SYNTHETIC FREQUENCY' },
+  { family: 'Oxanium', category: 'Futuristic', weights: ['500', '700', '800'], previewText: 'Quantum Fusion Drive' },
+  { family: 'Rajdhani', category: 'Futuristic', weights: ['500', '600', '700'], previewText: 'High-Altitude Avionics' },
+  { family: 'Michroma', category: 'Futuristic', weights: ['400'], previewText: 'SPACE HORIZON 2001' },
+  { family: 'Electrolize', category: 'Futuristic', weights: ['400'], previewText: 'Digital Sensor Network' },
+  { family: 'Nova Square', category: 'Futuristic', weights: ['400'], previewText: 'GEOMETRIC MATRIX LAB' },
+  { family: 'Zen Dots', category: 'Futuristic', weights: ['400'], previewText: 'CYBERPUNK SHINJUKU' },
+  { family: 'Tourney', category: 'Futuristic', weights: ['700', '900'], previewText: 'SPEEDWAY HYPER CAR' },
+  { family: 'Bruno Ace', category: 'Futuristic', weights: ['400'], previewText: 'AERODYNAMIC WING' },
+  { family: 'Megrim', category: 'Futuristic', weights: ['400'], previewText: 'Wireframe Optical Line' },
+  { family: 'Allerta Stencil', category: 'Futuristic', weights: ['400'], previewText: 'CARGO STENCIL HAZARD' },
+  { family: 'Faster One', category: 'Futuristic', weights: ['400'], previewText: 'MACH 5 SUPERSONIC' },
+  { family: 'Goldman', category: 'Futuristic', weights: ['700'], previewText: 'HEAVY TITANIUM SUIT' },
+
+  // ==========================================
+  // 6. ARTISAN, SCRIPT & CALLIGRAPHIC (12 FONTS)
+  // ==========================================
+  { family: 'Caveat', category: 'Script', weights: ['600', '700'], previewText: 'Bespoke hand-crafted signature' },
+  { family: 'Dancing Script', category: 'Script', weights: ['600', '700'], previewText: 'Lively elegant script notes' },
+  { family: 'Pacifico', category: 'Script', weights: ['400'], previewText: 'Sunny California Coastal' },
+  { family: 'Satisfy', category: 'Script', weights: ['400'], previewText: 'Timeless smooth fountain pen' },
+  { family: 'Sacramento', category: 'Script', weights: ['400'], previewText: 'Delicate connected monogram' },
+  { family: 'Great Vibes', category: 'Script', weights: ['400'], previewText: 'Gala Royal Invitation' },
+  { family: 'Kaushan Script', category: 'Script', weights: ['400'], previewText: 'Expressive painterly brush' },
+  { family: 'Shadows Into Light', category: 'Script', weights: ['400'], previewText: 'Authentic clean handwriting' },
+  { family: 'Permanent Marker', category: 'Script', weights: ['400'], previewText: 'HEAVY ACRYLIC MARKER' },
+  { family: 'Rock Salt', category: 'Script', weights: ['400'], previewText: 'RAW EDGY STREET ART' },
+  { family: 'Marck Script', category: 'Script', weights: ['400'], previewText: 'Personal heartfelt letter' },
+  { family: 'Homemade Apple', category: 'Script', weights: ['400'], previewText: 'Artisan bakery recipe cursive' },
+];

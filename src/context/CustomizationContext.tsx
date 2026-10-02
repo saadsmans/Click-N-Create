@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { loadGoogleFont } from '../data/themeCatalog.ts';
+import { loadGoogleFont, loadGoogleFontsBatch, FONT_CATALOG } from '../data/themeCatalog.ts';
 import { SeoConfig, Invoice, ThemeTokens } from '../types/index.ts';
 
 export type { ThemeTokens };
@@ -504,6 +504,12 @@ export const CustomizationProvider: React.FC<{ children: React.ReactNode }> = ({
     root.style.removeProperty('--text-muted');
     root.style.removeProperty('--border-main');
 
+    // Set dataset attributes for layout variants
+    root.dataset.headerStyle = theme.headerStyle || 'floating_glass';
+    root.dataset.footerStyle = theme.footerStyle || 'modern_columns';
+    root.dataset.dropdownStyle = theme.dropdownStyle || 'glass_blur';
+    root.dataset.themePreset = theme.presetId || 'cyber_cyan';
+
     // 5. Glow & Shadow calculation
     let glowShadow = `0 0 25px ${accent1}66`;
     if (theme.glowIntensity === 'none') {
@@ -808,6 +814,12 @@ export const CustomizationProvider: React.FC<{ children: React.ReactNode }> = ({
 
   useEffect(() => {
     refreshCustomization();
+    if (typeof window !== 'undefined') {
+      const timer = setTimeout(() => {
+        loadGoogleFontsBatch(FONT_CATALOG.map((f) => f.family));
+      }, 50);
+      return () => clearTimeout(timer);
+    }
   }, []);
 
   const getPageContent = (pageKey: string): any => {

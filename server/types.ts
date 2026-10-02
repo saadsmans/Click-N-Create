@@ -349,8 +349,10 @@ export interface ThemeTokens {
   borderRadius: 'sharp' | 'minimal' | 'modern' | 'soft' | 'pill';
   borderWidth?: 'none' | 'thin' | 'bold' | 'brutalist';
   buttonStyle?: 'glow' | 'flat' | 'brutalist' | 'outline' | 'glass';
-  headerStyle?: 'floating_glass' | 'solid_bar' | 'editorial_clean';
-  backgroundPattern?: 'grid' | 'dots' | 'noise' | 'clean' | 'aurora';
+  headerStyle?: string;
+  footerStyle?: string;
+  dropdownStyle?: string;
+  backgroundPattern?: 'grid' | 'dots' | 'noise' | 'clean' | 'aurora' | 'circuit' | 'scanlines' | 'mesh';
   showGame: boolean;
   showGrid: boolean;
   customBadge?: string;
