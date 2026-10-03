@@ -485,24 +485,31 @@ router.get('/security/scanner', requireAdmin, (_req: Request, res: Response) => 
 // -------------------------------------------------------------
 // 12. Dynamic CMS, SEO, Sitemap & Health
 // -------------------------------------------------------------
+const handleCustomizationUpdate = (req: Request, res: Response) => {
+  return res.json({ success: true, customization: db.updateCustomization(req.body) });
+};
+
 router.get('/customization', (_req: Request, res: Response) => {
   return res.json({ success: true, customization: db.getCustomization() });
 });
+router.put('/customization', requireAdmin, handleCustomizationUpdate);
+router.post('/customization', requireAdmin, handleCustomizationUpdate);
+router.patch('/customization', requireAdmin, handleCustomizationUpdate);
 
-router.put('/customization', requireAdmin, (req: Request, res: Response) => {
-  return res.json({ success: true, customization: db.updateCustomization(req.body) });
-});
-
-router.put('/customization/theme', (req: Request, res: Response) => {
+const handleThemeUpdate = (req: Request, res: Response) => {
   if (req.body?.theme) {
     const updated = db.updateCustomization({ theme: req.body.theme });
     return res.json({ success: true, customization: updated });
   }
   return res.status(400).json({ success: false, error: 'Theme payload required' });
-});
+};
+
+router.put('/customization/theme', handleThemeUpdate);
+router.post('/customization/theme', handleThemeUpdate);
+router.patch('/customization/theme', handleThemeUpdate);
 
 // Dedicated Header Logo & Brandmark Upload / Update Endpoint
-router.post('/customization/logo', requireAdmin, (req: Request, res: Response) => {
+const handleLogoUpdate = (req: Request, res: Response) => {
   try {
     const { logoUrl, logoBase64, logoDisplayMode, logoHeight, customSiteIconUrl } = req.body || {};
     let finalLogoUrl = logoUrl || '';
@@ -549,10 +556,14 @@ router.post('/customization/logo', requireAdmin, (req: Request, res: Response) =
   } catch (err: any) {
     return res.status(500).json({ success: false, error: err?.message || 'Failed to update logo' });
   }
-});
+};
+
+router.post('/customization/logo', requireAdmin, handleLogoUpdate);
+router.put('/customization/logo', requireAdmin, handleLogoUpdate);
+router.patch('/customization/logo', requireAdmin, handleLogoUpdate);
 
 // Dedicated Browser Site Icon / Favicon Upload / Update Endpoint
-router.post('/customization/site-icon', requireAdmin, (req: Request, res: Response) => {
+const handleSiteIconUpdate = (req: Request, res: Response) => {
   try {
     const { siteIconUrl, siteIconBase64, removeIcon } = req.body || {};
     let finalIconUrl = siteIconUrl || '';
@@ -615,15 +626,22 @@ router.post('/customization/site-icon', requireAdmin, (req: Request, res: Respon
   } catch (err: any) {
     return res.status(500).json({ success: false, error: err?.message || 'Failed to update site icon' });
   }
-});
+};
+
+router.post('/customization/site-icon', requireAdmin, handleSiteIconUpdate);
+router.put('/customization/site-icon', requireAdmin, handleSiteIconUpdate);
+router.patch('/customization/site-icon', requireAdmin, handleSiteIconUpdate);
+
+const handleSeoUpdate = (req: Request, res: Response) => {
+  return res.json({ success: true, seo: db.updateSeo(req.body) });
+};
 
 router.get('/seo', (_req: Request, res: Response) => {
   return res.json({ success: true, seo: db.getSeo() });
 });
-
-router.put('/seo', requireAdmin, (req: Request, res: Response) => {
-  return res.json({ success: true, seo: db.updateSeo(req.body) });
-});
+router.put('/seo', requireAdmin, handleSeoUpdate);
+router.post('/seo', requireAdmin, handleSeoUpdate);
+router.patch('/seo', requireAdmin, handleSeoUpdate);
 
 // SEO Scoring & Technical Audit Engine
 router.get('/seo/audit', (_req: Request, res: Response) => {
@@ -753,14 +771,18 @@ router.get('/pages/:pageId', (req: Request, res: Response) => {
   return res.json({ success: true, pageId: req.params.pageId, content });
 });
 
-router.put('/pages/:pageId', requireAdmin, (req: Request, res: Response) => {
+const handlePageUpdate = (req: Request, res: Response) => {
   try {
     const updated = db.updatePageContent(req.params.pageId, req.body);
     return res.json({ success: true, pageId: req.params.pageId, content: updated });
   } catch (err: any) {
     return res.status(500).json({ success: false, error: err.message });
   }
-});
+};
+
+router.put('/pages/:pageId', requireAdmin, handlePageUpdate);
+router.post('/pages/:pageId', requireAdmin, handlePageUpdate);
+router.patch('/pages/:pageId', requireAdmin, handlePageUpdate);
 
 router.post('/pages/reset/:pageId', requireAdmin, (req: Request, res: Response) => {
   const reset = db.resetPageContent(req.params.pageId);
