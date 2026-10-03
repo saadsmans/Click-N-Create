@@ -46,8 +46,19 @@ export const LivePreviewBar: React.FC<LivePreviewBarProps> = ({ currentPath, onN
     setIsPublishing(true);
     try {
       if (typeof window !== 'undefined') {
-        localStorage.setItem('cnc_active_theme', JSON.stringify(previewTheme));
-        sessionStorage.removeItem('cnc_live_preview_theme');
+        try {
+          const cleanTheme: any = { ...previewTheme };
+          if (cleanTheme.customLogoUrl?.startsWith('data:')) delete cleanTheme.customLogoUrl;
+          if (cleanTheme.customSiteIconUrl?.startsWith('data:')) delete cleanTheme.customSiteIconUrl;
+          localStorage.setItem('cnc_active_theme', JSON.stringify(cleanTheme));
+        } catch (e) {
+          console.warn('localStorage theme quota warning in LivePreviewBar:', e);
+        }
+        try {
+          sessionStorage.removeItem('cnc_live_preview_theme');
+        } catch {
+          // ignore
+        }
       }
 
       await fetch('/api/customization/theme', {

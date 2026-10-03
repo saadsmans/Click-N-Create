@@ -1,4 +1,6 @@
 import express, { Request, Response } from 'express';
+import fs from 'fs';
+import path from 'path';
 import { db } from './db.ts';
 import { auditSeoConfig } from './seoAuditor.ts';
 import { runAiSeoImprovement } from './seoAiImprover.ts';
@@ -497,6 +499,111 @@ router.put('/customization/theme', (req: Request, res: Response) => {
     return res.json({ success: true, customization: updated });
   }
   return res.status(400).json({ success: false, error: 'Theme payload required' });
+});
+
+// Dedicated Header Logo & Brandmark Upload / Update Endpoint
+router.post('/customization/logo', requireAdmin, (req: Request, res: Response) => {
+  try {
+    const { logoUrl, logoBase64, logoDisplayMode, logoHeight, customSiteIconUrl } = req.body || {};
+    let finalLogoUrl = logoUrl || '';
+
+    // If a base64 image is uploaded, write it to public/uploads/ or use data URI
+    if (logoBase64 && typeof logoBase64 === 'string' && logoBase64.startsWith('data:image/')) {
+      try {
+        const matches = logoBase64.match(/^data:image\/([a-zA-Z0-9+]+);base64,(.+)$/);
+        if (matches && matches[2]) {
+          const rawExt = matches[1].toLowerCase();
+          const ext = rawExt === 'svg+xml' ? 'svg' : rawExt === 'jpeg' ? 'jpg' : rawExt;
+          const buffer = Buffer.from(matches[2], 'base64');
+          const fileName = `header-logo-${Date.now()}.${ext}`;
+          const uploadDir = path.resolve('public/uploads');
+          if (!fs.existsSync(uploadDir)) {
+            fs.mkdirSync(uploadDir, { recursive: true });
+          }
+          const filePath = path.join(uploadDir, fileName);
+          fs.writeFileSync(filePath, buffer);
+          finalLogoUrl = `/uploads/${fileName}`;
+        }
+      } catch (e) {
+        console.warn('Could not write logo file to disk, storing data URI directly:', e);
+        finalLogoUrl = logoBase64;
+      }
+    }
+
+    const currentCust = db.getCustomization();
+    const updatedTheme = {
+      ...(currentCust.theme || {}),
+      customLogoUrl: finalLogoUrl,
+      logoDisplayMode: logoDisplayMode || currentCust.theme?.logoDisplayMode || 'image_text',
+      logoHeight: Number(logoHeight) || currentCust.theme?.logoHeight || 36,
+      ...(customSiteIconUrl !== undefined ? { customSiteIconUrl } : {}),
+    };
+
+    const saved = db.updateCustomization({ theme: updatedTheme as any });
+    return res.json({
+      success: true,
+      customization: saved,
+      logoUrl: finalLogoUrl,
+      message: 'Header logo saved and live on website.',
+    });
+  } catch (err: any) {
+    return res.status(500).json({ success: false, error: err?.message || 'Failed to update logo' });
+  }
+});
+
+// Dedicated Browser Site Icon / Favicon Upload / Update Endpoint
+router.post('/customization/site-icon', requireAdmin, (req: Request, res: Response) => {
+  try {
+    const { siteIconUrl, siteIconBase64, removeIcon } = req.body || {};
+    let finalIconUrl = siteIconUrl || '';
+
+    if (removeIcon) {
+      finalIconUrl = '';
+    } else if (siteIconBase64 && typeof siteIconBase64 === 'string' && siteIconBase64.startsWith('data:image/')) {
+      try {
+        const matches = siteIconBase64.match(/^data:image\/([a-zA-Z0-9+]+);base64,(.+)$/);
+        if (matches && matches[2]) {
+          const rawExt = matches[1].toLowerCase();
+          const ext =
+            rawExt === 'svg+xml'
+              ? 'svg'
+              : rawExt === 'x-icon' || rawExt === 'vnd.microsoft.icon'
+              ? 'ico'
+              : rawExt === 'jpeg'
+              ? 'jpg'
+              : rawExt;
+          const buffer = Buffer.from(matches[2], 'base64');
+          const fileName = `site-icon-${Date.now()}.${ext}`;
+          const uploadDir = path.resolve('public/uploads');
+          if (!fs.existsSync(uploadDir)) {
+            fs.mkdirSync(uploadDir, { recursive: true });
+          }
+          const filePath = path.join(uploadDir, fileName);
+          fs.writeFileSync(filePath, buffer);
+          finalIconUrl = `/uploads/${fileName}`;
+        }
+      } catch (e) {
+        console.warn('Could not write site icon file to disk, storing data URI directly:', e);
+        finalIconUrl = siteIconBase64;
+      }
+    }
+
+    const currentCust = db.getCustomization();
+    const updatedTheme = {
+      ...(currentCust.theme || {}),
+      customSiteIconUrl: finalIconUrl,
+    };
+
+    const saved = db.updateCustomization({ theme: updatedTheme as any });
+    return res.json({
+      success: true,
+      customization: saved,
+      siteIconUrl: finalIconUrl,
+      message: finalIconUrl ? 'Site icon / favicon updated and live.' : 'Site icon removed, reset to default icon.',
+    });
+  } catch (err: any) {
+    return res.status(500).json({ success: false, error: err?.message || 'Failed to update site icon' });
+  }
 });
 
 router.get('/seo', (_req: Request, res: Response) => {

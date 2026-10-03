@@ -356,6 +356,10 @@ export interface ThemeTokens {
   showGame: boolean;
   showGrid: boolean;
   customBadge?: string;
+  customLogoUrl?: string;
+  logoDisplayMode?: 'image_text' | 'image_only' | 'text_only';
+  logoHeight?: number;
+  customSiteIconUrl?: string;
 }
 
 export interface SiteCustomization {

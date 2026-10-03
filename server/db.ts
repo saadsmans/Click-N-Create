@@ -1105,9 +1105,12 @@ class JSONDatabase {
   }
 
   public updateCustomization(updates: Partial<SiteCustomization>): SiteCustomization {
+    const current = this.getCustomization();
     this.data.customization = {
-      ...this.data.customization,
+      ...current,
       ...updates,
+      theme: updates.theme ? { ...(current.theme || {}), ...updates.theme } : current.theme,
+      seo: updates.seo ? { ...(current.seo || {}), ...updates.seo } : current.seo,
       updatedAt: new Date().toISOString(),
     };
     this.saveSync(this.data);

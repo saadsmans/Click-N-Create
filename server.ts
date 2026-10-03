@@ -17,6 +17,13 @@ async function startServer() {
   app.use(express.json({ limit: '10mb' }));
   app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
+  // Mount static uploads directory for admin uploaded assets & logos
+  const uploadsPath = path.resolve(__dirname, 'public/uploads');
+  if (!fs.existsSync(uploadsPath)) {
+    fs.mkdirSync(uploadsPath, { recursive: true });
+  }
+  app.use('/uploads', express.static(uploadsPath));
+
   // Mount API router
   app.use('/api', apiRouter);
 

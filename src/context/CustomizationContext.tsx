@@ -413,6 +413,37 @@ export const DEFAULT_CUSTOMIZATION: SiteCustomization = {
   updatedAt: new Date().toISOString(),
 };
 
+/**
+ * Sanitize theme tokens before caching in localStorage so large base64 data URIs
+ * never exceed browser storage quota limits.
+ */
+const sanitizeThemeForStorage = (theme: ThemeTokens): Partial<ThemeTokens> => {
+  if (!theme || typeof theme !== 'object') return {};
+  const clean: any = { ...theme };
+  if (clean.customLogoUrl && typeof clean.customLogoUrl === 'string' && clean.customLogoUrl.startsWith('data:')) {
+    delete clean.customLogoUrl;
+  }
+  if (clean.customSiteIconUrl && typeof clean.customSiteIconUrl === 'string' && clean.customSiteIconUrl.startsWith('data:')) {
+    delete clean.customSiteIconUrl;
+  }
+  return clean;
+};
+
+const safeSetLocalStorage = (key: string, value: any) => {
+  if (typeof window === 'undefined') return;
+  try {
+    const stringVal = typeof value === 'string' ? value : JSON.stringify(value);
+    localStorage.setItem(key, stringVal);
+  } catch (err) {
+    console.warn(`[LocalStorage] Storage quota warning or write error for "${key}":`, err);
+    try {
+      localStorage.removeItem('cnc_active_theme');
+    } catch {
+      // ignore
+    }
+  }
+};
+
 interface CustomizationContextType {
   customization: SiteCustomization;
   loading: boolean;
@@ -833,7 +864,8 @@ export const CustomizationProvider: React.FC<{ children: React.ReactNode }> = ({
     const merged = { ...customization.theme, ...tokens };
     setCustomization((prev) => ({ ...prev, theme: merged }));
     if (typeof window !== 'undefined') {
-      localStorage.setItem('cnc_active_theme', JSON.stringify(merged));
+      const sanitized = sanitizeThemeForStorage(merged);
+      safeSetLocalStorage('cnc_active_theme', sanitized);
     }
     applyThemeToDOM(merged);
   };

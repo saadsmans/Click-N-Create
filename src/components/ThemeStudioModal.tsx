@@ -173,8 +173,15 @@ export const ThemeStudioModal: React.FC<ThemeStudioModalProps> = ({ isOpen, onCl
   const handleApplyDraft = async (persist = false) => {
     applyPreviewTokens(draftTheme);
     if (typeof window !== 'undefined') {
-      sessionStorage.setItem('cnc_live_preview_theme', JSON.stringify(draftTheme));
-      window.dispatchEvent(new Event('cnc_preview_update'));
+      try {
+        const cleanDraft: any = { ...draftTheme };
+        if (cleanDraft.customLogoUrl?.startsWith('data:')) delete cleanDraft.customLogoUrl;
+        if (cleanDraft.customSiteIconUrl?.startsWith('data:')) delete cleanDraft.customSiteIconUrl;
+        sessionStorage.setItem('cnc_live_preview_theme', JSON.stringify(cleanDraft));
+        window.dispatchEvent(new Event('cnc_preview_update'));
+      } catch (e) {
+        console.warn('sessionStorage preview update warning:', e);
+      }
     }
     if (persist) {
       await saveThemeToBackend(draftTheme);
@@ -185,8 +192,19 @@ export const ThemeStudioModal: React.FC<ThemeStudioModalProps> = ({ isOpen, onCl
     setIsSaving(true);
     try {
       if (typeof window !== 'undefined') {
-        localStorage.setItem('cnc_active_theme', JSON.stringify(themeToSave));
-        sessionStorage.removeItem('cnc_live_preview_theme');
+        try {
+          const cleanTheme: any = { ...themeToSave };
+          if (cleanTheme.customLogoUrl?.startsWith('data:')) delete cleanTheme.customLogoUrl;
+          if (cleanTheme.customSiteIconUrl?.startsWith('data:')) delete cleanTheme.customSiteIconUrl;
+          localStorage.setItem('cnc_active_theme', JSON.stringify(cleanTheme));
+        } catch (e) {
+          console.warn('localStorage theme quota warning in ThemeStudioModal:', e);
+        }
+        try {
+          sessionStorage.removeItem('cnc_live_preview_theme');
+        } catch {
+          // ignore
+        }
       }
 
       // Try theme-specific endpoint

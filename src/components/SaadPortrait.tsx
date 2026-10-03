@@ -42,7 +42,11 @@ export const SaadPortrait: React.FC<SaadPortraitProps> = ({
           setCurrentImageSrc(result);
           setHasError(false);
           setIsUploaded(true);
-          localStorage.setItem('saad_custom_avatar', result);
+          try {
+            localStorage.setItem('saad_custom_avatar', result);
+          } catch (e) {
+            console.warn('localStorage quota warning for custom avatar:', e);
+          }
         }
       };
       reader.readAsDataURL(file);

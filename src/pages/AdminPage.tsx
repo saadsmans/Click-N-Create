@@ -54,6 +54,7 @@ import {
   EyeOff,
   KeyRound,
   Fingerprint,
+  Image as ImageIcon,
 } from 'lucide-react';
 import { SEOHead } from '../components/SEOHead.tsx';
 import { useTheme } from '../context/ThemeContext.tsx';
@@ -62,6 +63,7 @@ import { InvoiceView } from '../components/InvoiceView.tsx';
 import { InvoiceEditor } from '../components/InvoiceEditor.tsx';
 import { SeoManager } from '../components/SeoManager.tsx';
 import { AdvancedThemeCustomizer } from '../components/AdvancedThemeCustomizer.tsx';
+import { HeaderLogoManager } from '../components/HeaderLogoManager.tsx';
 import { VisitorAnalyticsConsole } from '../components/VisitorAnalyticsConsole.tsx';
 import { ThemeToggle } from '../components/ThemeToggle.tsx';
 import { PageEditor } from '../components/PageEditor.tsx';
@@ -110,6 +112,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onNavigate, initialTab }) 
 
   // Tab State
   const [activeTab, setActiveTab] = useState<
+    | 'logo'
     | 'page_editor'
     | 'security_credentials'
     | 'crm'
@@ -126,13 +129,16 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onNavigate, initialTab }) 
     | 'seo'
     | 'themes'
   >(() => {
+    if (initialTab === 'logo' || initialTab === 'header-logo') return 'logo';
     if (initialTab === 'system_ops' || initialTab === 'backend') return 'system_ops';
     if (initialTab === 'credentials' || initialTab === 'security') return 'security_credentials';
     return 'page_editor';
   });
 
   useEffect(() => {
-    if (initialTab === 'system_ops' || initialTab === 'backend') {
+    if (initialTab === 'logo' || initialTab === 'header-logo') {
+      setActiveTab('logo');
+    } else if (initialTab === 'system_ops' || initialTab === 'backend') {
       setActiveTab('system_ops');
     } else if (initialTab === 'credentials' || initialTab === 'security') {
       setActiveTab('security_credentials');
@@ -886,7 +892,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onNavigate, initialTab }) 
   }
 
   return (
-    <div className="pt-28 pb-24 md:pt-32 relative min-h-screen px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto bg-[var(--bg-main)] text-[var(--text-main)] transition-colors duration-300">
+    <div className="pt-32 sm:pt-36 md:pt-36 pb-24 relative min-h-screen px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto bg-[var(--bg-main)] text-[var(--text-main)] transition-colors duration-300">
       <SEOHead title="Admin Console — Saad M Studio" description="Complete digital studio operational control center." />
 
       {/* Main Top Header Banner */}
@@ -995,6 +1001,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onNavigate, initialTab }) 
       {/* Navigation Tabs Bar */}
       <div className="flex flex-wrap gap-2 pb-4 mb-6 border-b border-zinc-200 dark:border-white/10">
         {[
+          { id: 'logo', label: '🖼️ Logo & Site Icon (Favicon)', icon: ImageIcon, isSuper: true },
           { id: 'themes', label: '🎨 100 Themes & 115 Fonts Studio', icon: Palette },
           { id: 'page_editor', label: 'Page Editor (CMS)', icon: Layout, isSuper: true },
           { id: 'security_credentials', label: '🔐 Login & Security Credentials', icon: Key, isSuper: true },
@@ -1036,6 +1043,11 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onNavigate, initialTab }) 
           );
         })}
       </div>
+
+      {/* 0A. HEADER LOGO & BRANDMARK MANAGER */}
+      {activeTab === 'logo' && (
+        <HeaderLogoManager onSaved={() => refreshCustomization()} />
+      )}
 
       {/* 0. VISUAL PAGE EDITOR (CMS) */}
       {activeTab === 'page_editor' && (
