@@ -28,6 +28,7 @@ import { SEOHead } from '../components/SEOHead.tsx';
 import { useTheme } from '../context/ThemeContext.tsx';
 import { InvoiceView } from '../components/InvoiceView.tsx';
 import { ClientProfile, ProjectItem, Invoice, CommunicationMessage } from '../types/index.ts';
+import { safeParseJson } from '../utils/api.ts';
 
 interface ClientPortalPageProps {
   onNavigate: (path: string) => void;
@@ -42,8 +43,13 @@ export const ClientPortalPage: React.FC<ClientPortalPageProps> = ({ onNavigate }
   const [loginError, setLoginError] = useState<string>('');
 
   const [client, setClient] = useState<ClientProfile | null>(() => {
-    const saved = localStorage.getItem('cnc_client_profile');
-    return saved ? JSON.parse(saved) : null;
+    try {
+      const saved = typeof window !== 'undefined' ? localStorage.getItem('cnc_client_profile') : null;
+      if (!saved || !saved.trim()) return null;
+      return JSON.parse(saved);
+    } catch {
+      return null;
+    }
   });
 
   const [projects, setProjects] = useState<ProjectItem[]>([]);
@@ -65,7 +71,7 @@ export const ClientPortalPage: React.FC<ClientPortalPageProps> = ({ onNavigate }
   const loadPortalData = async (email: string) => {
     try {
       const res = await fetch(`/api/portal/data?email=${encodeURIComponent(email)}`);
-      const data = await res.json();
+      const data = await safeParseJson(res);
       if (data.success) {
         if (data.client) setClient(data.client);
         setProjects(data.projects || []);
@@ -95,18 +101,17 @@ export const ClientPortalPage: React.FC<ClientPortalPageProps> = ({ onNavigate }
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ accessKeyOrEmail: query }),
       });
-      const contentType = res.headers.get('content-type') || '';
-      if (contentType.includes('application/json')) {
-        const data = await res.json();
-        if (data.success && data.client) {
-          setClient(data.client);
-          setProjects(data.projects || []);
-          setInvoices(data.invoices || []);
-          setMessages(data.messages || []);
+      const data = await safeParseJson(res);
+      if (data.success && data.client) {
+        setClient(data.client);
+        setProjects(data.projects || []);
+        setInvoices(data.invoices || []);
+        setMessages(data.messages || []);
+        try {
           localStorage.setItem('cnc_client_profile', JSON.stringify(data.client));
-          setLoading(false);
-          return;
-        }
+        } catch {}
+        setLoading(false);
+        return;
       }
     } catch {
       console.warn('Backend client portal fetch bypassed, using client sandbox session');
@@ -127,7 +132,9 @@ export const ClientPortalPage: React.FC<ClientPortalPageProps> = ({ onNavigate }
     };
 
     setClient(sampleClient);
-    localStorage.setItem('cnc_client_profile', JSON.stringify(sampleClient));
+    try {
+      localStorage.setItem('cnc_client_profile', JSON.stringify(sampleClient));
+    } catch {}
     setLoading(false);
   };
 
@@ -155,7 +162,7 @@ export const ClientPortalPage: React.FC<ClientPortalPageProps> = ({ onNavigate }
           message: newMessage.trim(),
         }),
       });
-      const data = await res.json();
+      const data = await safeParseJson(res);
       if (data.success && data.message) {
         setMessages((prev) => [...prev, data.message]);
         setNewMessage('');

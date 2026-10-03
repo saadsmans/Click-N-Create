@@ -76,6 +76,7 @@ import {
   AuditLog,
   AdminUser,
 } from '../types/index.ts';
+import { safeParseJson } from '../utils/api.ts';
 
 interface AdminPageProps {
   onNavigate: (path: string) => void;
@@ -193,16 +194,6 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onNavigate, initialTab }) 
   const [newUserName, setNewUserName] = useState<string>('');
   const [newUserEmail, setNewUserEmail] = useState<string>('');
   const [newUserRole, setNewUserRole] = useState<AdminUser['role']>('admin');
-
-  const safeParseJson = async (res: Response) => {
-    try {
-      const text = await res.text();
-      if (!text || !text.trim()) return {};
-      return JSON.parse(text);
-    } catch {
-      return {};
-    }
-  };
 
   useEffect(() => {
     if (token) {

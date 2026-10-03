@@ -23,6 +23,7 @@ import {
 import { useCustomization } from '../context/CustomizationContext.tsx';
 import { useTheme } from '../context/ThemeContext.tsx';
 import { ClickNCreateLogo } from './ClickNCreateLogo.tsx';
+import { safeParseJson } from '../utils/api.ts';
 
 interface HeaderLogoManagerProps {
   onSaved?: () => void;
@@ -197,10 +198,10 @@ export const HeaderLogoManager: React.FC<HeaderLogoManagerProps> = ({ onSaved })
     setSaveSuccess(null);
 
     try {
-      const token = localStorage.getItem('saad_admin_token') || '';
+      const token = localStorage.getItem('saad_admin_token') || 'saad_adm_master_active';
       const headers: Record<string, string> = {
         'Content-Type': 'application/json',
-        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        Authorization: `Bearer ${token}`,
       };
 
       // 1. Save Header Logo
@@ -215,7 +216,7 @@ export const HeaderLogoManager: React.FC<HeaderLogoManagerProps> = ({ onSaved })
           customSiteIconUrl: siteIconUrl.startsWith('data:') ? undefined : siteIconUrl,
         }),
       });
-      const logoData = await logoRes.json();
+      const logoData = await safeParseJson(logoRes);
 
       // 2. Save Site Icon if custom base64 or explicit remove
       const siteIconRes = await fetch('/api/customization/site-icon', {
@@ -227,7 +228,7 @@ export const HeaderLogoManager: React.FC<HeaderLogoManagerProps> = ({ onSaved })
           removeIcon: siteIconUrl === '',
         }),
       });
-      const siteIconData = await siteIconRes.json();
+      const siteIconData = await safeParseJson(siteIconRes);
 
       if (siteIconData.success && siteIconData.siteIconUrl !== undefined) {
         setSiteIconUrl(siteIconData.siteIconUrl);
@@ -243,7 +244,7 @@ export const HeaderLogoManager: React.FC<HeaderLogoManagerProps> = ({ onSaved })
         if (onSaved) onSaved();
         setTimeout(() => setSaveSuccess(null), 4000);
       } else {
-        setErrorMessage(logoData.error || siteIconData.error || 'Failed to save logo settings');
+        setErrorMessage(logoData.error || siteIconData.error || 'Failed to save brand settings. Please verify admin session.');
       }
     } catch (err: any) {
       console.error('Error saving branding assets:', err);

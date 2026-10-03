@@ -29,6 +29,7 @@ import {
   Copy,
 } from 'lucide-react';
 import { SeoConfig, SeoPageSetting } from '../types/index.ts';
+import { safeParseJson } from '../utils/api.ts';
 
 interface SeoAuditReport {
   overallScore: number;
@@ -116,7 +117,7 @@ export const SeoManager: React.FC<SeoManagerProps> = ({ seoConfig, onSave }) => 
         },
         body: JSON.stringify({ seo: configToAudit || draft }),
       });
-      const data = await res.json();
+      const data = await safeParseJson(res);
       if (data.success && data.report) {
         setAuditReport(data.report);
       }
@@ -167,7 +168,7 @@ export const SeoManager: React.FC<SeoManagerProps> = ({ seoConfig, onSave }) => 
           currentKeywords: targetPageSetting?.keywords || draft.defaultKeywords,
         }),
       });
-      const data = await res.json();
+      const data = await safeParseJson(res);
       if (data.success && data.result) {
         setAiResult(data.result);
       }

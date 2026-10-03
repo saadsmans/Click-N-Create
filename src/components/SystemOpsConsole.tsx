@@ -28,6 +28,7 @@ import {
 } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext.tsx';
 import { MediaAsset, WebhookConfig, MaintenanceConfig, ServerEventLog } from '../types/index.ts';
+import { safeParseJson } from '../utils/api.ts';
 
 interface SystemOpsConsoleProps {
   token: string;
@@ -93,7 +94,7 @@ export const SystemOpsConsole: React.FC<SystemOpsConsoleProps> = ({ token }) => 
       const res = await fetch('/api/system/health', {
         headers: { Authorization: `Bearer ${token}` },
       });
-      const data = await res.json();
+      const data = await safeParseJson(res);
       if (data.success) {
         setHealth(data.health);
       }
@@ -110,7 +111,7 @@ export const SystemOpsConsole: React.FC<SystemOpsConsoleProps> = ({ token }) => 
       const res = await fetch('/api/system/logs', {
         headers: { Authorization: `Bearer ${token}` },
       });
-      const data = await res.json();
+      const data = await safeParseJson(res);
       if (data.success) {
         setLogs(data.logs || []);
       }
@@ -125,7 +126,7 @@ export const SystemOpsConsole: React.FC<SystemOpsConsoleProps> = ({ token }) => 
       const res = await fetch('/api/webhooks', {
         headers: { Authorization: `Bearer ${token}` },
       });
-      const data = await res.json();
+      const data = await safeParseJson(res);
       if (data.success) {
         setWebhooks(data.webhooks || []);
       }
@@ -140,7 +141,7 @@ export const SystemOpsConsole: React.FC<SystemOpsConsoleProps> = ({ token }) => 
       const res = await fetch('/api/media', {
         headers: { Authorization: `Bearer ${token}` },
       });
-      const data = await res.json();
+      const data = await safeParseJson(res);
       if (data.success) {
         setMediaAssets(data.media || []);
       }
@@ -153,7 +154,7 @@ export const SystemOpsConsole: React.FC<SystemOpsConsoleProps> = ({ token }) => 
   const fetchMaintenance = async () => {
     try {
       const res = await fetch('/api/system/maintenance');
-      const data = await res.json();
+      const data = await safeParseJson(res);
       if (data.success) {
         setMaintenance(data.maintenance);
       }
@@ -177,7 +178,7 @@ export const SystemOpsConsole: React.FC<SystemOpsConsoleProps> = ({ token }) => 
         method: 'POST',
         headers: { Authorization: `Bearer ${token}` },
       });
-      const data = await res.json();
+      const data = await safeParseJson(res);
       if (data.success) {
         showToast('Realistic demo data seeded successfully!');
         fetchHealth();
@@ -205,7 +206,7 @@ export const SystemOpsConsole: React.FC<SystemOpsConsoleProps> = ({ token }) => 
         method: 'POST',
         headers: { Authorization: `Bearer ${token}` },
       });
-      const data = await res.json();
+      const data = await safeParseJson(res);
       setTestWebhookResult(data);
       showToast('Test webhook payload dispatched!');
       fetchWebhooks();
@@ -234,7 +235,7 @@ export const SystemOpsConsole: React.FC<SystemOpsConsoleProps> = ({ token }) => 
           events: ['inquiry.created', 'invoice.paid', 'quote.submitted'],
         }),
       });
-      const data = await res.json();
+      const data = await safeParseJson(res);
       if (data.success) {
         setNewWhName('');
         setNewWhUrl('');
@@ -278,7 +279,7 @@ export const SystemOpsConsole: React.FC<SystemOpsConsoleProps> = ({ token }) => 
           sizeBytes: 120400,
         }),
       });
-      const data = await res.json();
+      const data = await safeParseJson(res);
       if (data.success) {
         setNewMediaName('');
         setNewMediaUrl('');
@@ -305,7 +306,7 @@ export const SystemOpsConsole: React.FC<SystemOpsConsoleProps> = ({ token }) => 
         enabled: updatedState,
       }),
     });
-    const data = await res.json();
+    const data = await safeParseJson(res);
     if (data.success) {
       setMaintenance(data.maintenance);
       showToast(`Maintenance mode ${updatedState ? 'ENABLED' : 'DISABLED'}`);
@@ -335,7 +336,7 @@ export const SystemOpsConsole: React.FC<SystemOpsConsoleProps> = ({ token }) => 
           },
         }),
       });
-      const data = await res.json();
+      const data = await safeParseJson(res);
       setEmailDispatchResult(data);
       showToast('Simulated email rendered and dispatched!');
     } catch (e) {

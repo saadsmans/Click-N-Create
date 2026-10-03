@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { Send, CheckCircle2, AlertCircle, Loader2, Sparkles, MessageSquare, Mail } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext.tsx';
 import { SITE_CONFIG } from '../data/site.ts';
+import { safeParseJson } from '../utils/api.ts';
 
 export interface ContactFormData {
   name: string;
@@ -59,8 +60,8 @@ export async function submitContactForm(data: ContactFormData): Promise<{ succes
       }),
     });
 
-    const result = await response.json();
-    if (response.ok && result.success !== 'false') {
+    const result = await safeParseJson(response);
+    if (response.ok && result.success !== 'false' && result.success !== false) {
       return {
         success: true,
         message: 'Your project enquiry has been stored and dispatched directly to Saad M at Mansurisaad28012@gmail.com.',
