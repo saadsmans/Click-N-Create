@@ -35,7 +35,7 @@ export const SERVICES: ServiceItem[] = [
     categoryTag: 'WEBSITES · WORDPRESS · FAST & MOBILE-READY',
     shortDescription: 'Clean, modern websites that make your business look trustworthy, open in under a second on phones, and make it effortless for customers to contact you.',
     fullDescription: 'Your website is usually the very first impression a potential customer has of your company. I build clean, professional websites designed to build trust and win you more clients. Whether you want a simple WordPress site where you can easily change text and photos yourself, or a high-speed custom website, everything is built to look great on mobile phones, load instantly, and get found on Google.',
-    image: '/file_00000000440061f7b67bc59e52b0df8e.png',
+    image: '',
     altText: 'Web Development 3D laptop representation with code interface, cloud components, and styling elements',
     pricingEstimate: 'Simple hourly rate (£35/hr) or fixed project quotes',
     typicalTimeline: '1 – 3 Weeks depending on how many pages you need',
