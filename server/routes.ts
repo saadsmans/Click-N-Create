@@ -581,6 +581,17 @@ router.post('/customization/site-icon', requireAdmin, (req: Request, res: Respon
           const filePath = path.join(uploadDir, fileName);
           fs.writeFileSync(filePath, buffer);
           finalIconUrl = `/uploads/${fileName}`;
+
+          // Also mirror to public root favicons so cold incognito tabs and browser address bars load it immediately
+          try {
+            const pubDir = path.resolve('public');
+            fs.writeFileSync(path.join(pubDir, 'favicon.png'), buffer);
+            fs.writeFileSync(path.join(pubDir, 'favicon-32x32.png'), buffer);
+            fs.writeFileSync(path.join(pubDir, 'favicon-16x16.png'), buffer);
+            fs.writeFileSync(path.join(pubDir, 'apple-touch-icon.png'), buffer);
+          } catch (mErr) {
+            console.warn('Could not mirror favicon to public root:', mErr);
+          }
         }
       } catch (e) {
         console.warn('Could not write site icon file to disk, storing data URI directly:', e);

@@ -27,6 +27,20 @@ async function startServer() {
   // Mount API router
   app.use('/api', apiRouter);
 
+  // Direct favicon handlers for browser address bars and cold incognito sessions
+  app.get('/favicon.ico', (_req, res) => {
+    const icoPath = path.resolve(__dirname, 'public/favicon.ico');
+    const pngPath = path.resolve(__dirname, 'public/favicon.png');
+    if (fs.existsSync(icoPath)) return res.sendFile(icoPath);
+    if (fs.existsSync(pngPath)) return res.sendFile(pngPath);
+    return res.status(204).end();
+  });
+  app.get('/favicon.png', (_req, res) => {
+    const pngPath = path.resolve(__dirname, 'public/favicon.png');
+    if (fs.existsSync(pngPath)) return res.sendFile(pngPath);
+    return res.status(204).end();
+  });
+
   // Root SEO endpoints for search engines
   app.get('/sitemap.xml', (req, res, next) => {
     (apiRouter as any).handle(req, res, next);
