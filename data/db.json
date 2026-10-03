@@ -2741,6 +2741,83 @@
           "dwellSeconds": 1
         }
       ]
+    },
+    {
+      "id": "log_1791001327105_kkh5",
+      "sessionId": "sess_1791001326945_i7b4s",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "mobile",
+      "browser": "Google Chrome",
+      "os": "Linux",
+      "screen": "384x832",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Search",
+      "localTime": "09:52",
+      "timestamp": "2026-10-03T04:22:07.105Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-03T04:22:07.105Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1791001327109_0qfd",
+      "sessionId": "sess_1791001326866_v6zdp",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "mobile",
+      "browser": "Chrome",
+      "os": "Android",
+      "screen": "0x0",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Organic Search",
+      "localTime": "09:52:06",
+      "timestamp": "2026-10-03T04:22:07.109Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-03T04:22:07.109Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1791001327110_9foy",
+      "sessionId": "sess_1791001326945_i7b4s",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "mobile",
+      "browser": "Google Chrome",
+      "os": "Linux",
+      "screen": "384x832",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Search",
+      "localTime": "09:52",
+      "timestamp": "2026-10-03T04:22:07.110Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-03T04:22:07.105Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/",
+          "timestamp": "2026-10-03T04:22:07.110Z",
+          "dwellSeconds": 1
+        }
+      ]
     }
   ],
   "activeSessions": {
@@ -2960,6 +3037,40 @@
         "/contact"
       ],
       "totalDwellSeconds": 32
+    },
+    "sess_1791001326945_i7b4s": {
+      "sessionId": "sess_1791001326945_i7b4s",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "mobile",
+      "browser": "Google Chrome",
+      "os": "Linux",
+      "source": "Google Search",
+      "lastSeen": 1791001359153,
+      "startedAt": "2026-10-03T04:22:07.105Z",
+      "pageHistory": [
+        "/"
+      ],
+      "totalDwellSeconds": 32
+    },
+    "sess_1791001326866_v6zdp": {
+      "sessionId": "sess_1791001326866_v6zdp",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "mobile",
+      "browser": "Chrome",
+      "os": "Android",
+      "source": "Google Organic Search",
+      "lastSeen": 1791001327109,
+      "startedAt": "2026-10-03T04:22:07.109Z",
+      "pageHistory": [
+        "/"
+      ],
+      "totalDwellSeconds": 1
     }
   },
   "auditLogs": [
