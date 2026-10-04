@@ -716,7 +716,7 @@ RATE: £${SITE_CONFIG.hourlyRateNumber}/hour (Fixed milestone package available)
 ESTIMATED TOTAL COST: £${totalCost.toLocaleString()}
 
 Contact Saad directly:
-Email: Mansurisaad28012@gmail.com
+Email: saadm.clickncreate@gmail.com
 WhatsApp: +44 7927 548123`;
   };
 

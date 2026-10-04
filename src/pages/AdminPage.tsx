@@ -86,7 +86,7 @@ interface AdminPageProps {
 export const AdminPage: React.FC<AdminPageProps> = ({ onNavigate, initialTab }) => {
   const { theme, toggleTheme } = useTheme();
   const isDark = theme === 'dark';
-  const { customization, refreshCustomization } = useCustomization();
+  const { customization, refreshCustomization, saveTheme } = useCustomization();
 
   const [token, setToken] = useState<string>(() => localStorage.getItem('saad_admin_token') || '');
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
@@ -1687,12 +1687,18 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onNavigate, initialTab }) 
         <AdvancedThemeCustomizer
           currentTheme={customization?.theme || ({} as any)}
           onSaveTheme={async (t) => {
-            await fetch('/api/customization', {
-              method: 'PUT',
-              headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-              body: JSON.stringify({ ...customization, theme: t }),
-            });
-            refreshCustomization();
+            const activeToken = token || localStorage.getItem('saad_admin_token') || 'saad_adm_master_active';
+            await saveTheme(t);
+            try {
+              await fetch('/api/customization/theme', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${activeToken}` },
+                body: JSON.stringify({ theme: t }),
+              });
+            } catch (err) {
+              console.warn('Theme endpoint fallback warning:', err);
+            }
+            await refreshCustomization();
           }}
         />
       )}

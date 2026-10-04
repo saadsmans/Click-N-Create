@@ -113,7 +113,7 @@ export const FAQS: FaqItem[] = [
     id: 'direct-communication-channels',
     category: 'Communication & Availability',
     question: 'How will we communicate during the project?',
-    answer: 'You talk directly with Saad M via WhatsApp (+44 7927 548123) for quick questions and updates, and email (Mansurisaad28012@gmail.com) for sending files and final reviews. You will never have to wait for an agency call center.'
+    answer: 'You talk directly with Saad M via WhatsApp (+44 7927 548123) for quick questions and updates, and email (saadm.clickncreate@gmail.com) for sending files and final reviews. You will never have to wait for an agency call center.'
   },
   {
     id: 'freelancer-vs-agency-difference',

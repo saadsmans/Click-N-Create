@@ -9,7 +9,7 @@ export const CONTACT_CHANNELS = {
   freelancerName: 'Saad M',
   brandName: 'Click N Create',
   role: 'Freelance Web Developer',
-  email: 'Mansurisaad28012@gmail.com',
+  email: 'saadm.clickncreate@gmail.com',
   phone: '+44 7927 548123',
   whatsappUrl: 'https://wa.me/447927548123',
   linkedinUrl: 'https://www.linkedin.com/in/saad-m-aa54bb375?utm_source=share_via&utm_content=profile&utm_medium=member_android',
@@ -34,8 +34,8 @@ export const SOCIAL_LINKS: SocialLink[] = [
   },
   {
     name: 'Email',
-    label: 'Mansurisaad28012@gmail.com',
-    url: 'mailto:Mansurisaad28012@gmail.com',
+    label: 'saadm.clickncreate@gmail.com',
+    url: 'mailto:saadm.clickncreate@gmail.com',
     iconName: 'Mail'
   }
 ];

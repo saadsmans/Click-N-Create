@@ -78,7 +78,7 @@ export const InvoiceEditor: React.FC<InvoiceEditorProps> = ({ initialInvoice, on
   const [sortCode, setSortCode] = useState(initialInvoice?.sortCode || '20-00-00');
   const [accountNumber, setAccountNumber] = useState(initialInvoice?.accountNumber || '83920194');
   const [iban, setIban] = useState(initialInvoice?.iban || 'GB29BARC20000083920194');
-  const [paypalEmail, setPaypalEmail] = useState(initialInvoice?.paypalEmail || 'Mansurisaad28012@gmail.com');
+  const [paypalEmail, setPaypalEmail] = useState(initialInvoice?.paypalEmail || 'saadm.clickncreate@gmail.com');
   const [paymentNotes, setPaymentNotes] = useState(
     initialInvoice?.paymentNotes ||
       'Thank you for your business! Please include your Invoice Number in bank transfer reference.'

@@ -4489,6 +4489,83 @@
           "dwellSeconds": 1
         }
       ]
+    },
+    {
+      "id": "log_1791096562154_ssw2",
+      "sessionId": "sess_1791096561843_7lhf5",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "mobile",
+      "browser": "Chrome",
+      "os": "Android",
+      "screen": "0x0",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Organic Search",
+      "localTime": "12:19:21",
+      "timestamp": "2026-10-04T06:49:22.154Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-04T06:49:22.154Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1791096562158_t92j",
+      "sessionId": "sess_1791096561907_85bhy",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "mobile",
+      "browser": "Google Chrome",
+      "os": "Linux",
+      "screen": "384x832",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Search",
+      "localTime": "12:19",
+      "timestamp": "2026-10-04T06:49:22.158Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-04T06:49:22.158Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1791096562160_cgky",
+      "sessionId": "sess_1791096561907_85bhy",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "mobile",
+      "browser": "Google Chrome",
+      "os": "Linux",
+      "screen": "384x832",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Search",
+      "localTime": "12:19",
+      "timestamp": "2026-10-04T06:49:22.160Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-04T06:49:22.158Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/",
+          "timestamp": "2026-10-04T06:49:22.160Z",
+          "dwellSeconds": 1
+        }
+      ]
     }
   ],
   "activeSessions": {
@@ -4862,13 +4939,13 @@
       "browser": "Google Chrome",
       "os": "Windows",
       "source": "ais-dev-nxdvfwymrltyryjugtbifv-253746061940.asia-southeast1.run.app",
-      "lastSeen": 1791037054854,
+      "lastSeen": 1791097333382,
       "startedAt": "2026-10-03T13:41:04.489Z",
       "pageHistory": [
         "/",
         "/portfolio"
       ],
-      "totalDwellSeconds": 2048
+      "totalDwellSeconds": 62323
     },
     "sess_1791034862576_6g77w": {
       "sessionId": "sess_1791034862576_6g77w",
@@ -4887,6 +4964,40 @@
         "/portfolio"
       ],
       "totalDwellSeconds": 46
+    },
+    "sess_1791096561843_7lhf5": {
+      "sessionId": "sess_1791096561843_7lhf5",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "mobile",
+      "browser": "Chrome",
+      "os": "Android",
+      "source": "Google Organic Search",
+      "lastSeen": 1791096562155,
+      "startedAt": "2026-10-04T06:49:22.155Z",
+      "pageHistory": [
+        "/"
+      ],
+      "totalDwellSeconds": 1
+    },
+    "sess_1791096561907_85bhy": {
+      "sessionId": "sess_1791096561907_85bhy",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "mobile",
+      "browser": "Google Chrome",
+      "os": "Linux",
+      "source": "Google Search",
+      "lastSeen": 1791097498959,
+      "startedAt": "2026-10-04T06:49:22.158Z",
+      "pageHistory": [
+        "/"
+      ],
+      "totalDwellSeconds": 937
     }
   },
   "auditLogs": [
@@ -4937,6 +5048,16 @@
     }
   ],
   "activeUserSessions": [
+    {
+      "id": "sess_1791097512257",
+      "email": "mansurisaad28012@gmail.com",
+      "device": "Desktop / Authorized Workstation",
+      "browser": "Secure Admin Session",
+      "os": "Admin Environment",
+      "ip": "127.0.0.1 (Direct)",
+      "lastActive": "2026-10-04T07:05:12.257Z",
+      "token": "saad_adm_1791097512257_5rve71pk"
+    },
     {
       "id": "sess_1790947436421",
       "email": "mansurisaad28012@gmail.com",
@@ -5001,24 +5122,24 @@
   "customization": {
     "theme": {
       "presetId": "cyber_cyan",
-      "presetName": "Cyber Neon Cyan (Default)",
+      "presetName": "Cyber Neon Cyan",
       "accentCyan": "#00F0FF",
-      "accentPurple": "#A855F7",
-      "accentGradient": "linear-gradient(135deg, #00F0FF 0%, #A855F7 50%, #FF0055 100%)",
-      "bgTone": "default",
-      "bgMainDark": "#07070F",
-      "bgSecondaryDark": "#0D0D1C",
-      "bgMainLight": "#F8FAFC",
-      "bgSecondaryLight": "#FFFFFF",
-      "fontDisplay": "Syne",
+      "accentPurple": "#D97706",
+      "accentGradient": "linear-gradient(135deg, #F59E0B 0%, #D97706 100%)",
+      "bgTone": "black",
+      "bgMainDark": "#000000",
+      "bgSecondaryDark": "#0F0F0F",
+      "bgMainLight": "#FFFBEB",
+      "bgSecondaryLight": "#FEF3C7",
+      "fontDisplay": "Playfair Display",
       "fontSans": "Plus Jakarta Sans",
-      "fontMono": "Hubot Sans",
-      "borderRadius": "modern",
+      "fontMono": "JetBrains Mono",
+      "borderRadius": "minimal",
       "borderWidth": "thin",
-      "glowIntensity": "cyber",
-      "buttonStyle": "glow",
-      "headerStyle": "floating_glass",
-      "backgroundPattern": "grid",
+      "glowIntensity": "subtle",
+      "buttonStyle": "solid",
+      "headerStyle": "glass_blur",
+      "backgroundPattern": "none",
       "customLogoUrl": "/uploads/header-logo-1791033749583.png",
       "logoDisplayMode": "image_text",
       "logoHeight": 44,
@@ -5407,7 +5528,7 @@
         ]
       }
     },
-    "updatedAt": "2026-10-03T15:48:35.383Z"
+    "updatedAt": "2026-10-04T07:05:12.244Z"
   },
   "adminCredentials": {
     "email": "mansurisaad28012@gmail.com",

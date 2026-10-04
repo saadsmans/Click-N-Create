@@ -151,7 +151,7 @@ export const PrivacyPolicyPage: React.FC<PrivacyPolicyPageProps> = ({ onNavigate
                 <div className="p-4 rounded-2xl bg-zinc-100 dark:bg-white/5 border border-zinc-200 dark:border-white/10 space-y-1 text-xs font-mono">
                   <p className="font-bold text-black dark:text-white">Click N Create (Sole Freelance Practice)</p>
                   <p className="text-black dark:text-white">Saad M</p>
-                  <p className="text-cyan-700 dark:text-[#00F0FF] font-bold">mansurisaad28012@gmail.com</p>
+                  <p className="text-cyan-700 dark:text-[#00F0FF] font-bold">saadm.clickncreate@gmail.com</p>
                   <p className="text-black dark:text-white">United Kingdom (Available Worldwide)</p>
                 </div>
                 <p>
@@ -377,7 +377,7 @@ export const PrivacyPolicyPage: React.FC<PrivacyPolicyPageProps> = ({ onNavigate
                   <li><strong className="text-black dark:text-white">Right to Data Portability:</strong> Receive your data in a structured, machine-readable format.</li>
                 </ul>
                 <p className="text-xs text-black dark:text-white pt-1">
-                  To exercise any statutory right, simply email Saad M at <a href="mailto:mansurisaad28012@gmail.com" className="text-cyan-700 dark:text-[#00F0FF] font-bold hover:underline">mansurisaad28012@gmail.com</a>. Requests will be fulfilled free of charge within 30 calendar days.
+                  To exercise any statutory right, simply email Saad M at <a href="mailto:saadm.clickncreate@gmail.com" className="text-cyan-700 dark:text-[#00F0FF] font-bold hover:underline">saadm.clickncreate@gmail.com</a>. Requests will be fulfilled free of charge within 30 calendar days.
                 </p>
               </div>
             </div>
@@ -421,7 +421,7 @@ export const PrivacyPolicyPage: React.FC<PrivacyPolicyPageProps> = ({ onNavigate
               </div>
               <div className="space-y-3 text-sm text-black dark:text-white leading-relaxed font-sans font-medium">
                 <p>
-                  If you have questions regarding this Privacy Policy, please contact Saad M directly at <a href="mailto:mansurisaad28012@gmail.com" className="text-cyan-700 dark:text-[#00F0FF] font-bold hover:underline">mansurisaad28012@gmail.com</a>.
+                  If you have questions regarding this Privacy Policy, please contact Saad M directly at <a href="mailto:saadm.clickncreate@gmail.com" className="text-cyan-700 dark:text-[#00F0FF] font-bold hover:underline">saadm.clickncreate@gmail.com</a>.
                 </p>
                 <p className="text-xs text-black dark:text-white">
                   You also hold the statutory right to lodge a complaint with the UK supervisory authority: Information Commissioner's Office (ICO) at <a href="https://ico.org.uk" target="_blank" rel="noreferrer" className="text-cyan-700 dark:text-[#00F0FF] font-bold hover:underline">ico.org.uk</a>.

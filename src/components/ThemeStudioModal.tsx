@@ -39,7 +39,7 @@ interface ThemeStudioModalProps {
 }
 
 export const ThemeStudioModal: React.FC<ThemeStudioModalProps> = ({ isOpen, onClose }) => {
-  const { customization, applyPreviewTokens, refreshCustomization } = useCustomization();
+  const { customization, applyPreviewTokens, refreshCustomization, saveTheme } = useCustomization();
   const { theme: modeTheme } = useTheme();
   const isDark = modeTheme === 'dark';
 
@@ -207,29 +207,10 @@ export const ThemeStudioModal: React.FC<ThemeStudioModalProps> = ({ isOpen, onCl
         }
       }
 
-      // Try theme-specific endpoint
-      await fetch('/api/customization/theme', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ theme: themeToSave }),
-      });
-
-      // Also try general endpoint if admin token is present
-      const token = localStorage.getItem('saad_admin_token') || '';
-      if (token) {
-        await fetch('/api/customization', {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ theme: themeToSave }),
-        });
-      }
-
+      await saveTheme(themeToSave);
       setSaveSuccess(true);
       setTimeout(() => setSaveSuccess(false), 2500);
-      refreshCustomization();
+      await refreshCustomization();
     } catch (err) {
       console.warn('Theme save warning:', err);
     } finally {

@@ -43,7 +43,7 @@ export const SAAD_PORTFOLIO = {
   tagline: 'Engineering modern, high-speed websites and innovative digital solutions with a solid technical foundation.',
   avatarImage: '/file_000000002c8882099a216468f5829320.png',
   cvDocumentImage: '/White%20simple%20Sales%20Representative%20Cv%20Resume_20260802_150122_0000.png',
-  email: 'Mansurisaad28012@gmail.com',
+  email: 'saadm.clickncreate@gmail.com',
   phone: '+91 9265129400',
   ukPhone: '+44 7927 548123',
   whatsappUrl: 'https://wa.me/447927548123',

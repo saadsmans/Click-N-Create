@@ -1105,8 +1105,8 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
                     <div className="text-xs text-zinc-600 mt-2 flex flex-wrap gap-2 font-mono">
                       <span>Bharuch, Gujarat, India</span>
                       <span>•</span>
-                      <a href="mailto:Mansurisaad28012@gmail.com" className="text-cyan-800 hover:underline">
-                        Mansurisaad28012@gmail.com
+                      <a href="mailto:saadm.clickncreate@gmail.com" className="text-cyan-800 hover:underline">
+                        saadm.clickncreate@gmail.com
                       </a>
                       <span>•</span>
                       <span>+91 9265129400</span>

@@ -17,7 +17,7 @@ export interface ContactFormData {
 }
 
 /**
- * Dispatches the enquiry directly to Mansurisaad28012@gmail.com
+ * Dispatches the enquiry directly to saadm.clickncreate@gmail.com
  * Uses formsubmit.co API with JSON payload and automatic fallback to mailto.
  */
 export async function submitContactForm(data: ContactFormData): Promise<{ success: boolean; message: string }> {
@@ -38,7 +38,7 @@ export async function submitContactForm(data: ContactFormData): Promise<{ succes
 
   // 2. Dispatch directly to personal inbox via FormSubmit API
   try {
-    const response = await fetch('https://formsubmit.co/ajax/Mansurisaad28012@gmail.com', {
+    const response = await fetch('https://formsubmit.co/ajax/saadm.clickncreate@gmail.com', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -64,7 +64,7 @@ export async function submitContactForm(data: ContactFormData): Promise<{ succes
     if (response.ok && result.success !== 'false' && result.success !== false) {
       return {
         success: true,
-        message: 'Your project enquiry has been stored and dispatched directly to Saad M at Mansurisaad28012@gmail.com.',
+        message: 'Your project enquiry has been stored and dispatched directly to Saad M at saadm.clickncreate@gmail.com.',
       };
     }
   } catch (err) {
@@ -76,11 +76,11 @@ export async function submitContactForm(data: ContactFormData): Promise<{ succes
   const mailtoBody = encodeURIComponent(
     `Name: ${data.name}\nEmail: ${data.email}\nPhone: ${data.phone || 'N/A'}\nBusiness: ${data.business || 'N/A'}\nService: ${data.service}\nBudget: ${data.budget}\nTimeline: ${data.timeline}\n\nProject Details:\n${data.projectDetails}`
   );
-  window.open(`mailto:Mansurisaad28012@gmail.com?subject=${mailtoSubject}&body=${mailtoBody}`, '_blank');
+  window.open(`mailto:saadm.clickncreate@gmail.com?subject=${mailtoSubject}&body=${mailtoBody}`, '_blank');
 
   return {
     success: true,
-    message: 'Your enquiry has been saved and prepared for Mansurisaad28012@gmail.com.',
+    message: 'Your enquiry has been saved and prepared for saadm.clickncreate@gmail.com.',
   };
 }
 
@@ -167,7 +167,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({ preselectedService }) 
       await submitContactForm(formData);
       setIsSuccess(true);
     } catch (err: any) {
-      setApiError(err?.message || 'Something went wrong. You can also email Mansurisaad28012@gmail.com directly.');
+      setApiError(err?.message || 'Something went wrong. You can also email saadm.clickncreate@gmail.com directly.');
     } finally {
       setIsLoading(false);
     }
@@ -208,7 +208,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({ preselectedService }) 
             </h3>
 
             <p className={`text-sm sm:text-base max-w-md mx-auto leading-relaxed ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>
-              Thank you, <strong className={isDark ? 'text-white' : 'text-zinc-900'}>{formData.name}</strong>. Your project enquiry was sent to <strong className="text-blue-500">Mansurisaad28012@gmail.com</strong>. Saad will personally review your specifications and reply within 24 business hours.
+              Thank you, <strong className={isDark ? 'text-white' : 'text-zinc-900'}>{formData.name}</strong>. Your project enquiry was sent to <strong className="text-blue-500">saadm.clickncreate@gmail.com</strong>. Saad will personally review your specifications and reply within 24 business hours.
             </p>
 
             <div className="pt-4 flex flex-wrap items-center justify-center gap-3">
@@ -258,7 +258,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({ preselectedService }) 
             <div>
               <div className="flex items-center gap-2 text-xs font-mono text-blue-500 uppercase tracking-wider mb-1 font-semibold">
                 <Sparkles className="w-3.5 h-3.5" />
-                <span>Direct Inbound to Mansurisaad28012@gmail.com</span>
+                <span>Direct Inbound to saadm.clickncreate@gmail.com</span>
               </div>
               <h3 className={`text-2xl font-bold font-display tracking-tight ${isDark ? 'text-white' : 'text-zinc-950'}`}>
                 Start Your Project with Saad M
@@ -425,7 +425,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({ preselectedService }) 
                 {isLoading ? (
                   <>
                     <Loader2 className="w-5 h-5 animate-spin" />
-                    <span>Sending to Mansurisaad28012@gmail.com...</span>
+                    <span>Sending to saadm.clickncreate@gmail.com...</span>
                   </>
                 ) : (
                   <>
@@ -436,7 +436,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({ preselectedService }) 
               </button>
 
               <div className="flex items-center justify-center gap-4 text-xs font-mono text-zinc-500 pt-1">
-                <span>Direct email: Mansurisaad28012@gmail.com</span>
+                <span>Direct email: saadm.clickncreate@gmail.com</span>
                 <span>·</span>
                 <a
                   href={SITE_CONFIG.whatsappUrl}

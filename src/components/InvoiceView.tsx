@@ -115,7 +115,7 @@ export const InvoiceView: React.FC<InvoiceViewProps> = ({ invoice, onBack, onUpd
             <div className="text-xs font-mono text-zinc-500 space-y-1">
               <p className="font-bold text-zinc-800 dark:text-zinc-200">Click N Create Digital Studio</p>
               <p>Lead Engineer: Saad M</p>
-              <p>Email: Mansurisaad28012@gmail.com</p>
+              <p>Email: saadm.clickncreate@gmail.com</p>
               <p>WhatsApp: +44 7927 548123</p>
               <p>Web: clickncreate.dev · London, United Kingdom</p>
             </div>
@@ -301,7 +301,7 @@ export const InvoiceView: React.FC<InvoiceViewProps> = ({ invoice, onBack, onUpd
           <p className="font-medium text-slate-800 dark:text-zinc-300">{invoice.paymentNotes}</p>
           <p className="text-[10px]">
             Thank you for choosing Click N Create. For questions regarding this invoice, contact Saad M at{' '}
-            <span className="text-[#00F0FF]">Mansurisaad28012@gmail.com</span>.
+            <span className="text-[#00F0FF]">saadm.clickncreate@gmail.com</span>.
           </p>
         </div>
       </div>

@@ -204,7 +204,7 @@ export const HeaderLogoManager: React.FC<HeaderLogoManagerProps> = ({ onSaved })
         Authorization: `Bearer ${token}`,
       };
 
-      // 1. Save Header Logo
+      // Unified Atomic Save for Header Logo & Browser Tab Icon
       const logoRes = await fetch('/api/customization/logo', {
         method: 'POST',
         headers,
@@ -213,38 +213,26 @@ export const HeaderLogoManager: React.FC<HeaderLogoManagerProps> = ({ onSaved })
           logoBase64: logoUrl.startsWith('data:') ? logoUrl : undefined,
           logoDisplayMode: displayMode,
           logoHeight: Number(logoHeight),
-          customSiteIconUrl: siteIconUrl.startsWith('data:') ? undefined : siteIconUrl,
+          customSiteIconUrl: siteIconUrl.startsWith('data:') ? '' : siteIconUrl,
+          siteIconBase64: siteIconUrl.startsWith('data:') ? siteIconUrl : undefined,
+          removeSiteIcon: siteIconUrl === '',
         }),
       });
       const logoData = await safeParseJson(logoRes);
 
-      // 2. Save Site Icon if custom base64 or explicit remove
-      const siteIconRes = await fetch('/api/customization/site-icon', {
-        method: 'POST',
-        headers,
-        body: JSON.stringify({
-          siteIconUrl: siteIconUrl.startsWith('data:') ? '' : siteIconUrl,
-          siteIconBase64: siteIconUrl.startsWith('data:') ? siteIconUrl : undefined,
-          removeIcon: siteIconUrl === '',
-        }),
-      });
-      const siteIconData = await safeParseJson(siteIconRes);
-
-      if (siteIconData.success && siteIconData.siteIconUrl !== undefined) {
-        setSiteIconUrl(siteIconData.siteIconUrl);
-      }
-
-      if (logoData.success && logoData.logoUrl) {
-        setLogoUrl(logoData.logoUrl);
-      }
-
-      if (logoData.success || siteIconData.success) {
+      if (logoData.success) {
+        if (logoData.logoUrl !== undefined) {
+          setLogoUrl(logoData.logoUrl);
+        }
+        if (logoData.siteIconUrl !== undefined) {
+          setSiteIconUrl(logoData.siteIconUrl);
+        }
         setSaveSuccess('Branding & Site Icons saved live across the entire website!');
         await refreshCustomization();
         if (onSaved) onSaved();
         setTimeout(() => setSaveSuccess(null), 4000);
       } else {
-        setErrorMessage(logoData.error || siteIconData.error || 'Failed to save brand settings. Please verify admin session.');
+        setErrorMessage(logoData.error || 'Failed to save brand settings. Please verify admin session.');
       }
     } catch (err: any) {
       console.error('Error saving branding assets:', err);

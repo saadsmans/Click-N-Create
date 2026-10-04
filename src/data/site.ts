@@ -38,7 +38,7 @@ export const SITE_CONFIG = {
   hourlyRate: '£35/hr',
   hourlyRateNumber: 35,
   currency: '£',
-  email: 'Mansurisaad28012@gmail.com',
+  email: 'saadm.clickncreate@gmail.com',
   phone: '+44 7927 548123',
   whatsappUrl: 'https://wa.me/447927548123',
   linkedinUrl: 'https://www.linkedin.com/in/saad-m-aa54bb375?utm_source=share_via&utm_content=profile&utm_medium=member_android',

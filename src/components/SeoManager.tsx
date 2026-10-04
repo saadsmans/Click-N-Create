@@ -1080,7 +1080,7 @@ export const SeoManager: React.FC<SeoManagerProps> = ({ seoConfig, onSave }) => 
                     '@type': 'Person',
                     name: draft.founderName,
                     jobTitle: 'Lead Full-Stack Web Developer & Designer',
-                    email: 'Mansurisaad28012@gmail.com',
+                    email: 'saadm.clickncreate@gmail.com',
                   },
                   url: draft.siteUrl,
                   description: draft.siteDescription,

@@ -145,7 +145,7 @@ export const ContactPage: React.FC = () => {
             </div>
           </div>
 
-          {/* Right Column: Project Enquiry Form (Dispatches to Mansurisaad28012@gmail.com) */}
+          {/* Right Column: Project Enquiry Form (Dispatches to saadm.clickncreate@gmail.com) */}
           <div className="lg:col-span-7">
             <ContactForm />
           </div>

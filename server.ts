@@ -14,8 +14,8 @@ async function startServer() {
   const isProd = process.env.NODE_ENV === 'production';
 
   app.use(cors());
-  app.use(express.json({ limit: '10mb' }));
-  app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+  app.use(express.json({ limit: '50mb' }));
+  app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
   // Mount static uploads directory for admin uploaded assets & logos
   const uploadsPath = path.resolve(__dirname, 'public/uploads');

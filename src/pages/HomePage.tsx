@@ -63,7 +63,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
           name: 'Click N Create — Freelance Web Development by Saad M',
           image: 'https://clickncreate.co.uk/file_00000000440061f7b67bc59e52b0df8e.png',
           url: 'https://clickncreate.co.uk',
-          email: 'Mansurisaad28012@gmail.com',
+          email: 'saadm.clickncreate@gmail.com',
           telephone: '+447927548123',
           priceRange: '£35/hr',
           currenciesAccepted: 'GBP, USD, EUR',

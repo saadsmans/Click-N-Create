@@ -1151,7 +1151,7 @@ export const PageEditor: React.FC<PageEditorProps> = ({ onNavigate }) => {
                       type="text"
                       value={formData.emailAddress || ''}
                       onChange={(e) => handleFieldChange('emailAddress', e.target.value)}
-                      placeholder="Mansurisaad28012@gmail.com"
+                      placeholder="saadm.clickncreate@gmail.com"
                       className={`w-full px-3 py-1.5 text-xs font-mono rounded-xl border ${
                         isDark ? 'bg-black/50 border-white/10 text-white' : 'bg-zinc-50 border-zinc-300 text-zinc-900'
                       }`}

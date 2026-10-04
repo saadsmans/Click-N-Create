@@ -356,7 +356,7 @@ export const DEFAULT_CUSTOMIZATION: SiteCustomization = {
       badgeText: 'DIRECT INBOUND TO SAAD M',
       whatsappNumber: '+44 7927 548123',
       phoneNumber: '+44 7927 548123',
-      emailAddress: 'Mansurisaad28012@gmail.com',
+      emailAddress: 'saadm.clickncreate@gmail.com',
       linkedinUrl: 'https://linkedin.com',
       availabilityStatus: 'Active & Open',
       availabilityText: 'Rate: £35/hr · Open for 2026 Projects',
@@ -455,6 +455,7 @@ interface CustomizationContextType {
   getPageContent: (pageKey: string) => any;
   refreshCustomization: () => Promise<void>;
   applyPreviewTokens: (tokens: Partial<ThemeTokens>) => void;
+  saveTheme: (theme: ThemeTokens) => Promise<boolean>;
   updatePageContent: (pageKey: string, pageData: any) => Promise<boolean>;
   resetPageContent: (pageKey: string) => Promise<boolean>;
   importPagesJson: (pagesJson: any) => Promise<boolean>;
@@ -466,6 +467,7 @@ const CustomizationContext = createContext<CustomizationContextType>({
   getPageContent: (key) => (DEFAULT_CUSTOMIZATION.pages as any)[key] || {},
   refreshCustomization: async () => {},
   applyPreviewTokens: () => {},
+  saveTheme: async () => false,
   updatePageContent: async () => false,
   resetPageContent: async () => false,
   importPagesJson: async () => false,
@@ -823,7 +825,14 @@ export const CustomizationProvider: React.FC<{ children: React.ReactNode }> = ({
         }
       }
 
-      const res = await fetch('/api/customization');
+      // Always fetch directly from server with cache-busting timestamp to prevent stale browser caches
+      const res = await fetch(`/api/customization?_t=${Date.now()}`, {
+        cache: 'no-store',
+        headers: {
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'Pragma': 'no-cache',
+        },
+      });
       const data = await safeParseJson(res);
       if (data.success && data.customization) {
         setCustomization(data.customization);
@@ -844,10 +853,20 @@ export const CustomizationProvider: React.FC<{ children: React.ReactNode }> = ({
   useEffect(() => {
     refreshCustomization();
     if (typeof window !== 'undefined') {
+      const handleRemoteSync = () => {
+        refreshCustomization();
+      };
+      window.addEventListener('storage', handleRemoteSync);
+      window.addEventListener('cnc_customization_saved', handleRemoteSync);
+
       const timer = setTimeout(() => {
         loadGoogleFontsBatch(FONT_CATALOG.map((f) => f.family));
       }, 50);
-      return () => clearTimeout(timer);
+      return () => {
+        clearTimeout(timer);
+        window.removeEventListener('storage', handleRemoteSync);
+        window.removeEventListener('cnc_customization_saved', handleRemoteSync);
+      };
     }
   }, []);
 
@@ -866,6 +885,43 @@ export const CustomizationProvider: React.FC<{ children: React.ReactNode }> = ({
       safeSetLocalStorage('cnc_active_theme', sanitized);
     }
     applyThemeToDOM(merged);
+  };
+
+  const saveTheme = async (themeToSave: ThemeTokens): Promise<boolean> => {
+    try {
+      const token = localStorage.getItem('saad_admin_token') || 'saad_adm_master_active';
+      const cleanTheme = { ...themeToSave };
+      if (cleanTheme.customLogoUrl?.startsWith('data:')) delete cleanTheme.customLogoUrl;
+      if (cleanTheme.customSiteIconUrl?.startsWith('data:')) delete cleanTheme.customSiteIconUrl;
+
+      // 1. Call dedicated theme endpoint
+      const res = await fetch('/api/customization/theme', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ theme: themeToSave }),
+      });
+      const data = await safeParseJson(res);
+
+      if (data.success && data.theme) {
+        setCustomization((prev) => ({
+          ...prev,
+          theme: data.theme,
+        }));
+        applyThemeToDOM(data.theme);
+        if (typeof window !== 'undefined') {
+          safeSetLocalStorage('cnc_active_theme', sanitizeThemeForStorage(data.theme));
+          window.dispatchEvent(new Event('cnc_customization_saved'));
+        }
+        return true;
+      }
+      return false;
+    } catch (err) {
+      console.error('Failed to save theme to server:', err);
+      return false;
+    }
   };
 
   const updatePageContent = async (pageKey: string, pageData: any): Promise<boolean> => {
@@ -963,6 +1019,7 @@ export const CustomizationProvider: React.FC<{ children: React.ReactNode }> = ({
         getPageContent,
         refreshCustomization,
         applyPreviewTokens,
+        saveTheme,
         updatePageContent,
         resetPageContent,
         importPagesJson,

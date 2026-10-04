@@ -73,7 +73,7 @@ export const SystemOpsConsole: React.FC<SystemOpsConsoleProps> = ({ token }) => 
   });
 
   // Email test
-  const [testEmailTo, setTestEmailTo] = useState<string>('mansurisaad28012@gmail.com');
+  const [testEmailTo, setTestEmailTo] = useState<string>('saadm.clickncreate@gmail.com');
   const [testTemplateId, setTestTemplateId] = useState<string>('tmpl-quote');
   const [emailDispatchResult, setEmailDispatchResult] = useState<any>(null);
   const [isSendingEmail, setIsSendingEmail] = useState<boolean>(false);

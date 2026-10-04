@@ -223,7 +223,7 @@ export const TermsPage: React.FC<TermsPageProps> = ({ onNavigate }) => {
               </button>
 
               <a
-                href="mailto:mansurisaad28012@gmail.com"
+                href="mailto:saadm.clickncreate@gmail.com"
                 className={`px-5 py-3.5 rounded-xl border font-mono text-xs flex items-center justify-center gap-2 transition-colors ${
                   isDark
                     ? 'border-white/10 hover:bg-white/10 text-white'

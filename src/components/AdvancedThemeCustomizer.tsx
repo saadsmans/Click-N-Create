@@ -63,6 +63,14 @@ export const AdvancedThemeCustomizer: React.FC<AdvancedThemeCustomizerProps> = (
     loadGoogleFontsBatch(FONT_CATALOG.map((f) => f.family));
   }, []);
 
+  // Synchronize draft state when currentTheme updates from server
+  React.useEffect(() => {
+    if (currentTheme?.presetId) {
+      setActivePresetId(currentTheme.presetId);
+      setDraft(currentTheme);
+    }
+  }, [currentTheme]);
+
   const categories = [
     { id: 'All', label: 'All 100 Themes', count: THEME_PRESETS.length },
     { id: 'Cyber & Sci-Fi', label: 'Cyber & Sci-Fi', count: 20, icon: Zap },
