@@ -205,7 +205,7 @@ const INITIAL_SCHEMA: DatabaseSchema = {
   customization: {
     theme: {
       presetId: 'cyber_cyan',
-      presetName: 'Cyber Neon Cyan',
+      presetName: 'Cyber Neon Cyan (Default)',
       fontDisplay: 'Syne',
       fontSans: 'Plus Jakarta Sans',
       fontMono: 'Hubot Sans',

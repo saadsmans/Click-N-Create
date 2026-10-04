@@ -4566,6 +4566,296 @@
           "dwellSeconds": 1
         }
       ]
+    },
+    {
+      "id": "log_1791097816525_yruk",
+      "sessionId": "sess_1791096561843_7lhf5",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "mobile",
+      "browser": "Chrome",
+      "os": "Android",
+      "screen": "0x0",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Organic Search",
+      "localTime": "12:40:16",
+      "timestamp": "2026-10-04T07:10:16.525Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-04T06:49:22.154Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/",
+          "timestamp": "2026-10-04T07:10:16.525Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1791097816568_jvds",
+      "sessionId": "sess_1791096561907_85bhy",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "mobile",
+      "browser": "Google Chrome",
+      "os": "Linux",
+      "screen": "384x832",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Search",
+      "localTime": "12:40",
+      "timestamp": "2026-10-04T07:10:16.568Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-04T06:49:22.158Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/",
+          "timestamp": "2026-10-04T07:10:16.568Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1791097816573_l46c",
+      "sessionId": "sess_1791096561907_85bhy",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "mobile",
+      "browser": "Google Chrome",
+      "os": "Linux",
+      "screen": "384x832",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Search",
+      "localTime": "12:40",
+      "timestamp": "2026-10-04T07:10:16.573Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-04T06:49:22.158Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/",
+          "timestamp": "2026-10-04T07:10:16.573Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1791097827280_wwbg",
+      "sessionId": "sess_1791096561907_85bhy",
+      "path": "/admin",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "mobile",
+      "browser": "Google Chrome",
+      "os": "Linux",
+      "screen": "384x832",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Search",
+      "localTime": "12:40",
+      "timestamp": "2026-10-04T07:10:27.280Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-04T06:49:22.158Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/admin",
+          "timestamp": "2026-10-04T07:10:27.280Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1791097858724_dub2",
+      "sessionId": "sess_1791096561907_85bhy",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "mobile",
+      "browser": "Google Chrome",
+      "os": "Linux",
+      "screen": "384x832",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Search",
+      "localTime": "12:40",
+      "timestamp": "2026-10-04T07:10:58.724Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-04T06:49:22.158Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/",
+          "timestamp": "2026-10-04T07:10:58.724Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1791097929961_77ye",
+      "sessionId": "sess_1791096561907_85bhy",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "mobile",
+      "browser": "Google Chrome",
+      "os": "Linux",
+      "screen": "384x832",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Search",
+      "localTime": "12:42",
+      "timestamp": "2026-10-04T07:12:09.961Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-04T06:49:22.158Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/",
+          "timestamp": "2026-10-04T07:12:09.961Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1791097929962_jmsx",
+      "sessionId": "sess_1791096561843_7lhf5",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "mobile",
+      "browser": "Chrome",
+      "os": "Android",
+      "screen": "384x675",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Organic Search",
+      "localTime": "12:42:09",
+      "timestamp": "2026-10-04T07:12:09.962Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-04T06:49:22.154Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/",
+          "timestamp": "2026-10-04T07:12:09.962Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1791097929966_w4az",
+      "sessionId": "sess_1791096561907_85bhy",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "mobile",
+      "browser": "Google Chrome",
+      "os": "Linux",
+      "screen": "384x832",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Search",
+      "localTime": "12:42",
+      "timestamp": "2026-10-04T07:12:09.966Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-04T06:49:22.158Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/",
+          "timestamp": "2026-10-04T07:12:09.966Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1791097935903_6kiu",
+      "sessionId": "sess_1791096561843_7lhf5",
+      "path": "/portfolio",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "mobile",
+      "browser": "Chrome",
+      "os": "Android",
+      "screen": "384x675",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Organic Search",
+      "localTime": "12:42:15",
+      "timestamp": "2026-10-04T07:12:15.903Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-04T06:49:22.154Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/portfolio",
+          "timestamp": "2026-10-04T07:12:15.903Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1791097935905_wywy",
+      "sessionId": "sess_1791096561907_85bhy",
+      "path": "/portfolio",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "mobile",
+      "browser": "Google Chrome",
+      "os": "Linux",
+      "screen": "384x832",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Search",
+      "localTime": "12:42",
+      "timestamp": "2026-10-04T07:12:15.905Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-04T06:49:22.158Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/portfolio",
+          "timestamp": "2026-10-04T07:12:15.905Z",
+          "dwellSeconds": 1
+        }
+      ]
     }
   ],
   "activeSessions": {
@@ -4939,13 +5229,13 @@
       "browser": "Google Chrome",
       "os": "Windows",
       "source": "ais-dev-nxdvfwymrltyryjugtbifv-253746061940.asia-southeast1.run.app",
-      "lastSeen": 1791097333382,
+      "lastSeen": 1791097948781,
       "startedAt": "2026-10-03T13:41:04.489Z",
       "pageHistory": [
         "/",
         "/portfolio"
       ],
-      "totalDwellSeconds": 62323
+      "totalDwellSeconds": 62942
     },
     "sess_1791034862576_6g77w": {
       "sessionId": "sess_1791034862576_6g77w",
@@ -4967,7 +5257,7 @@
     },
     "sess_1791096561843_7lhf5": {
       "sessionId": "sess_1791096561843_7lhf5",
-      "path": "/",
+      "path": "/portfolio",
       "country": "India",
       "countryCode": "IN",
       "city": "Mumbai",
@@ -4975,16 +5265,17 @@
       "browser": "Chrome",
       "os": "Android",
       "source": "Google Organic Search",
-      "lastSeen": 1791096562155,
+      "lastSeen": 1791098205976,
       "startedAt": "2026-10-04T06:49:22.155Z",
       "pageHistory": [
-        "/"
+        "/",
+        "/portfolio"
       ],
-      "totalDwellSeconds": 1
+      "totalDwellSeconds": 270
     },
     "sess_1791096561907_85bhy": {
       "sessionId": "sess_1791096561907_85bhy",
-      "path": "/",
+      "path": "/portfolio",
       "country": "India",
       "countryCode": "IN",
       "city": "Mumbai",
@@ -4992,12 +5283,14 @@
       "browser": "Google Chrome",
       "os": "Linux",
       "source": "Google Search",
-      "lastSeen": 1791097498959,
+      "lastSeen": 1791098199971,
       "startedAt": "2026-10-04T06:49:22.158Z",
       "pageHistory": [
-        "/"
+        "/",
+        "/admin",
+        "/portfolio"
       ],
-      "totalDwellSeconds": 937
+      "totalDwellSeconds": 264
     }
   },
   "auditLogs": [
@@ -5122,28 +5415,32 @@
   "customization": {
     "theme": {
       "presetId": "cyber_cyan",
-      "presetName": "Cyber Neon Cyan",
+      "presetName": "Cyber Neon Cyan (Default)",
       "accentCyan": "#00F0FF",
-      "accentPurple": "#D97706",
-      "accentGradient": "linear-gradient(135deg, #F59E0B 0%, #D97706 100%)",
-      "bgTone": "black",
-      "bgMainDark": "#000000",
-      "bgSecondaryDark": "#0F0F0F",
-      "bgMainLight": "#FFFBEB",
-      "bgSecondaryLight": "#FEF3C7",
-      "fontDisplay": "Playfair Display",
+      "accentPurple": "#A855F7",
+      "accentGradient": "linear-gradient(135deg, #00F0FF 0%, #A855F7 50%, #FF0055 100%)",
+      "bgTone": "default",
+      "bgMainDark": "#07070F",
+      "bgSecondaryDark": "#0D0D1C",
+      "bgMainLight": "#F8FAFC",
+      "bgSecondaryLight": "#FFFFFF",
+      "fontDisplay": "Syne",
       "fontSans": "Plus Jakarta Sans",
-      "fontMono": "JetBrains Mono",
-      "borderRadius": "minimal",
+      "fontMono": "Hubot Sans",
+      "borderRadius": "modern",
       "borderWidth": "thin",
-      "glowIntensity": "subtle",
-      "buttonStyle": "solid",
-      "headerStyle": "glass_blur",
-      "backgroundPattern": "none",
+      "glowIntensity": "cyber",
+      "buttonStyle": "glow",
+      "headerStyle": "hdr_cyber_cyan",
+      "backgroundPattern": "grid",
       "customLogoUrl": "/uploads/header-logo-1791033749583.png",
       "logoDisplayMode": "image_text",
       "logoHeight": 44,
-      "customSiteIconUrl": "/uploads/site-icon-1791034074249.png"
+      "customSiteIconUrl": "/uploads/site-icon-1791034074249.png",
+      "textColorDark": "#F8FAFC",
+      "textColorLight": "#0F172A",
+      "footerStyle": "ftr_cyber_cyan",
+      "dropdownStyle": "dd_cyber_cyan"
     },
     "seo": {
       "siteTitle": "Click N Create | Saad M — Freelance Web Developer & Designer",
@@ -5528,7 +5825,7 @@
         ]
       }
     },
-    "updatedAt": "2026-10-04T07:05:12.244Z"
+    "updatedAt": "2026-10-04T07:10:46.588Z"
   },
   "adminCredentials": {
     "email": "mansurisaad28012@gmail.com",

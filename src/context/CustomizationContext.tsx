@@ -163,6 +163,8 @@ export interface SiteCustomization {
 
 export const DEFAULT_CUSTOMIZATION: SiteCustomization = {
   theme: {
+    presetId: 'cyber_cyan',
+    presetName: 'Cyber Neon Cyan (Default)',
     fontDisplay: 'Syne',
     fontSans: 'Plus Jakarta Sans',
     fontMono: 'Hubot Sans',
