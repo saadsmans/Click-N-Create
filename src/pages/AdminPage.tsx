@@ -201,6 +201,23 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onNavigate, initialTab }) 
     }
   }, [token]);
 
+  // Real-time live analytics telemetry polling every 6s while active on analytics tab
+  useEffect(() => {
+    if (isAuthenticated && activeTab === 'analytics' && token) {
+      const timer = setInterval(() => {
+        fetch('/api/analytics/stats', { headers: { Authorization: `Bearer ${token}` } })
+          .then((res) => safeParseJson(res))
+          .then((data) => {
+            if (data && data.success) {
+              setAnalytics(data);
+            }
+          })
+          .catch(() => {});
+      }, 6000);
+      return () => clearInterval(timer);
+    }
+  }, [isAuthenticated, activeTab, token]);
+
   const verifyToken = async (authToken: string) => {
     if (!authToken) {
       setIsAuthenticated(false);
@@ -2158,7 +2175,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onNavigate, initialTab }) 
                 type="email"
                 value={newUserEmail}
                 onChange={(e) => setNewUserEmail(e.target.value)}
-                placeholder="elena@clickncreate.dev"
+                placeholder="elena@clickncreate.co.uk"
                 required
                 className="w-full px-3 py-2 rounded-xl border border-zinc-300 dark:border-white/10 bg-slate-50 dark:bg-black/40 text-zinc-950 dark:text-white placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-cyan-500"
               />

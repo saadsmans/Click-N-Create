@@ -869,7 +869,7 @@ export const PageEditor: React.FC<PageEditorProps> = ({ onNavigate }) => {
                           metric: '+250% Inbound Leads',
                           description: 'Custom responsive web application built with modern React.',
                           tags: ['React 19', 'TypeScript', 'Tailwind CSS'],
-                          liveUrl: 'https://clickncreate.dev',
+                          liveUrl: 'https://clickncreate.co.uk',
                         })
                       }
                       className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-cyan-500/10 text-cyan-400 hover:bg-cyan-500/20 transition-all"
@@ -1257,7 +1257,7 @@ export const PageEditor: React.FC<PageEditorProps> = ({ onNavigate }) => {
                     C
                   </div>
                   <span className="text-[11px] text-zinc-400 font-mono truncate">
-                    https://clickncreate.dev{activeMeta.path}
+                    https://clickncreate.co.uk{activeMeta.path}
                   </span>
                 </div>
                 <h4 className="text-base text-cyan-400 font-medium hover:underline cursor-pointer truncate">
@@ -1275,7 +1275,7 @@ export const PageEditor: React.FC<PageEditorProps> = ({ onNavigate }) => {
                 </div>
                 <div className="flex items-center gap-2 text-xs font-mono text-zinc-400">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                  <span>Canonical URL automatically configured: https://clickncreate.dev{activeMeta.path}</span>
+                  <span>Canonical URL automatically configured: https://clickncreate.co.uk{activeMeta.path}</span>
                 </div>
               </div>
             </div>
@@ -1318,7 +1318,7 @@ export const PageEditor: React.FC<PageEditorProps> = ({ onNavigate }) => {
                   <span className="w-2 h-2 rounded-full bg-emerald-500/80" />
                 </div>
                 <span className="truncate max-w-[200px] text-zinc-400">
-                  clickncreate.dev{activeMeta.path}
+                  clickncreate.co.uk{activeMeta.path}
                 </span>
                 <span className="w-2" />
               </div>

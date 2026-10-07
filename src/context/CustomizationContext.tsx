@@ -296,7 +296,7 @@ export const DEFAULT_CUSTOMIZATION: SiteCustomization = {
           metric: '+180% Mobile Conversion',
           description: 'Ultra-fast headless commerce storefront with dynamic slide-out cart, multi-currency Stripe checkout, and 99+ mobile Google PageSpeed score.',
           tags: ['React 19', 'Shopify API', 'Tailwind CSS', 'Stripe'],
-          liveUrl: 'https://clickncreate.dev',
+          liveUrl: 'https://clickncreate.co.uk',
         },
         {
           id: 'proj_02',
@@ -307,7 +307,7 @@ export const DEFAULT_CUSTOMIZATION: SiteCustomization = {
           metric: '0.4s First Paint Time',
           description: 'Interactive architectural portfolio featuring real-time WebGL floor plan previews, smooth physics scrolling, and instant consultation scheduling.',
           tags: ['TypeScript', 'Three.js', 'Framer Motion', 'Tailwind'],
-          liveUrl: 'https://clickncreate.dev',
+          liveUrl: 'https://clickncreate.co.uk',
         },
         {
           id: 'proj_03',
@@ -318,7 +318,7 @@ export const DEFAULT_CUSTOMIZATION: SiteCustomization = {
           metric: '40hrs Weekly Admin Saved',
           description: 'Enterprise fleet dispatch dashboard with live tracking indicators, automated PDF quote generator, and client dispatch management.',
           tags: ['Node.js', 'Express', 'React', 'TypeScript'],
-          liveUrl: 'https://clickncreate.dev',
+          liveUrl: 'https://clickncreate.co.uk',
         },
       ],
     },

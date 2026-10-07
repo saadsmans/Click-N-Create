@@ -1,5 +1,48 @@
 {
-  "inquiries": [],
+  "inquiries": [
+    {
+      "id": "inq-3",
+      "name": "David Wright",
+      "email": "david@wrighttech.io",
+      "phone": "+44 7700 900444",
+      "business": "WrightTech Logistics",
+      "service": "Custom Web Application & Dashboard",
+      "budget": "£3,500+",
+      "timeline": "Urgent (< 3 weeks)",
+      "projectDetails": "Real-time fleet tracking dashboard with client portal, PDF exports, and automated reports.",
+      "status": "contacted",
+      "source": "LinkedIn Referral",
+      "createdAt": "2026-03-03T11:10:00Z"
+    },
+    {
+      "id": "inq-2",
+      "name": "Sophie Clark",
+      "email": "sophie@gloworganics.com",
+      "phone": "+44 7700 900333",
+      "business": "Glow Organics",
+      "service": "E-Commerce & Shopify Store",
+      "budget": "£2,000 - £4,000",
+      "timeline": "1 month",
+      "projectDetails": "Need a custom skincare store with subscription checkout, high-converting product pages, and lightning fast loading.",
+      "status": "in_review",
+      "source": "Direct Visit",
+      "createdAt": "2026-03-02T16:45:00Z"
+    },
+    {
+      "id": "inq-1",
+      "name": "Jordan Miller",
+      "email": "jordan.miller@crestwood.co.uk",
+      "phone": "+44 7700 900222",
+      "business": "Crestwood Architecture",
+      "service": "Custom Website Redesign",
+      "budget": "£1,500 - £3,000",
+      "timeline": "2-4 weeks",
+      "projectDetails": "Looking for a high-end architectural portfolio with smooth page transitions, high-res gallery lazy loading, and mobile responsiveness.",
+      "status": "new",
+      "source": "Google Search",
+      "createdAt": "2026-03-01T14:22:00Z"
+    }
+  ],
   "quotes": [
     {
       "serviceId": "branding-design",
@@ -21,9 +64,221 @@
       "createdAt": "2026-10-02T14:54:38.353Z"
     }
   ],
-  "clients": [],
-  "projects": [],
-  "tasks": [],
+  "clients": [
+    {
+      "id": "cli-1",
+      "name": "Alex Rivera",
+      "email": "alex@apexdigital.co.uk",
+      "company": "Apex Digital Ltd",
+      "phone": "+44 7700 900123",
+      "portalAccessKey": "APEX-2026-PORTAL",
+      "status": "active",
+      "totalSpent": 1400,
+      "notes": "NextGen Headless Store & Brand Design System",
+      "createdAt": "2026-01-10T10:00:00Z",
+      "updatedAt": "2026-02-01T15:30:00Z"
+    },
+    {
+      "id": "cli-2",
+      "name": "Dr. Elena Rostova",
+      "email": "dr.elena@luminawellness.co.uk",
+      "company": "Lumina Health & Aesthetics",
+      "phone": "+44 7700 900456",
+      "portalAccessKey": "LUMINA-2026-KEY",
+      "status": "active",
+      "totalSpent": 2100,
+      "notes": "Luxury Clinic Booking Engine & Patient Portal",
+      "createdAt": "2026-01-18T12:00:00Z",
+      "updatedAt": "2026-02-15T09:00:00Z"
+    },
+    {
+      "id": "cli-3",
+      "name": "Marcus Vance",
+      "email": "marcus@nexusventures.io",
+      "company": "Nexus Ventures",
+      "phone": "+44 7700 900789",
+      "portalAccessKey": "NEXUS-2026-PASS",
+      "status": "active",
+      "totalSpent": 3500,
+      "notes": "Enterprise SaaS Real-Time Dashboard & Analytics API",
+      "createdAt": "2026-01-05T08:30:00Z",
+      "updatedAt": "2026-02-28T18:00:00Z"
+    }
+  ],
+  "projects": [
+    {
+      "id": "proj-1",
+      "title": "NextGen E-Commerce & Brand Redesign",
+      "clientId": "cli-1",
+      "clientName": "Alex Rivera",
+      "clientEmail": "alex@apexdigital.co.uk",
+      "category": "E-Commerce & Branding",
+      "status": "development",
+      "progressPercentage": 85,
+      "startDate": "2026-01-15",
+      "deadline": "2026-03-30",
+      "budget": 1400,
+      "paidAmount": 1400,
+      "milestones": [
+        {
+          "id": "m-1",
+          "title": "Architecture Blueprint & Figma Design",
+          "status": "completed",
+          "dueDate": "2026-01-25"
+        },
+        {
+          "id": "m-2",
+          "title": "Frontend Development & 3D Interactive Hero",
+          "status": "completed",
+          "dueDate": "2026-02-15"
+        },
+        {
+          "id": "m-3",
+          "title": "Stripe Checkout & Shopify Integration",
+          "status": "in_progress",
+          "dueDate": "2026-03-15"
+        },
+        {
+          "id": "m-4",
+          "title": "QA & Mobile Speed Optimization (<0.5s)",
+          "status": "pending",
+          "dueDate": "2026-03-30"
+        }
+      ],
+      "liveUrl": "https://apexdigital.co.uk",
+      "createdAt": "2026-01-15T10:00:00Z",
+      "updatedAt": "2026-02-20T14:00:00Z"
+    },
+    {
+      "id": "proj-2",
+      "title": "Lumina Aesthetics Booking Engine & Portal",
+      "clientId": "cli-2",
+      "clientName": "Dr. Elena Rostova",
+      "clientEmail": "dr.elena@luminawellness.co.uk",
+      "category": "Web Application",
+      "status": "development",
+      "progressPercentage": 60,
+      "startDate": "2026-01-20",
+      "deadline": "2026-04-15",
+      "budget": 2100,
+      "paidAmount": 1050,
+      "milestones": [
+        {
+          "id": "m-21",
+          "title": "Visual Identity & Booking User Journey",
+          "status": "completed",
+          "dueDate": "2026-02-05"
+        },
+        {
+          "id": "m-22",
+          "title": "Calendar Sync & SMS Confirmation System",
+          "status": "in_progress",
+          "dueDate": "2026-03-20"
+        },
+        {
+          "id": "m-23",
+          "title": "Patient Portal & HIPAA / GDPR Compliance",
+          "status": "pending",
+          "dueDate": "2026-04-10"
+        }
+      ],
+      "liveUrl": "https://luminawellness.co.uk",
+      "createdAt": "2026-01-20T11:00:00Z",
+      "updatedAt": "2026-02-25T16:00:00Z"
+    },
+    {
+      "id": "proj-3",
+      "title": "Nexus SaaS Enterprise Dashboard & API",
+      "clientId": "cli-3",
+      "clientName": "Marcus Vance",
+      "clientEmail": "marcus@nexusventures.io",
+      "category": "Full-Stack Web App",
+      "status": "launched",
+      "progressPercentage": 100,
+      "startDate": "2026-01-08",
+      "deadline": "2026-02-25",
+      "budget": 3500,
+      "paidAmount": 3500,
+      "milestones": [
+        {
+          "id": "m-31",
+          "title": "Database Schema & Auth Engine",
+          "status": "completed",
+          "dueDate": "2026-01-20"
+        },
+        {
+          "id": "m-32",
+          "title": "Real-time WebSocket Data Feeds",
+          "status": "completed",
+          "dueDate": "2026-02-10"
+        },
+        {
+          "id": "m-33",
+          "title": "Production Cloud Deployment & Monitoring",
+          "status": "completed",
+          "dueDate": "2026-02-25"
+        }
+      ],
+      "liveUrl": "https://nexusventures.io/dashboard",
+      "createdAt": "2026-01-08T09:00:00Z",
+      "updatedAt": "2026-02-28T19:00:00Z"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "tsk-1",
+      "projectId": "proj-1",
+      "title": "Finalize Three.js / WebGL Dynamic Interactive Hero",
+      "description": "Ensure 60 FPS rendering on mobile devices with fallback CSS glow canvas.",
+      "priority": "urgent",
+      "status": "in_progress",
+      "dueDate": "2026-03-25",
+      "assignedTo": "Saad M",
+      "createdAt": "2026-02-01T10:00:00Z"
+    },
+    {
+      "id": "tsk-2",
+      "projectId": "proj-1",
+      "title": "Setup Stripe Webhook & Automated Receipt PDFs",
+      "description": "Auto-generate and email jsPDF invoices upon successful milestone checkout.",
+      "priority": "high",
+      "status": "completed",
+      "dueDate": "2026-02-10",
+      "assignedTo": "Saad M",
+      "createdAt": "2026-01-28T12:00:00Z"
+    },
+    {
+      "id": "tsk-3",
+      "projectId": "proj-2",
+      "title": "Deploy Client Portal Token Generator & SSL Security",
+      "description": "One-click login link delivery for clients without requiring passwords.",
+      "priority": "high",
+      "status": "completed",
+      "dueDate": "2026-02-18",
+      "assignedTo": "Saad M",
+      "createdAt": "2026-02-05T15:00:00Z"
+    },
+    {
+      "id": "tsk-4",
+      "title": "Complete Core Web Vitals Audit for 100 Mobile PageSpeed",
+      "description": "Audit image compression, defer non-critical CSS, verify Syne and Hubot Sans subsets.",
+      "priority": "medium",
+      "status": "review",
+      "dueDate": "2026-04-05",
+      "assignedTo": "Saad M",
+      "createdAt": "2026-02-12T11:00:00Z"
+    },
+    {
+      "id": "tsk-5",
+      "title": "Configure Google Search Console & XML Sitemap Indexing",
+      "description": "Submit dynamic /sitemap.xml and robots.txt to Google and Bing webmaster tools.",
+      "priority": "medium",
+      "status": "todo",
+      "dueDate": "2026-04-12",
+      "assignedTo": "Saad M",
+      "createdAt": "2026-02-15T14:00:00Z"
+    }
+  ],
   "appointments": [],
   "messages": [],
   "expenses": [],
@@ -40,7 +295,7 @@
       "name": "Client Onboarding & Portal Access",
       "category": "welcome",
       "subject": "Welcome to Click N Create! Access Your Client Project Portal",
-      "body": "Hi {{clientName}},\n\nWelcome to Click N Create! I am excited to collaborate on {{projectName}}.\n\nYour secure client portal has been provisioned. You can track live sprint milestones, review design proofs, download invoices, and message me directly:\n\n👉 Portal URL: https://clickncreate.dev/portal\n🔑 Access Key: {{portalAccessKey}}\n\nLooking forward to bringing this vision to life!\n\nBest,\nSaad M · Click N Create"
+      "body": "Hi {{clientName}},\n\nWelcome to Click N Create! I am excited to collaborate on {{projectName}}.\n\nYour secure client portal has been provisioned. You can track live sprint milestones, review design proofs, download invoices, and message me directly:\n\n👉 Portal URL: https://clickncreate.co.uk/portal\n🔑 Access Key: {{portalAccessKey}}\n\nLooking forward to bringing this vision to life!\n\nBest,\nSaad M · Click N Create"
     },
     {
       "id": "tmpl-invoice",
@@ -89,7 +344,151 @@
     "type": "bar",
     "enabled": true
   },
-  "invoices": [],
+  "invoices": [
+    {
+      "id": "inv-3",
+      "invoiceNumber": "INV-2026-003",
+      "date": "2026-02-20",
+      "dueDate": "2026-03-05",
+      "status": "paid",
+      "currency": "GBP",
+      "currencySymbol": "£",
+      "clientId": "cli-3",
+      "clientName": "Marcus Vance",
+      "clientEmail": "marcus@nexusventures.io",
+      "clientBusiness": "Nexus Ventures",
+      "clientAddress": "100 Bishopsgate, London, UK",
+      "providerName": "Saad M",
+      "providerBrand": "Click N Create",
+      "providerEmail": "saadm.clickncreate@gmail.com",
+      "providerPhone": "+44 7700 900000",
+      "providerWebsite": "https://clickncreate.com",
+      "providerAddress": "London, United Kingdom",
+      "projectTitle": "Nexus SaaS Enterprise Dashboard & API",
+      "lineItems": [
+        {
+          "id": "li-31",
+          "description": "Real-Time Analytics Dashboard & High-Throughput API",
+          "quantityOrHours": 100,
+          "unitRate": 35,
+          "total": 3500
+        }
+      ],
+      "subtotal": 3500,
+      "discountPercentage": 0,
+      "discountAmount": 0,
+      "taxPercentage": 0,
+      "taxAmount": 0,
+      "depositPaid": 3500,
+      "totalDue": 0,
+      "bankName": "Barclays Bank UK",
+      "accountName": "Saad M / Click N Create",
+      "sortCode": "20-00-00",
+      "accountNumber": "83920194",
+      "createdAt": "2026-02-20T14:00:00Z",
+      "updatedAt": "2026-02-25T16:00:00Z"
+    },
+    {
+      "id": "inv-2",
+      "invoiceNumber": "INV-2026-002",
+      "date": "2026-02-01",
+      "dueDate": "2026-02-15",
+      "status": "sent",
+      "currency": "GBP",
+      "currencySymbol": "£",
+      "clientId": "cli-2",
+      "clientName": "Dr. Elena Rostova",
+      "clientEmail": "dr.elena@luminawellness.co.uk",
+      "clientBusiness": "Lumina Health & Aesthetics",
+      "clientAddress": "88 Harley Street, London, UK",
+      "providerName": "Saad M",
+      "providerBrand": "Click N Create",
+      "providerEmail": "saadm.clickncreate@gmail.com",
+      "providerPhone": "+44 7700 900000",
+      "providerWebsite": "https://clickncreate.com",
+      "providerAddress": "London, United Kingdom",
+      "projectTitle": "Lumina Aesthetics Booking Engine & Portal",
+      "lineItems": [
+        {
+          "id": "li-21",
+          "description": "Bespoke UI Design & Mobile Booking Workflow",
+          "quantityOrHours": 30,
+          "unitRate": 35,
+          "total": 1050
+        },
+        {
+          "id": "li-22",
+          "description": "Patient Portal, HIPAA/GDPR Compliance, Calendar Sync",
+          "quantityOrHours": 30,
+          "unitRate": 35,
+          "total": 1050
+        }
+      ],
+      "subtotal": 2100,
+      "discountPercentage": 0,
+      "discountAmount": 0,
+      "taxPercentage": 0,
+      "taxAmount": 0,
+      "depositPaid": 1050,
+      "totalDue": 1050,
+      "bankName": "Barclays Bank UK",
+      "accountName": "Saad M / Click N Create",
+      "sortCode": "20-00-00",
+      "accountNumber": "83920194",
+      "createdAt": "2026-02-01T11:00:00Z",
+      "updatedAt": "2026-02-01T11:00:00Z"
+    },
+    {
+      "id": "inv-1",
+      "invoiceNumber": "INV-2026-001",
+      "date": "2026-01-15",
+      "dueDate": "2026-01-29",
+      "status": "paid",
+      "currency": "GBP",
+      "currencySymbol": "£",
+      "clientId": "cli-1",
+      "clientName": "Alex Rivera",
+      "clientEmail": "alex@apexdigital.co.uk",
+      "clientBusiness": "Apex Digital Ltd",
+      "clientAddress": "24 Silicon Roundabout, London, UK",
+      "providerName": "Saad M",
+      "providerBrand": "Click N Create",
+      "providerEmail": "saadm.clickncreate@gmail.com",
+      "providerPhone": "+44 7700 900000",
+      "providerWebsite": "https://clickncreate.com",
+      "providerAddress": "London, United Kingdom",
+      "projectTitle": "NextGen E-Commerce & Brand Redesign",
+      "lineItems": [
+        {
+          "id": "li-1",
+          "description": "Custom Headless Frontend & 3D Interactive Interface",
+          "quantityOrHours": 25,
+          "unitRate": 35,
+          "total": 875
+        },
+        {
+          "id": "li-2",
+          "description": "Stripe & Shopify Checkout Integration with Webhooks",
+          "quantityOrHours": 15,
+          "unitRate": 35,
+          "total": 525
+        }
+      ],
+      "subtotal": 1400,
+      "discountPercentage": 0,
+      "discountAmount": 0,
+      "taxPercentage": 0,
+      "taxAmount": 0,
+      "depositPaid": 1400,
+      "totalDue": 0,
+      "bankName": "Barclays Bank UK",
+      "accountName": "Saad M / Click N Create",
+      "sortCode": "20-00-00",
+      "accountNumber": "83920194",
+      "createdAt": "2026-01-15T10:00:00Z",
+      "updatedAt": "2026-01-20T12:00:00Z"
+    }
+  ],
   "analytics": [
     {
       "sessionId": "sess_1790852988021_7e3q9",
@@ -4856,6 +5255,257 @@
           "dwellSeconds": 1
         }
       ]
+    },
+    {
+      "id": "log_1791379942525_w3mj",
+      "sessionId": "sess_1791379942272_kh5p6",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "mobile",
+      "browser": "Google Chrome",
+      "os": "Linux",
+      "screen": "384x832",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Search",
+      "localTime": "19:02",
+      "timestamp": "2026-10-07T13:32:22.525Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-07T13:32:22.525Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1791379942528_uc3r",
+      "sessionId": "sess_1791379942209_a58vs",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "mobile",
+      "browser": "Chrome",
+      "os": "Android",
+      "screen": "0x0",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Organic Search",
+      "localTime": "19:02:22",
+      "timestamp": "2026-10-07T13:32:22.528Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-07T13:32:22.528Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1791379942529_8d1d",
+      "sessionId": "sess_1791379942272_kh5p6",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "mobile",
+      "browser": "Google Chrome",
+      "os": "Linux",
+      "screen": "384x832",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Search",
+      "localTime": "19:02",
+      "timestamp": "2026-10-07T13:32:22.529Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-07T13:32:22.525Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/",
+          "timestamp": "2026-10-07T13:32:22.529Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1791380145780_2o7y",
+      "sessionId": "sess_1791379942272_kh5p6",
+      "path": "/admin",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "mobile",
+      "browser": "Google Chrome",
+      "os": "Linux",
+      "screen": "384x832",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Search",
+      "localTime": "19:05",
+      "timestamp": "2026-10-07T13:35:45.780Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-07T13:32:22.525Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/admin",
+          "timestamp": "2026-10-07T13:35:45.780Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1791389206561_fpbq",
+      "sessionId": "sess_1791379942272_kh5p6",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "mobile",
+      "browser": "Chrome",
+      "os": "Android",
+      "screen": "384x675",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Organic Search",
+      "localTime": "21:36:46",
+      "timestamp": "2026-10-07T16:06:46.561Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-07T13:32:22.525Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/",
+          "timestamp": "2026-10-07T16:06:46.561Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1791389206566_xwvw",
+      "sessionId": "sess_1791379942272_kh5p6",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "mobile",
+      "browser": "Google Chrome",
+      "os": "Linux",
+      "screen": "384x832",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Search",
+      "localTime": "21:36",
+      "timestamp": "2026-10-07T16:06:46.566Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-07T13:32:22.525Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/",
+          "timestamp": "2026-10-07T16:06:46.566Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1791389206574_pp2j",
+      "sessionId": "sess_1791379942272_kh5p6",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "mobile",
+      "browser": "Google Chrome",
+      "os": "Linux",
+      "screen": "384x832",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Search",
+      "localTime": "21:36",
+      "timestamp": "2026-10-07T16:06:46.574Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-07T13:32:22.525Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/",
+          "timestamp": "2026-10-07T16:06:46.574Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1791389212617_uh8s",
+      "sessionId": "sess_1791379942272_kh5p6",
+      "path": "/admin",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "mobile",
+      "browser": "Chrome",
+      "os": "Android",
+      "screen": "384x675",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Organic Search",
+      "localTime": "21:36:52",
+      "timestamp": "2026-10-07T16:06:52.617Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-07T13:32:22.525Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/admin",
+          "timestamp": "2026-10-07T16:06:52.617Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1791389212631_4lzo",
+      "sessionId": "sess_1791379942272_kh5p6",
+      "path": "/admin",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "mobile",
+      "browser": "Google Chrome",
+      "os": "Linux",
+      "screen": "384x832",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Search",
+      "localTime": "21:36",
+      "timestamp": "2026-10-07T16:06:52.631Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-07T13:32:22.525Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/admin",
+          "timestamp": "2026-10-07T16:06:52.631Z",
+          "dwellSeconds": 1
+        }
+      ]
     }
   ],
   "activeSessions": {
@@ -5291,6 +5941,41 @@
         "/portfolio"
       ],
       "totalDwellSeconds": 264
+    },
+    "sess_1791379942272_kh5p6": {
+      "sessionId": "sess_1791379942272_kh5p6",
+      "path": "/admin",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "mobile",
+      "browser": "Google Chrome",
+      "os": "Linux",
+      "source": "Google Search",
+      "lastSeen": 1791389261458,
+      "startedAt": "2026-10-07T13:32:22.525Z",
+      "pageHistory": [
+        "/",
+        "/admin"
+      ],
+      "totalDwellSeconds": 49
+    },
+    "sess_1791379942209_a58vs": {
+      "sessionId": "sess_1791379942209_a58vs",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "mobile",
+      "browser": "Chrome",
+      "os": "Android",
+      "source": "Google Organic Search",
+      "lastSeen": 1791379942528,
+      "startedAt": "2026-10-07T13:32:22.528Z",
+      "pageHistory": [
+        "/"
+      ],
+      "totalDwellSeconds": 1
     }
   },
   "auditLogs": [
@@ -5341,6 +6026,86 @@
     }
   ],
   "activeUserSessions": [
+    {
+      "id": "sess_1791381011665",
+      "email": "admin@clickncreate.com",
+      "device": "Desktop / Authorized Workstation",
+      "browser": "Secure Admin Session",
+      "os": "Admin Environment",
+      "ip": "127.0.0.1 (Direct)",
+      "lastActive": "2026-10-07T13:50:11.665Z",
+      "token": "saad_adm_1791381011665_wxw2j9fk"
+    },
+    {
+      "id": "sess_1791381011664",
+      "email": "mansurisaad28012@gmail.com",
+      "device": "Desktop / Authorized Workstation",
+      "browser": "Secure Admin Session",
+      "os": "Admin Environment",
+      "ip": "127.0.0.1 (Direct)",
+      "lastActive": "2026-10-07T13:50:11.664Z",
+      "token": "saad_adm_1791381011664_ovp7zw6c"
+    },
+    {
+      "id": "sess_1791381011663",
+      "email": "saadm.clickncreate@gmail.com",
+      "device": "Desktop / Authorized Workstation",
+      "browser": "Secure Admin Session",
+      "os": "Admin Environment",
+      "ip": "127.0.0.1 (Direct)",
+      "lastActive": "2026-10-07T13:50:11.663Z",
+      "token": "saad_adm_1791381011663_7pnftkhk"
+    },
+    {
+      "id": "sess_1791380243184",
+      "email": "mansurisaad28012@gmail.com",
+      "device": "Desktop / Authorized Workstation",
+      "browser": "Secure Admin Session",
+      "os": "Admin Environment",
+      "ip": "127.0.0.1 (Direct)",
+      "lastActive": "2026-10-07T13:37:23.184Z",
+      "token": "saad_adm_1791380243184_5jfqfavd"
+    },
+    {
+      "id": "sess_1791380243182",
+      "email": "saadm.clickncreate@gmail.com",
+      "device": "Desktop / Authorized Workstation",
+      "browser": "Secure Admin Session",
+      "os": "Admin Environment",
+      "ip": "127.0.0.1 (Direct)",
+      "lastActive": "2026-10-07T13:37:23.182Z",
+      "token": "saad_adm_1791380243182_sjvvjs6l"
+    },
+    {
+      "id": "sess_1791380243180",
+      "email": "admin@clickncreate.com",
+      "device": "Desktop / Authorized Workstation",
+      "browser": "Secure Admin Session",
+      "os": "Admin Environment",
+      "ip": "127.0.0.1 (Direct)",
+      "lastActive": "2026-10-07T13:37:23.180Z",
+      "token": "saad_adm_1791380243180_fjpdx1ks"
+    },
+    {
+      "id": "sess_1791380243177",
+      "email": "mansurisaad28012@gmail.com",
+      "device": "Desktop / Authorized Workstation",
+      "browser": "Secure Admin Session",
+      "os": "Admin Environment",
+      "ip": "127.0.0.1 (Direct)",
+      "lastActive": "2026-10-07T13:37:23.177Z",
+      "token": "saad_adm_1791380243177_wp5t7l1l"
+    },
+    {
+      "id": "sess_1791380243169",
+      "email": "saadm.clickncreate@gmail.com",
+      "device": "Desktop / Authorized Workstation",
+      "browser": "Secure Admin Session",
+      "os": "Admin Environment",
+      "ip": "127.0.0.1 (Direct)",
+      "lastActive": "2026-10-07T13:37:23.169Z",
+      "token": "saad_adm_1791380243169_dq60e8r7"
+    },
     {
       "id": "sess_1791097512257",
       "email": "mansurisaad28012@gmail.com",
@@ -5406,7 +6171,7 @@
     {
       "id": "adm-owner-1",
       "name": "Saad M",
-      "email": "mansurisaad28012@gmail.com",
+      "email": "saadm.clickncreate@gmail.com",
       "role": "owner",
       "status": "active",
       "createdAt": "2026-01-01T00:00:00Z"
@@ -5766,7 +6531,7 @@
         "badgeText": "DIRECT INBOUND TO SAAD M",
         "whatsappNumber": "+44 7927 548123",
         "phoneNumber": "+44 7927 548123",
-        "emailAddress": "Mansurisaad28012@gmail.com",
+        "emailAddress": "saadm.clickncreate@gmail.com",
         "linkedinUrl": "https://linkedin.com",
         "availabilityStatus": "Active & Open",
         "availabilityText": "Rate: £35/hr · Open for 2026 Projects"
@@ -5828,7 +6593,7 @@
     "updatedAt": "2026-10-04T07:10:46.588Z"
   },
   "adminCredentials": {
-    "email": "mansurisaad28012@gmail.com",
+    "email": "saadm.clickncreate@gmail.com",
     "passwordHash": "myUpdatedPassword2026",
     "secondaryEmail": "",
     "sessionTimeoutHours": 24,

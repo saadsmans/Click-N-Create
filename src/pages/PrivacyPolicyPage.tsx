@@ -146,7 +146,7 @@ export const PrivacyPolicyPage: React.FC<PrivacyPolicyPageProps> = ({ onNavigate
               </div>
               <div className="space-y-3 text-sm text-black dark:text-white leading-relaxed font-sans font-medium">
                 <p>
-                  The data controller responsible for the processing of your personal information collected via this website (<code className="text-cyan-700 dark:text-[#00F0FF] font-mono font-bold">clickncreate.dev</code>) is:
+                  The data controller responsible for the processing of your personal information collected via this website (<code className="text-cyan-700 dark:text-[#00F0FF] font-mono font-bold">clickncreate.co.uk</code>) is:
                 </p>
                 <div className="p-4 rounded-2xl bg-zinc-100 dark:bg-white/5 border border-zinc-200 dark:border-white/10 space-y-1 text-xs font-mono">
                   <p className="font-bold text-black dark:text-white">Click N Create (Sole Freelance Practice)</p>

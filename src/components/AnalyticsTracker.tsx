@@ -101,10 +101,10 @@ function getTrafficSource(): string {
 
 function getSessionId(): string {
   try {
-    let sid = sessionStorage.getItem('cnc_visitor_sid');
+    let sid = sessionStorage.getItem('cnc_session_id');
     if (!sid) {
       sid = `sess_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
-      sessionStorage.setItem('cnc_visitor_sid', sid);
+      sessionStorage.setItem('cnc_session_id', sid);
     }
     return sid;
   } catch {
@@ -117,7 +117,6 @@ export const AnalyticsTracker: React.FC<AnalyticsTrackerProps> = ({ currentPath 
   const sessionStartTime = useRef<number>(Date.now());
 
   useEffect(() => {
-    if (currentPath === '/admin') return;
     if (lastTracked.current === currentPath) return;
     lastTracked.current = currentPath;
     sessionStartTime.current = Date.now();
@@ -155,25 +154,38 @@ export const AnalyticsTracker: React.FC<AnalyticsTrackerProps> = ({ currentPath 
       }),
     }).catch(() => {});
 
-    // 2. Set 15s Heartbeat to maintain live presence
+    // 2. Immediate Initial Heartbeat to register active presence instantly
+    fetch('/api/analytics/heartbeat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        sessionId,
+        path: currentPath,
+        country,
+        countryCode,
+        city,
+        device,
+        dwellTimeSeconds: 1,
+      }),
+    }).catch(() => {});
+
+    // 3. Fast 6s Heartbeat to maintain real-time live presence radar
     const interval = setInterval(() => {
-      if (document.visibilityState === 'visible') {
-        const dwell = Math.floor((Date.now() - sessionStartTime.current) / 1000);
-        fetch('/api/analytics/heartbeat', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            sessionId,
-            path: currentPath,
-            country,
-            countryCode,
-            city,
-            device,
-            dwellTimeSeconds: dwell,
-          }),
-        }).catch(() => {});
-      }
-    }, 15000);
+      const dwell = Math.floor((Date.now() - sessionStartTime.current) / 1000);
+      fetch('/api/analytics/heartbeat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          sessionId,
+          path: currentPath,
+          country,
+          countryCode,
+          city,
+          device,
+          dwellTimeSeconds: dwell,
+        }),
+      }).catch(() => {});
+    }, 6000);
 
     return () => clearInterval(interval);
   }, [currentPath]);
