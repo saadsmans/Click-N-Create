@@ -860,7 +860,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onNavigate, initialTab }) 
                 type="email"
                 value={emailInput}
                 onChange={(e) => setEmailInput(e.target.value)}
-                placeholder="e.g. admin@clickncreate.com"
+                placeholder="e.g. admin@clickncreate.co.uk"
                 className="w-full px-4 py-3 rounded-xl border border-zinc-300 dark:border-white/10 bg-slate-50 dark:bg-black/50 text-zinc-950 dark:text-white placeholder:text-zinc-400 font-mono text-xs focus:outline-none focus:ring-2 focus:ring-cyan-500"
               />
             </div>
@@ -1795,7 +1795,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onNavigate, initialTab }) 
                       type="email"
                       value={adminCredsEmail}
                       onChange={(e) => setAdminCredsEmail(e.target.value)}
-                      placeholder="admin@clickncreate.com"
+                      placeholder="admin@clickncreate.co.uk"
                       required
                       className="w-full px-4 py-3 rounded-xl border border-zinc-300 dark:border-white/10 bg-slate-50 dark:bg-black/50 text-zinc-950 dark:text-white placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-cyan-500"
                     />

@@ -74,7 +74,7 @@
           "logo": "https://clickncreate.co.uk/file_00000000440061f7b67bc59e52b0df8e.png",
           "image": "https://clickncreate.co.uk/file_00000000440061f7b67bc59e52b0df8e.png",
           "description": "Professional freelance web development, custom UI/UX design, Shopify e-commerce storefronts, and WordPress websites by Saad M.",
-          "email": "Mansurisaad28012@gmail.com",
+          "email": "saadm.clickncreate@gmail.com",
           "telephone": "+447927548123",
           "priceRange": "£35/hr",
           "founder": {
@@ -142,13 +142,41 @@
     <script>
       (function() {
         try {
-          var t = localStorage.getItem('cnc_theme') || localStorage.getItem('saad_theme');
-          if (t === 'light') {
-            document.documentElement.classList.remove('dark');
-            document.documentElement.classList.add('light');
-          } else {
+          var savedMode = localStorage.getItem('cnc_theme');
+          var isDark = savedMode === 'light' ? false : true;
+          if (isDark) {
             document.documentElement.classList.add('dark');
             document.documentElement.classList.remove('light');
+            document.documentElement.setAttribute('data-theme', 'dark');
+            document.documentElement.style.colorScheme = 'dark';
+          } else {
+            document.documentElement.classList.remove('dark');
+            document.documentElement.classList.add('light');
+            document.documentElement.setAttribute('data-theme', 'light');
+            document.documentElement.style.colorScheme = 'light';
+          }
+          
+          var cachedTheme = localStorage.getItem('cnc_active_theme');
+          if (cachedTheme) {
+            var theme = JSON.parse(cachedTheme);
+            if (theme) {
+              if (theme.presetId) document.documentElement.dataset.themePreset = theme.presetId;
+              if (theme.headerStyle) document.documentElement.dataset.headerStyle = theme.headerStyle;
+              if (theme.footerStyle) document.documentElement.dataset.footerStyle = theme.footerStyle;
+              if (theme.dropdownStyle) document.documentElement.dataset.dropdownStyle = theme.dropdownStyle;
+              if (theme.accentCyan) {
+                document.documentElement.style.setProperty('--accent-cyan', theme.accentCyan);
+                document.documentElement.style.setProperty('--accent-primary', theme.accentCyan);
+                document.documentElement.style.setProperty('--cyber-cyan', theme.accentCyan);
+              }
+              if (theme.accentPurple) {
+                document.documentElement.style.setProperty('--accent-purple', theme.accentPurple);
+                document.documentElement.style.setProperty('--accent-secondary', theme.accentPurple);
+              }
+              if (theme.accentGradient) {
+                document.documentElement.style.setProperty('--accent-gradient', theme.accentGradient);
+              }
+            }
           }
         } catch (e) {}
       })();
@@ -157,7 +185,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Caudex:ital,wght@0,400;0,700;1,400;1,700&family=Hubot+Sans:ital,wght@0,200..900;1,200..900&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
   </head>
-  <body class="bg-slate-50 dark:bg-[#07070F] text-slate-900 dark:text-[#FAFAFA] antialiased selection:bg-blue-600/30 selection:text-blue-200 overflow-x-hidden max-w-full min-h-screen">
+  <body class="bg-slate-50 dark:bg-[#07070F] text-slate-900 dark:text-[#FAFAFA] antialiased selection:bg-cyan-500/30 selection:text-cyan-200 overflow-x-hidden max-w-full min-h-screen">
     <div id="root" class="overflow-x-hidden w-full max-w-full min-h-screen"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

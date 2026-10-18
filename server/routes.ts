@@ -34,7 +34,7 @@ router.post('/auth/login', (req: Request, res: Response) => {
     }
 
     const cleanPass = (password || '').trim();
-    const cleanEmail = (email || '').trim().toLowerCase() || storedCreds.email || 'admin@clickncreate.com';
+    const cleanEmail = (email || '').trim().toLowerCase() || storedCreds.email || 'saadm.clickncreate@gmail.com';
 
     // Strictly verify against active password or standard passcodes
     const matchesPassword =

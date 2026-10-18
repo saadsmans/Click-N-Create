@@ -172,9 +172,21 @@ export const DEFAULT_CUSTOMIZATION: SiteCustomization = {
     accentPurple: '#A855F7',
     accentGradient: 'linear-gradient(135deg, #00F0FF 0%, #A855F7 50%, #FF0055 100%)',
     bgTone: 'default',
+    bgMainDark: '#07070F',
+    bgSecondaryDark: '#0D0D1C',
+    bgMainLight: '#F8FAFC',
+    bgSecondaryLight: '#FFFFFF',
+    textColorDark: '#F8FAFC',
+    textColorLight: '#0F172A',
+    borderRadius: 'modern',
+    borderWidth: 'thin',
     glowEffect: true,
     glowIntensity: 'cyber',
-    borderRadius: 'modern',
+    buttonStyle: 'glow',
+    headerStyle: 'hdr_cyber_cyan',
+    footerStyle: 'ftr_cyber_cyan',
+    dropdownStyle: 'dd_cyber_cyan',
+    backgroundPattern: 'grid',
     showGame: true,
     showGrid: true,
     customBadge: 'AVAILABLE FOR 2026 CLIENT PROJECTS · £35/HR',
@@ -818,12 +830,16 @@ export const CustomizationProvider: React.FC<{ children: React.ReactNode }> = ({
         if (cached) {
           try {
             const parsed = JSON.parse(cached);
-            if (parsed && parsed.presetId) {
+            if (parsed && typeof parsed === 'object') {
               applyThemeToDOM(parsed);
+            } else {
+              applyThemeToDOM(DEFAULT_CUSTOMIZATION.theme);
             }
           } catch {
-            // ignore
+            applyThemeToDOM(DEFAULT_CUSTOMIZATION.theme);
           }
+        } else {
+          applyThemeToDOM(DEFAULT_CUSTOMIZATION.theme);
         }
       }
 
@@ -837,16 +853,21 @@ export const CustomizationProvider: React.FC<{ children: React.ReactNode }> = ({
       });
       const data = await safeParseJson(res);
       if (data.success && data.customization) {
-        setCustomization(data.customization);
-        applyThemeToDOM(data.customization.theme);
+        const themeToUse = data.customization.theme || DEFAULT_CUSTOMIZATION.theme;
+        const mergedCustomization = {
+          ...data.customization,
+          theme: themeToUse,
+        };
+        setCustomization(mergedCustomization);
+        applyThemeToDOM(themeToUse);
         if (typeof window !== 'undefined') {
-          const sanitized = sanitizeThemeForStorage(data.customization.theme);
+          const sanitized = sanitizeThemeForStorage(themeToUse);
           safeSetLocalStorage('cnc_active_theme', sanitized);
         }
       }
     } catch (err) {
       console.warn('Backend customization load fallback:', err);
-      applyThemeToDOM(customization.theme);
+      applyThemeToDOM(DEFAULT_CUSTOMIZATION.theme);
     } finally {
       setLoading(false);
     }

@@ -10,21 +10,21 @@
 
 @layer base {
   :root {
-    --bg-main: #F8FAFC;
-    --bg-secondary: #FFFFFF;
-    --card-bg: #FFFFFF;
-    --card-bg-subtle: #F1F5F9;
-    --text-main: #0F172A;
-    --text-muted: #475569;
-    --border-main: rgba(0, 0, 0, 0.08);
-    --border-subtle: rgba(0, 0, 0, 0.05);
-    --border-hover: var(--accent-cyan, #0284C7);
-    --accent-cyan: #0284C7;
-    --accent-purple: #7C3AED;
-    --accent-gradient: linear-gradient(135deg, #0284C7 0%, #7C3AED 50%, #E11D48 100%);
-    --cyber-cyan: #0284C7;
-    --cyber-purple: #7C3AED;
-    --glow-color: rgba(2, 132, 199, 0.25);
+    --bg-main: #07070F;
+    --bg-secondary: #0D0D1C;
+    --card-bg: #0D0D1C;
+    --card-bg-subtle: #121226;
+    --text-main: #F8FAFC;
+    --text-muted: #94A3B8;
+    --border-main: rgba(0, 240, 255, 0.2);
+    --border-subtle: rgba(255, 255, 255, 0.05);
+    --border-hover: var(--accent-cyan, #00F0FF);
+    --accent-cyan: #00F0FF;
+    --accent-purple: #A855F7;
+    --accent-gradient: linear-gradient(135deg, #00F0FF 0%, #A855F7 50%, #FF0055 100%);
+    --cyber-cyan: #00F0FF;
+    --cyber-purple: #A855F7;
+    --glow-color: rgba(0, 240, 255, 0.4);
     --border-radius: 16px;
   }
 
@@ -35,7 +35,7 @@
     --card-bg-subtle: #121226;
     --text-main: #F8FAFC;
     --text-muted: #94A3B8;
-    --border-main: rgba(255, 255, 255, 0.08);
+    --border-main: rgba(0, 240, 255, 0.2);
     --border-subtle: rgba(255, 255, 255, 0.04);
     --border-hover: var(--accent-cyan, #00F0FF);
     --accent-cyan: #00F0FF;

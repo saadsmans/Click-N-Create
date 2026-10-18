@@ -288,7 +288,7 @@
       "name": "Project Quotation Proposal",
       "category": "quote",
       "subject": "Click N Create · Project Quotation & Scope Breakdown for {{clientName}}",
-      "body": "Hi {{clientName}},\n\nThank you for reaching out to Click N Create!\n\nI have reviewed your project requirements and put together an itemized scope and price estimate for {{projectName}}.\n\n• Estimated Development Time: ~{{hours}} hours\n• Rate: £35/hr (Fixed Milestone Scope)\n• Total Estimated Investment: £{{totalCost}}\n• Expected Timeline: {{timeline}}\n\nYou can review your scope breakdown and project status directly in your Client Portal anytime.\n\nLet me know if you would like to book a quick 15-minute alignment call to get started!\n\nWarm regards,\nSaad M\nLead Engineer & Founder · Click N Create\n+44 7927 548123 | Mansurisaad28012@gmail.com"
+      "body": "Hi {{clientName}},\n\nThank you for reaching out to Click N Create!\n\nI have reviewed your project requirements and put together an itemized scope and price estimate for {{projectName}}.\n\n• Estimated Development Time: ~{{hours}} hours\n• Rate: £35/hr (Fixed Milestone Scope)\n• Total Estimated Investment: £{{totalCost}}\n• Expected Timeline: {{timeline}}\n\nYou can review your scope breakdown and project status directly in your Client Portal anytime.\n\nLet me know if you would like to book a quick 15-minute alignment call to get started!\n\nWarm regards,\nSaad M\nLead Engineer & Founder · Click N Create\n+44 7927 548123 | saadm.clickncreate@gmail.com"
     },
     {
       "id": "tmpl-welcome",
@@ -362,7 +362,7 @@
       "providerBrand": "Click N Create",
       "providerEmail": "saadm.clickncreate@gmail.com",
       "providerPhone": "+44 7700 900000",
-      "providerWebsite": "https://clickncreate.com",
+      "providerWebsite": "https://clickncreate.co.uk",
       "providerAddress": "London, United Kingdom",
       "projectTitle": "Nexus SaaS Enterprise Dashboard & API",
       "lineItems": [
@@ -405,7 +405,7 @@
       "providerBrand": "Click N Create",
       "providerEmail": "saadm.clickncreate@gmail.com",
       "providerPhone": "+44 7700 900000",
-      "providerWebsite": "https://clickncreate.com",
+      "providerWebsite": "https://clickncreate.co.uk",
       "providerAddress": "London, United Kingdom",
       "projectTitle": "Lumina Aesthetics Booking Engine & Portal",
       "lineItems": [
@@ -455,7 +455,7 @@
       "providerBrand": "Click N Create",
       "providerEmail": "saadm.clickncreate@gmail.com",
       "providerPhone": "+44 7700 900000",
-      "providerWebsite": "https://clickncreate.com",
+      "providerWebsite": "https://clickncreate.co.uk",
       "providerAddress": "London, United Kingdom",
       "projectTitle": "NextGen E-Commerce & Brand Redesign",
       "lineItems": [
@@ -5506,6 +5506,146 @@
           "dwellSeconds": 1
         }
       ]
+    },
+    {
+      "id": "log_1792233833885_gip7",
+      "sessionId": "sess_1792233833470_4xhef",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "mobile",
+      "browser": "Chrome",
+      "os": "Android",
+      "screen": "384x675",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Organic Search",
+      "localTime": "16:13:53",
+      "timestamp": "2026-10-17T10:43:53.885Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-17T10:43:53.885Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1792233833890_e7ab",
+      "sessionId": "sess_1792233833470_4xhef",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "mobile",
+      "browser": "Google Chrome",
+      "os": "Linux",
+      "screen": "384x832",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Search",
+      "localTime": "16:13",
+      "timestamp": "2026-10-17T10:43:53.890Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-17T10:43:53.885Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/",
+          "timestamp": "2026-10-17T10:43:53.890Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1792233833896_13bv",
+      "sessionId": "sess_1792233833470_4xhef",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "mobile",
+      "browser": "Google Chrome",
+      "os": "Linux",
+      "screen": "384x832",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Search",
+      "localTime": "16:13",
+      "timestamp": "2026-10-17T10:43:53.896Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-17T10:43:53.885Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/",
+          "timestamp": "2026-10-17T10:43:53.896Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1792233909613_ac7p",
+      "sessionId": "sess_1792233833470_4xhef",
+      "path": "/admin",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "mobile",
+      "browser": "Chrome",
+      "os": "Android",
+      "screen": "384x675",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Organic Search",
+      "localTime": "16:15:09",
+      "timestamp": "2026-10-17T10:45:09.613Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-17T10:43:53.885Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/admin",
+          "timestamp": "2026-10-17T10:45:09.613Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1792233909684_m29l",
+      "sessionId": "sess_1792233833470_4xhef",
+      "path": "/admin",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "mobile",
+      "browser": "Google Chrome",
+      "os": "Linux",
+      "screen": "384x832",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Search",
+      "localTime": "16:15",
+      "timestamp": "2026-10-17T10:45:09.684Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-17T10:43:53.885Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/admin",
+          "timestamp": "2026-10-17T10:45:09.684Z",
+          "dwellSeconds": 1
+        }
+      ]
     }
   ],
   "activeSessions": {
@@ -5976,6 +6116,24 @@
         "/"
       ],
       "totalDwellSeconds": 1
+    },
+    "sess_1792233833470_4xhef": {
+      "sessionId": "sess_1792233833470_4xhef",
+      "path": "/admin",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "mobile",
+      "browser": "Google Chrome",
+      "os": "Linux",
+      "source": "Google Search",
+      "lastSeen": 1792234179847,
+      "startedAt": "2026-10-17T10:43:53.885Z",
+      "pageHistory": [
+        "/",
+        "/admin"
+      ],
+      "totalDwellSeconds": 270
     }
   },
   "auditLogs": [
@@ -6028,7 +6186,7 @@
   "activeUserSessions": [
     {
       "id": "sess_1791381011665",
-      "email": "admin@clickncreate.com",
+      "email": "admin@clickncreate.co.uk",
       "device": "Desktop / Authorized Workstation",
       "browser": "Secure Admin Session",
       "os": "Admin Environment",
@@ -6078,7 +6236,7 @@
     },
     {
       "id": "sess_1791380243180",
-      "email": "admin@clickncreate.com",
+      "email": "admin@clickncreate.co.uk",
       "device": "Desktop / Authorized Workstation",
       "browser": "Secure Admin Session",
       "os": "Admin Environment",
@@ -6189,6 +6347,8 @@
       "bgSecondaryDark": "#0D0D1C",
       "bgMainLight": "#F8FAFC",
       "bgSecondaryLight": "#FFFFFF",
+      "textColorDark": "#F8FAFC",
+      "textColorLight": "#0F172A",
       "fontDisplay": "Syne",
       "fontSans": "Plus Jakarta Sans",
       "fontMono": "Hubot Sans",
@@ -6197,15 +6357,17 @@
       "glowIntensity": "cyber",
       "buttonStyle": "glow",
       "headerStyle": "hdr_cyber_cyan",
+      "footerStyle": "ftr_cyber_cyan",
+      "dropdownStyle": "dd_cyber_cyan",
       "backgroundPattern": "grid",
+      "glowEffect": true,
+      "showGame": true,
+      "showGrid": true,
+      "customBadge": "AVAILABLE FOR 2026 CLIENT PROJECTS · £35/HR",
       "customLogoUrl": "/uploads/header-logo-1791033749583.png",
       "logoDisplayMode": "image_text",
       "logoHeight": 44,
-      "customSiteIconUrl": "/uploads/site-icon-1791034074249.png",
-      "textColorDark": "#F8FAFC",
-      "textColorLight": "#0F172A",
-      "footerStyle": "ftr_cyber_cyan",
-      "dropdownStyle": "dd_cyber_cyan"
+      "customSiteIconUrl": "/uploads/site-icon-1791034074249.png"
     },
     "seo": {
       "siteTitle": "Click N Create | Saad M — Freelance Web Developer & Designer",

@@ -330,7 +330,7 @@ const DEFAULT_INVOICES: Invoice[] = [
     providerBrand: 'Click N Create',
     providerEmail: 'saadm.clickncreate@gmail.com',
     providerPhone: '+44 7700 900000',
-    providerWebsite: 'https://clickncreate.com',
+    providerWebsite: 'https://clickncreate.co.uk',
     providerAddress: 'London, United Kingdom',
     projectTitle: 'NextGen E-Commerce & Brand Redesign',
     lineItems: [
@@ -368,7 +368,7 @@ const DEFAULT_INVOICES: Invoice[] = [
     providerBrand: 'Click N Create',
     providerEmail: 'saadm.clickncreate@gmail.com',
     providerPhone: '+44 7700 900000',
-    providerWebsite: 'https://clickncreate.com',
+    providerWebsite: 'https://clickncreate.co.uk',
     providerAddress: 'London, United Kingdom',
     projectTitle: 'Lumina Aesthetics Booking Engine & Portal',
     lineItems: [
@@ -406,7 +406,7 @@ const DEFAULT_INVOICES: Invoice[] = [
     providerBrand: 'Click N Create',
     providerEmail: 'saadm.clickncreate@gmail.com',
     providerPhone: '+44 7700 900000',
-    providerWebsite: 'https://clickncreate.com',
+    providerWebsite: 'https://clickncreate.co.uk',
     providerAddress: 'London, United Kingdom',
     projectTitle: 'Nexus SaaS Enterprise Dashboard & API',
     lineItems: [
@@ -542,12 +542,24 @@ const INITIAL_SCHEMA: DatabaseSchema = {
       accentPurple: '#A855F7',
       accentGradient: 'linear-gradient(135deg, #00F0FF 0%, #A855F7 50%, #FF0055 100%)',
       bgTone: 'default',
+      bgMainDark: '#07070F',
+      bgSecondaryDark: '#0D0D1C',
+      bgMainLight: '#F8FAFC',
+      bgSecondaryLight: '#FFFFFF',
+      textColorDark: '#F8FAFC',
+      textColorLight: '#0F172A',
+      borderRadius: 'modern',
+      borderWidth: 'thin',
       glowEffect: true,
       glowIntensity: 'cyber',
-      borderRadius: 'modern',
+      buttonStyle: 'glow',
+      headerStyle: 'hdr_cyber_cyan',
+      footerStyle: 'ftr_cyber_cyan',
+      dropdownStyle: 'dd_cyber_cyan',
+      backgroundPattern: 'grid',
       showGame: true,
       showGrid: true,
-      customBadge: 'AVAILABLE FOR NEW 2026 PROJECTS',
+      customBadge: 'AVAILABLE FOR NEW 2026 PROJECTS · £35/HR',
     },
     seo: DEFAULT_SEO,
     invoices: [],
@@ -659,7 +671,7 @@ class JSONDatabase {
   public getAdminCredentials(): AdminCredentials {
     return (
       this.data.adminCredentials || {
-        email: 'admin@clickncreate.com',
+        email: 'saadm.clickncreate@gmail.com',
         passwordHash: 'saad2026',
         secondaryEmail: '',
         sessionTimeoutHours: 24,
@@ -677,7 +689,7 @@ class JSONDatabase {
   ): { success: boolean; credentials?: AdminCredentials; error?: string } {
     if (!this.data.adminCredentials) {
       this.data.adminCredentials = {
-        email: 'admin@clickncreate.com',
+        email: 'saadm.clickncreate@gmail.com',
         passwordHash: 'saad2026',
         sessionTimeoutHours: 24,
         apiKey: 'cnc_live_key_9f830a7b12',
@@ -741,7 +753,7 @@ class JSONDatabase {
   public createAdminSession(email: string, token: string): UserSession {
     const session: UserSession = {
       id: `sess_${Date.now()}`,
-      email: (email || 'admin@clickncreate.com').trim().toLowerCase(),
+      email: (email || 'saadm.clickncreate@gmail.com').trim().toLowerCase(),
       device: 'Desktop / Authorized Workstation',
       browser: 'Secure Admin Session',
       os: 'Admin Environment',
