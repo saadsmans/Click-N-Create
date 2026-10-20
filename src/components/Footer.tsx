@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowUpRight, Mail, MessageSquare, Linkedin, Lock, ShieldCheck, Shield } from 'lucide-react';
+import { ArrowUpRight, Mail, MessageSquare, Linkedin, ShieldCheck, Shield } from 'lucide-react';
 import { ClickNCreateLogo } from './ClickNCreateLogo.tsx';
 import { SITE_CONFIG, NAV_ITEMS } from '../data/site.ts';
 import { SERVICES } from '../data/services.ts';
@@ -219,16 +219,6 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                 }`}
               >
                 Terms & Conditions
-              </a>
-              <a
-                href="/portal"
-                onClick={(e) => handleNav(e, '/portal')}
-                className={`transition-colors flex items-center gap-1.5 cursor-pointer ${
-                  isDark ? 'hover:text-[#00F0FF] text-zinc-300' : 'hover:text-cyan-600 text-zinc-600'
-                }`}
-              >
-                <Lock className={`w-3 h-3 ${isDark ? 'text-[#00F0FF]' : 'text-cyan-600'}`} />
-                <span>Client Portal</span>
               </a>
               <a
                 href="/admin"

@@ -179,7 +179,7 @@ export const PrivacyPolicyPage: React.FC<PrivacyPolicyPageProps> = ({ onNavigate
                 <p>Under Article 6 of the UK GDPR, personal data is processed under the following legal bases:</p>
                 <ul className="list-disc pl-5 space-y-2">
                   <li>
-                    <strong className="text-black dark:text-white">Contractual Necessity (Art. 6(1)(b)):</strong> To prepare technical quotes, scope milestone specifications, provide client project portal access, and deliver code handovers.
+                    <strong className="text-black dark:text-white">Contractual Necessity (Art. 6(1)(b)):</strong> To prepare technical quotes, scope milestone specifications, deliver project milestones, and coordinate code handovers.
                   </li>
                   <li>
                     <strong className="text-black dark:text-white">Legitimate Interests (Art. 6(1)(f)):</strong> To monitor website uptime, defend against cybersecurity attacks, prevent fraudulent spam submissions, and refine responsive UI performance.
@@ -220,9 +220,9 @@ export const PrivacyPolicyPage: React.FC<PrivacyPolicyPageProps> = ({ onNavigate
                   </div>
 
                   <div className="p-4 rounded-2xl bg-zinc-100 dark:bg-white/5 border border-zinc-200 dark:border-white/10">
-                    <h3 className="font-bold text-black dark:text-white text-sm mb-1">B. Client Portal & Invoicing Records</h3>
+                    <h3 className="font-bold text-black dark:text-white text-sm mb-1">B. Billing & Invoicing Records</h3>
                     <p className="text-xs text-black dark:text-white">
-                      Portal access authentication keys, approved milestone sign-offs, invoice identifiers, and VAT/billing addresses for commercial accounting.
+                      Invoice identifiers, approved milestone sign-offs, and commercial accounting records.
                     </p>
                   </div>
 
@@ -256,7 +256,7 @@ export const PrivacyPolicyPage: React.FC<PrivacyPolicyPageProps> = ({ onNavigate
                 <ul className="list-disc pl-5 space-y-1.5">
                   <li>Generate transparent engineering estimates and itemized project contracts.</li>
                   <li>Develop, test, and deploy bespoke frontend and full-stack software architectures.</li>
-                  <li>Enable real-time communication via email, WhatsApp, or the Client Portal.</li>
+                  <li>Enable real-time communication via email, phone, or WhatsApp.</li>
                   <li>Provide 30 days of post-launch technical warranty and bug remediation.</li>
                   <li>Issue compliant commercial invoices with Barclays UK or PayPal details.</li>
                 </ul>
@@ -321,7 +321,7 @@ export const PrivacyPolicyPage: React.FC<PrivacyPolicyPageProps> = ({ onNavigate
               </div>
               <div className="space-y-3 text-sm text-black dark:text-white leading-relaxed font-sans font-medium">
                 <p>
-                  This site uses only essential first-party cookies and local storage tokens (<code className="text-cyan-700 dark:text-[#00F0FF] font-mono font-bold">saad_theme</code>, <code className="text-cyan-700 dark:text-[#00F0FF] font-mono font-bold">saad_admin_token</code>, <code className="text-cyan-700 dark:text-[#00F0FF] font-mono font-bold">saad_client_auth</code>) required to remember your Dark/Light mode theme preferences and authenticate client portal sessions.
+                  This site uses only essential first-party cookies and local storage tokens (<code className="text-cyan-700 dark:text-[#00F0FF] font-mono font-bold">saad_theme</code>, <code className="text-cyan-700 dark:text-[#00F0FF] font-mono font-bold">saad_admin_token</code>) required to remember your Dark/Light mode theme preferences and authenticate admin sessions.
                 </p>
                 <p>
                   We do not use intrusive third-party cross-site advertising cookies or invasive tracking beacons.

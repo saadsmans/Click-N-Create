@@ -1073,10 +1073,10 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onNavigate, initialTab }) 
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-2xl bg-white dark:bg-black/40 border border-zinc-200 dark:border-white/10 shadow-xs">
             <div>
               <h3 className="text-base font-bold font-display text-zinc-950 dark:text-white">
-                Client Directory & Access Passkeys
+                Client Directory & Project Records
               </h3>
               <p className="text-xs font-mono text-zinc-500">
-                Clients can log into their private Client Portal using their registered email or access key.
+                Directory of registered clients, contacts, and active project records.
               </p>
             </div>
             <div className="flex items-center gap-3">
@@ -1126,14 +1126,14 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onNavigate, initialTab }) 
 
                     <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-black/40 border border-zinc-200 dark:border-white/5 flex items-center justify-between text-[11px]">
                       <div>
-                        <span className="text-zinc-500 block text-[10px]">Client Access Key:</span>
+                        <span className="text-zinc-500 block text-[10px]">Client Reference Code:</span>
                         <strong className="text-purple-600 dark:text-purple-300">{c.portalAccessKey}</strong>
                       </div>
                       <button
                         type="button"
                         onClick={() => copyToClipboard(c.portalAccessKey, c.id)}
                         className="p-1.5 rounded-lg bg-zinc-200 dark:bg-white/10 hover:bg-zinc-300 dark:hover:bg-white/20 text-zinc-700 dark:text-zinc-200 cursor-pointer"
-                        title="Copy client access key"
+                        title="Copy client reference code"
                       >
                         {copiedKey === c.id ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
                       </button>

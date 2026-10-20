@@ -31,7 +31,6 @@ import { StandardsPage } from './pages/StandardsPage.tsx';
 import { PrivacyPolicyPage } from './pages/PrivacyPolicyPage.tsx';
 import { TermsPage } from './pages/TermsPage.tsx';
 import { AdminPage } from './pages/AdminPage.tsx';
-import { ClientPortalPage } from './pages/ClientPortalPage.tsx';
 import { NotFoundPage } from './pages/NotFoundPage.tsx';
 import { useVisitorTracker } from './hooks/useVisitorTracker.ts';
 
@@ -150,10 +149,6 @@ function AppContent() {
 
     if (path === '/contact') {
       return <ContactPage />;
-    }
-
-    if (path === '/portal' || path === '/client-portal' || path === '/client') {
-      return <ClientPortalPage onNavigate={handleNavigate} />;
     }
 
     if (path === '/admin' || path === '/backend' || path === '/admin/backend' || path === '/dashboard') {
