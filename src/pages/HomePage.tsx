@@ -17,6 +17,7 @@ import { SITE_CONFIG } from '../data/site.ts';
 import { useTheme } from '../context/ThemeContext.tsx';
 import { useCustomization } from '../context/CustomizationContext.tsx';
 import { SEOHead } from '../components/SEOHead.tsx';
+import { HeroEmojiActionWidget } from '../components/HeroEmojiActionWidget.tsx';
 
 interface HomePageProps {
   onNavigate: (path: string) => void;
@@ -302,6 +303,11 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
             </motion.div>
           </motion.div>
         </div>
+      </div>
+
+      {/* Bottom Right Hero Emoji Avatar & Action Buttons Widget */}
+      <div className="absolute bottom-4 right-4 sm:bottom-6 sm:right-6 lg:bottom-8 lg:right-8 z-30">
+        <HeroEmojiActionWidget onNavigate={onNavigate} />
       </div>
     </section>
 

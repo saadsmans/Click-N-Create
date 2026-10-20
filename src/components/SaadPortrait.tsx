@@ -19,7 +19,7 @@ export const SaadPortrait: React.FC<SaadPortraitProps> = ({
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Default image source from uploaded photo
-  const defaultPhotoSrc = 'file_000000002c8882099a216468f5829320.png';
+  const defaultPhotoSrc = '/assets/aistudio/profile_photo_under_1mb-1_26da4b57.jpg';
 
   const [currentImageSrc, setCurrentImageSrc] = useState<string>(() => {
     if (typeof window !== 'undefined') {
@@ -31,6 +31,22 @@ export const SaadPortrait: React.FC<SaadPortraitProps> = ({
 
   const [hasError, setHasError] = useState(false);
   const [isUploaded, setIsUploaded] = useState(false);
+
+  useEffect(() => {
+    const handleAvatarUpdate = (e: any) => {
+      const newSrc = e.detail?.src || localStorage.getItem('saad_custom_avatar');
+      if (newSrc) {
+        setCurrentImageSrc(newSrc);
+        setHasError(false);
+      }
+    };
+    window.addEventListener('saad_avatar_updated', handleAvatarUpdate);
+    window.addEventListener('storage', handleAvatarUpdate);
+    return () => {
+      window.removeEventListener('saad_avatar_updated', handleAvatarUpdate);
+      window.removeEventListener('storage', handleAvatarUpdate);
+    };
+  }, []);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -44,6 +60,7 @@ export const SaadPortrait: React.FC<SaadPortraitProps> = ({
           setIsUploaded(true);
           try {
             localStorage.setItem('saad_custom_avatar', result);
+            window.dispatchEvent(new CustomEvent('saad_avatar_updated', { detail: { src: result } }));
           } catch (e) {
             console.warn('localStorage quota warning for custom avatar:', e);
           }

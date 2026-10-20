@@ -1,0 +1,150 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <!-- Background Gradient -->
+    <radialGradient id="bgGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#181432"/>
+      <stop offset="70%" stop-color="#0a0818"/>
+      <stop offset="100%" stop-color="#05040d"/>
+    </radialGradient>
+    
+    <!-- Neon Rim Lights -->
+    <linearGradient id="cyanRim" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00F0FF"/>
+      <stop offset="100%" stop-color="#0080FF"/>
+    </linearGradient>
+    <linearGradient id="purpleRim" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF0080"/>
+      <stop offset="100%" stop-color="#A855F7"/>
+    </linearGradient>
+
+    <!-- Skin Gradient -->
+    <linearGradient id="skin" x1="30%" y1="0%" x2="70%" y2="100%">
+      <stop offset="0%" stop-color="#f0b691"/>
+      <stop offset="60%" stop-color="#e09e75"/>
+      <stop offset="100%" stop-color="#c67e56"/>
+    </linearGradient>
+    
+    <!-- Hair Gradient -->
+    <linearGradient id="hair" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#2a2336"/>
+      <stop offset="40%" stop-color="#181324"/>
+      <stop offset="100%" stop-color="#090710"/>
+    </linearGradient>
+
+    <!-- Glasses Glass Gradient -->
+    <linearGradient id="glassReflection" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="rgba(255, 255, 255, 0.6)"/>
+      <stop offset="40%" stop-color="rgba(255, 255, 255, 0.15)"/>
+      <stop offset="100%" stop-color="rgba(0, 240, 255, 0.25)"/>
+    </linearGradient>
+    
+    <filter id="neonGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+
+  <!-- Circular Outer Container with Neon Border -->
+  <circle cx="256" cy="256" r="248" fill="url(#bgGlow)"/>
+  <circle cx="256" cy="256" r="248" fill="none" stroke="url(#cyanRim)" stroke-width="6" opacity="0.8" filter="url(#neonGlow)"/>
+  <circle cx="256" cy="256" r="248" fill="none" stroke="url(#purpleRim)" stroke-width="4" stroke-dasharray="300 400" opacity="0.9"/>
+
+  <!-- Neck & Black Collar Shirt -->
+  <path d="M 216 350 L 296 350 L 306 440 L 206 440 Z" fill="#d18a62"/>
+  <!-- Shirt Body -->
+  <path d="M 140 440 Q 256 460 372 440 L 390 512 L 122 512 Z" fill="#0c0d16"/>
+  <!-- Left Collar -->
+  <path d="M 210 380 L 160 440 L 225 450 L 245 400 Z" fill="#151724" stroke="rgba(255,255,255,0.1)" stroke-width="2"/>
+  <!-- Right Collar -->
+  <path d="M 302 380 L 352 440 L 287 450 L 267 400 Z" fill="#151724" stroke="rgba(255,255,255,0.1)" stroke-width="2"/>
+  <!-- Button Placket -->
+  <line x1="256" y1="410" x2="256" y2="500" stroke="#00F0FF" stroke-width="1.5" opacity="0.4"/>
+  <circle cx="256" cy="465" r="4" fill="#202230" stroke="#00F0FF" stroke-width="1"/>
+
+  <!-- Ears with Cyber Highlights -->
+  <ellipse cx="140" cy="280" rx="20" ry="32" fill="#d9936c" stroke="#FF0080" stroke-width="2"/>
+  <ellipse cx="142" cy="280" rx="10" ry="18" fill="#b9714a"/>
+  
+  <ellipse cx="372" cy="280" rx="20" ry="32" fill="#d9936c" stroke="#00F0FF" stroke-width="2"/>
+  <ellipse cx="370" cy="280" rx="10" ry="18" fill="#b9714a"/>
+
+  <!-- Face Shape -->
+  <path d="M 160 210 C 150 290 180 380 256 385 C 332 380 362 290 352 210 C 350 160 330 140 256 140 C 182 140 162 160 160 210 Z" fill="url(#skin)"/>
+
+  <!-- Eyes Background and Pupils -->
+  <g id="eyes">
+    <!-- Left Eye -->
+    <ellipse cx="206" cy="242" rx="22" ry="16" fill="#ffffff"/>
+    <ellipse cx="208" cy="242" rx="12" ry="12" fill="#18111e"/>
+    <circle cx="204" cy="238" r="4" fill="#ffffff"/>
+    <circle cx="212" cy="244" r="1.5" fill="#ffffff" opacity="0.7"/>
+
+    <!-- Right Eye -->
+    <ellipse cx="306" cy="242" rx="22" ry="16" fill="#ffffff"/>
+    <ellipse cx="304" cy="242" rx="12" ry="12" fill="#18111e"/>
+    <circle cx="300" cy="238" r="4" fill="#ffffff"/>
+    <circle cx="308" cy="244" r="1.5" fill="#ffffff" opacity="0.7"/>
+  </g>
+
+  <!-- Eyebrows (Styled and Expressive) -->
+  <path d="M 180 216 Q 206 210 232 220" fill="none" stroke="#1d1626" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 332 216 Q 306 210 280 220" fill="none" stroke="#1d1626" stroke-width="7" stroke-linecap="round"/>
+
+  <!-- Nose -->
+  <path d="M 256 230 L 252 282 Q 256 288 264 286 Q 250 292 242 284" fill="none" stroke="#b36c46" stroke-width="3.5" stroke-linecap="round"/>
+  <ellipse cx="244" cy="283" rx="3.5" ry="2" fill="#9e5634"/>
+  <ellipse cx="268" cy="283" rx="3.5" ry="2" fill="#9e5634"/>
+
+  <!-- Mustache -->
+  <path d="M 230 304 Q 256 308 282 304 Q 256 312 230 304 Z" fill="#20172c" opacity="0.85"/>
+
+  <!-- Warm Smile & Lips -->
+  <path d="M 218 316 Q 256 348 294 316 Q 256 332 218 316 Z" fill="#b84c66"/>
+  <path d="M 226 318 Q 256 340 286 318" fill="none" stroke="#ffffff" stroke-width="4.5" stroke-linecap="round"/>
+  <!-- Lower Lip -->
+  <path d="M 232 332 Q 256 348 280 332" fill="none" stroke="#db6e87" stroke-width="5" stroke-linecap="round"/>
+
+  <!-- Chin Stubble -->
+  <path d="M 246 364 Q 256 368 266 364" fill="none" stroke="#251b33" stroke-width="3" stroke-linecap="round" opacity="0.6"/>
+
+  <!-- Glasses (Saad M's Signature Clear Round Frames) -->
+  <g id="glasses">
+    <!-- Left Lens Rim -->
+    <circle cx="204" cy="245" r="42" fill="url(#glassReflection)" stroke="#ffffff" stroke-width="4.5" opacity="0.95"/>
+    <circle cx="204" cy="245" r="39" fill="none" stroke="rgba(255,255,255,0.7)" stroke-width="2"/>
+    <!-- Left Lens Glare Arc -->
+    <path d="M 180 220 Q 210 216 230 230" fill="none" stroke="#ffffff" stroke-width="3" opacity="0.8" stroke-linecap="round"/>
+
+    <!-- Bridge -->
+    <path d="M 246 242 Q 256 237 266 242" fill="none" stroke="#ffffff" stroke-width="4.5" stroke-linecap="round"/>
+
+    <!-- Right Lens Rim -->
+    <circle cx="308" cy="245" r="42" fill="url(#glassReflection)" stroke="#ffffff" stroke-width="4.5" opacity="0.95"/>
+    <circle cx="308" cy="245" r="39" fill="none" stroke="rgba(255,255,255,0.7)" stroke-width="2"/>
+    <!-- Right Lens Glare Arc -->
+    <path d="M 284 220 Q 314 216 334 230" fill="none" stroke="#ffffff" stroke-width="3" opacity="0.8" stroke-linecap="round"/>
+
+    <!-- Side Temples -->
+    <line x1="162" y1="244" x2="140" y2="250" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round"/>
+    <line x1="350" y1="244" x2="372" y2="250" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round"/>
+  </g>
+
+  <!-- Voluminous Stylish Wavy Dark Hair (Front & Top Crown) -->
+  <g id="hair">
+    <!-- Hair Base Shell -->
+    <path d="M 148 200 C 135 120 190 70 256 65 C 322 70 377 120 364 200 C 354 160 326 126 256 124 C 186 126 158 160 148 200 Z" fill="url(#hair)"/>
+    <!-- Wavy Crest Strands (Left to Right) -->
+    <path d="M 170 120 Q 200 60 250 75 Q 215 95 180 125 Z" fill="#2d233c"/>
+    <path d="M 230 75 Q 280 50 320 85 Q 280 85 240 100 Z" fill="#322742"/>
+    <path d="M 280 85 Q 350 70 360 135 Q 330 110 290 115 Z" fill="#271f34"/>
+    <path d="M 150 160 Q 140 100 190 100 Q 160 130 155 170 Z" fill="#20182b"/>
+    <!-- Cyber Neon Edge Highlights on Hair -->
+    <path d="M 145 150 Q 150 80 230 65" fill="none" stroke="#FF0080" stroke-width="3.5" opacity="0.65" stroke-linecap="round"/>
+    <path d="M 280 65 Q 355 80 365 160" fill="none" stroke="#00F0FF" stroke-width="3.5" opacity="0.65" stroke-linecap="round"/>
+  </g>
+
+  <!-- Sparkle Stars Badge -->
+  <g transform="translate(390, 80) scale(0.8)">
+    <path d="M 0 -20 Q 0 0 20 0 Q 0 0 0 20 Q 0 0 -20 0 Q 0 0 0 -20 Z" fill="#00F0FF" filter="url(#neonGlow)"/>
+  </g>
+</svg>

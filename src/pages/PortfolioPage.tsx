@@ -240,14 +240,14 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
   const [showCvModal, setShowCvModal] = useState<boolean>(false);
   const [downloading, setDownloading] = useState<boolean>(false);
 
-  const handleDownloadPdf = () => {
+  const handleDownloadPdf = async () => {
     setDownloading(true);
     try {
-      generateCvPdf();
+      await generateCvPdf();
     } catch (e) {
       console.error('PDF generation error', e);
     } finally {
-      setTimeout(() => setDownloading(false), 1200);
+      setTimeout(() => setDownloading(false), 800);
     }
   };
 
@@ -306,121 +306,151 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
           <div className="absolute top-0 right-0 w-96 h-96 rounded-full blur-[140px] pointer-events-none bg-[#00F0FF]/15" />
           <div className="absolute bottom-0 left-1/4 w-80 h-80 rounded-full blur-[130px] pointer-events-none bg-[#A855F7]/10" />
 
-          <div className="relative z-10 max-w-4xl space-y-6">
-            <div>
-              <div
-                className={`inline-flex items-center gap-2 px-3.5 py-1 rounded-full border text-xs font-mono uppercase tracking-wider mb-3 ${
-                  isDark
-                    ? 'border-[#00F0FF]/30 bg-[#00F0FF]/10 text-[#00F0FF]'
-                    : 'border-cyan-400 bg-cyan-50 text-cyan-800 font-semibold'
-                }`}
-              >
-                <Sparkles className="w-3.5 h-3.5" />
-                <span>Official Portfolio & Verified Credentials</span>
+          <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+            {/* Left Content Column */}
+            <div className="lg:col-span-8 space-y-6">
+              <div>
+                <div
+                  className={`inline-flex items-center gap-2 px-3.5 py-1 rounded-full border text-xs font-mono uppercase tracking-wider mb-3 ${
+                    isDark
+                      ? 'border-[#00F0FF]/30 bg-[#00F0FF]/10 text-[#00F0FF]'
+                      : 'border-cyan-400 bg-cyan-50 text-cyan-800 font-semibold'
+                  }`}
+                >
+                  <Sparkles className="w-3.5 h-3.5" />
+                  <span>Official Portfolio & Verified Credentials</span>
+                </div>
+
+                <h1
+                  className={`text-3xl sm:text-5xl md:text-6xl font-black font-display tracking-tight leading-[1.1] ${
+                    isDark ? 'text-white' : 'text-zinc-950'
+                  }`}
+                >
+                  SAAD M
+                </h1>
+
+                <p className="text-base sm:text-xl font-medium text-[#00F0FF] mt-1.5 font-mono">
+                  {SAAD_PORTFOLIO.title}
+                </p>
+
+                <p
+                  className={`mt-4 text-sm sm:text-base md:text-lg leading-relaxed max-w-3xl ${
+                    isDark ? 'text-zinc-300' : 'text-zinc-600'
+                  }`}
+                >
+                  {SAAD_PORTFOLIO.tagline}
+                </p>
               </div>
 
-              <h1
-                className={`text-3xl sm:text-5xl md:text-6xl font-black font-display tracking-tight leading-[1.1] ${
-                  isDark ? 'text-white' : 'text-zinc-950'
-                }`}
-              >
-                SAAD M
-              </h1>
+              {/* Contact Meta Badges */}
+              <div className="flex flex-wrap items-center gap-2.5 text-xs font-mono">
+                <div
+                  className={`px-3 py-1.5 rounded-xl border flex items-center gap-1.5 ${
+                    isDark ? 'border-white/10 bg-white/5 text-zinc-300' : 'border-zinc-200 bg-zinc-50 text-zinc-700'
+                  }`}
+                >
+                  <MapPin className="w-3.5 h-3.5 text-[#00F0FF]" />
+                  <span>{SAAD_PORTFOLIO.location}</span>
+                </div>
 
-              <p className="text-base sm:text-xl font-medium text-[#00F0FF] mt-1.5 font-mono">
-                {SAAD_PORTFOLIO.title}
-              </p>
+                <a
+                  href={`mailto:${SAAD_PORTFOLIO.email}`}
+                  className={`px-3 py-1.5 rounded-xl border flex items-center gap-1.5 transition-colors ${
+                    isDark
+                      ? 'border-white/10 bg-white/5 hover:border-[#00F0FF]/40 text-zinc-300'
+                      : 'border-zinc-200 bg-zinc-50 hover:border-cyan-400 text-zinc-700'
+                  }`}
+                >
+                  <Mail className="w-3.5 h-3.5 text-[#00F0FF]" />
+                  <span>{SAAD_PORTFOLIO.email}</span>
+                </a>
 
-              <p
-                className={`mt-4 text-sm sm:text-base md:text-lg leading-relaxed max-w-3xl ${
-                  isDark ? 'text-zinc-300' : 'text-zinc-600'
-                }`}
-              >
-                {SAAD_PORTFOLIO.tagline}
-              </p>
+                <div
+                  className={`px-3 py-1.5 rounded-xl border flex items-center gap-1.5 ${
+                    isDark ? 'border-white/10 bg-white/5 text-zinc-300' : 'border-zinc-200 bg-zinc-50 text-zinc-700'
+                  }`}
+                >
+                  <Phone className="w-3.5 h-3.5 text-[#00F0FF]" />
+                  <span>{SAAD_PORTFOLIO.phone} / {SAAD_PORTFOLIO.ukPhone}</span>
+                </div>
+
+                <div
+                  className={`px-3 py-1.5 rounded-xl border flex items-center gap-1.5 ${
+                    isDark
+                      ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-400'
+                      : 'border-emerald-400 bg-emerald-50 text-emerald-700 font-semibold'
+                  }`}
+                >
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                  <span>Open for Worldwide Projects</span>
+                </div>
+              </div>
+
+              {/* Action Buttons (Download CV, View Original, WhatsApp) */}
+              <div className="flex flex-wrap items-center gap-3 pt-2">
+                {/* 1. PDF Download Button */}
+                <button
+                  type="button"
+                  onClick={handleDownloadPdf}
+                  disabled={downloading}
+                  className="px-6 py-3.5 rounded-xl font-display font-bold text-xs uppercase tracking-wider bg-[#00F0FF] hover:bg-[#38bdf8] text-black shadow-[0_0_20px_rgba(0,240,255,0.35)] hover:shadow-[0_0_30px_rgba(0,240,255,0.6)] transition-all cursor-pointer flex items-center gap-2"
+                >
+                  <Download className="w-4 h-4" />
+                  <span>{downloading ? 'Creating PDF...' : 'Download CV (PDF)'}</span>
+                </button>
+
+                {/* 2. View Original CV Document Modal */}
+                <button
+                  type="button"
+                  onClick={() => setShowCvModal(true)}
+                  className={`px-5 py-3.5 rounded-xl border font-mono text-xs font-semibold uppercase tracking-wider transition-all cursor-pointer flex items-center gap-2 ${
+                    isDark
+                      ? 'border-white/20 bg-white/5 hover:bg-white/10 text-white'
+                      : 'border-zinc-300 bg-white hover:bg-zinc-50 text-zinc-900 shadow-2xs'
+                  }`}
+                >
+                  <FileText className="w-4 h-4 text-[#00F0FF]" />
+                  <span>View Full CV Document</span>
+                </button>
+
+                {/* 3. WhatsApp Direct Chat */}
+                <a
+                  href={SAAD_PORTFOLIO.whatsappUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="px-5 py-3.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 font-mono text-xs font-semibold flex items-center gap-2 transition-colors"
+                >
+                  <MessageSquare className="w-4 h-4" />
+                  <span>WhatsApp Saad</span>
+                </a>
+              </div>
             </div>
 
-            {/* Contact Meta Badges */}
-            <div className="flex flex-wrap items-center gap-2.5 text-xs font-mono">
-              <div
-                className={`px-3 py-1.5 rounded-xl border flex items-center gap-1.5 ${
-                  isDark ? 'border-white/10 bg-white/5 text-zinc-300' : 'border-zinc-200 bg-zinc-50 text-zinc-700'
-                }`}
-              >
-                <MapPin className="w-3.5 h-3.5 text-[#00F0FF]" />
-                <span>{SAAD_PORTFOLIO.location}</span>
+            {/* Right Column: Permanent Official Avatar */}
+            <div className="lg:col-span-4 flex flex-col items-center justify-center">
+              <div className="relative group">
+                {/* Ambient glow */}
+                <div className="absolute -inset-2 rounded-full bg-gradient-to-r from-[#00F0FF] via-[#A855F7] to-[#2EE59D] opacity-60 blur-xl group-hover:opacity-85 transition-opacity duration-500" />
+
+                {/* Permanent Circular Avatar Frame */}
+                <div className="relative w-44 h-44 sm:w-52 sm:h-52 md:w-56 md:h-56 rounded-full overflow-hidden border-4 border-white/80 dark:border-[#00F0FF]/80 bg-[#0C0D18] shadow-2xl">
+                  <img
+                    src="/assets/aistudio/profile_photo_under_1mb-1_26da4b57.jpg"
+                    alt="Saad M — Official Portrait"
+                    className="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-500"
+                  />
+                </div>
+
+                {/* Status Badge */}
+                <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 px-3.5 py-1 rounded-full border border-emerald-400/40 bg-[#0B0D14]/90 backdrop-blur-md shadow-lg flex items-center gap-2 whitespace-nowrap text-xs font-mono font-bold text-emerald-400">
+                  <span className="w-2 h-2 rounded-full bg-[#2EE59D] animate-pulse" />
+                  <span>Available For Work</span>
+                </div>
               </div>
 
-              <a
-                href={`mailto:${SAAD_PORTFOLIO.email}`}
-                className={`px-3 py-1.5 rounded-xl border flex items-center gap-1.5 transition-colors ${
-                  isDark
-                    ? 'border-white/10 bg-white/5 hover:border-[#00F0FF]/40 text-zinc-300'
-                    : 'border-zinc-200 bg-zinc-50 hover:border-cyan-400 text-zinc-700'
-                }`}
-              >
-                <Mail className="w-3.5 h-3.5 text-[#00F0FF]" />
-                <span>{SAAD_PORTFOLIO.email}</span>
-              </a>
-
-              <div
-                className={`px-3 py-1.5 rounded-xl border flex items-center gap-1.5 ${
-                  isDark ? 'border-white/10 bg-white/5 text-zinc-300' : 'border-zinc-200 bg-zinc-50 text-zinc-700'
-                }`}
-              >
-                <Phone className="w-3.5 h-3.5 text-[#00F0FF]" />
-                <span>{SAAD_PORTFOLIO.phone} / {SAAD_PORTFOLIO.ukPhone}</span>
+              <div className="mt-4 text-center">
+                <span className="text-xs font-mono text-zinc-400">Verified Web Developer</span>
               </div>
-
-              <div
-                className={`px-3 py-1.5 rounded-xl border flex items-center gap-1.5 ${
-                  isDark
-                    ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-400'
-                    : 'border-emerald-400 bg-emerald-50 text-emerald-700 font-semibold'
-                }`}
-              >
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                <span>Open for Worldwide Projects</span>
-              </div>
-            </div>
-
-            {/* Action Buttons (Download CV, View Original, WhatsApp) */}
-            <div className="flex flex-wrap items-center gap-3 pt-2">
-              {/* 1. PDF Download Button */}
-              <button
-                type="button"
-                onClick={handleDownloadPdf}
-                disabled={downloading}
-                className="px-6 py-3.5 rounded-xl font-display font-bold text-xs uppercase tracking-wider bg-[#00F0FF] hover:bg-[#38bdf8] text-black shadow-[0_0_20px_rgba(0,240,255,0.35)] hover:shadow-[0_0_30px_rgba(0,240,255,0.6)] transition-all cursor-pointer flex items-center gap-2"
-              >
-                <Download className="w-4 h-4" />
-                <span>{downloading ? 'Creating PDF...' : 'Download CV (PDF)'}</span>
-              </button>
-
-              {/* 2. View Original CV Document Modal */}
-              <button
-                type="button"
-                onClick={() => setShowCvModal(true)}
-                className={`px-5 py-3.5 rounded-xl border font-mono text-xs font-semibold uppercase tracking-wider transition-all cursor-pointer flex items-center gap-2 ${
-                  isDark
-                    ? 'border-white/20 bg-white/5 hover:bg-white/10 text-white'
-                    : 'border-zinc-300 bg-white hover:bg-zinc-50 text-zinc-900 shadow-2xs'
-                }`}
-              >
-                <FileText className="w-4 h-4 text-[#00F0FF]" />
-                <span>View Full CV Document</span>
-              </button>
-
-              {/* 3. WhatsApp Direct Chat */}
-              <a
-                href={SAAD_PORTFOLIO.whatsappUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="px-5 py-3.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 font-mono text-xs font-semibold flex items-center gap-2 transition-colors"
-              >
-                <MessageSquare className="w-4 h-4" />
-                <span>WhatsApp Saad</span>
-              </a>
             </div>
           </div>
         </div>
@@ -590,11 +620,20 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
                 isDark ? 'border-white/10 bg-white/[0.02]' : 'border-zinc-200 bg-white shadow-2xs'
               }`}
             >
-              <div>
-                <h3 className="font-display font-bold text-lg">Curriculum Vitae Credentials</h3>
-                <p className="text-xs text-zinc-500 font-mono mt-0.5">
-                  Imported directly from official CV Resume · Saad M
-                </p>
+              <div className="flex items-center gap-4">
+                <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl overflow-hidden border-2 border-[#00F0FF]/40 bg-zinc-900 shrink-0 shadow-md">
+                  <img
+                    src={SAAD_PORTFOLIO.cvAvatarImage}
+                    alt="Saad M — Official CV Avatar"
+                    className="w-full h-full object-cover object-top"
+                  />
+                </div>
+                <div>
+                  <h3 className="font-display font-bold text-lg">Curriculum Vitae Credentials</h3>
+                  <p className="text-xs text-zinc-500 font-mono mt-0.5">
+                    Imported directly from official CV Resume · Saad M
+                  </p>
+                </div>
               </div>
 
               <div className="flex items-center gap-3">
@@ -1115,8 +1154,12 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
                     </div>
                   </div>
 
-                  <div className="w-16 h-16 rounded-2xl bg-zinc-950 text-[#00F0FF] flex items-center justify-center font-display font-black text-2xl shrink-0 shadow-md">
-                    SM
+                  <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl overflow-hidden border-2 border-zinc-200 bg-white shadow-md shrink-0">
+                    <img
+                      src={SAAD_PORTFOLIO.cvAvatarImage}
+                      alt="Saad M — Official CV Avatar"
+                      className="w-full h-full object-cover object-top"
+                    />
                   </div>
                 </div>
 

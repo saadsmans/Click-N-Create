@@ -1,7 +1,17 @@
 import { jsPDF } from 'jspdf';
 import { SAAD_PORTFOLIO } from '../data/portfolio.ts';
 
-export const generateCvPdf = () => {
+const loadImage = (url: string): Promise<HTMLImageElement> => {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => resolve(img);
+    img.onerror = (e) => reject(e);
+    img.src = url;
+  });
+};
+
+export const generateCvPdf = async () => {
   const doc = new jsPDF({
     orientation: 'portrait',
     unit: 'mm',
@@ -15,11 +25,25 @@ export const generateCvPdf = () => {
 
   // Background Header Accents
   doc.setFillColor(15, 23, 42); // Slate 900
-  doc.rect(0, 0, pageWidth, 40, 'F');
+  doc.rect(0, 0, pageWidth, 42, 'F');
 
   // Accent Line
   doc.setFillColor(0, 240, 255); // Cyan Neon
-  doc.rect(0, 40, pageWidth, 1.2, 'F');
+  doc.rect(0, 42, pageWidth, 1.2, 'F');
+
+  // Embed Official CV Avatar photo in header
+  try {
+    const img = await loadImage(SAAD_PORTFOLIO.cvAvatarImage);
+    const photoSize = 28;
+    const photoX = pageWidth - margin - photoSize;
+    const photoY = 7;
+    // White backing frame
+    doc.setFillColor(255, 255, 255);
+    doc.roundedRect(photoX - 0.8, photoY - 0.8, photoSize + 1.6, photoSize + 1.6, 2, 2, 'F');
+    doc.addImage(img, 'PNG', photoX, photoY, photoSize, photoSize);
+  } catch (err) {
+    console.warn('Could not load CV avatar for PDF, continuing with text header', err);
+  }
 
   // Header: Name
   doc.setTextColor(255, 255, 255);
@@ -37,10 +61,10 @@ export const generateCvPdf = () => {
   doc.setTextColor(203, 213, 225);
   doc.setFontSize(8);
   doc.setFont('helvetica', 'normal');
-  doc.text(`Email: ${SAAD_PORTFOLIO.email}   |   Phone: ${SAAD_PORTFOLIO.phone}   |   UK: ${SAAD_PORTFOLIO.ukPhone}`, margin, 30);
+  doc.text(`Email: ${SAAD_PORTFOLIO.email}   |   Phone: ${SAAD_PORTFOLIO.phone}`, margin, 30);
   doc.text(`Location: ${SAAD_PORTFOLIO.location}   |   Portfolio: clickncreate.co.uk`, margin, 35);
 
-  y = 48;
+  y = 50;
 
   // Helper to draw section headers
   const drawSectionHeader = (title: string) => {
