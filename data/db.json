@@ -6646,6 +6646,88 @@
           "dwellSeconds": 1
         }
       ]
+    },
+    {
+      "id": "log_1793292637539_lh66",
+      "sessionId": "sess_1793292637015_lrbvm",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "mobile",
+      "browser": "Chrome",
+      "os": "Android",
+      "screen": "384x675",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Organic Search",
+      "localTime": "22:20:37",
+      "timestamp": "2026-10-29T16:50:37.539Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-29T16:50:37.539Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1793292637588_r1vl",
+      "sessionId": "sess_1793292637015_lrbvm",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "mobile",
+      "browser": "Google Chrome",
+      "os": "Linux",
+      "screen": "384x832",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Search",
+      "localTime": "22:20",
+      "timestamp": "2026-10-29T16:50:37.588Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-29T16:50:37.539Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/",
+          "timestamp": "2026-10-29T16:50:37.588Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1793292637595_5vgx",
+      "sessionId": "sess_1793292637015_lrbvm",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "mobile",
+      "browser": "Google Chrome",
+      "os": "Linux",
+      "screen": "384x832",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Search",
+      "localTime": "22:20",
+      "timestamp": "2026-10-29T16:50:37.595Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-10-29T16:50:37.539Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/",
+          "timestamp": "2026-10-29T16:50:37.595Z",
+          "dwellSeconds": 1
+        }
+      ]
     }
   ],
   "activeSessions": {
@@ -7187,6 +7269,40 @@
         "/pricing"
       ],
       "totalDwellSeconds": 24
+    },
+    "sess_1792678309285_4wdew": {
+      "sessionId": "sess_1792678309285_4wdew",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "mobile",
+      "browser": "Browser Client",
+      "os": "Desktop / Mobile",
+      "source": "Direct Traffic",
+      "lastSeen": 1792679454978,
+      "startedAt": "2026-10-22T14:29:02.850Z",
+      "pageHistory": [
+        "/"
+      ],
+      "totalDwellSeconds": 169
+    },
+    "sess_1793292637015_lrbvm": {
+      "sessionId": "sess_1793292637015_lrbvm",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "mobile",
+      "browser": "Google Chrome",
+      "os": "Linux",
+      "source": "Google Search",
+      "lastSeen": 1793292909550,
+      "startedAt": "2026-10-29T16:50:37.539Z",
+      "pageHistory": [
+        "/"
+      ],
+      "totalDwellSeconds": 272
     }
   },
   "auditLogs": [
@@ -7747,7 +7863,8 @@
         "whatsappNumber": "+44 7927 548123",
         "phoneNumber": "+44 7927 548123",
         "emailAddress": "saadm.clickncreate@gmail.com",
-        "linkedinUrl": "https://linkedin.com",
+        "linkedinUrl": "https://www.linkedin.com/in/saad-m-aa54bb375?utm_source=share_via&utm_content=profile&utm_medium=member_android",
+        "instagramUrl": "https://www.instagram.com/saads.125?exln=aXEyZnduNGc3dThj",
         "availabilityStatus": "Active & Open",
         "availabilityText": "Rate: £35/hr · Open for 2026 Projects"
       },

@@ -126,6 +126,7 @@ export interface SiteCustomization {
       phoneNumber: string;
       emailAddress: string;
       linkedinUrl: string;
+      instagramUrl?: string;
       availabilityStatus: string;
       availabilityText: string;
     };
@@ -371,7 +372,8 @@ export const DEFAULT_CUSTOMIZATION: SiteCustomization = {
       whatsappNumber: '+44 7927 548123',
       phoneNumber: '+44 7927 548123',
       emailAddress: 'saadm.clickncreate@gmail.com',
-      linkedinUrl: 'https://linkedin.com',
+      linkedinUrl: 'https://www.linkedin.com/in/saad-m-aa54bb375?utm_source=share_via&utm_content=profile&utm_medium=member_android',
+      instagramUrl: 'https://www.instagram.com/saads.125?exln=aXEyZnduNGc3dThj',
       availabilityStatus: 'Active & Open',
       availabilityText: 'Rate: £35/hr · Open for 2026 Projects',
     },

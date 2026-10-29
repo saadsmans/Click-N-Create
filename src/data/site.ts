@@ -42,6 +42,8 @@ export const SITE_CONFIG = {
   phone: '+44 7927 548123',
   whatsappUrl: 'https://wa.me/447927548123',
   linkedinUrl: 'https://www.linkedin.com/in/saad-m-aa54bb375?utm_source=share_via&utm_content=profile&utm_medium=member_android',
+  instagramUrl: 'https://www.instagram.com/saads.125?exln=aXEyZnduNGc3dThj',
+  instagramHandle: '@saads.125',
   location: 'United Kingdom',
   areaServed: 'United Kingdom, Europe, North America & Worldwide Remote',
   priceRange: '£35/hr',

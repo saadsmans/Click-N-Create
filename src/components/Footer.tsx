@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowUpRight, Mail, MessageSquare, Linkedin, ShieldCheck, Shield } from 'lucide-react';
+import { ArrowUpRight, Mail, MessageSquare, Linkedin, Instagram, ShieldCheck, Shield } from 'lucide-react';
 import { ClickNCreateLogo } from './ClickNCreateLogo.tsx';
 import { SITE_CONFIG, NAV_ITEMS } from '../data/site.ts';
 import { SERVICES } from '../data/services.ts';
@@ -41,6 +41,13 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
       href: `mailto:${SITE_CONFIG.email}`,
       icon: Mail,
       label: `Email ${SITE_CONFIG.email}`,
+    },
+    {
+      id: 'instagram',
+      name: 'Instagram',
+      href: SITE_CONFIG.instagramUrl,
+      icon: Instagram,
+      label: 'Connect on Instagram (@saads.125)',
     },
     {
       id: 'linkedin',

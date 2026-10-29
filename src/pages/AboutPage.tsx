@@ -9,6 +9,7 @@ import {
   CheckCircle2,
   ArrowUpRight,
   Linkedin,
+  Instagram,
   Mail,
   Phone,
   Sparkles,
@@ -104,6 +105,19 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
               >
                 <Linkedin className="w-3.5 h-3.5 text-cyan-500" />
                 <span>LinkedIn Profile</span>
+                <ArrowUpRight className="w-3 h-3 text-zinc-400" />
+              </a>
+
+              <a
+                href={SITE_CONFIG.instagramUrl}
+                target="_blank"
+                rel="noreferrer"
+                className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl border text-xs font-mono transition-colors ${
+                  isDark ? 'border-white/15 bg-white/5 hover:bg-white/10 text-zinc-300' : 'border-zinc-300 bg-white hover:bg-zinc-50 text-zinc-800 shadow-2xs'
+                }`}
+              >
+                <Instagram className="w-3.5 h-3.5 text-pink-500" />
+                <span>Instagram (@saads.125)</span>
                 <ArrowUpRight className="w-3 h-3 text-zinc-400" />
               </a>
             </div>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { MessageSquare, Mail, Phone, Linkedin, Clock, ShieldCheck, Sparkles, ArrowUpRight } from 'lucide-react';
+import { MessageSquare, Mail, Phone, Linkedin, Instagram, Clock, ShieldCheck, Sparkles, ArrowUpRight } from 'lucide-react';
 import { ContactForm } from '../components/ContactForm.tsx';
 import { SITE_CONFIG } from '../data/site.ts';
 import { useTheme } from '../context/ThemeContext.tsx';
@@ -128,6 +128,31 @@ export const ContactPage: React.FC = () => {
                   </div>
                 </div>
                 <ArrowUpRight className="w-4 h-4 text-indigo-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+              </a>
+
+              {/* Instagram Card */}
+              <a
+                href={cms.instagramUrl || SITE_CONFIG.instagramUrl}
+                target="_blank"
+                rel="noreferrer"
+                className={`p-4 rounded-2xl border flex items-center justify-between transition-all group ${
+                  isDark
+                    ? 'border-white/10 bg-white/[0.025] hover:border-pink-500/40 hover:bg-pink-500/5'
+                    : 'border-zinc-200 bg-white hover:border-pink-500/50 hover:bg-pink-50/50 shadow-2xs'
+                }`}
+              >
+                <div className="flex items-center gap-3.5">
+                  <div className="w-10 h-10 rounded-xl bg-pink-500/10 text-pink-500 flex items-center justify-center shrink-0">
+                    <Instagram className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <span className="text-xs font-mono text-zinc-500 uppercase block">Instagram Direct</span>
+                    <span className={`text-sm font-bold font-display ${isDark ? 'text-white' : 'text-zinc-950'}`}>
+                      @saads.125 on Instagram
+                    </span>
+                  </div>
+                </div>
+                <ArrowUpRight className="w-4 h-4 text-pink-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
               </a>
             </div>
 

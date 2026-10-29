@@ -13,6 +13,8 @@ export const CONTACT_CHANNELS = {
   phone: '+44 7927 548123',
   whatsappUrl: 'https://wa.me/447927548123',
   linkedinUrl: 'https://www.linkedin.com/in/saad-m-aa54bb375?utm_source=share_via&utm_content=profile&utm_medium=member_android',
+  instagramUrl: 'https://www.instagram.com/saads.125?exln=aXEyZnduNGc3dThj',
+  instagramHandle: '@saads.125',
   hourlyRate: '£35/hr',
   pricingNote: 'Custom fixed packages available based on project scope',
   availability: 'Accepting select freelance projects for 2026',
@@ -20,6 +22,12 @@ export const CONTACT_CHANNELS = {
 };
 
 export const SOCIAL_LINKS: SocialLink[] = [
+  {
+    name: 'Instagram',
+    label: 'Connect & DM on Instagram (@saads.125)',
+    url: 'https://www.instagram.com/saads.125?exln=aXEyZnduNGc3dThj',
+    iconName: 'Instagram'
+  },
   {
     name: 'LinkedIn',
     label: 'Connect on LinkedIn',

@@ -75,7 +75,8 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
             jobTitle: 'Founder & Full-Stack Web Developer',
             url: 'https://clickncreate.co.uk/about',
             sameAs: [
-              'https://www.linkedin.com/in/saad-m-aa54bb375?utm_source=share_via&utm_content=profile&utm_medium=member_android'
+              'https://www.linkedin.com/in/saad-m-aa54bb375?utm_source=share_via&utm_content=profile&utm_medium=member_android',
+              'https://www.instagram.com/saads.125?exln=aXEyZnduNGc3dThj'
             ]
           },
           address: {
