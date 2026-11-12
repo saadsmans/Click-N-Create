@@ -121,46 +121,68 @@ export const generateCvPdf = async () => {
   // Project 1: Owais Academic Dashboard
   doc.setTextColor(15, 23, 42);
   doc.setFont('helvetica', 'bold');
-  doc.setFontSize(9);
+  doc.setFontSize(8.8);
   doc.text('Owais Portfolio & Academic Dashboard', margin, y);
 
   doc.setTextColor(0, 150, 180);
   doc.setFont('helvetica', 'bold');
-  doc.setFontSize(8);
+  doc.setFontSize(7.8);
   doc.text('owaisdashboard.vercel.app  [Client Delivery · 2026]', pageWidth - margin, y, { align: 'right' });
 
-  y += 4;
+  y += 3.8;
   doc.setTextColor(51, 65, 85);
   doc.setFont('helvetica', 'normal');
-  doc.setFontSize(8);
+  doc.setFontSize(7.8);
   const owaisLines = doc.splitTextToSize(
     '• Designed & deployed comprehensive student academic dashboard for client Owais featuring verified academic records, degree trajectory, and interactive technical & soft skills matrix with fast Vercel edge delivery.',
     contentWidth
   );
   doc.text(owaisLines, margin, y);
-  y += owaisLines.length * 3.8 + 2.5;
+  y += owaisLines.length * 3.5 + 2;
 
-  // Project 2: Click N Create Platform
+  // Project 2: Hammad Patel Portfolio
   doc.setTextColor(15, 23, 42);
   doc.setFont('helvetica', 'bold');
-  doc.setFontSize(9);
+  doc.setFontSize(8.8);
+  doc.text('Hammad Patel — Personal & Engineering Portfolio', margin, y);
+
+  doc.setTextColor(0, 150, 180);
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(7.8);
+  doc.text('hammadpatel.vercel.app  [Client Delivery · 2026]', pageWidth - margin, y, { align: 'right' });
+
+  y += 3.8;
+  doc.setTextColor(51, 65, 85);
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(7.8);
+  const hammadLines = doc.splitTextToSize(
+    '• Designed & built custom personal portfolio website for client Hammad Patel showcasing his E&C Engineering profile at GEC Bharuch, IIT Bombay internship experience, and web skills on Vercel edge CDN.',
+    contentWidth
+  );
+  doc.text(hammadLines, margin, y);
+  y += hammadLines.length * 3.5 + 2;
+
+  // Project 3: Click N Create Platform
+  doc.setTextColor(15, 23, 42);
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(8.8);
   doc.text('Click N Create Web Platform & Brand System', margin, y);
 
   doc.setTextColor(0, 150, 180);
   doc.setFont('helvetica', 'bold');
-  doc.setFontSize(8);
+  doc.setFontSize(7.8);
   doc.text('clickncreate.co.uk  [Flagship Platform · 2024 – Present]', pageWidth - margin, y, { align: 'right' });
 
-  y += 4;
+  y += 3.8;
   doc.setTextColor(51, 65, 85);
   doc.setFont('helvetica', 'normal');
-  doc.setFontSize(8);
+  doc.setFontSize(7.8);
   const cncLines = doc.splitTextToSize(
     '• Built full-stack freelance website featuring custom geometric vector logo, real-time cost estimator (£35/hr and fixed milestone calculation), responsive dark/light UI, and direct WhatsApp quote pipelines.',
     contentWidth
   );
   doc.text(cncLines, margin, y);
-  y += cncLines.length * 3.8 + 4;
+  y += cncLines.length * 3.5 + 3.5;
 
   // Section 4: Professional Experience & Internships
   drawSectionHeader('Experience & Internships');

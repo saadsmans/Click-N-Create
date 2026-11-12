@@ -140,6 +140,96 @@ const ProjectVisualCard: React.FC<{ projectId: string; title: string; category: 
     );
   }
 
+  if (projectId === 'hammad-patel-portfolio') {
+    return (
+      <div
+        className={`w-full aspect-video rounded-2xl border p-3.5 sm:p-5 flex flex-col justify-between relative overflow-hidden transition-all group ${
+          isDark
+            ? 'border-purple-500/30 bg-gradient-to-br from-[#0d0a1e] via-[#080916] to-[#04040a] shadow-[0_15px_35px_rgba(168,85,247,0.15)]'
+            : 'border-purple-300 bg-gradient-to-br from-purple-50 via-white to-cyan-50 shadow-md'
+        }`}
+      >
+        <div className="absolute -top-12 -right-12 w-48 h-48 rounded-full blur-3xl opacity-35 pointer-events-none bg-[#A855F7]" />
+        <div className="absolute -bottom-10 -left-10 w-44 h-44 rounded-full blur-3xl opacity-25 pointer-events-none bg-[#00F0FF]" />
+
+        {/* Browser Top Window Bar */}
+        <div className="flex items-center justify-between pb-2.5 border-b border-black/10 dark:border-white/10 relative z-10">
+          <div className="flex items-center gap-1.5">
+            <span className="w-2.5 h-2.5 rounded-full bg-rose-500/90 shadow-xs" />
+            <span className="w-2.5 h-2.5 rounded-full bg-amber-500/90 shadow-xs" />
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/90 shadow-xs" />
+            <div className="ml-2 px-2.5 py-0.5 rounded-md bg-black/10 dark:bg-white/10 font-mono text-[10px] text-purple-600 dark:text-purple-300 flex items-center gap-1.5">
+              <span className="opacity-60">https://</span>
+              <span className="font-bold">hammadpatel.vercel.app</span>
+            </div>
+          </div>
+
+          <span className="text-[10px] font-mono px-2 py-0.5 rounded-full border border-emerald-500/40 bg-emerald-500/10 text-emerald-400 font-bold flex items-center gap-1">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            <span>LIVE CLIENT WORK</span>
+          </span>
+        </div>
+
+        {/* Portfolio Preview Cards Layout */}
+        <div className="my-auto py-2 relative z-10 space-y-2">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2.5">
+              <div className="w-9 h-9 rounded-xl bg-purple-500/15 border border-purple-500/30 text-purple-400 flex items-center justify-center shrink-0 shadow-sm">
+                <Code2 className="w-5 h-5" />
+              </div>
+              <div>
+                <h4 className="font-display font-black text-sm sm:text-base leading-tight">
+                  Hammad Patel <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#A855F7] to-[#00F0FF]">Portfolio</span>
+                </h4>
+                <span className="text-[10px] font-mono text-zinc-400 block">
+                  E&amp;C Engineer &amp; Web Developer Showcase
+                </span>
+              </div>
+            </div>
+
+            <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 text-[10px] font-mono text-zinc-400">
+              <Sparkles className="w-3.5 h-3.5 text-purple-400" />
+              <span>GEC Bharuch &amp; IITB</span>
+            </div>
+          </div>
+
+          {/* Mini Portfolio Widget Pills */}
+          <div className="grid grid-cols-3 gap-2 pt-1 font-mono text-[10px]">
+            <div className="p-2 rounded-xl border border-purple-500/25 bg-purple-500/5 text-purple-300 flex flex-col justify-between">
+              <span className="text-zinc-400 text-[9px] uppercase">Credentials</span>
+              <span className="font-bold truncate">E&amp;C Engineering</span>
+            </div>
+            <div className="p-2 rounded-xl border border-cyan-500/25 bg-cyan-500/5 text-cyan-400 flex flex-col justify-between">
+              <span className="text-zinc-400 text-[9px] uppercase">Experience</span>
+              <span className="font-bold truncate">IIT Bombay Intern</span>
+            </div>
+            <div className="p-2 rounded-xl border border-emerald-500/25 bg-emerald-500/5 text-emerald-400 flex flex-col justify-between">
+              <span className="text-zinc-400 text-[9px] uppercase">Hosting</span>
+              <span className="font-bold truncate">Vercel Edge</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Footer Bar with Live Site Link */}
+        <div className="flex items-center justify-between text-[11px] font-mono text-zinc-500 border-t border-black/10 dark:border-white/10 pt-2 relative z-10">
+          <span className="flex items-center gap-1.5 text-purple-400 font-semibold">
+            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+            <span>Built &amp; Delivered by Saad M</span>
+          </span>
+          <a
+            href="https://hammadpatel.vercel.app"
+            target="_blank"
+            rel="noreferrer"
+            className="flex items-center gap-1 font-bold text-[#00F0FF] hover:underline"
+          >
+            <span>hammadpatel.vercel.app</span>
+            <ArrowUpRight className="w-3 h-3" />
+          </a>
+        </div>
+      </div>
+    );
+  }
+
   if (projectId === 'click-n-create-platform') {
     return (
       <div
@@ -789,7 +879,7 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
                       </h4>
                     </div>
                     <span className="text-[10px] font-mono text-zinc-500 uppercase">
-                      2 Verified Works
+                      3 Verified Works
                     </span>
                   </div>
 
@@ -849,7 +939,62 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
                       </div>
                     </div>
 
-                    {/* Project 2: Click N Create */}
+                    {/* Project 2: Hammad Patel Personal & Engineering Portfolio */}
+                    <div className="border-l-2 border-purple-500 pl-4 sm:pl-6 space-y-2 relative">
+                      <div className="flex flex-wrap items-center justify-between gap-2">
+                        <div>
+                          <h5 className="font-bold text-base sm:text-lg">
+                            Hammad Patel — Personal & Engineering Portfolio
+                          </h5>
+                          <span className="text-xs font-mono text-purple-400">
+                            Client Project · Live on Vercel
+                          </span>
+                        </div>
+                        <a
+                          href="https://hammadpatel.vercel.app"
+                          target="_blank"
+                          rel="noreferrer"
+                          className="inline-flex items-center gap-1 text-xs font-mono text-purple-400 hover:underline"
+                        >
+                          <span>hammadpatel.vercel.app</span>
+                          <ArrowUpRight className="w-3.5 h-3.5" />
+                        </a>
+                      </div>
+
+                      <p className={`text-xs sm:text-sm leading-relaxed ${isDark ? 'text-zinc-300' : 'text-zinc-700'}`}>
+                        Bespoke personal and engineering portfolio website designed and built for client Hammad Patel showcasing his Electronics & Communication Engineering credentials, GEC Bharuch academic profile, IIT Bombay internship, and web development skills.
+                      </p>
+
+                      <ul className="space-y-1 text-xs">
+                        <li className="flex items-start gap-2">
+                          <span className="text-purple-400 font-bold">•</span>
+                          <span className={isDark ? 'text-zinc-300' : 'text-zinc-700'}>
+                            Crafted custom personal portfolio presenting engineering coursework, IIT Bombay internship highlights, and technical competencies.
+                          </span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span className="text-purple-400 font-bold">•</span>
+                          <span className={isDark ? 'text-zinc-300' : 'text-zinc-700'}>
+                            Deployed live on Vercel (hammadpatel.vercel.app) with dark/light responsive UI and instant page performance.
+                          </span>
+                        </li>
+                      </ul>
+
+                      <div className="flex flex-wrap gap-1.5 pt-1">
+                        {['React / TypeScript', 'Tailwind CSS', 'Vercel Edge', 'Engineering Portfolio', 'Client Delivery'].map((t, idx) => (
+                          <span
+                            key={idx}
+                            className={`text-[10px] font-mono px-2 py-0.5 rounded-full ${
+                              isDark ? 'bg-purple-500/10 text-purple-300 border border-purple-500/30' : 'bg-purple-50 text-purple-800'
+                            }`}
+                          >
+                            {t}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Project 3: Click N Create */}
                     <div className="border-l-2 border-indigo-500 pl-4 sm:pl-6 space-y-2 relative">
                       <div className="flex flex-wrap items-center justify-between gap-2">
                         <div>
@@ -1239,7 +1384,7 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
                           <Code2 className="w-3.5 h-3.5 text-cyan-700" />
                           <span>Key Projects & Web Deliveries</span>
                         </div>
-                        <span className="text-[10px] text-zinc-500 font-mono">2 Verified Works</span>
+                        <span className="text-[10px] text-zinc-500 font-mono">3 Verified Works</span>
                       </h4>
 
                       <div className="space-y-2 pt-0.5">
@@ -1266,7 +1411,30 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
                           </p>
                         </div>
 
-                        {/* Project 2: Click N Create */}
+                        {/* Project 2: Hammad Patel Portfolio */}
+                        <div className="p-2.5 rounded-xl border border-zinc-200 bg-zinc-50/70 space-y-1">
+                          <div className="flex items-center justify-between">
+                            <span className="font-bold text-zinc-950 text-[11px]">
+                              Hammad Patel — Personal & Engineering Portfolio
+                            </span>
+                            <a
+                              href="https://hammadpatel.vercel.app"
+                              target="_blank"
+                              rel="noreferrer"
+                              className="text-[10px] font-mono text-cyan-700 hover:underline font-bold"
+                            >
+                              hammadpatel.vercel.app ↗
+                            </a>
+                          </div>
+                          <div className="text-[10px] text-cyan-800 font-mono">
+                            Client Delivery · Engineering & Web Portfolio Website (Vercel)
+                          </div>
+                          <p className="text-[10.5px] text-zinc-700 leading-tight">
+                            • Designed and built custom personal portfolio for client Hammad Patel showcasing his E&C Engineering profile at GEC Bharuch, IIT Bombay internship, and web skills on Vercel edge CDN.
+                          </p>
+                        </div>
+
+                        {/* Project 3: Click N Create */}
                         <div className="p-2.5 rounded-xl border border-zinc-200 bg-zinc-50/70 space-y-1">
                           <div className="flex items-center justify-between">
                             <span className="font-bold text-zinc-950 text-[11px]">

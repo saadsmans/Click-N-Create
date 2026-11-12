@@ -125,6 +125,23 @@ I am also proficient in using AI tools to enhance productivity, research, conten
       liveUrl: 'https://owaisdashboard.vercel.app'
     },
     {
+      id: 'hammad-patel-portfolio',
+      title: 'Hammad Patel — Personal & Engineering Portfolio',
+      category: 'Client Project · Engineering & Web Portfolio',
+      clientOrRole: 'Client: Hammad Patel (Freelance Web Developer)',
+      timeline: '2026 (Recent Client Delivery)',
+      description: 'Bespoke personal and engineering portfolio website designed and developed for client Hammad Patel (Electronics & Communication Engineering student at GEC Bharuch). Showcases his engineering credentials, IIT Bombay internship experience, academic profile, technical competencies, and web development projects with a sleek dark/light responsive interface.',
+      featuredImage: 'https://hammadpatel.vercel.app',
+      tags: ['Client Project', 'Personal Portfolio', 'Engineering Showcase', 'React / TypeScript', 'Vercel Deployment', 'Tailwind CSS', 'Responsive UI'],
+      achievements: [
+        'Designed & developed custom personal portfolio website for client Hammad Patel',
+        'Showcased Electronics & Communication Engineering credentials, GEC Bharuch academics, and IIT Bombay internship highlights',
+        'Deployed live on Vercel (hammadpatel.vercel.app) with global edge CDN and sub-second load times',
+        'Engineered responsive dark/light theme interface with modern typography and smooth micro-interactions'
+      ],
+      liveUrl: 'https://hammadpatel.vercel.app'
+    },
+    {
       id: 'click-n-create-platform',
       title: 'Click N Create Web Platform & Brand Identity',
       category: 'Freelance Web Platform & Brand System',

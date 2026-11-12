@@ -24,7 +24,8 @@ export const RecentWorksSection: React.FC<RecentWorksSectionProps> = ({ onNaviga
   const isDark = theme === 'dark';
 
   const owaisProject = SAAD_PORTFOLIO.projects.find((p) => p.id === 'owais-academic-portfolio') || SAAD_PORTFOLIO.projects[0];
-  const clickNCreateProject = SAAD_PORTFOLIO.projects.find((p) => p.id === 'click-n-create-platform') || SAAD_PORTFOLIO.projects[1];
+  const hammadProject = SAAD_PORTFOLIO.projects.find((p) => p.id === 'hammad-patel-portfolio');
+  const clickNCreateProject = SAAD_PORTFOLIO.projects.find((p) => p.id === 'click-n-create-platform') || SAAD_PORTFOLIO.projects[2];
 
   return (
     <section className="relative py-24 md:py-32 overflow-hidden" id="works">
@@ -300,7 +301,229 @@ export const RecentWorksSection: React.FC<RecentWorksSectionProps> = ({ onNaviga
           </div>
         </motion.div>
 
-        {/* WORK 2: CLICK N CREATE PLATFORM & BRAND IDENTITY */}
+        {/* WORK 2: HAMMAD PATEL PERSONAL & ENGINEERING PORTFOLIO */}
+        {hammadProject && (
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-40px' }}
+            transition={{ duration: 0.6 }}
+            className={`rounded-3xl border p-6 sm:p-10 md:p-12 mb-10 relative overflow-hidden backdrop-blur-2xl transition-all duration-300 ${
+              isDark
+                ? 'border-purple-500/35 bg-gradient-to-br from-[#0D0A1E]/95 via-[#080916]/90 to-[#04040A]/95 shadow-[0_20px_60px_-10px_rgba(168,85,247,0.18)]'
+                : 'border-purple-300 bg-white/95 shadow-xl hover:border-purple-400'
+            }`}
+          >
+            {/* Subtle Ambient Glow */}
+            <div className="absolute top-0 left-0 w-96 h-96 bg-gradient-to-br from-[#A855F7]/20 via-[#00F0FF]/10 to-transparent rounded-full blur-3xl pointer-events-none" />
+
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center relative z-10">
+              {/* Left Column: Interactive Browser Window Mockup */}
+              <div className="lg:col-span-6 order-2 lg:order-1">
+                <div
+                  className={`rounded-2xl border p-4 sm:p-6 shadow-2xl relative overflow-hidden backdrop-blur-xl ${
+                    isDark
+                      ? 'border-purple-500/40 bg-[#080914] shadow-[0_15px_45px_rgba(168,85,247,0.16)]'
+                      : 'border-purple-300 bg-white shadow-xl'
+                  }`}
+                >
+                  {/* Browser Window Header */}
+                  <div className="flex items-center justify-between pb-3.5 border-b border-black/10 dark:border-white/10 mb-4">
+                    <div className="flex items-center gap-2">
+                      <span className="w-3 h-3 rounded-full bg-rose-500/90 shadow-xs" />
+                      <span className="w-3 h-3 rounded-full bg-amber-500/90 shadow-xs" />
+                      <span className="w-3 h-3 rounded-full bg-emerald-500/90 shadow-xs" />
+                    </div>
+
+                    {/* URL Bar */}
+                    <a
+                      href="https://hammadpatel.vercel.app"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="px-3.5 py-1 rounded-lg bg-black/10 dark:bg-white/10 font-mono text-[11px] text-purple-600 dark:text-purple-300 flex items-center gap-1.5 hover:underline"
+                    >
+                      <span className="opacity-50">https://</span>
+                      <span className="font-bold">hammadpatel.vercel.app</span>
+                      <ExternalLink className="w-3 h-3 opacity-70" />
+                    </a>
+
+                    <span className="text-[10px] font-mono text-emerald-400 font-bold hidden sm:inline-flex items-center gap-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                      VERCEL LIVE
+                    </span>
+                  </div>
+
+                  {/* Portfolio Inner Layout Mockup */}
+                  <div className="space-y-4">
+                    {/* Top Profile Banner in Mockup */}
+                    <div
+                      className={`p-4 rounded-xl border flex items-center justify-between ${
+                        isDark
+                          ? 'border-white/10 bg-gradient-to-r from-purple-950/40 via-cyan-950/30 to-black/60'
+                          : 'border-purple-100 bg-gradient-to-r from-purple-50 via-cyan-50 to-white'
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-purple-500/15 border border-purple-500/30 text-purple-400 flex items-center justify-center shrink-0">
+                          <Code2 className="w-5 h-5" />
+                        </div>
+                        <div>
+                          <h4 className="font-display font-bold text-base text-zinc-950 dark:text-white leading-tight">
+                            Hammad Patel
+                          </h4>
+                          <p className="text-xs font-mono text-purple-600 dark:text-purple-300">
+                            E&amp;C Engineer &amp; Web Developer Portfolio
+                          </p>
+                        </div>
+                      </div>
+
+                      <span className="text-[10px] font-mono px-2.5 py-1 rounded-full bg-emerald-500/15 text-emerald-500 font-bold border border-emerald-500/30">
+                        Live Portfolio
+                      </span>
+                    </div>
+
+                    {/* Portfolio Widgets Grid */}
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+                      <div
+                        className={`p-3 rounded-xl border ${
+                          isDark ? 'border-purple-500/20 bg-purple-950/20 text-zinc-200' : 'border-purple-200 bg-purple-50/70 text-zinc-800'
+                        }`}
+                      >
+                        <div className="flex items-center gap-1.5 text-purple-400 mb-1">
+                          <Cpu className="w-4 h-4" />
+                          <span className="text-[10px] font-mono uppercase font-bold">Engineering</span>
+                        </div>
+                        <div className="text-xs font-bold leading-tight">E&amp;C &amp; IIT Bombay</div>
+                        <div className="text-[10px] text-zinc-500 font-mono mt-0.5">Technical Profile</div>
+                      </div>
+
+                      <div
+                        className={`p-3 rounded-xl border ${
+                          isDark ? 'border-cyan-500/20 bg-cyan-950/20 text-zinc-200' : 'border-cyan-200 bg-cyan-50/70 text-zinc-800'
+                        }`}
+                      >
+                        <div className="flex items-center gap-1.5 text-cyan-400 mb-1">
+                          <Code2 className="w-4 h-4" />
+                          <span className="text-[10px] font-mono uppercase font-bold">Web Showcase</span>
+                        </div>
+                        <div className="text-xs font-bold leading-tight">Projects &amp; Resume</div>
+                        <div className="text-[10px] text-zinc-500 font-mono mt-0.5">Dark/Light UI</div>
+                      </div>
+
+                      <div
+                        className={`p-3 rounded-xl border col-span-2 sm:col-span-1 ${
+                          isDark ? 'border-emerald-500/20 bg-emerald-950/20 text-zinc-200' : 'border-emerald-200 bg-emerald-50/70 text-zinc-800'
+                        }`}
+                      >
+                        <div className="flex items-center gap-1.5 text-emerald-400 mb-1">
+                          <Globe className="w-4 h-4" />
+                          <span className="text-[10px] font-mono uppercase font-bold">Deployment</span>
+                        </div>
+                        <div className="text-xs font-bold leading-tight">Vercel Edge CDN</div>
+                        <div className="text-[10px] text-zinc-500 font-mono mt-0.5">Instant Load</div>
+                      </div>
+                    </div>
+
+                    {/* Bottom Verification Seal in Mockup */}
+                    <div className="p-3 rounded-xl border border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 flex items-center justify-between text-xs font-mono">
+                      <span className="text-zinc-500">Client Delivery: Completed &amp; Live</span>
+                      <span className="text-purple-400 font-bold">Saad M · Click N Create</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Right Column: Client Project Info */}
+              <div className="lg:col-span-6 space-y-6 order-1 lg:order-2">
+                <div>
+                  <div className="flex flex-wrap items-center gap-2.5 mb-3.5">
+                    <span className="px-3 py-1 rounded-full text-[11px] font-mono font-bold uppercase tracking-wider bg-emerald-500/15 border border-emerald-500/35 text-emerald-400 flex items-center gap-1.5 shadow-xs">
+                      <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                      <span>RECENT CLIENT WORK // 2026</span>
+                    </span>
+
+                    <span className="px-3 py-1 rounded-full text-[11px] font-mono font-bold uppercase tracking-wider bg-purple-500/10 border border-purple-500/30 text-purple-400">
+                      PERSONAL &amp; ENGINEERING PORTFOLIO
+                    </span>
+                  </div>
+
+                  <h3 className={`text-2xl sm:text-3xl md:text-4xl font-black font-display tracking-tight leading-tight break-words ${
+                    isDark ? 'text-white' : 'text-zinc-950'
+                  }`}>
+                    Hammad Patel — <span className="text-cyber-gradient">Personal Portfolio</span>
+                  </h3>
+
+                  <p className={`mt-4 text-sm sm:text-base leading-relaxed ${
+                    isDark ? 'text-zinc-300' : 'text-zinc-700'
+                  }`}>
+                    Designed, engineered, and deployed for client <strong>Hammad Patel</strong>. A bespoke personal and engineering portfolio website showcasing his Electronics &amp; Communication Engineering credentials at GEC Bharuch, IIT Bombay internship experience, technical competencies, and web development projects.
+                  </p>
+                </div>
+
+                {/* Key Deliverables Matrix */}
+                <div className="space-y-2.5 pt-1">
+                  <span className="text-xs font-mono text-zinc-400 uppercase tracking-widest font-bold block">
+                    Delivered Features &amp; Technical Highlights:
+                  </span>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                    {hammadProject.achievements.map((ach, idx) => (
+                      <div key={idx} className="flex items-start gap-2">
+                        <CheckCircle2 className="w-4 h-4 text-[#00F0FF] shrink-0 mt-0.5" />
+                        <span className={isDark ? 'text-zinc-300' : 'text-zinc-700'}>
+                          {ach}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Tech Stack Pills */}
+                <div className="flex flex-wrap gap-2 pt-2">
+                  {hammadProject.tags.map((tag, idx) => (
+                    <span
+                      key={idx}
+                      className={`text-xs font-mono px-3 py-1 rounded-lg border ${
+                        isDark
+                          ? 'bg-white/5 border-white/10 text-zinc-300'
+                          : 'bg-zinc-100 border-zinc-200 text-zinc-800'
+                      }`}
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+
+                {/* CTA Action Buttons */}
+                <div className="flex flex-wrap items-center gap-4 pt-3">
+                  <a
+                    href="https://hammadpatel.vercel.app"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="px-6 py-3.5 rounded-xl bg-[#00F0FF] hover:bg-[#38bdf8] text-black font-mono font-bold text-xs uppercase tracking-wider shadow-[0_0_20px_rgba(0,240,255,0.4)] hover:shadow-[0_0_30px_rgba(0,240,255,0.7)] flex items-center gap-2 transition-all cursor-pointer"
+                  >
+                    <Globe className="w-4 h-4" />
+                    <span>Visit Live Website</span>
+                    <ExternalLink className="w-3.5 h-3.5" />
+                  </a>
+
+                  <button
+                    type="button"
+                    onClick={() => onNavigate('/contact')}
+                    className={`px-5 py-3.5 rounded-xl border text-xs font-mono font-semibold uppercase tracking-wider transition-colors cursor-pointer ${
+                      isDark
+                        ? 'border-white/20 hover:bg-white/10 text-white'
+                        : 'border-zinc-300 bg-white hover:bg-zinc-50 text-zinc-900 shadow-2xs'
+                    }`}
+                  >
+                    Request Similar Project
+                  </button>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+
+        {/* WORK 3: CLICK N CREATE PLATFORM & BRAND IDENTITY */}
         {clickNCreateProject && (
           <motion.div
             initial={{ opacity: 0, y: 30 }}
