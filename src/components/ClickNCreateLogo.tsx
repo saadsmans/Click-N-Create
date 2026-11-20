@@ -115,7 +115,7 @@ export const ClickNCreateLogo: React.FC<LogoProps> = ({
               >
                 CLICK <span className="font-light text-zinc-500">N</span> CREATE
               </span>
-              <span className={`rounded-full bg-[#00F0FF] shadow-[0_0_8px_#00F0FF] ${currentSize.dot}`} />
+              <span className={`rounded-full bg-[#38BDF8] shadow-[0_0_8px_rgba(56, 189, 248,0.5)] ${currentSize.dot}`} />
             </div>
             {showText && (
               <span className={`font-mono tracking-widest uppercase mt-0.5 text-zinc-500 font-medium ${currentSize.sub}`}>
@@ -143,7 +143,7 @@ export const ClickNCreateLogo: React.FC<LogoProps> = ({
         >
           CLICK <span className="font-light text-zinc-500">N</span> CREATE
         </span>
-        <span className={`rounded-full bg-[#00F0FF] shadow-[0_0_8px_#00F0FF] ${currentSize.dot}`} />
+        <span className={`rounded-full bg-[#38BDF8] shadow-[0_0_8px_rgba(56, 189, 248,0.5)] ${currentSize.dot}`} />
       </div>
       {showText && (
         <span className={`font-mono tracking-widest uppercase mt-1 text-zinc-500 font-medium ${currentSize.sub}`}>

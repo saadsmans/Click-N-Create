@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en-GB" class="dark scroll-smooth overflow-x-hidden max-w-full">
+<html lang="en-GB" class="dark scroll-smooth overflow-x-clip max-w-full">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
@@ -11,7 +11,7 @@
     <meta name="keywords" content="freelance web developer UK, Click N Create, Saad M, hire freelance web developer, custom website design, Shopify developer UK, WordPress developer, React web developer, ecommerce web developer, affordable web design UK, clickncreate.co.uk" />
     <meta name="author" content="Saad M — Click N Create" />
     <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
-    <meta name="theme-color" content="#07070F" />
+    <meta name="theme-color" content="#0B0C0F" />
     <link rel="canonical" href="https://clickncreate.co.uk" />
 
     <!-- Favicon & Site Icons (Click N Create Official Logo) -->
@@ -160,6 +160,10 @@
           var cachedTheme = localStorage.getItem('cnc_active_theme');
           if (cachedTheme) {
             var theme = JSON.parse(cachedTheme);
+            if (theme && theme.presetId === 'cyber_cyan') {
+              localStorage.removeItem('cnc_active_theme');
+              theme = null;
+            }
             if (theme) {
               if (theme.presetId) document.documentElement.dataset.themePreset = theme.presetId;
               if (theme.headerStyle) document.documentElement.dataset.headerStyle = theme.headerStyle;
@@ -186,8 +190,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Caudex:ital,wght@0,400;0,700;1,400;1,700&family=Hubot+Sans:ital,wght@0,200..900;1,200..900&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
   </head>
-  <body class="bg-slate-50 dark:bg-[#07070F] text-slate-900 dark:text-[#FAFAFA] antialiased selection:bg-cyan-500/30 selection:text-cyan-200 overflow-x-hidden max-w-full min-h-screen">
-    <div id="root" class="overflow-x-hidden w-full max-w-full min-h-screen"></div>
+  <body class="bg-[#F4F2ED] dark:bg-[#0B0C0F] text-[#141518] dark:text-[#ECEAE4] antialiased selection:bg-[#D99B52]/30 selection:text-[#F3C178] overflow-x-clip max-w-full min-h-screen">
+    <div id="root" class="overflow-x-clip w-full max-w-full min-h-screen"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

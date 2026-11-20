@@ -164,32 +164,32 @@ export interface SiteCustomization {
 
 export const DEFAULT_CUSTOMIZATION: SiteCustomization = {
   theme: {
-    presetId: 'cyber_cyan',
-    presetName: 'Cyber Neon Cyan (Default)',
+    presetId: 'futuristic_sapphire',
+    presetName: 'Futuristic Sapphire & Glacier Slate (Default)',
     fontDisplay: 'Syne',
     fontSans: 'Plus Jakarta Sans',
-    fontMono: 'Hubot Sans',
-    accentCyan: '#00F0FF',
-    accentPurple: '#A855F7',
-    accentGradient: 'linear-gradient(135deg, #00F0FF 0%, #A855F7 50%, #FF0055 100%)',
-    bgTone: 'default',
-    bgMainDark: '#07070F',
-    bgSecondaryDark: '#0D0D1C',
-    bgMainLight: '#F8FAFC',
+    fontMono: 'JetBrains Mono',
+    accentCyan: '#38BDF8',
+    accentPurple: '#2563EB',
+    accentGradient: 'linear-gradient(135deg, #7DD3FC 0%, #38BDF8 45%, #2563EB 100%)',
+    bgTone: 'navy',
+    bgMainDark: '#060913',
+    bgSecondaryDark: '#0C1222',
+    bgMainLight: '#F3F6FA',
     bgSecondaryLight: '#FFFFFF',
-    textColorDark: '#F8FAFC',
+    textColorDark: '#F1F5F9',
     textColorLight: '#0F172A',
     borderRadius: 'modern',
     borderWidth: 'thin',
     glowEffect: true,
-    glowIntensity: 'cyber',
+    glowIntensity: 'subtle',
     buttonStyle: 'glow',
-    headerStyle: 'hdr_cyber_cyan',
-    footerStyle: 'ftr_cyber_cyan',
-    dropdownStyle: 'dd_cyber_cyan',
-    backgroundPattern: 'grid',
+    headerStyle: 'hdr_futuristic_sapphire',
+    footerStyle: 'ftr_futuristic_sapphire',
+    dropdownStyle: 'dd_futuristic_sapphire',
+    backgroundPattern: 'clean',
     showGame: true,
-    showGrid: true,
+    showGrid: false,
     customBadge: 'AVAILABLE FOR 2026 CLIENT PROJECTS · £35/HR',
     customLogoUrl: '/uploads/header-logo-1791033749583.png',
     logoDisplayMode: 'image_text',
@@ -497,9 +497,9 @@ export const CustomizationProvider: React.FC<{ children: React.ReactNode }> = ({
     if (typeof document === 'undefined') return;
     const root = document.documentElement;
 
-    const accent1 = theme.accentCyan || '#00F0FF';
-    const accent2 = theme.accentPurple || '#A855F7';
-    const gradient = theme.accentGradient || `linear-gradient(135deg, ${accent1} 0%, ${accent2} 100%)`;
+    const accent1 = theme.accentCyan || '#38BDF8';
+    const accent2 = theme.accentPurple || '#2563EB';
+    const gradient = theme.accentGradient || `linear-gradient(135deg, #7DD3FC 0%, ${accent1} 45%, ${accent2} 100%)`;
 
     // 1. Dynamic Google Fonts Loading
     if (theme.fontDisplay) {
@@ -538,17 +538,17 @@ export const CustomizationProvider: React.FC<{ children: React.ReactNode }> = ({
     root.style.setProperty('--card-radius', rad.card);
 
     // 4. Background and Text Tone Calculations for BOTH Light & Dark modes
-    const bgMainDark = theme.bgMainDark || (theme.bgTone === 'void' ? '#000000' : theme.bgTone === 'obsidian' ? '#080812' : theme.bgTone === 'slate' ? '#0B0F19' : theme.bgTone === 'emerald' ? '#02120B' : theme.bgTone === 'navy' ? '#040B1A' : theme.bgTone === 'warm_sand' ? '#120B05' : '#07070F');
-    const bgSecondaryDark = theme.bgSecondaryDark || (theme.bgTone === 'void' ? '#050508' : theme.bgTone === 'obsidian' ? '#100E22' : theme.bgTone === 'slate' ? '#111827' : theme.bgTone === 'emerald' ? '#072418' : theme.bgTone === 'navy' ? '#0A1633' : theme.bgTone === 'warm_sand' ? '#22150A' : '#0D0D1C');
-    const textColorDark = theme.textColorDark || '#F8FAFC';
+    const bgMainDark = theme.bgMainDark || (theme.bgTone === 'void' ? '#000000' : theme.bgTone === 'obsidian' ? '#060913' : theme.bgTone === 'slate' ? '#0B1120' : theme.bgTone === 'emerald' ? '#02120B' : theme.bgTone === 'navy' ? '#060913' : theme.bgTone === 'warm_sand' ? '#060913' : '#060913');
+    const bgSecondaryDark = theme.bgSecondaryDark || (theme.bgTone === 'void' ? '#080C18' : theme.bgTone === 'obsidian' ? '#0C1222' : theme.bgTone === 'slate' ? '#131D33' : theme.bgTone === 'emerald' ? '#072418' : theme.bgTone === 'navy' ? '#0C1222' : theme.bgTone === 'warm_sand' ? '#0C1222' : '#0C1222');
+    const textColorDark = theme.textColorDark || '#F1F5F9';
     const textMutedDark = '#94A3B8';
-    const borderColorDark = `${accent1}33`;
+    const borderColorDark = `${accent1}38`;
 
-    const bgMainLight = theme.bgMainLight || (theme.bgTone === 'cream' || theme.bgTone === 'paper' ? '#FAF8F5' : theme.bgTone === 'ice' ? '#F0F9FF' : '#F8FAFC');
+    const bgMainLight = theme.bgMainLight || (theme.bgTone === 'cream' || theme.bgTone === 'paper' ? '#F3F6FA' : theme.bgTone === 'ice' ? '#EFF6FF' : '#F3F6FA');
     const bgSecondaryLight = theme.bgSecondaryLight || '#FFFFFF';
     const textColorLight = theme.textColorLight || '#0F172A';
-    const textMutedLight = '#64748B';
-    const borderColorLight = 'rgba(0, 0, 0, 0.1)';
+    const textMutedLight = '#475569';
+    const borderColorLight = 'rgba(15, 23, 42, 0.11)';
 
     // Clean up any inline overrides so CSS selectors (:root.dark vs :root:not(.dark)) have full control
     root.style.removeProperty('--bg-main');
@@ -562,20 +562,20 @@ export const CustomizationProvider: React.FC<{ children: React.ReactNode }> = ({
     root.dataset.headerStyle = theme.headerStyle || 'floating_glass';
     root.dataset.footerStyle = theme.footerStyle || 'modern_columns';
     root.dataset.dropdownStyle = theme.dropdownStyle || 'glass_blur';
-    root.dataset.themePreset = theme.presetId || 'cyber_cyan';
+    root.dataset.themePreset = theme.presetId || 'futuristic_sapphire';
 
     // 5. Glow & Shadow calculation
-    let glowShadow = `0 0 25px ${accent1}66`;
+    let glowShadow = `0 12px 30px -10px rgba(0,0,0,0.45)`;
     if (theme.glowIntensity === 'none') {
       glowShadow = 'none';
     } else if (theme.glowIntensity === 'subtle') {
-      glowShadow = `0 4px 20px -2px rgba(0,0,0,0.25)`;
+      glowShadow = `0 10px 28px -8px rgba(0,0,0,0.38)`;
     } else if (theme.glowIntensity === 'medium') {
-      glowShadow = `0 0 20px ${accent1}44`;
+      glowShadow = `0 0 20px ${accent1}33`;
     } else if (theme.glowIntensity === 'brutalist') {
       glowShadow = `4px 4px 0px #000000`;
     }
-    root.style.setProperty('--glow-color', `${accent1}66`);
+    root.style.setProperty('--glow-color', `${accent1}44`);
     root.style.setProperty('--card-shadow', glowShadow);
 
     // 6. Complete Dynamic CSS Overrides
@@ -590,7 +590,7 @@ export const CustomizationProvider: React.FC<{ children: React.ReactNode }> = ({
     const isSharp = theme.borderRadius === 'sharp';
     const isOutline = theme.buttonStyle === 'outline';
     const isFlat = theme.buttonStyle === 'flat';
-    const pattern = theme.backgroundPattern || 'grid';
+    const pattern = theme.backgroundPattern || 'clean';
 
     styleTag.innerHTML = `
       /* Mode-Specific Color & Background Variables */
@@ -598,12 +598,12 @@ export const CustomizationProvider: React.FC<{ children: React.ReactNode }> = ({
         --bg-main: ${bgMainLight};
         --bg-secondary: ${bgSecondaryLight};
         --card-bg: ${bgSecondaryLight};
-        --card-bg-subtle: #F1F5F9;
+        --card-bg-subtle: #E6EEF8;
         --text-main: ${textColorLight};
         --text-muted: ${textMutedLight};
         --border-main: ${borderColorLight};
-        --border-subtle: rgba(0, 0, 0, 0.05);
-        --glow-color: rgba(2, 132, 199, 0.2);
+        --border-subtle: rgba(15, 23, 42, 0.05);
+        --glow-color: rgba(37, 99, 235, 0.22);
         color-scheme: light;
       }
 
@@ -611,12 +611,12 @@ export const CustomizationProvider: React.FC<{ children: React.ReactNode }> = ({
         --bg-main: ${bgMainDark};
         --bg-secondary: ${bgSecondaryDark};
         --card-bg: ${bgSecondaryDark};
-        --card-bg-subtle: #121226;
+        --card-bg-subtle: #131D33;
         --text-main: ${textColorDark};
         --text-muted: ${textMutedDark};
         --border-main: ${borderColorDark};
-        --border-subtle: rgba(255, 255, 255, 0.04);
-        --glow-color: ${accent1}66;
+        --border-subtle: rgba(241, 245, 249, 0.06);
+        --glow-color: ${accent1}44;
         color-scheme: dark;
       }
 
@@ -832,9 +832,15 @@ export const CustomizationProvider: React.FC<{ children: React.ReactNode }> = ({
         if (cached) {
           try {
             const parsed = JSON.parse(cached);
-            if (parsed && typeof parsed === 'object') {
+            if (
+              parsed &&
+              typeof parsed === 'object' &&
+              parsed.presetId !== 'cyber_cyan' &&
+              parsed.presetId !== 'architectural_amber'
+            ) {
               applyThemeToDOM(parsed);
             } else {
+              localStorage.removeItem('cnc_active_theme');
               applyThemeToDOM(DEFAULT_CUSTOMIZATION.theme);
             }
           } catch {
@@ -855,7 +861,13 @@ export const CustomizationProvider: React.FC<{ children: React.ReactNode }> = ({
       });
       const data = await safeParseJson(res);
       if (data.success && data.customization) {
-        const themeToUse = data.customization.theme || DEFAULT_CUSTOMIZATION.theme;
+        const rawTheme = data.customization.theme;
+        const themeToUse =
+          !rawTheme ||
+          rawTheme.presetId === 'cyber_cyan' ||
+          rawTheme.presetId === 'architectural_amber'
+            ? DEFAULT_CUSTOMIZATION.theme
+            : rawTheme;
         const mergedCustomization = {
           ...data.customization,
           theme: themeToUse,

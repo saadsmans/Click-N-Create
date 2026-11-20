@@ -1,5 +1,5 @@
 import React from 'react';
-import { MessageSquare, Mail, Phone, Linkedin, Instagram, Clock, ShieldCheck, Sparkles, ArrowUpRight } from 'lucide-react';
+import { MessageSquare, Mail, Linkedin, Instagram, Sparkles, ArrowUpRight } from 'lucide-react';
 import { ContactForm } from '../components/ContactForm.tsx';
 import { SITE_CONFIG } from '../data/site.ts';
 import { useTheme } from '../context/ThemeContext.tsx';
@@ -12,12 +12,11 @@ export const ContactPage: React.FC = () => {
   const { getPageContent } = useCustomization();
   const cms = getPageContent('contact');
 
-  const phoneDisplay = cms.phoneNumber || SITE_CONFIG.phone;
   const emailDisplay = cms.emailAddress || SITE_CONFIG.email;
   const whatsappDisplay = cms.whatsappNumber || SITE_CONFIG.phone;
 
   return (
-    <div className="pt-28 pb-20 md:pt-36 relative overflow-x-hidden w-full max-w-full">
+    <div className="pt-28 pb-20 md:pt-36 relative overflow-x-clip w-full max-w-full">
       <SEOHead
         title="Contact Saad M | Hire Freelance Web Developer · Click N Create"
         description="Get in touch directly with Saad M for new web development projects, bespoke quotes, WhatsApp chats, or quick questions. Response within 24 hours."
@@ -35,21 +34,23 @@ export const ContactPage: React.FC = () => {
           {/* Left Column: Direct Collaboration Context & Verified Contact Channels */}
           <div className="lg:col-span-5 space-y-8">
             <div>
-              <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border text-xs font-mono uppercase tracking-wider mb-4 ${
-                isDark ? 'border-white/10 bg-white/5 text-blue-400' : 'border-zinc-300 bg-white text-blue-600 shadow-2xs font-semibold'
+              <div className={`inline-flex items-center gap-2 px-3.5 py-1 rounded-full border text-xs font-mono uppercase tracking-wider mb-4 ${
+                isDark
+                  ? 'border-[#38BDF8]/30 bg-[#0C1222]/90 text-[#38BDF8]'
+                  : 'border-[#1D4ED8]/30 bg-[#F3E9DC]/75 text-[#1E40AF] shadow-2xs font-semibold'
               }`}>
                 <Sparkles className="w-3.5 h-3.5" />
                 <span>{cms.badgeText || 'Direct Inbound to Saad M'}</span>
               </div>
 
               <h1 className={`text-4xl sm:text-5xl md:text-6xl font-black font-display tracking-tight leading-[1.05] ${
-                isDark ? 'text-white' : 'text-zinc-950'
+                isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'
               }`}>
                 {cms.heroTitle || "LET'S TALK ABOUT YOUR"} <span className="text-luxury-gradient">{cms.heroHighlight || 'PROJECT.'}</span>
               </h1>
 
               <p className={`mt-5 text-base sm:text-lg leading-relaxed ${
-                isDark ? 'text-zinc-400' : 'text-zinc-600'
+                isDark ? 'text-[#94A3B8]' : 'text-[#475569]'
               }`}>
                 {cms.heroSubtitle || 'You communicate directly with Saad M. Standard rate is £35/hr, with custom milestone scopes available. Messages submit straight to my personal inbox.'}
               </p>
@@ -64,8 +65,8 @@ export const ContactPage: React.FC = () => {
                 rel="noreferrer"
                 className={`p-4 rounded-2xl border flex items-center justify-between transition-all group ${
                   isDark
-                    ? 'border-white/10 bg-white/[0.025] hover:border-emerald-500/40 hover:bg-emerald-500/5'
-                    : 'border-zinc-200 bg-white hover:border-emerald-500/50 hover:bg-emerald-50/50 shadow-2xs'
+                    ? 'border-white/10 bg-[#0C1222]/85 hover:border-emerald-500/40 hover:bg-emerald-500/5'
+                    : 'border-black/10 bg-white hover:border-emerald-500/50 hover:bg-emerald-50/50 shadow-2xs'
                 }`}
               >
                 <div className="flex items-center gap-3.5">
@@ -73,8 +74,8 @@ export const ContactPage: React.FC = () => {
                     <MessageSquare className="w-5 h-5" />
                   </div>
                   <div>
-                    <span className="text-xs font-mono text-zinc-500 uppercase block">WhatsApp (Direct Chat)</span>
-                    <span className={`text-sm font-bold font-display ${isDark ? 'text-white' : 'text-zinc-950'}`}>
+                    <span className={`text-xs font-mono uppercase block ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>WhatsApp (Direct Chat)</span>
+                    <span className={`text-sm font-bold font-display ${isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'}`}>
                       {whatsappDisplay}
                     </span>
                   </div>
@@ -87,22 +88,26 @@ export const ContactPage: React.FC = () => {
                 href={`mailto:${emailDisplay}`}
                 className={`p-4 rounded-2xl border flex items-center justify-between transition-all group ${
                   isDark
-                    ? 'border-white/10 bg-white/[0.025] hover:border-blue-500/40 hover:bg-blue-500/5'
-                    : 'border-zinc-200 bg-white hover:border-blue-500/50 hover:bg-blue-50/50 shadow-2xs'
+                    ? 'border-white/10 bg-[#0C1222]/85 hover:border-[#38BDF8]/40 hover:bg-[#38BDF8]/5'
+                    : 'border-black/10 bg-white hover:border-[#1D4ED8]/50 hover:bg-[#F3E9DC]/40 shadow-2xs'
                 }`}
               >
                 <div className="flex items-center gap-3.5">
-                  <div className="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-500 flex items-center justify-center shrink-0">
+                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${
+                    isDark ? 'bg-[#38BDF8]/10 text-[#38BDF8]' : 'bg-[#F3E9DC] text-[#1D4ED8]'
+                  }`}>
                     <Mail className="w-5 h-5" />
                   </div>
                   <div>
-                    <span className="text-xs font-mono text-zinc-500 uppercase block">Direct Email</span>
-                    <span className={`text-sm font-bold font-display ${isDark ? 'text-white' : 'text-zinc-950'}`}>
+                    <span className={`text-xs font-mono uppercase block ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>Direct Email</span>
+                    <span className={`text-sm font-bold font-display ${isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'}`}>
                       {emailDisplay}
                     </span>
                   </div>
                 </div>
-                <ArrowUpRight className="w-4 h-4 text-blue-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                <ArrowUpRight className={`w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform ${
+                  isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'
+                }`} />
               </a>
 
               {/* LinkedIn Card */}
@@ -112,22 +117,26 @@ export const ContactPage: React.FC = () => {
                 rel="noreferrer"
                 className={`p-4 rounded-2xl border flex items-center justify-between transition-all group ${
                   isDark
-                    ? 'border-white/10 bg-white/[0.025] hover:border-indigo-500/40 hover:bg-indigo-500/5'
-                    : 'border-zinc-200 bg-white hover:border-indigo-500/50 hover:bg-indigo-50/50 shadow-2xs'
+                    ? 'border-white/10 bg-[#0C1222]/85 hover:border-[#38BDF8]/40 hover:bg-[#38BDF8]/5'
+                    : 'border-black/10 bg-white hover:border-[#1D4ED8]/50 hover:bg-[#F3E9DC]/40 shadow-2xs'
                 }`}
               >
                 <div className="flex items-center gap-3.5">
-                  <div className="w-10 h-10 rounded-xl bg-indigo-500/10 text-indigo-500 flex items-center justify-center shrink-0">
+                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${
+                    isDark ? 'bg-[#94A3B8]/10 text-[#94A3B8]' : 'bg-[#EAE6DF] text-[#475569]'
+                  }`}>
                     <Linkedin className="w-5 h-5" />
                   </div>
                   <div>
-                    <span className="text-xs font-mono text-zinc-500 uppercase block">Professional Profile</span>
-                    <span className={`text-sm font-bold font-display ${isDark ? 'text-white' : 'text-zinc-950'}`}>
+                    <span className={`text-xs font-mono uppercase block ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>Professional Profile</span>
+                    <span className={`text-sm font-bold font-display ${isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'}`}>
                       Saad M on LinkedIn
                     </span>
                   </div>
                 </div>
-                <ArrowUpRight className="w-4 h-4 text-indigo-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                <ArrowUpRight className={`w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform ${
+                  isDark ? 'text-[#94A3B8]' : 'text-[#475569]'
+                }`} />
               </a>
 
               {/* Instagram Card */}
@@ -137,22 +146,26 @@ export const ContactPage: React.FC = () => {
                 rel="noreferrer"
                 className={`p-4 rounded-2xl border flex items-center justify-between transition-all group ${
                   isDark
-                    ? 'border-white/10 bg-white/[0.025] hover:border-pink-500/40 hover:bg-pink-500/5'
-                    : 'border-zinc-200 bg-white hover:border-pink-500/50 hover:bg-pink-50/50 shadow-2xs'
+                    ? 'border-white/10 bg-[#0C1222]/85 hover:border-[#38BDF8]/40 hover:bg-[#38BDF8]/5'
+                    : 'border-black/10 bg-white hover:border-[#1D4ED8]/50 hover:bg-[#F3E9DC]/40 shadow-2xs'
                 }`}
               >
                 <div className="flex items-center gap-3.5">
-                  <div className="w-10 h-10 rounded-xl bg-pink-500/10 text-pink-500 flex items-center justify-center shrink-0">
+                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${
+                    isDark ? 'bg-[#7DD3FC]/10 text-[#7DD3FC]' : 'bg-[#F3E9DC] text-[#1D4ED8]'
+                  }`}>
                     <Instagram className="w-5 h-5" />
                   </div>
                   <div>
-                    <span className="text-xs font-mono text-zinc-500 uppercase block">Instagram Direct</span>
-                    <span className={`text-sm font-bold font-display ${isDark ? 'text-white' : 'text-zinc-950'}`}>
+                    <span className={`text-xs font-mono uppercase block ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>Instagram Direct</span>
+                    <span className={`text-sm font-bold font-display ${isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'}`}>
                       @saads.125 on Instagram
                     </span>
                   </div>
                 </div>
-                <ArrowUpRight className="w-4 h-4 text-pink-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                <ArrowUpRight className={`w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform ${
+                  isDark ? 'text-[#7DD3FC]' : 'text-[#1D4ED8]'
+                }`} />
               </a>
             </div>
 
@@ -163,7 +176,7 @@ export const ContactPage: React.FC = () => {
                 : 'border-emerald-600/20 bg-emerald-50 text-emerald-800'
             }`}>
               <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                <span className="w-2 h-2 rounded-full bg-emerald-500" />
                 <span>{cms.availabilityText || 'Rate: £35/hr · Open for 2026 Projects'}</span>
               </div>
               <span className="font-bold">{cms.availabilityStatus || 'Active'}</span>

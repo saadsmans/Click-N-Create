@@ -41,21 +41,21 @@ export const FAQAccordion: React.FC<FAQAccordionProps> = ({
             className={`rounded-2xl border transition-all duration-200 overflow-hidden ${
               isOpen
                 ? isDark
-                  ? 'border-white/20 bg-white/[0.04] shadow-md'
-                  : 'border-zinc-300 bg-zinc-50/80 shadow-xs'
+                  ? 'border-[#38BDF8]/40 bg-[#1A1D25]/85 shadow-md'
+                  : 'border-[#1D4ED8]/45 bg-white shadow-xs'
                 : isDark
-                ? 'border-white/10 bg-white/[0.02] hover:border-white/20 hover:bg-white/[0.035]'
-                : 'border-zinc-200 bg-white hover:border-zinc-300 hover:bg-zinc-50/50'
+                ? 'border-white/10 bg-[#1A1D25]/45 hover:border-[#38BDF8]/30 hover:bg-[#1A1D25]/70'
+                : 'border-stone-200 bg-white hover:border-stone-300 hover:bg-stone-50/70'
             }`}
           >
             <button
               type="button"
               onClick={() => toggle(index)}
-              className="w-full px-6 py-5 text-left flex items-center justify-between gap-4 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+              className="w-full px-6 py-5 text-left flex items-center justify-between gap-4 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#38BDF8]"
               aria-expanded={isOpen}
             >
               <span className={`text-base sm:text-lg font-bold font-display tracking-tight ${
-                isDark ? 'text-white' : 'text-zinc-950'
+                isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'
               }`}>
                 {item.question}
               </span>
@@ -65,11 +65,11 @@ export const FAQAccordion: React.FC<FAQAccordionProps> = ({
                 className={`p-1.5 rounded-full border shrink-0 transition-colors ${
                   isOpen
                     ? isDark
-                      ? 'border-white/20 text-white bg-white/10'
-                      : 'border-zinc-300 text-zinc-900 bg-zinc-200/60'
+                      ? 'border-[#38BDF8]/40 text-[#BAE6FD] bg-[#38BDF8]/15'
+                      : 'border-[#1D4ED8]/40 text-[#1D4ED8] bg-[#F3E9DC]'
                     : isDark
-                    ? 'border-white/10 text-zinc-400 bg-white/5'
-                    : 'border-zinc-200 text-zinc-500 bg-zinc-100'
+                    ? 'border-white/10 text-[#94A3B8] bg-white/5'
+                    : 'border-stone-200 text-[#475569] bg-stone-100'
                 }`}
               >
                 <ChevronDown className="w-4 h-4" />
@@ -86,8 +86,8 @@ export const FAQAccordion: React.FC<FAQAccordionProps> = ({
                 >
                   <div className={`px-6 pb-6 pt-1 text-sm sm:text-base leading-relaxed border-t font-medium ${
                     isDark
-                      ? 'text-zinc-100 border-white/[0.04]'
-                      : 'text-zinc-900 border-zinc-200/60'
+                      ? 'text-[#94A3B8] border-white/[0.06]'
+                      : 'text-[#475569] border-stone-200/70'
                   }`}>
                     {item.answer}
                   </div>

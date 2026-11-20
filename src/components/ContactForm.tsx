@@ -85,12 +85,12 @@ export async function submitContactForm(data: ContactFormData): Promise<{ succes
 }
 
 const SERVICE_OPTIONS = [
+  'E-Commerce Development (£35/hr or Fixed)',
   'Web Development (£35/hr or Fixed)',
-  'E-commerce Storefront (£35/hr or Fixed)',
   'Branding & Design (£35/hr or Fixed)',
-  'Hosting & Maintenance Setup',
-  'Custom Web App / SPA Development',
-  'Digital Marketing & On-Page SEO',
+  'Digital Marketing',
+  'Web App Development',
+  'Hosting & Maintenance',
 ];
 
 const BUDGET_OPTIONS = [
@@ -179,16 +179,16 @@ export const ContactForm: React.FC<ContactFormProps> = ({ preselectedService }) 
       hasError
         ? 'border-red-500 focus:ring-red-400'
         : isDark
-        ? 'border-white/10 bg-white/[0.03] text-white placeholder:text-zinc-500 focus:border-blue-500 focus:ring-blue-500/20'
-        : 'border-zinc-300 bg-white text-zinc-900 placeholder:text-zinc-400 focus:border-blue-600 focus:ring-blue-500/20 shadow-2xs'
+        ? 'border-white/10 bg-white/[0.04] text-[#F1F5F9] placeholder:text-[#94A3B8]/70 focus:border-[#38BDF8] focus:ring-[#38BDF8]/20'
+        : 'border-stone-300 bg-white text-[#0F172A] placeholder:text-stone-400 focus:border-[#1D4ED8] focus:ring-[#1D4ED8]/20 shadow-2xs'
     }
   `;
 
   return (
     <div className={`rounded-3xl border p-6 sm:p-10 transition-all duration-300 backdrop-blur-2xl ${
       isDark
-        ? 'border-white/10 bg-[#0E0E12]/90 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.8)]'
-        : 'border-zinc-200 bg-white/95 shadow-lg'
+        ? 'border-white/10 bg-[#0C1222]/95 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.8)]'
+        : 'border-stone-200 bg-white/95 shadow-lg'
     }`}>
       <AnimatePresence mode="wait">
         {isSuccess ? (
@@ -203,12 +203,12 @@ export const ContactForm: React.FC<ContactFormProps> = ({ preselectedService }) 
               <CheckCircle2 className="w-8 h-8" />
             </div>
 
-            <h3 className={`text-2xl sm:text-3xl font-display font-extrabold ${isDark ? 'text-white' : 'text-zinc-950'}`}>
+            <h3 className={`text-2xl sm:text-3xl font-display font-extrabold ${isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'}`}>
               Enquiry Sent to Saad M
             </h3>
 
-            <p className={`text-sm sm:text-base max-w-md mx-auto leading-relaxed ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>
-              Thank you, <strong className={isDark ? 'text-white' : 'text-zinc-900'}>{formData.name}</strong>. Your project enquiry was sent to <strong className="text-blue-500">saadm.clickncreate@gmail.com</strong>. Saad will personally review your specifications and reply within 24 business hours.
+            <p className={`text-sm sm:text-base max-w-md mx-auto leading-relaxed ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>
+              Thank you, <strong className={isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'}>{formData.name}</strong>. Your project enquiry was sent to <strong className={isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}>saadm.clickncreate@gmail.com</strong>. Saad will personally review your specifications and reply within 24 business hours.
             </p>
 
             <div className="pt-4 flex flex-wrap items-center justify-center gap-3">
@@ -239,8 +239,8 @@ export const ContactForm: React.FC<ContactFormProps> = ({ preselectedService }) 
                 }}
                 className={`px-5 py-2.5 rounded-xl border text-xs font-mono transition-colors cursor-pointer ${
                   isDark
-                    ? 'border-white/20 bg-white/5 hover:bg-white/10 text-white'
-                    : 'border-zinc-300 bg-zinc-100 hover:bg-zinc-200 text-zinc-900'
+                    ? 'border-white/20 bg-white/5 hover:bg-white/10 text-[#F1F5F9]'
+                    : 'border-stone-300 bg-stone-100 hover:bg-stone-200 text-[#0F172A]'
                 }`}
               >
                 Send Another Message
@@ -256,14 +256,16 @@ export const ContactForm: React.FC<ContactFormProps> = ({ preselectedService }) 
           >
             {/* Header info */}
             <div>
-              <div className="flex items-center gap-2 text-xs font-mono text-blue-500 uppercase tracking-wider mb-1 font-semibold">
+              <div className={`flex items-center gap-2 text-xs font-mono uppercase tracking-wider mb-1 font-semibold ${
+                isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'
+              }`}>
                 <Sparkles className="w-3.5 h-3.5" />
                 <span>Direct Inbound to saadm.clickncreate@gmail.com</span>
               </div>
-              <h3 className={`text-2xl font-bold font-display tracking-tight ${isDark ? 'text-white' : 'text-zinc-950'}`}>
+              <h3 className={`text-2xl font-bold font-display tracking-tight ${isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'}`}>
                 Start Your Project with Saad M
               </h3>
-              <p className={`text-xs sm:text-sm mt-1 ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>
+              <p className={`text-xs sm:text-sm mt-1 ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>
                 Fill in the details below. Data is delivered straight to my personal inbox. Rate: £35/hr or custom scope.
               </p>
             </div>
@@ -278,8 +280,8 @@ export const ContactForm: React.FC<ContactFormProps> = ({ preselectedService }) 
             {/* Row 1: Name & Email */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className={`block text-xs font-mono uppercase tracking-wider mb-1.5 ${isDark ? 'text-zinc-300' : 'text-zinc-700'}`}>
-                  Your Name <span className="text-blue-500">*</span>
+                <label className={`block text-xs font-mono uppercase tracking-wider mb-1.5 ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>
+                  Your Name <span className={isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}>*</span>
                 </label>
                 <input
                   type="text"
@@ -294,8 +296,8 @@ export const ContactForm: React.FC<ContactFormProps> = ({ preselectedService }) 
               </div>
 
               <div>
-                <label className={`block text-xs font-mono uppercase tracking-wider mb-1.5 ${isDark ? 'text-zinc-300' : 'text-zinc-700'}`}>
-                  Email Address <span className="text-blue-500">*</span>
+                <label className={`block text-xs font-mono uppercase tracking-wider mb-1.5 ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>
+                  Email Address <span className={isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}>*</span>
                 </label>
                 <input
                   type="email"
@@ -313,7 +315,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({ preselectedService }) 
             {/* Row 2: Phone/WhatsApp & Business */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className={`block text-xs font-mono uppercase tracking-wider mb-1.5 ${isDark ? 'text-zinc-300' : 'text-zinc-700'}`}>
+                <label className={`block text-xs font-mono uppercase tracking-wider mb-1.5 ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>
                   WhatsApp / Phone <span className="text-zinc-500">(Optional)</span>
                 </label>
                 <input
@@ -326,7 +328,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({ preselectedService }) 
               </div>
 
               <div>
-                <label className={`block text-xs font-mono uppercase tracking-wider mb-1.5 ${isDark ? 'text-zinc-300' : 'text-zinc-700'}`}>
+                <label className={`block text-xs font-mono uppercase tracking-wider mb-1.5 ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>
                   Company / Brand <span className="text-zinc-500">(Optional)</span>
                 </label>
                 <input
@@ -341,7 +343,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({ preselectedService }) 
 
             {/* Row 3: Service Selection */}
             <div>
-              <label className={`block text-xs font-mono uppercase tracking-wider mb-1.5 ${isDark ? 'text-zinc-300' : 'text-zinc-700'}`}>
+              <label className={`block text-xs font-mono uppercase tracking-wider mb-1.5 ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>
                 Required Service
               </label>
               <select
@@ -350,7 +352,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({ preselectedService }) 
                 className={`${inputClasses()} cursor-pointer`}
               >
                 {SERVICE_OPTIONS.map((opt) => (
-                  <option key={opt} value={opt} className={isDark ? 'bg-zinc-900 text-white' : 'bg-white text-zinc-900'}>
+                  <option key={opt} value={opt} className={isDark ? 'bg-[#0C1222] text-[#F1F5F9]' : 'bg-white text-[#0F172A]'}>
                     {opt}
                   </option>
                 ))}
@@ -360,7 +362,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({ preselectedService }) 
             {/* Row 4: Budget & Timeline */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className={`block text-xs font-mono uppercase tracking-wider mb-1.5 ${isDark ? 'text-zinc-300' : 'text-zinc-700'}`}>
+                <label className={`block text-xs font-mono uppercase tracking-wider mb-1.5 ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>
                   Estimated Budget / Rate Model
                 </label>
                 <select
@@ -369,7 +371,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({ preselectedService }) 
                   className={`${inputClasses()} cursor-pointer`}
                 >
                   {BUDGET_OPTIONS.map((opt) => (
-                    <option key={opt} value={opt} className={isDark ? 'bg-zinc-900 text-white' : 'bg-white text-zinc-900'}>
+                    <option key={opt} value={opt} className={isDark ? 'bg-[#0C1222] text-[#F1F5F9]' : 'bg-white text-[#0F172A]'}>
                       {opt}
                     </option>
                   ))}
@@ -377,7 +379,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({ preselectedService }) 
               </div>
 
               <div>
-                <label className={`block text-xs font-mono uppercase tracking-wider mb-1.5 ${isDark ? 'text-zinc-300' : 'text-zinc-700'}`}>
+                <label className={`block text-xs font-mono uppercase tracking-wider mb-1.5 ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>
                   Target Delivery Timeline
                 </label>
                 <select
@@ -386,7 +388,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({ preselectedService }) 
                   className={`${inputClasses()} cursor-pointer`}
                 >
                   {TIMELINE_OPTIONS.map((opt) => (
-                    <option key={opt} value={opt} className={isDark ? 'bg-zinc-900 text-white' : 'bg-white text-zinc-900'}>
+                    <option key={opt} value={opt} className={isDark ? 'bg-[#0C1222] text-[#F1F5F9]' : 'bg-white text-[#0F172A]'}>
                       {opt}
                     </option>
                   ))}
@@ -396,8 +398,8 @@ export const ContactForm: React.FC<ContactFormProps> = ({ preselectedService }) 
 
             {/* Row 5: Project Details */}
             <div>
-              <label className={`block text-xs font-mono uppercase tracking-wider mb-1.5 ${isDark ? 'text-zinc-300' : 'text-zinc-700'}`}>
-                Project Overview & Requirements <span className="text-blue-500">*</span>
+              <label className={`block text-xs font-mono uppercase tracking-wider mb-1.5 ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>
+                Project Overview & Requirements <span className={isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}>*</span>
               </label>
               <textarea
                 rows={4}
@@ -418,8 +420,8 @@ export const ContactForm: React.FC<ContactFormProps> = ({ preselectedService }) 
                 disabled={isLoading}
                 className={`w-full py-4 px-6 rounded-xl font-display font-bold transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed group shadow-md ${
                   isDark
-                    ? 'text-zinc-950 bg-white hover:bg-zinc-200'
-                    : 'text-white bg-zinc-950 hover:bg-zinc-800'
+                    ? 'text-[#060913] bg-[#38BDF8] hover:bg-[#7DD3FC]'
+                    : 'text-[#F3F6FA] bg-[#0F172A] hover:bg-[#2A2622]'
                 }`}
               >
                 {isLoading ? (

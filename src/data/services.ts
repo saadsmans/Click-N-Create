@@ -28,20 +28,87 @@ export interface ServiceItem {
 
 export const SERVICES: ServiceItem[] = [
   {
-    id: 'web-dev',
+    id: 'ecommerce-dev',
     number: '01',
-    title: 'Custom Business Websites',
+    title: 'E-Commerce Development',
+    slug: 'ecommerce-development',
+    categoryTag: 'SHOPIFY · WOOCOMMERCE · HIGH-CONVERSION STORES',
+    shortDescription: 'Complete online stores where customers browse your products effortlessly, add items to a slide-out cart, and buy safely with Apple Pay, cards, or PayPal.',
+    fullDescription: 'Want to sell products online without the headache? I engineer high-converting e-commerce storefronts that make shopping effortless for your customers. From smooth mobile browsing and product color/size pickers to instant checkout with Apple Pay, credit cards, and PayPal, your store is built to take orders 24/7.',
+    image: '/file_000000003d8861f9978bc4e948bee359.png',
+    altText: 'E-Commerce Development 3D digital shopping cart with product items, payment cards, and checkout verification',
+    pricingEstimate: 'Fixed milestone package based on how many products you have',
+    typicalTimeline: '2 – 3 Weeks',
+    rateNote: 'Guaranteed fixed price with full launch and training support',
+    techStack: ['Shopify', 'WooCommerce', 'Apple Pay', 'Google Pay', 'Stripe Cards', 'PayPal'],
+    accentColor: '#38BDF8',
+    features: [
+      'Take customer payments safely with Apple Pay, Google Pay, Visa, Mastercard, and PayPal',
+      'Smooth slide-out cart drawer so shoppers can checkout in seconds',
+      'Product options like sizes, colors, and materials with pictures that switch automatically',
+      'Free shipping progress meter (e.g. "Add £10 more for Free Delivery!") to boost order sizes',
+      'Simple admin dashboard on your phone or laptop to view new orders and print shipping labels',
+      'Automatic order confirmation emails and receipts sent to your buyers',
+      'Discount codes, promo sales, and seasonal campaigns (e.g. 10% off for new customers)',
+      'Customer account portal where buyers can view their past orders and track parcels'
+    ],
+    deliverables: [
+      'Fully working e-commerce store live on your custom web domain',
+      'Secure payment processing connected directly to your business bank account',
+      'Your initial products and collections uploaded with high-quality photos',
+      'Automated customer receipts and order notification emails',
+      'Shipping rates and tax settings configured properly',
+      'Step-by-step video tutorial showing you how to add new items and fulfill orders',
+      '30 days of free post-launch support to answer any questions'
+    ],
+    suitableFor: [
+      'Anyone launching a clothing, fashion, beauty, jewelry, or lifestyle brand',
+      'Physical shops and local retail stores wanting to sell online',
+      'Creators selling handmade crafts, art, books, or digital downloads',
+      'Sellers moving away from Etsy or Amazon fees to own their independent shop'
+    ],
+    scopeInclusions: [
+      'Store design and custom branding',
+      'Setting up payment cards and bank deposit accounts',
+      'Organizing product categories, tags, and collections',
+      'Setting up shipping rules (e.g. standard UK delivery, worldwide delivery)',
+      'Testing real checkout purchases before going live',
+      'Personal walkthrough on how to manage your orders'
+    ],
+    scopeExclusions: [
+      'Shopify monthly software plan (paid directly to Shopify if chosen)',
+      'Standard small transaction processing fees from card processors (Stripe/PayPal)'
+    ],
+    faqs: [
+      {
+        question: 'Should I pick Shopify or WooCommerce for my online store?',
+        answer: 'If you want an all-in-one system with zero technical maintenance, Shopify is usually the easiest choice. If you want 100% free ownership with no monthly platform fees and deep WordPress power, WooCommerce is fantastic. I build both and will guide you to what fits your budget best!'
+      },
+      {
+        question: 'Do I need technical skills to add new products or change prices?',
+        answer: 'No technical skills needed at all! Both Shopify and WooCommerce have super easy mobile apps and web dashboards. You can add a new product or change a price in 60 seconds from your phone.'
+      },
+      {
+        question: 'How do I receive the money when customers buy?',
+        answer: 'Payments from credit cards, Apple Pay, and PayPal deposit directly into your business bank account automatically on a regular schedule.'
+      }
+    ]
+  },
+  {
+    id: 'web-dev',
+    number: '02',
+    title: 'Web Development',
     slug: 'web-development',
-    categoryTag: 'WEBSITES · WORDPRESS · FAST & MOBILE-READY',
+    categoryTag: 'CUSTOM WEBSITES · WORDPRESS · REACT · ULTRA-FAST',
     shortDescription: 'Clean, modern websites that make your business look trustworthy, open in under a second on phones, and make it effortless for customers to contact you.',
-    fullDescription: 'Your website is usually the very first impression a potential customer has of your company. I build clean, professional websites designed to build trust and win you more clients. Whether you want a simple WordPress site where you can easily change text and photos yourself, or a high-speed custom website, everything is built to look great on mobile phones, load instantly, and get found on Google.',
+    fullDescription: 'Your website is usually the very first impression a potential customer has of your company. I build clean, high-performance websites designed to build trust and win you more clients. Whether you want an easy-to-edit WordPress site or a bespoke high-speed React website, everything is engineered to look sharp on mobile phones, load instantly, and rank on Google.',
     image: '',
     altText: 'Web Development 3D laptop representation with code interface, cloud components, and styling elements',
     pricingEstimate: 'Simple hourly rate (£35/hr) or fixed project quotes',
     typicalTimeline: '1 – 3 Weeks depending on how many pages you need',
     rateNote: 'Fixed price quote agreed before starting, or flexible £35/hr',
-    techStack: ['WordPress', 'React', 'Mobile Friendly', 'Speed Boost', 'Fast Hosting', 'Contact Forms'],
-    accentColor: '#00F0FF',
+    techStack: ['React', 'WordPress', 'TypeScript', 'Mobile First', 'Speed Boost', 'Contact Forms'],
+    accentColor: '#0EA5E9',
     features: [
       'Looks clean and easy to read on every phone, tablet, and computer screen',
       'Contact forms that send inquiries and quotes directly to your email inbox',
@@ -101,87 +168,20 @@ export const SERVICES: ServiceItem[] = [
     ]
   },
   {
-    id: 'ecommerce-dev',
-    number: '02',
-    title: 'Online Shops & Stores',
-    slug: 'ecommerce-development',
-    categoryTag: 'SHOPIFY · WOOCOMMERCE · TAKE PAYMENTS ONLINE',
-    shortDescription: 'Complete online stores where customers can browse your products, add items to a slide-out cart, and buy safely with Apple Pay, cards, or PayPal.',
-    fullDescription: 'Want to sell products online without the headache? I build beautiful, high-converting online stores that make shopping effortless for your customers. From smooth mobile browsing and product color/size pickers to instant checkout with Apple Pay, credit cards, and PayPal, your store will be ready to take orders 24/7.',
-    image: '/file_000000003d8861f9978bc4e948bee359.png',
-    altText: 'E-commerce development 3D digital shopping cart with product items, payment cards, and checkout verification',
-    pricingEstimate: 'Fixed milestone package based on how many products you have',
-    typicalTimeline: '2 – 3 Weeks',
-    rateNote: 'Guaranteed fixed price with full launch and training support',
-    techStack: ['Shopify', 'WooCommerce', 'Apple Pay', 'Google Pay', 'Credit Cards', 'PayPal'],
-    accentColor: '#FF0055',
-    features: [
-      'Take customer payments safely with Apple Pay, Google Pay, Visa, Mastercard, and PayPal',
-      'Smooth slide-out cart drawer so shoppers can checkout in seconds',
-      'Product options like sizes, colors, and materials with pictures that switch automatically',
-      'Free shipping progress meter (e.g. "Add £10 more for Free Delivery!") to boost order sizes',
-      'Simple admin dashboard on your phone or laptop to view new orders and print shipping labels',
-      'Automatic order confirmation emails and receipts sent to your buyers',
-      'Discount codes, promo sales, and coupon coupons (e.g. 10% off for new customers)',
-      'Customer account portal where buyers can view their past orders and track parcels'
-    ],
-    deliverables: [
-      'Fully working online shop live on your custom web domain',
-      'Secure payment processing connected directly to your business bank account',
-      'Your initial products and collections uploaded with high-quality photos',
-      'Automated customer receipts and order notification emails',
-      'Shipping rates and tax settings configured properly',
-      'Step-by-step video tutorial showing you how to add new items and fulfill orders',
-      '30 days of free post-launch support to answer any questions'
-    ],
-    suitableFor: [
-      'Anyone launching a clothing, fashion, beauty, jewelry, or lifestyle brand',
-      'Physical shops and local retail stores wanting to sell online',
-      'Creators selling handmade crafts, art, books, or digital downloads',
-      'Sellers moving away from Etsy or Amazon fees to own their independent shop'
-    ],
-    scopeInclusions: [
-      'Store design and custom branding',
-      'Setting up payment cards and bank deposit accounts',
-      'Organizing product categories, tags, and collections',
-      'Setting up shipping rules (e.g. standard UK delivery, worldwide delivery)',
-      'Testing real checkout purchases before going live',
-      'Personal walkthrough on how to manage your orders'
-    ],
-    scopeExclusions: [
-      'Shopify monthly software plan (paid directly to Shopify if chosen)',
-      'Standard small transaction processing fees from card processors (Stripe/PayPal)'
-    ],
-    faqs: [
-      {
-        question: 'Should I pick Shopify or WooCommerce for my online store?',
-        answer: 'If you want an all-in-one system with zero technical maintenance, Shopify is usually the easiest choice. If you want 100% free ownership with no monthly platform fees and deep WordPress power, WooCommerce is fantastic. I build both and will guide you to what fits your budget best!'
-      },
-      {
-        question: 'Do I need technical skills to add new products or change prices?',
-        answer: 'No technical skills needed at all! Both Shopify and WooCommerce have super easy mobile apps and web dashboards. You can add a new product or change a price in 60 seconds from your phone.'
-      },
-      {
-        question: 'How do I receive the money when customers buy?',
-        answer: 'Payments from credit cards, Apple Pay, and PayPal deposit directly into your business bank account automatically on a regular schedule.'
-      }
-    ]
-  },
-  {
     id: 'branding-design',
     number: '03',
-    title: 'Logo & Graphic Design',
+    title: 'Branding & Design',
     slug: 'branding-and-design',
-    categoryTag: 'LOGOS · SOCIAL BANNERS · FLYERS & PRINT',
-    shortDescription: 'Memorable logos, matching social media headers, print-ready flyers, business cards, and advertising materials that make your business look top-tier.',
-    fullDescription: 'Before someone reads a single sentence, they judge your business by how professional it looks. I create clean, memorable logos, social media banner packs, print flyers, business cards, and promotional materials that give your brand a high-end, trustworthy feel across both screens and physical print.',
+    categoryTag: 'BRAND IDENTITY · LOGOS · UI/UX · PRINT & DIGITAL',
+    shortDescription: 'Memorable logos, cohesive brand systems, social media banners, print-ready flyers, and business cards that give your business an unmistakable premium identity.',
+    fullDescription: 'Before someone reads a single sentence, they judge your business by how polished it looks. I craft memorable logos, complete brand identities, social media kits, print flyers, business cards, and UI/UX visuals that elevate your business across both digital screens and physical print.',
     image: '/file_000000003c4c61f9a6295fced3c44012.png',
-    altText: 'Digital branding and design creative workspace with color swatches, typographic hierarchy, responsive layout frames, and aesthetic guidelines',
+    altText: 'Branding and design creative workspace with color swatches, typographic hierarchy, responsive layout frames, and aesthetic guidelines',
     pricingEstimate: 'Standalone design package or added to your website build',
     typicalTimeline: '3 – 7 Days',
     rateNote: 'Fixed price quote based on which graphics and print files you need',
-    techStack: ['Vector Logo', 'Print Ready CMYK', 'Social Media Kit', 'Business Cards', 'Figma'],
-    accentColor: '#8B5CF6',
+    techStack: ['Vector Logo', 'Brand Identity', 'Print Ready CMYK', 'Social Media Kit', 'Figma'],
+    accentColor: '#2563EB',
     features: [
       'Complete Logo Suite: High-resolution files for social media, websites, clothing, and signs',
       'Transparent background files (PNG & SVG) so your logo looks crisp on any color',
@@ -230,18 +230,18 @@ export const SERVICES: ServiceItem[] = [
   {
     id: 'digital-marketing',
     number: '04',
-    title: 'Get Found on Google & Marketing',
+    title: 'Digital Marketing',
     slug: 'digital-marketing',
-    categoryTag: 'GOOGLE SEARCH · LOCAL SEO · TRAFFIC & LEADS',
-    shortDescription: 'Help your business show up higher on Google search and maps, fix website errors, run Google ads, and track how many new calls and leads you get.',
-    fullDescription: 'Having a great website only works if customers can actually find it. I help your business get found on Google search and Google Maps when local customers look for what you offer. I also set up Google Ads, social media ad graphics, and clear visitor reports so you can see exactly where your leads come from.',
+    categoryTag: 'SEO · GOOGLE ADS · SOCIAL GROWTH · ANALYTICS',
+    shortDescription: 'Help your business rank higher on Google search and maps, run high-ROI Google & social ads, and track every new lead, call, and sale.',
+    fullDescription: 'Having a great website only works when customers can find it. I help your business climb Google search and Google Maps rankings, launch targeted Google Ads and social media campaigns, and configure transparent analytics dashboards so you can measure every click, call, and conversion.',
     image: '/file_00000000d60c61f9a5d3f27f2976b911.png',
     altText: 'Digital marketing and SEO 3D visual with growth analytics chart, target bullseye, search ranking graphs, and conversion megaphone',
     pricingEstimate: 'One-time setup package or monthly marketing support',
     typicalTimeline: '4 – 7 Days',
     rateNote: 'Fixed price setup or ongoing monthly growth support',
-    techStack: ['Google Search', 'Google Maps', 'Google Ads', 'Visitor Reports', 'Facebook Ads'],
-    accentColor: '#FFE600',
+    techStack: ['Technical SEO', 'Google Maps', 'Google Ads', 'GA4 Analytics', 'Meta Ads'],
+    accentColor: '#60A5FA',
     features: [
       'Fix Google search errors so all your website pages show up in search results',
       'Local SEO setup so your company appears when people search "near me" in your area',
@@ -288,20 +288,81 @@ export const SERVICES: ServiceItem[] = [
     ]
   },
   {
-    id: 'hosting-maintenance',
+    id: 'web-apps',
     number: '05',
-    title: 'Hosting, Backups & Peace of Mind',
+    title: 'Web App Development',
+    slug: 'web-app-development',
+    categoryTag: 'CUSTOM WEB APPS · CLIENT PORTALS · DASHBOARDS',
+    shortDescription: 'Bespoke interactive web applications that save your business time—instant quote calculators, customer booking portals, SaaS MVPs, and live data dashboards.',
+    fullDescription: 'When a standard brochure website is not enough for your business operations, I engineer custom interactive web applications. Whether you want an instant quote estimator that prices jobs automatically, an authenticated client portal, or a real-time analytics dashboard, I turn your business workflow into fast, reliable software.',
+    image: '/file_00000000dcbc61f9ac09271ea9b4755e.png',
+    altText: 'Web app development interface with dynamic modular widgets, data visualization charts, interactive controls, and user settings panel',
+    pricingEstimate: 'Clear project quote based on the features you need',
+    typicalTimeline: '2 – 4 Weeks',
+    rateNote: 'Itemized milestone quote with clear feature breakdown',
+    techStack: ['React & TypeScript', 'Client Portals', 'User Logins', 'REST APIs', 'PDF Generators'],
+    accentColor: '#38BDF8',
+    features: [
+      'Instant calculations: Sliders and forms that calculate prices or estimates on the fly',
+      'Secure user login portals: Let customers sign in with email or Google to see their files',
+      'Filterable tables & search: Search and organize leads, client orders, or inventory easily',
+      'Downloadable PDF quotes and receipts: Customers can print or download quotes with 1 click',
+      'Email alerts: Automatic notifications sent whenever a client completes a calculation or form',
+      'Connects with your favorite tools (like Google Sheets, Mailchimp, Stripe, or your CRM)',
+      'Works smoothly on mobile phones just like a native phone app',
+      'Clean, easy-to-use screens that anyone can understand without a training manual'
+    ],
+    deliverables: [
+      'Finished custom web application or interactive tool live on your domain',
+      'Custom calculation formulas and pricing rules programmed accurately',
+      'User login and account security if requested',
+      'PDF download or email notification features configured',
+      'Full testing across browsers and phones before launch',
+      'Complete ownership of the code with zero ongoing software licensing royalties'
+    ],
+    suitableFor: [
+      'Service companies needing an online price estimator to qualify incoming leads',
+      'Businesses replacing messy paper forms or Excel spreadsheets with an easy online tool',
+      'Startups building an initial prototype or Minimum Viable Product (MVP)',
+      'Agencies and consultants wanting an interactive intake portal for new clients'
+    ],
+    scopeInclusions: [
+      'Mapping out the logic and user steps in plain English',
+      'Designing clean, intuitive screens that are easy to use',
+      'Programming the calculation formulas and form validations',
+      'Setting up account logins or document exports if needed',
+      'Testing everything thoroughly with real test numbers'
+    ],
+    scopeExclusions: [
+      'Monthly database server fees (if a large database is required)',
+      'Paid third-party API subscriptions'
+    ],
+    faqs: [
+      {
+        question: 'Can this connect to my existing software or Google Sheets?',
+        answer: 'Yes! I can connect your custom web app directly to Google Sheets, your email system, Slack, Stripe, or other software so you never have to copy and paste data manually.'
+      },
+      {
+        question: 'Can my customers download their quote as a PDF?',
+        answer: 'Yes. I can add a clean "Download PDF Quote" button that instantly generates a branded document with your company logo, terms, and the calculated price.'
+      }
+    ]
+  },
+  {
+    id: 'hosting-maintenance',
+    number: '06',
+    title: 'Hosting & Maintenance',
     slug: 'hosting-maintenance',
-    categoryTag: 'FAST HOSTING · DAILY BACKUPS · 24/7 CARE',
-    shortDescription: 'Fast, secure website hosting, domain connection, daily automated backups, and friendly ongoing support so you never have to worry about tech issues.',
-    fullDescription: 'Never worry about your website going down, getting hacked, or losing files. I set up fast, modern cloud hosting, connect your domain name, install the secure lock icon (SSL), and take care of daily backups and software updates. If you ever need a quick change or have an urgent question, I am right here on WhatsApp.',
+    categoryTag: 'CLOUD HOSTING · DAILY BACKUPS · 24/7 SECURITY',
+    shortDescription: 'Fast, secure cloud hosting, domain setup, daily automated backups, security updates, and friendly ongoing support so your site stays online 24/7.',
+    fullDescription: 'Never worry about your website going down, getting hacked, or losing files. I set up fast, modern cloud hosting, connect your domain name, install SSL security encryption, and manage daily backups and software updates. Whenever you need a quick edit or technical help, I am right here on WhatsApp.',
     image: '/file_00000000f0ec61f9aa41eb3fa7a57a0f.png',
-    altText: 'Hosting and cloud maintenance 3D graphic showing secure server tower, cloud synchronization, SSL padlock, and speed monitoring dials',
+    altText: 'Hosting and maintenance 3D graphic showing secure server tower, cloud synchronization, SSL padlock, and speed monitoring dials',
     pricingEstimate: 'Setup included with every build, or low monthly care plan',
     typicalTimeline: '24 – 48 Hours for setup, or ongoing monthly care',
     rateNote: 'Affordable monthly care plan or pay-as-you-go £35/hr',
-    techStack: ['Fast Cloud Hosting', 'Domain Setup', 'Daily Backups', 'Hacker Shield', 'WhatsApp Help'],
-    accentColor: '#10B981',
+    techStack: ['Cloud Hosting', 'Domain & DNS', 'Daily Backups', 'SSL & Firewall', 'WhatsApp Support'],
+    accentColor: '#06B6D4',
     features: [
       'Fast, modern cloud hosting so your website opens quickly for visitors anywhere',
       'We connect your chosen web domain (.com / .co.uk) with zero hassle',
@@ -344,67 +405,6 @@ export const SERVICES: ServiceItem[] = [
       {
         question: 'What happens if I need a quick text change or picture swapped?',
         answer: 'Simply send me a WhatsApp message or an email with what you want changed, and I take care of it for you quickly.'
-      }
-    ]
-  },
-  {
-    id: 'web-apps',
-    number: '06',
-    title: 'Custom Web Tools & Portals',
-    slug: 'web-app-development',
-    categoryTag: 'ONLINE CALCULATORS · CLIENT PORTALS · DASHBOARDS',
-    shortDescription: 'Custom online tools that save your business time—like instant quote calculators, customer booking wizards, private client portals, and data dashboards.',
-    fullDescription: 'When a standard brochure website is not enough for your business operations, I build custom interactive web tools. Whether you want an instant quote estimator that gives visitors an accurate price on your site, an intake form that collects client documents, or a private dashboard to track business numbers, I turn your custom business idea into clean, working software.',
-    image: '/file_00000000dcbc61f9ac09271ea9b4755e.png',
-    altText: 'Custom web application interface with dynamic modular widgets, data visualization charts, interactive controls, and user settings panel',
-    pricingEstimate: 'Clear project quote based on the features you need',
-    typicalTimeline: '2 – 4 Weeks',
-    rateNote: 'Itemized milestone quote with clear feature breakdown',
-    techStack: ['Custom Calculators', 'Client Portals', 'User Logins', 'PDF Generators', 'Easy Dashboards'],
-    accentColor: '#A855F7',
-    features: [
-      'Instant calculations: Sliders and forms that calculate prices or estimates on the fly',
-      'Secure user login portals: Let customers sign in with email or Google to see their files',
-      'Filterable tables & search: Search and organize leads, client orders, or inventory easily',
-      'Downloadable PDF quotes and receipts: Customers can print or download quotes with 1 click',
-      'Email alerts: Automatic notifications sent whenever a client completes a calculation or form',
-      'Connects with your favorite tools (like Google Sheets, Mailchimp, Stripe, or your CRM)',
-      'Works smoothly on mobile phones just like a native phone app',
-      'Clean, easy-to-use screens that anyone can understand without a training manual'
-    ],
-    deliverables: [
-      'Finished custom web application or interactive tool live on your domain',
-      'Custom calculation formulas and pricing rules programmed accurately',
-      'User login and account security if requested',
-      'PDF download or email notification features configured',
-      'Full testing across browsers and phones before launch',
-      'Complete ownership of the code with zero ongoing software licensing royalties'
-    ],
-    suitableFor: [
-      'Service companies needing an online price estimator to qualify incoming leads',
-      'Businesses replacing messy paper forms or Excel spreadsheets with an easy online tool',
-      'Startups building an initial prototype or Minimum Viable Product (MVP)',
-      'Agencies and consultants wanting an interactive intake portal for new clients'
-    ],
-    scopeInclusions: [
-      'Mapping out the logic and user steps in plain English',
-      'Designing clean, intuitive screens that are easy to use',
-      'Programming the calculation formulas and form validations',
-      'Setting up account logins or document exports if needed',
-      'Testing everything thoroughly with real test numbers'
-    ],
-    scopeExclusions: [
-      'Monthly database server fees (if a large database is required)',
-      'Paid third-party API subscriptions'
-    ],
-    faqs: [
-      {
-        question: 'Can this connect to my existing software or Google Sheets?',
-        answer: 'Yes! I can connect your custom tool directly to Google Sheets, your email system, Slack, Stripe, or other software so you never have to copy and paste data manually.'
-      },
-      {
-        question: 'Can my customers download their quote as a PDF?',
-        answer: 'Yes. I can add a clean "Download PDF Quote" button that instantly generates a branded document with your company logo, terms, and the calculated price.'
       }
     ]
   }

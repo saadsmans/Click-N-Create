@@ -36,7 +36,7 @@ export const ProcessSection: React.FC = () => {
 
           {/* Animated SVG drawing progress line */}
           <motion.div
-            className="absolute left-6 md:left-8 top-4 w-[2px] bg-gradient-to-b from-blue-600 via-indigo-600 to-blue-400 origin-top shadow-xs"
+            className="absolute left-6 md:left-8 top-4 w-[2px] bg-gradient-to-b from-[#2563EB] via-[#38BDF8] to-[#BAE6FD] origin-top shadow-xs"
             style={{
               height: useTransform(lineHeight, [0, 1], ['0%', '100%']),
             }}
@@ -44,7 +44,7 @@ export const ProcessSection: React.FC = () => {
 
           {/* Stages List */}
           <div className="space-y-12 md:space-y-16">
-            {PROCESS_STAGES.map((stage, index) => {
+            {PROCESS_STAGES.map((stage) => {
               return (
                 <motion.div
                   key={stage.number}
@@ -57,8 +57,8 @@ export const ProcessSection: React.FC = () => {
                   {/* Timeline Node Badge */}
                   <div className={`relative z-10 shrink-0 w-12 h-12 md:w-16 md:h-16 rounded-2xl border flex flex-col items-center justify-center transition-all duration-300 ${
                     isDark
-                      ? 'border-white/20 bg-[#0E0E12] text-white shadow-md group-hover:border-white/40'
-                      : 'border-zinc-300 bg-white text-zinc-950 shadow-sm group-hover:border-zinc-400'
+                      ? 'border-white/15 bg-[#0C1222] text-[#BAE6FD] shadow-md group-hover:border-[#38BDF8]/50'
+                      : 'border-stone-300 bg-white text-[#1D4ED8] shadow-sm group-hover:border-[#1D4ED8]'
                   }`}>
                     <span className="text-xs md:text-sm font-mono font-bold">
                       {stage.number}
@@ -68,30 +68,34 @@ export const ProcessSection: React.FC = () => {
                   {/* Stage Content Card */}
                   <div className={`flex-1 rounded-3xl border p-6 sm:p-8 backdrop-blur-xl transition-all duration-300 ${
                     isDark
-                      ? 'border-white/10 bg-white/[0.025] hover:border-white/20 hover:bg-white/[0.04]'
-                      : 'border-zinc-200 bg-white hover:border-zinc-300 hover:shadow-md'
+                      ? 'border-white/10 bg-[#1A1D25]/60 hover:border-[#38BDF8]/40 hover:bg-[#1A1D25]/90'
+                      : 'border-stone-200 bg-white hover:border-[#1D4ED8]/45 hover:shadow-md'
                   }`}>
                     <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
-                      <span className="text-xs font-mono tracking-widest text-blue-500 uppercase font-semibold">
+                      <span className={`text-xs font-mono tracking-widest uppercase font-semibold ${
+                        isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'
+                      }`}>
                         Stage {stage.number} · {stage.stage}
                       </span>
                     </div>
 
                     <h3 className={`text-xl sm:text-2xl font-bold font-display tracking-tight mb-3 ${
-                      isDark ? 'text-white' : 'text-zinc-950'
+                      isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'
                     }`}>
                       {stage.title}
                     </h3>
 
                     <p className={`text-sm sm:text-base leading-relaxed mb-5 ${
-                      isDark ? 'text-zinc-400' : 'text-zinc-600'
+                      isDark ? 'text-[#94A3B8]' : 'text-[#475569]'
                     }`}>
                       {stage.description}
                     </p>
 
                     {/* Deliverables */}
                     <div className="pt-4 border-t border-black/[0.06] dark:border-white/[0.06]">
-                      <span className="text-[11px] font-mono text-zinc-500 uppercase tracking-wider block mb-2">
+                      <span className={`text-[11px] font-mono uppercase tracking-wider block mb-2 ${
+                        isDark ? 'text-[#94A3B8]' : 'text-[#475569]'
+                      }`}>
                         Key Deliverables:
                       </span>
                       <div className="flex flex-wrap gap-2">
@@ -100,11 +104,11 @@ export const ProcessSection: React.FC = () => {
                             key={idx}
                             className={`flex items-center gap-1.5 px-3 py-1 rounded-lg border text-xs font-mono ${
                               isDark
-                                ? 'bg-white/5 border-white/10 text-zinc-300'
-                                : 'bg-zinc-50 border-zinc-200 text-zinc-700'
+                                ? 'bg-white/5 border-white/10 text-[#94A3B8]'
+                                : 'bg-[#F3F6FA] border-stone-200 text-[#0F172A]'
                             }`}
                           >
-                            <CheckCircle2 className="w-3.5 h-3.5 text-blue-500" />
+                            <CheckCircle2 className={`w-3.5 h-3.5 ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`} />
                             <span>{item}</span>
                           </div>
                         ))}

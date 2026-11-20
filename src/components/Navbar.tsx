@@ -43,13 +43,11 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPath, onNavigate, onOpenT
 
   const getHeaderContainerClass = () => {
     if (!scrolled) {
-      // Normal top position: completely merged edge-to-edge with the page top
       return 'w-full max-w-7xl mx-auto px-0 py-0 rounded-none border-0 bg-transparent shadow-none';
     }
-    // Scrolled position: floating luxury pill shape
     return isDark
-      ? 'w-full max-w-4xl sm:max-w-5xl px-4 sm:px-6 py-2 sm:py-2.5 rounded-full border border-[#00F0FF]/30 bg-[#070714]/90 backdrop-blur-2xl shadow-[0_10px_35px_rgba(0,240,255,0.2)] text-white'
-      : 'w-full max-w-4xl sm:max-w-5xl px-4 sm:px-6 py-2 sm:py-2.5 rounded-full border border-zinc-200/90 bg-white/90 backdrop-blur-2xl shadow-[0_10px_30px_rgba(0,0,0,0.08)] text-zinc-950';
+      ? 'w-full max-w-4xl sm:max-w-5xl px-4 sm:px-6 py-2 sm:py-2.5 rounded-full border border-[#38BDF8]/30 bg-[#080D1B]/92 shadow-[0_14px_38px_rgba(2,8,23,0.68)] text-[#F1F5F9]'
+      : 'w-full max-w-4xl sm:max-w-5xl px-4 sm:px-6 py-2 sm:py-2.5 rounded-full border border-slate-300/90 bg-white/94 shadow-[0_10px_30px_rgba(15,23,42,0.09)] text-[#0F172A]';
   };
 
   useEffect(() => {
@@ -97,15 +95,15 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPath, onNavigate, onOpenT
 
   return (
     <>
-      {/* Sticky Floating Outer Container */}
+      {/* Minimal Floating Outer Container */}
       <header
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-out flex justify-center ${
           scrolled
             ? 'py-3 px-3 sm:px-6 pointer-events-none'
-            : 'py-4 sm:py-5 px-4 sm:px-8 border-b border-black/[0.06] dark:border-white/[0.06] bg-slate-50/80 dark:bg-[#07070F]/80 backdrop-blur-md'
+            : 'py-3.5 sm:py-4 px-4 sm:px-8 border-b border-slate-900/[0.07] dark:border-[#38BDF8]/[0.12] bg-[#F3F6FA]/90 dark:bg-[#060913]/88'
         }`}
       >
-        {/* The Unified Morphing Header Container */}
+        {/* Unified Morphing Header Container */}
         <div
           className={`transition-all duration-300 ease-out flex items-center justify-between relative pointer-events-auto ${getHeaderContainerClass()}`}
         >
@@ -125,8 +123,8 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPath, onNavigate, onOpenT
               className={`flex items-center gap-1 transition-all duration-300 ${
                 !scrolled
                   ? isDark
-                    ? 'px-3 py-1.5 rounded-full border border-white/10 bg-white/[0.02]'
-                    : 'px-3 py-1.5 rounded-full border border-zinc-200 bg-white/80 shadow-2xs'
+                    ? 'px-2.5 py-1 rounded-full border border-[#38BDF8]/18 bg-[#0C1222]/85'
+                    : 'px-2.5 py-1 rounded-full border border-slate-300/85 bg-white/92 shadow-2xs'
                   : ''
               }`}
             >
@@ -140,14 +138,14 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPath, onNavigate, onOpenT
                     key={item.label}
                     href={item.href}
                     onClick={(e) => handleLinkClick(e, item.href)}
-                    className={`relative px-3.5 py-1.5 text-xs font-mono transition-colors duration-200 rounded-full whitespace-nowrap cursor-pointer ${
+                    className={`relative px-3.5 py-1.5 text-xs font-mono transition-colors duration-200 rounded-full whitespace-nowrap shrink-0 cursor-pointer ${
                       isActive
                         ? isDark
-                          ? 'text-[#00F0FF] font-bold'
-                          : 'text-cyan-800 font-bold'
+                          ? 'text-[#7DD3FC] font-bold'
+                          : 'text-[#1D4ED8] font-bold'
                         : isDark
-                        ? 'text-zinc-400 hover:text-white'
-                        : 'text-zinc-600 hover:text-zinc-950'
+                        ? 'text-slate-400 hover:text-slate-100'
+                        : 'text-slate-600 hover:text-slate-950'
                     }`}
                   >
                     {isActive && (
@@ -155,8 +153,8 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPath, onNavigate, onOpenT
                         layoutId="nav-pill-active"
                         className={`absolute inset-0 rounded-full border ${
                           isDark
-                            ? 'bg-[#00F0FF]/15 border-[#00F0FF]/50 shadow-[0_0_12px_rgba(0,240,255,0.3)]'
-                            : 'bg-cyan-100/90 border-cyan-400'
+                            ? 'bg-[#38BDF8]/15 border-[#38BDF8]/45'
+                            : 'bg-[#2563EB]/10 border-[#2563EB]/40'
                         }`}
                         transition={{ type: 'spring', stiffness: 350, damping: 30 }}
                       />
@@ -166,31 +164,31 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPath, onNavigate, onOpenT
                 );
               })}
 
-              {/* High-Tech Pages Dropdown Trigger */}
+              {/* Directory Pages Dropdown Trigger */}
               <div className="relative" ref={pagesDropdownRef}>
                 <button
                   type="button"
                   onClick={() => setDropdownOpen(!dropdownOpen)}
-                  className={`px-3 py-1.5 text-xs font-mono flex items-center gap-1.5 rounded-full transition-all cursor-pointer ${
+                  className={`px-3 py-1.5 text-xs font-mono flex items-center gap-1.5 rounded-full transition-all cursor-pointer whitespace-nowrap shrink-0 ${
                     dropdownOpen
                       ? isDark
-                        ? 'bg-[#00F0FF]/20 text-[#00F0FF] border border-[#00F0FF]/40'
-                        : 'bg-cyan-100 text-cyan-800 border border-cyan-400'
+                        ? 'bg-[#38BDF8]/18 text-[#7DD3FC] border border-[#38BDF8]/45'
+                        : 'bg-[#2563EB]/12 text-[#1D4ED8] border border-[#2563EB]/40'
                       : isDark
-                      ? 'text-zinc-300 hover:text-white hover:bg-white/5'
-                      : 'text-zinc-700 hover:text-zinc-950 hover:bg-zinc-100'
+                      ? 'text-slate-300 hover:text-white hover:bg-white/5'
+                      : 'text-slate-700 hover:text-slate-950 hover:bg-slate-100'
                   }`}
                   aria-expanded={dropdownOpen}
                 >
-                  <span className="font-semibold uppercase tracking-wider">Pages</span>
+                  <span className="font-semibold uppercase tracking-wider">Explore</span>
                   <ChevronDown
                     className={`w-3.5 h-3.5 transition-transform duration-200 ${
-                      dropdownOpen ? 'rotate-180 text-[#00F0FF]' : 'text-zinc-500'
+                      dropdownOpen ? 'rotate-180 text-[#38BDF8]' : 'text-slate-500'
                     }`}
                   />
                 </button>
 
-                {/* Cyber Pages Dropdown Box */}
+                {/* Architectural Pages Dropdown Box */}
                 <AnimatePresence>
                   {dropdownOpen && (
                     <motion.div
@@ -198,23 +196,25 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPath, onNavigate, onOpenT
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, y: 8, scale: 0.96 }}
                       transition={{ duration: 0.18 }}
-                      className={`absolute top-full right-0 mt-3 w-80 z-50 transition-all duration-200 rounded-3xl p-5 border border-black/10 dark:border-white/10 shadow-2xl backdrop-blur-2xl ${
-                        isDark ? 'bg-[#0A0A16]/95 text-white' : 'bg-white/95 text-zinc-950'
+                      className={`absolute top-full right-0 mt-3 w-80 z-50 transition-all duration-200 rounded-2xl p-5 border shadow-2xl ${
+                        isDark
+                          ? 'bg-[#0B1120]/96 border-[#38BDF8]/25 text-[#F1F5F9]'
+                          : 'bg-white/98 border-slate-200 text-[#0F172A]'
                       }`}
                     >
-                      <div className="flex items-center justify-between pb-3 border-b border-black/[0.08] dark:border-white/[0.08] mb-3 text-[10px] font-mono">
-                        <span className="text-[#00F0FF] font-bold uppercase tracking-widest">
-                          [ DIRECTORY MATRIX ]
+                      <div className="flex items-center justify-between pb-3 border-b border-slate-900/[0.08] dark:border-white/[0.08] mb-3 text-[10px] font-mono">
+                        <span className={isDark ? 'text-[#38BDF8] font-bold uppercase tracking-widest' : 'text-[#1D4ED8] font-bold uppercase tracking-widest'}>
+                          Studio Directory
                         </span>
-                        <span className="text-zinc-500">Saad M</span>
+                        <span className="text-slate-400">Saad M</span>
                       </div>
 
-                      {/* Dark Mode Toggle in Pages Dropdown */}
-                      <div className="mb-3 p-2.5 rounded-2xl border border-black/[0.08] dark:border-white/[0.08] bg-black/[0.03] dark:bg-white/[0.03] flex items-center justify-between">
+                      {/* Theme Mode Toggle Row */}
+                      <div className="mb-3 p-2.5 rounded-xl border border-slate-900/[0.08] dark:border-white/[0.08] bg-slate-900/[0.03] dark:bg-white/[0.03] flex items-center justify-between">
                         <div className="flex items-center gap-2">
-                          <span className="text-xs font-mono font-medium">Dark Mode</span>
-                          <span className="text-[10px] font-mono text-zinc-500">
-                            [{isDark ? 'DARK' : 'LIGHT'}]
+                          <span className="text-xs font-mono font-medium">Appearance</span>
+                          <span className="text-[10px] font-mono text-slate-400">
+                            {isDark ? 'Midnight Glass' : 'Glacier Day'}
                           </span>
                         </div>
                         <ThemeToggle showLabel={false} />
@@ -225,19 +225,19 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPath, onNavigate, onOpenT
                           href="/portfolio"
                           onClick={(e) => handleLinkClick(e, '/portfolio')}
                           className={`flex items-center gap-3 p-2.5 rounded-xl text-xs font-mono transition-all group ${
-                            isDark ? 'hover:bg-[#00F0FF]/10 text-zinc-200' : 'hover:bg-cyan-50 text-zinc-800'
+                            isDark ? 'hover:bg-[#38BDF8]/12 text-slate-100' : 'hover:bg-slate-100 text-slate-900'
                           }`}
                         >
-                          <div className="w-7 h-7 rounded-lg bg-[#00F0FF]/15 text-[#00F0FF] flex items-center justify-center shrink-0">
+                          <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${isDark ? 'bg-[#38BDF8]/15 text-[#38BDF8]' : 'bg-[#2563EB]/12 text-[#1D4ED8]'}`}>
                             <Sparkles className="w-3.5 h-3.5" />
                           </div>
                           <div className="flex-1">
                             <div className="font-bold flex items-center justify-between">
-                              <span>Portfolio & CV</span>
-                              <span className="text-[10px] text-[#00F0FF]">RESUME</span>
+                              <span>Portfolio &amp; CV</span>
+                              <span className={`text-[10px] ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`}>RESUME</span>
                             </div>
-                            <span className="text-[10px] text-zinc-500 block">
-                              Projects & CV PDF Download
+                            <span className="text-[10px] text-slate-400 block">
+                              Projects &amp; CV PDF Download
                             </span>
                           </div>
                         </a>
@@ -246,19 +246,19 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPath, onNavigate, onOpenT
                           href="/estimator"
                           onClick={(e) => handleLinkClick(e, '/estimator')}
                           className={`flex items-center gap-3 p-2.5 rounded-xl text-xs font-mono transition-all group ${
-                            isDark ? 'hover:bg-[#00F0FF]/10 text-zinc-200' : 'hover:bg-cyan-50 text-zinc-800'
+                            isDark ? 'hover:bg-[#38BDF8]/12 text-slate-100' : 'hover:bg-slate-100 text-slate-900'
                           }`}
                         >
-                          <div className="w-7 h-7 rounded-lg bg-[#00F0FF]/15 text-[#00F0FF] flex items-center justify-center shrink-0">
+                          <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${isDark ? 'bg-[#38BDF8]/15 text-[#38BDF8]' : 'bg-[#2563EB]/12 text-[#1D4ED8]'}`}>
                             <Calculator className="w-3.5 h-3.5" />
                           </div>
                           <div className="flex-1">
                             <div className="font-bold flex items-center justify-between">
                               <span>Project Estimator</span>
-                              <span className="text-[10px] text-[#00F0FF]">CALC</span>
+                              <span className={`text-[10px] ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`}>CALC</span>
                             </div>
-                            <span className="text-[10px] text-zinc-500 block">
-                              Real-world hours & scope
+                            <span className="text-[10px] text-slate-400 block">
+                              Real-world hours &amp; scope
                             </span>
                           </div>
                         </a>
@@ -267,19 +267,19 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPath, onNavigate, onOpenT
                           href="/standards"
                           onClick={(e) => handleLinkClick(e, '/standards')}
                           className={`flex items-center gap-3 p-2.5 rounded-xl text-xs font-mono transition-all group ${
-                            isDark ? 'hover:bg-[#00F0FF]/10 text-zinc-200' : 'hover:bg-cyan-50 text-zinc-800'
+                            isDark ? 'hover:bg-[#38BDF8]/12 text-slate-100' : 'hover:bg-slate-100 text-slate-900'
                           }`}
                         >
-                          <div className="w-7 h-7 rounded-lg bg-indigo-500/15 text-indigo-400 flex items-center justify-center shrink-0">
+                          <div className="w-7 h-7 rounded-lg bg-sky-500/15 text-sky-400 flex items-center justify-center shrink-0">
                             <Terminal className="w-3.5 h-3.5" />
                           </div>
                           <div className="flex-1">
                             <div className="font-bold flex items-center justify-between">
                               <span>Tech Standards</span>
-                              <span className="text-[10px] text-indigo-400">ARCH</span>
+                              <span className="text-[10px] text-sky-500">ARCH</span>
                             </div>
-                            <span className="text-[10px] text-zinc-500 block">
-                              Speed & Core Web Vitals
+                            <span className="text-[10px] text-slate-400 block">
+                              Speed &amp; Core Web Vitals
                             </span>
                           </div>
                         </a>
@@ -288,7 +288,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPath, onNavigate, onOpenT
                           href="/process"
                           onClick={(e) => handleLinkClick(e, '/process')}
                           className={`flex items-center gap-3 p-2.5 rounded-xl text-xs font-mono transition-all group ${
-                            isDark ? 'hover:bg-[#00F0FF]/10 text-zinc-200' : 'hover:bg-cyan-50 text-zinc-800'
+                            isDark ? 'hover:bg-[#38BDF8]/12 text-slate-100' : 'hover:bg-slate-100 text-slate-900'
                           }`}
                         >
                           <div className="w-7 h-7 rounded-lg bg-emerald-500/15 text-emerald-400 flex items-center justify-center shrink-0">
@@ -296,10 +296,10 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPath, onNavigate, onOpenT
                           </div>
                           <div className="flex-1">
                             <div className="font-bold flex items-center justify-between">
-                              <span>Workflow & Process</span>
-                              <span className="text-[10px] text-emerald-400">STAGES</span>
+                              <span>Workflow &amp; Process</span>
+                              <span className="text-[10px] text-emerald-500">STAGES</span>
                             </div>
-                            <span className="text-[10px] text-zinc-500 block">
+                            <span className="text-[10px] text-slate-400 block">
                               Milestone blueprint
                             </span>
                           </div>
@@ -309,15 +309,15 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPath, onNavigate, onOpenT
                           href="/about"
                           onClick={(e) => handleLinkClick(e, '/about')}
                           className={`flex items-center gap-3 p-2.5 rounded-xl text-xs font-mono transition-all group ${
-                            isDark ? 'hover:bg-[#00F0FF]/10 text-zinc-200' : 'hover:bg-cyan-50 text-zinc-800'
+                            isDark ? 'hover:bg-[#38BDF8]/12 text-slate-100' : 'hover:bg-slate-100 text-slate-900'
                           }`}
                         >
-                          <div className="w-7 h-7 rounded-lg bg-amber-500/15 text-amber-400 flex items-center justify-center shrink-0">
+                          <div className="w-7 h-7 rounded-lg bg-blue-500/15 text-blue-400 flex items-center justify-center shrink-0">
                             <Sparkles className="w-3.5 h-3.5" />
                           </div>
                           <div className="flex-1">
                             <div className="font-bold">About Saad M</div>
-                            <span className="text-[10px] text-zinc-500 block">
+                            <span className="text-[10px] text-slate-400 block">
                               Independent developer
                             </span>
                           </div>
@@ -327,15 +327,15 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPath, onNavigate, onOpenT
                           href="/faq"
                           onClick={(e) => handleLinkClick(e, '/faq')}
                           className={`flex items-center gap-3 p-2.5 rounded-xl text-xs font-mono transition-all group ${
-                            isDark ? 'hover:bg-[#00F0FF]/10 text-zinc-200' : 'hover:bg-cyan-50 text-zinc-800'
+                            isDark ? 'hover:bg-[#38BDF8]/12 text-slate-100' : 'hover:bg-slate-100 text-slate-900'
                           }`}
                         >
-                          <div className="w-7 h-7 rounded-lg bg-rose-500/15 text-rose-400 flex items-center justify-center shrink-0">
+                          <div className="w-7 h-7 rounded-lg bg-slate-500/15 text-slate-400 flex items-center justify-center shrink-0">
                             <HelpCircle className="w-3.5 h-3.5" />
                           </div>
                           <div className="flex-1">
                             <div className="font-bold">FAQ Directory (25+)</div>
-                            <span className="text-[10px] text-zinc-500 block">
+                            <span className="text-[10px] text-slate-400 block">
                               Full answers database
                             </span>
                           </div>
@@ -351,14 +351,17 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPath, onNavigate, onOpenT
           {/* Zone 3: Right-Side Menu Dropdown Trigger & Dropdown Box */}
           <div className="relative" ref={rightMenuRef}>
             <div className="flex items-center gap-1.5 sm:gap-2">
-              {/* Pure Icon Menu Button */}
               <button
                 type="button"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 className={`relative p-2.5 sm:p-3 rounded-full font-mono text-xs transition-all duration-300 cursor-pointer overflow-hidden border ${
                   mobileMenuOpen
-                    ? 'border-[#00F0FF] bg-[#00F0FF] text-black shadow-[0_0_25px_rgba(0,240,255,0.7)]'
-                    : 'border-[#00F0FF]/50 bg-[#00F0FF] hover:bg-[#38bdf8] text-black shadow-[0_0_15px_rgba(0,240,255,0.4)] hover:shadow-[0_0_25px_rgba(0,240,255,0.8)]'
+                    ? isDark
+                      ? 'border-[#7DD3FC] bg-[#7DD3FC] text-[#040B16] shadow-[0_8px_24px_rgba(56,189,248,0.45)]'
+                      : 'border-[#1E40AF] bg-[#1E40AF] text-white shadow-[0_8px_24px_rgba(37,99,235,0.35)]'
+                    : isDark
+                    ? 'border-[#38BDF8]/60 bg-[#38BDF8] hover:bg-[#7DD3FC] text-[#040B16] shadow-[0_6px_18px_rgba(56,189,248,0.32)]'
+                    : 'border-[#1D4ED8]/70 bg-[#1D4ED8] hover:bg-[#1E40AF] text-white shadow-[0_6px_18px_rgba(29,78,216,0.28)]'
                 } flex items-center justify-center`}
                 aria-label={mobileMenuOpen ? 'Close menu dropdown' : 'Open menu dropdown'}
                 aria-expanded={mobileMenuOpen}
@@ -390,7 +393,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPath, onNavigate, onOpenT
               </button>
             </div>
 
-            {/* Normal Right-Side Menu Dropdown Box (No Full-Page Takeover) */}
+            {/* Right-Side Menu Dropdown Box */}
             <AnimatePresence>
               {mobileMenuOpen && (
                 <motion.div
@@ -398,31 +401,32 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPath, onNavigate, onOpenT
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: 10, scale: 0.95 }}
                   transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                  className={`absolute top-full right-0 mt-3 w-80 sm:w-92 max-h-[82vh] overflow-y-auto z-50 scrollbar-thin transition-all duration-200 rounded-3xl p-5 border border-black/10 dark:border-white/10 shadow-2xl backdrop-blur-2xl ${
-                    isDark ? 'bg-[#0A0A16]/95 text-white' : 'bg-white/95 text-zinc-950'
+                  className={`absolute top-full right-0 mt-3 w-80 sm:w-92 max-h-[82vh] overflow-y-auto z-50 scrollbar-thin transition-all duration-200 rounded-2xl p-5 border shadow-2xl ${
+                    isDark
+                      ? 'bg-[#0B1120]/96 border-[#38BDF8]/25 text-[#F1F5F9]'
+                      : 'bg-white/98 border-slate-200 text-[#0F172A]'
                   }`}
                 >
                   {/* Top Header Row in Dropdown */}
-                  <div className="flex items-center justify-between pb-3 border-b border-black/[0.08] dark:border-white/[0.08] mb-3 text-[11px] font-mono">
-                    <div className="flex items-center gap-1.5">
-                      <span className="w-2 h-2 rounded-full bg-[#00F0FF] animate-pulse" />
-                      <span className="text-[#00F0FF] font-bold uppercase tracking-wider">
-                        NAVIGATION MENU
+                  <div className="flex items-center justify-between pb-3 border-b border-slate-900/[0.08] dark:border-white/[0.08] mb-3 text-[11px] font-mono">
+                    <div className="flex items-center gap-2">
+                      <span className={`font-bold uppercase tracking-wider ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`}>
+                        Navigation Menu
                       </span>
                     </div>
-                    <span className="text-zinc-500 text-[10px] font-mono">Saad M</span>
+                    <span className="text-slate-400 text-[10px] font-mono">Saad M</span>
                   </div>
 
-                  {/* Dark Mode Toggle Icon Row */}
-                  <div className="mb-3 p-2.5 rounded-2xl border border-black/[0.08] dark:border-white/[0.08] bg-black/[0.03] dark:bg-white/[0.03] flex items-center justify-between">
+                  {/* Theme Mode Toggle Row */}
+                  <div className="mb-3 p-2.5 rounded-xl border border-slate-900/[0.08] dark:border-white/[0.08] bg-slate-900/[0.03] dark:bg-white/[0.03] flex items-center justify-between">
                     <div className="flex items-center gap-2.5">
-                      <div className="w-7 h-7 rounded-xl bg-cyan-500/15 text-[#00F0FF] flex items-center justify-center">
-                        {isDark ? <Moon className="w-3.5 h-3.5 text-cyan-400" /> : <Sun className="w-3.5 h-3.5 text-amber-500" />}
+                      <div className={`w-7 h-7 rounded-lg flex items-center justify-center ${isDark ? 'bg-[#38BDF8]/15 text-[#38BDF8]' : 'bg-[#2563EB]/12 text-[#1D4ED8]'}`}>
+                        {isDark ? <Moon className="w-3.5 h-3.5 text-[#7DD3FC]" /> : <Sun className="w-3.5 h-3.5 text-[#1D4ED8]" />}
                       </div>
                       <div>
-                        <div className="text-xs font-mono font-medium">Dark Mode</div>
-                        <div className="text-[10px] font-mono text-zinc-500">
-                          {isDark ? 'Cyber Dark Mode' : 'Bright Light Mode'}
+                        <div className="text-xs font-mono font-medium">Appearance</div>
+                        <div className="text-[10px] font-mono text-slate-400">
+                          {isDark ? 'Midnight Glass' : 'Glacier Daylight'}
                         </div>
                       </div>
                     </div>
@@ -431,7 +435,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPath, onNavigate, onOpenT
 
                   {/* Main Navigation Pages Grid */}
                   <div className="space-y-1 mb-4">
-                    <div className="text-[10px] font-mono uppercase tracking-widest text-zinc-500 px-1 py-1">
+                    <div className="text-[10px] font-mono uppercase tracking-widest text-slate-400 px-1 py-1">
                       Website Pages
                     </div>
                     <div className="grid grid-cols-2 gap-2 font-mono text-xs">
@@ -448,17 +452,17 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPath, onNavigate, onOpenT
                             className={`p-2.5 rounded-xl border transition-all flex items-center justify-between group ${
                               isActive
                                 ? isDark
-                                  ? 'border-[#00F0FF] bg-[#00F0FF]/15 text-[#00F0FF] font-bold shadow-[0_0_10px_rgba(0,240,255,0.2)]'
-                                  : 'border-cyan-600 bg-cyan-50 text-cyan-900 font-bold'
+                                  ? 'border-[#38BDF8] bg-[#38BDF8]/15 text-[#7DD3FC] font-bold'
+                                  : 'border-[#2563EB] bg-[#2563EB]/10 text-[#1D4ED8] font-bold'
                                 : isDark
-                                ? 'border-white/5 bg-white/[0.02] text-zinc-300 hover:border-[#00F0FF]/40 hover:bg-[#00F0FF]/5 hover:text-white'
-                                : 'border-zinc-200/80 bg-zinc-50/80 text-zinc-700 hover:border-cyan-400 hover:bg-cyan-50/50 hover:text-zinc-950'
+                                ? 'border-white/6 bg-white/[0.02] text-slate-300 hover:border-[#38BDF8]/40 hover:bg-[#38BDF8]/10 hover:text-white'
+                                : 'border-slate-200 bg-slate-50/80 text-slate-700 hover:border-[#2563EB] hover:bg-blue-50/60 hover:text-slate-950'
                             }`}
                           >
                             <span className="truncate">{item.label}</span>
                             <ArrowUpRight
                               className={`w-3 h-3 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 ${
-                                isActive ? 'text-[#00F0FF]' : 'text-zinc-500'
+                                isActive ? (isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]') : 'text-slate-500'
                               }`}
                             />
                           </a>
@@ -468,11 +472,15 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPath, onNavigate, onOpenT
                   </div>
 
                   {/* Bottom Actions */}
-                  <div className="pt-2 border-t border-black/[0.08] dark:border-white/[0.08]">
+                  <div className="pt-2 border-t border-slate-900/[0.08] dark:border-white/[0.08]">
                     <button
                       type="button"
                       onClick={(e) => handleLinkClick(e, '/contact')}
-                      className="w-full py-3 px-4 rounded-xl font-mono text-xs font-bold uppercase tracking-wider bg-[#00F0FF] hover:bg-[#38bdf8] text-black shadow-[0_0_20px_rgba(0,240,255,0.4)] hover:shadow-[0_0_30px_rgba(0,240,255,0.7)] transition-all flex items-center justify-center gap-2 cursor-pointer"
+                      className={`w-full py-3 px-4 rounded-xl font-mono text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer ${
+                        isDark
+                          ? 'bg-[#38BDF8] hover:bg-[#7DD3FC] text-[#040B16] shadow-[0_8px_22px_rgba(56,189,248,0.3)]'
+                          : 'bg-[#1D4ED8] hover:bg-[#1E40AF] text-white shadow-[0_8px_22px_rgba(29,78,216,0.25)]'
+                      }`}
                     >
                       <span>Start a Project / Contact</span>
                       <ArrowUpRight className="w-4 h-4" />

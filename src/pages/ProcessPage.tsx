@@ -1,9 +1,9 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { CheckCircle2, ArrowUpRight, Sparkles, Clock, ShieldCheck, Terminal, Layers } from 'lucide-react';
+import { CheckCircle2, Sparkles, Clock, ShieldCheck, Terminal } from 'lucide-react';
 import { SectionHeading } from '../components/SectionHeading.tsx';
 import { MagneticButton } from '../components/MagneticButton.tsx';
-import { PROCESS_STAGES, SITE_CONFIG } from '../data/site.ts';
+import { PROCESS_STAGES } from '../data/site.ts';
 import { useTheme } from '../context/ThemeContext.tsx';
 import { useCustomization } from '../context/CustomizationContext.tsx';
 import { SEOHead } from '../components/SEOHead.tsx';
@@ -19,7 +19,7 @@ export const ProcessPage: React.FC<ProcessPageProps> = ({ onNavigate }) => {
   const cms = getPageContent('process') || {};
 
   return (
-    <div className="pt-28 pb-20 md:pt-36 relative overflow-x-hidden w-full max-w-full">
+    <div className="pt-28 pb-20 md:pt-36 relative overflow-x-clip w-full max-w-full">
       <SEOHead
         title="Development Process & Milestones | Click N Create — Saad M"
         description="Discover Saad M's 5-stage freelance development methodology: Discovery & Scope, Wireframes & UI, Agile Coding, QA Testing, and Final Launch."
@@ -35,21 +35,23 @@ export const ProcessPage: React.FC<ProcessPageProps> = ({ onNavigate }) => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* ===================== HERO SECTION ===================== */}
         <div className="max-w-3xl mb-16 md:mb-20">
-          <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border text-xs font-mono uppercase tracking-wider mb-4 ${
-            isDark ? 'border-white/10 bg-white/5 text-blue-400' : 'border-zinc-300 bg-white text-blue-600 shadow-2xs font-semibold'
+          <div className={`inline-flex items-center gap-2 px-3.5 py-1 rounded-full border text-xs font-mono uppercase tracking-wider mb-4 ${
+            isDark
+              ? 'border-[#38BDF8]/30 bg-[#0C1222]/90 text-[#38BDF8]'
+              : 'border-[#1D4ED8]/30 bg-[#F3E9DC]/75 text-[#1E40AF] shadow-2xs font-semibold'
           }`}>
             <Sparkles className="w-3.5 h-3.5" />
             <span>{cms.badgeText || 'End-to-End Methodology'}</span>
           </div>
 
           <h1 className={`text-4xl sm:text-6xl md:text-7xl font-black font-display tracking-tight leading-[1.05] ${
-            isDark ? 'text-white' : 'text-zinc-950'
+            isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'
           }`}>
             {cms.heroTitle || 'HOW WE'} <span className="text-luxury-gradient">{cms.heroHighlight || 'COLLABORATE'}</span>
           </h1>
 
           <p className={`mt-5 text-base sm:text-xl leading-relaxed ${
-            isDark ? 'text-zinc-400' : 'text-zinc-600'
+            isDark ? 'text-[#94A3B8]' : 'text-[#475569]'
           }`}>
             {cms.heroSubtitle || 'A structured 5-stage blueprint engineered to eliminate guesswork, keep you directly involved at every milestone, and deliver production-grade code on time and within budget.'}
           </p>
@@ -66,46 +68,46 @@ export const ProcessPage: React.FC<ProcessPageProps> = ({ onNavigate }) => {
               transition={{ duration: 0.5, delay: idx * 0.08 }}
               className={`p-8 sm:p-10 rounded-3xl border transition-all duration-300 backdrop-blur-xl ${
                 isDark
-                  ? 'border-white/10 bg-[#0E0E12]/85 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.8)]'
-                  : 'border-zinc-200 bg-white shadow-md'
+                  ? 'border-white/10 bg-[#0C1222]/90 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.8)] hover:border-[#38BDF8]/35'
+                  : 'border-black/10 bg-white shadow-md hover:border-[#1D4ED8]/40'
               }`}
             >
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
                 {/* Left: Step indicator */}
                 <div className="lg:col-span-4 space-y-3">
                   <div className="flex items-center gap-3">
-                    <span className="text-3xl sm:text-4xl font-black font-display text-blue-500">
+                    <span className={`text-3xl sm:text-4xl font-black font-display ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`}>
                       {stage.number}
                     </span>
-                    <span className="text-xs font-mono text-zinc-500 uppercase tracking-widest">
+                    <span className={`text-xs font-mono uppercase tracking-widest ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>
                       Stage {stage.number}
                     </span>
                   </div>
 
                   <h3 className={`text-2xl font-bold font-display tracking-tight ${
-                    isDark ? 'text-white' : 'text-zinc-950'
+                    isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'
                   }`}>
                     {stage.stage}
                   </h3>
 
-                  <div className="flex items-center gap-2 text-xs font-mono text-zinc-500 pt-1">
-                    <Clock className="w-3.5 h-3.5 text-blue-500" />
+                  <div className={`flex items-center gap-2 text-xs font-mono pt-1 ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>
+                    <Clock className={`w-3.5 h-3.5 ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`} />
                     <span>Typical Duration: {stage.durationEstimate}</span>
                   </div>
                 </div>
 
                 {/* Right: Description & Deliverables */}
                 <div className="lg:col-span-8 space-y-5">
-                  <h4 className={`text-lg font-bold font-display ${isDark ? 'text-white' : 'text-zinc-950'}`}>
+                  <h4 className={`text-lg font-bold font-display ${isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'}`}>
                     {stage.title}
                   </h4>
 
-                  <p className={`text-sm sm:text-base leading-relaxed ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>
+                  <p className={`text-sm sm:text-base leading-relaxed ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>
                     {stage.description}
                   </p>
 
                   <div className="pt-4 border-t border-black/[0.06] dark:border-white/[0.06]">
-                    <span className="text-xs font-mono text-zinc-500 uppercase tracking-wider block mb-3 font-semibold">
+                    <span className={`text-xs font-mono uppercase tracking-wider block mb-3 font-semibold ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>
                       Milestone Deliverables:
                     </span>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
@@ -113,10 +115,10 @@ export const ProcessPage: React.FC<ProcessPageProps> = ({ onNavigate }) => {
                         <div
                           key={dIdx}
                           className={`flex items-start gap-2 text-xs sm:text-sm p-2.5 rounded-xl border ${
-                            isDark ? 'border-white/10 bg-white/5 text-zinc-300' : 'border-zinc-200 bg-zinc-50 text-zinc-700'
+                            isDark ? 'border-white/10 bg-[#1A1D25] text-[#F1F5F9]/85' : 'border-black/10 bg-[#F3F6FA] text-[#475569]'
                           }`}
                         >
-                          <CheckCircle2 className="w-4 h-4 text-blue-500 shrink-0 mt-0.5" />
+                          <CheckCircle2 className={`w-4 h-4 shrink-0 mt-0.5 ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`} />
                           <span>{item}</span>
                         </div>
                       ))}
@@ -138,37 +140,37 @@ export const ProcessPage: React.FC<ProcessPageProps> = ({ onNavigate }) => {
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-6">
             <div className={`p-6 rounded-2xl border space-y-3 ${
-              isDark ? 'border-white/10 bg-white/[0.02]' : 'border-zinc-200 bg-white shadow-2xs'
+              isDark ? 'border-white/10 bg-[#0C1222]/85' : 'border-black/10 bg-white shadow-2xs'
             }`}>
               <ShieldCheck className="w-6 h-6 text-emerald-500" />
-              <h4 className={`text-base font-bold font-display ${isDark ? 'text-white' : 'text-zinc-950'}`}>
+              <h4 className={`text-base font-bold font-display ${isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'}`}>
                 Zero Lock-In
               </h4>
-              <p className="text-xs text-zinc-500 leading-relaxed">
+              <p className={`text-xs leading-relaxed ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>
                 You retain complete, independent ownership of all repository code, domain registrations, and cloud hosting accounts.
               </p>
             </div>
 
             <div className={`p-6 rounded-2xl border space-y-3 ${
-              isDark ? 'border-white/10 bg-white/[0.02]' : 'border-zinc-200 bg-white shadow-2xs'
+              isDark ? 'border-white/10 bg-[#0C1222]/85' : 'border-black/10 bg-white shadow-2xs'
             }`}>
-              <Terminal className="w-6 h-6 text-blue-500" />
-              <h4 className={`text-base font-bold font-display ${isDark ? 'text-white' : 'text-zinc-950'}`}>
+              <Terminal className={`w-6 h-6 ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`} />
+              <h4 className={`text-base font-bold font-display ${isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'}`}>
                 Rigorous Mobile QA
               </h4>
-              <p className="text-xs text-zinc-500 leading-relaxed">
+              <p className={`text-xs leading-relaxed ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>
                 Every layout is verified across iOS Safari, Android Chrome, tablet viewports, and laptops before staging review.
               </p>
             </div>
 
             <div className={`p-6 rounded-2xl border space-y-3 ${
-              isDark ? 'border-white/10 bg-white/[0.02]' : 'border-zinc-200 bg-white shadow-2xs'
+              isDark ? 'border-white/10 bg-[#0C1222]/85' : 'border-black/10 bg-white shadow-2xs'
             }`}>
-              <Clock className="w-6 h-6 text-indigo-500" />
-              <h4 className={`text-base font-bold font-display ${isDark ? 'text-white' : 'text-zinc-950'}`}>
+              <Clock className={`w-6 h-6 ${isDark ? 'text-[#94A3B8]' : 'text-[#1E40AF]'}`} />
+              <h4 className={`text-base font-bold font-display ${isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'}`}>
                 Direct Updates
               </h4>
-              <p className="text-xs text-zinc-500 leading-relaxed">
+              <p className={`text-xs leading-relaxed ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>
                 Clear milestone updates delivered directly via WhatsApp or email so you always know current progress.
               </p>
             </div>
@@ -177,15 +179,15 @@ export const ProcessPage: React.FC<ProcessPageProps> = ({ onNavigate }) => {
 
         {/* ===================== CTA ===================== */}
         <div className="py-16 text-center max-w-3xl mx-auto space-y-6">
-          <span className="text-xs font-mono text-blue-500 tracking-widest uppercase block font-semibold">
+          <span className={`text-xs font-mono tracking-widest uppercase block font-semibold ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`}>
             Ready to Begin Stage 01?
           </span>
           <h2 className={`text-3xl sm:text-5xl font-extrabold font-display tracking-tight ${
-            isDark ? 'text-white' : 'text-zinc-950'
+            isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'
           }`}>
             Let's Start with Discovery.
           </h2>
-          <p className={`text-base sm:text-lg leading-relaxed ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>
+          <p className={`text-base sm:text-lg leading-relaxed ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>
             Send your project brief. Saad M will review your requirements and provide an honest estimate.
           </p>
           <div className="pt-4 flex flex-wrap items-center justify-center gap-4">

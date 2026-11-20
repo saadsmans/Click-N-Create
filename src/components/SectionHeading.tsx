@@ -29,13 +29,13 @@ export const SectionHeading: React.FC<SectionHeadingProps> = ({
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.4 }}
-          className={`text-xs font-mono tracking-widest uppercase mb-3 flex items-center gap-2 flex-wrap ${
-            isDark ? 'text-[#00F0FF] font-bold' : 'text-cyan-800 font-bold'
+          className={`text-xs font-mono tracking-[0.18em] uppercase mb-3 flex items-center gap-2.5 flex-wrap ${
+            isDark ? 'text-[#7DD3FC] font-semibold' : 'text-[#1D4ED8] font-semibold'
           }`}
           style={{ justifyContent: isCenter ? 'center' : 'flex-start' }}
         >
-          <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${isDark ? 'bg-[#00F0FF] shadow-[0_0_6px_#00F0FF]' : 'bg-cyan-600'}`} />
-          <span className="break-words">[ {category} ]</span>
+          <span className={`w-4 h-[1px] shrink-0 ${isDark ? 'bg-[#38BDF8]' : 'bg-[#1D4ED8]'}`} />
+          <span className="break-words">{category}</span>
         </motion.div>
       )}
 
@@ -45,7 +45,7 @@ export const SectionHeading: React.FC<SectionHeadingProps> = ({
         viewport={{ once: true }}
         transition={{ duration: 0.5, delay: 0.1 }}
         className={`text-2xl sm:text-4xl md:text-5xl font-extrabold tracking-tight leading-tight sm:leading-[1.1] break-words font-display ${
-          isDark ? 'text-white' : 'text-zinc-950'
+          isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'
         }`}
       >
         {title}
@@ -58,7 +58,7 @@ export const SectionHeading: React.FC<SectionHeadingProps> = ({
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.2 }}
           className={`mt-3 sm:mt-4 text-sm sm:text-base md:text-lg leading-relaxed break-words ${
-            isDark ? 'text-zinc-400' : 'text-zinc-600'
+            isDark ? 'text-[#94A3B8]' : 'text-[#475569]'
           }`}
         >
           {subtitle}

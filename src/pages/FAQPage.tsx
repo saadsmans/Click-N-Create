@@ -53,7 +53,7 @@ export const FAQPage: React.FC<FAQPageProps> = ({ onNavigate }) => {
   }));
 
   return (
-    <div className="pt-28 pb-20 md:pt-36 relative overflow-x-hidden w-full max-w-full">
+    <div className="pt-28 pb-20 md:pt-36 relative overflow-x-clip w-full max-w-full">
       <SEOHead
         title="Frequently Asked Questions (FAQ) | Click N Create — Saad M"
         description="Get instant answers about pricing (£35/hr), turnarounds, contracts, intellectual property rights, maintenance, and working directly with Saad M."
@@ -74,21 +74,23 @@ export const FAQPage: React.FC<FAQPageProps> = ({ onNavigate }) => {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Header */}
         <div className="text-center max-w-2xl mx-auto mb-12">
-          <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border text-xs font-mono uppercase tracking-wider mb-4 ${
-            isDark ? 'border-white/10 bg-white/5 text-blue-400' : 'border-zinc-300 bg-white text-blue-600 shadow-2xs font-semibold'
+          <div className={`inline-flex items-center gap-2 px-3.5 py-1 rounded-full border text-xs font-mono uppercase tracking-wider mb-4 ${
+            isDark
+              ? 'border-[#38BDF8]/30 bg-[#0C1222]/90 text-[#38BDF8]'
+              : 'border-[#1D4ED8]/30 bg-[#F3E9DC]/75 text-[#1E40AF] shadow-2xs font-semibold'
           }`}>
             <HelpCircle className="w-3.5 h-3.5" />
             <span>{cms.badgeText || 'Transparency & Answers'}</span>
           </div>
 
           <h1 className={`text-4xl sm:text-5xl font-black font-display tracking-tight leading-[1.1] ${
-            isDark ? 'text-white' : 'text-zinc-950'
+            isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'
           }`}>
             {cms.heroTitle || 'FREQUENTLY ASKED'} <span className="text-luxury-gradient">{cms.heroHighlight || 'QUESTIONS'}</span>
           </h1>
 
           <p className={`mt-4 text-base sm:text-lg leading-relaxed ${
-            isDark ? 'text-zinc-400' : 'text-zinc-600'
+            isDark ? 'text-[#94A3B8]' : 'text-[#475569]'
           }`}>
             {cms.heroSubtitle || 'Straightforward, honest details about working with Saad M at Click N Create. No hidden fees, no agency runarounds.'}
           </p>
@@ -98,16 +100,16 @@ export const FAQPage: React.FC<FAQPageProps> = ({ onNavigate }) => {
         <div className="mb-10 space-y-4">
           {/* Search Box */}
           <div className="relative">
-            <Search className="w-4 h-4 text-zinc-400 absolute left-4 top-1/2 -translate-y-1/2" />
+            <Search className={`w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`} />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search questions (e.g., cost, e-commerce, timeline)..."
-              className={`w-full pl-11 pr-4 py-3.5 rounded-2xl border text-sm transition-all focus:outline-none focus:ring-2 focus:ring-blue-500/20 ${
+              className={`w-full pl-11 pr-4 py-3.5 rounded-2xl border text-sm transition-all focus:outline-none focus:ring-2 ${
                 isDark
-                  ? 'border-white/10 bg-white/[0.03] text-white placeholder:text-zinc-500 focus:border-blue-500'
-                  : 'border-zinc-300 bg-white text-zinc-900 placeholder:text-zinc-400 focus:border-blue-600 shadow-2xs'
+                  ? 'border-white/10 bg-[#0C1222]/85 text-[#F1F5F9] placeholder:text-[#94A3B8] focus:border-[#38BDF8] focus:ring-[#38BDF8]/20'
+                  : 'border-black/15 bg-white text-[#0F172A] placeholder:text-[#475569]/70 focus:border-[#1D4ED8] focus:ring-[#1D4ED8]/20 shadow-2xs'
               }`}
             />
           </div>
@@ -122,11 +124,11 @@ export const FAQPage: React.FC<FAQPageProps> = ({ onNavigate }) => {
                 className={`px-4 py-1.5 rounded-xl text-xs font-mono transition-all cursor-pointer ${
                   activeCategory === cat
                     ? isDark
-                      ? 'bg-white/15 text-white border border-white/25 shadow-xs'
-                      : 'bg-zinc-900 text-white border border-zinc-900 shadow-xs'
+                      ? 'bg-[#38BDF8] text-[#060913] font-bold border border-[#38BDF8] shadow-xs'
+                      : 'bg-[#1D4ED8] text-white font-bold border border-[#1D4ED8] shadow-xs'
                     : isDark
-                    ? 'bg-white/[0.02] text-zinc-400 border border-white/5 hover:text-white'
-                    : 'bg-zinc-100 text-zinc-600 border border-zinc-200 hover:text-zinc-950'
+                    ? 'bg-[#0C1222] text-[#94A3B8] border border-white/10 hover:text-[#F1F5F9]'
+                    : 'bg-white text-[#475569] border border-black/10 hover:text-[#0F172A]'
                 }`}
               >
                 {cat}
@@ -140,7 +142,7 @@ export const FAQPage: React.FC<FAQPageProps> = ({ onNavigate }) => {
           <FAQAccordion items={filteredFaqs} defaultOpenIndex={0} />
         ) : (
           <div className={`text-center py-16 rounded-2xl border ${
-            isDark ? 'border-white/10 bg-white/[0.02] text-zinc-400' : 'border-zinc-200 bg-white text-zinc-600'
+            isDark ? 'border-white/10 bg-[#0C1222]/85 text-[#94A3B8]' : 'border-black/10 bg-white text-[#475569]'
           }`}>
             <p className="text-sm">No questions found matching your search.</p>
             <button
@@ -149,7 +151,7 @@ export const FAQPage: React.FC<FAQPageProps> = ({ onNavigate }) => {
                 setSearchQuery('');
                 setActiveCategory('All');
               }}
-              className="mt-4 px-4 py-2 rounded-lg border border-zinc-300 dark:border-white/20 text-xs font-mono"
+              className="mt-4 px-4 py-2 rounded-lg border border-black/15 dark:border-white/15 text-xs font-mono cursor-pointer"
             >
               Reset Filters
             </button>
@@ -159,13 +161,13 @@ export const FAQPage: React.FC<FAQPageProps> = ({ onNavigate }) => {
         {/* Still Have Questions Box */}
         <div className={`mt-16 p-8 rounded-3xl border text-center space-y-4 backdrop-blur-xl ${
           isDark
-            ? 'border-white/10 bg-[#0E0E12]/80 shadow-md'
-            : 'border-zinc-200 bg-white shadow-sm'
+            ? 'border-white/10 bg-[#0C1222]/90 shadow-md'
+            : 'border-black/10 bg-white shadow-sm'
         }`}>
-          <h3 className={`text-xl font-bold font-display ${isDark ? 'text-white' : 'text-zinc-950'}`}>
+          <h3 className={`text-xl font-bold font-display ${isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'}`}>
             Have a question not listed here?
           </h3>
-          <p className={`text-sm max-w-md mx-auto ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>
+          <p className={`text-sm max-w-md mx-auto ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>
             I am happy to discuss your specific project requirements directly. Send me a message and I will reply personally.
           </p>
           <div className="pt-2">

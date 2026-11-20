@@ -32,7 +32,7 @@ export const RecentWorksSection: React.FC<RecentWorksSectionProps> = ({ onNaviga
       {/* Diffused ambient light */}
       <div
         className={`absolute top-1/3 left-1/2 -translate-x-1/2 w-[650px] h-[450px] blur-[140px] pointer-events-none transition-opacity ${
-          isDark ? 'bg-cyan-500/10' : 'bg-cyan-400/10'
+          isDark ? 'bg-[#38BDF8]/10' : 'bg-[#38BDF8]/10'
         }`}
       />
 
@@ -52,8 +52,8 @@ export const RecentWorksSection: React.FC<RecentWorksSectionProps> = ({ onNaviga
               onClick={() => onNavigate('/portfolio')}
               className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border text-xs font-mono font-bold transition-all cursor-pointer ${
                 isDark
-                  ? 'border-[#00F0FF]/40 bg-[#00F0FF]/10 hover:bg-[#00F0FF]/20 text-[#00F0FF] shadow-[0_0_15px_rgba(0,240,255,0.2)]'
-                  : 'border-cyan-500 bg-cyan-50 hover:bg-cyan-100 text-cyan-900 shadow-2xs'
+                  ? 'border-[#38BDF8]/40 bg-[#38BDF8]/10 hover:bg-[#38BDF8]/20 text-[#BAE6FD] shadow-[0_8px_24px_rgba(56, 189, 248,0.16)]'
+                  : 'border-[#1D4ED8]/45 bg-[#F3E9DC] hover:bg-[#EBDDCA] text-[#1E40AF] shadow-2xs'
               }`}
             >
               <span>View Full Portfolio & CV</span>
@@ -70,12 +70,12 @@ export const RecentWorksSection: React.FC<RecentWorksSectionProps> = ({ onNaviga
           transition={{ duration: 0.6 }}
           className={`rounded-3xl border p-6 sm:p-10 md:p-12 mb-10 relative overflow-hidden backdrop-blur-2xl transition-all duration-300 ${
             isDark
-              ? 'border-cyan-500/35 bg-gradient-to-br from-[#0B0C1E]/95 via-[#080916]/90 to-[#04040A]/95 shadow-[0_20px_60px_-10px_rgba(0,240,255,0.2)]'
-              : 'border-cyan-300 bg-white/95 shadow-xl hover:border-cyan-400'
+              ? 'border-[#38BDF8]/30 bg-gradient-to-br from-[#161922]/95 via-[#111319]/95 to-[#060913]/95 shadow-[0_20px_60px_-10px_rgba(56, 189, 248,0.14)]'
+              : 'border-stone-200 bg-white/95 shadow-xl hover:border-[#1D4ED8]/50'
           }`}
         >
           {/* Subtle Ambient Glow */}
-          <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-[#00F0FF]/20 via-purple-600/10 to-transparent rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-[#38BDF8]/15 via-[#2563EB]/10 to-transparent rounded-full blur-3xl pointer-events-none" />
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center relative z-10">
             {/* Left Column: Client Project Info */}
@@ -83,23 +83,25 @@ export const RecentWorksSection: React.FC<RecentWorksSectionProps> = ({ onNaviga
               <div>
                 <div className="flex flex-wrap items-center gap-2.5 mb-3.5">
                   <span className="px-3 py-1 rounded-full text-[11px] font-mono font-bold uppercase tracking-wider bg-emerald-500/15 border border-emerald-500/35 text-emerald-400 flex items-center gap-1.5 shadow-xs">
-                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                    <span>RECENT CLIENT WORK // 2026</span>
+                    <span className="w-2 h-2 rounded-full bg-emerald-400" />
+                    <span>RECENT CLIENT WORK · 2026</span>
                   </span>
 
-                  <span className="px-3 py-1 rounded-full text-[11px] font-mono font-bold uppercase tracking-wider bg-[#00F0FF]/10 border border-[#00F0FF]/30 text-[#00F0FF]">
+                  <span className={`px-3 py-1 rounded-full text-[11px] font-mono font-bold uppercase tracking-wider border ${
+                    isDark ? 'bg-[#38BDF8]/10 border-[#38BDF8]/30 text-[#BAE6FD]' : 'bg-[#F3E9DC] border-[#1D4ED8]/35 text-[#1E40AF]'
+                  }`}>
                     ACADEMIC DASHBOARD & PORTFOLIO
                   </span>
                 </div>
 
                 <h3 className={`text-2xl sm:text-3xl md:text-4xl font-black font-display tracking-tight leading-tight break-words ${
-                  isDark ? 'text-white' : 'text-zinc-950'
+                  isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'
                 }`}>
                   Owais Portfolio & <span className="text-cyber-gradient">Academic Dashboard</span>
                 </h3>
 
                 <p className={`mt-4 text-sm sm:text-base leading-relaxed ${
-                  isDark ? 'text-zinc-300' : 'text-zinc-700'
+                  isDark ? 'text-[#94A3B8]' : 'text-[#475569]'
                 }`}>
                   Successfully designed, built, and launched for client <strong>Owais</strong>. A clean, responsive portfolio and academic background dashboard featuring his educational trajectory, degree milestones, interactive skill matrices, and personal accomplishments with zero-lag performance.
                 </p>
@@ -107,31 +109,31 @@ export const RecentWorksSection: React.FC<RecentWorksSectionProps> = ({ onNaviga
 
               {/* Key Deliverables Matrix */}
               <div className="space-y-2.5 pt-1">
-                <span className="text-xs font-mono text-zinc-400 uppercase tracking-widest font-bold block">
+                <span className={`text-xs font-mono uppercase tracking-widest font-bold block ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>
                   Delivered Features & Technical Highlights:
                 </span>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
                   <div className="flex items-start gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-[#00F0FF] shrink-0 mt-0.5" />
-                    <span className={isDark ? 'text-zinc-300' : 'text-zinc-700'}>
+                    <CheckCircle2 className={`w-4 h-4 shrink-0 mt-0.5 ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`} />
+                    <span className={isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}>
                       Full Academic Timeline & Milestone Showcase
                     </span>
                   </div>
                   <div className="flex items-start gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-[#00F0FF] shrink-0 mt-0.5" />
-                    <span className={isDark ? 'text-zinc-300' : 'text-zinc-700'}>
+                    <CheckCircle2 className={`w-4 h-4 shrink-0 mt-0.5 ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`} />
+                    <span className={isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}>
                       Categorized Technical & Soft Skills Matrix
                     </span>
                   </div>
                   <div className="flex items-start gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-[#00F0FF] shrink-0 mt-0.5" />
-                    <span className={isDark ? 'text-zinc-300' : 'text-zinc-700'}>
+                    <CheckCircle2 className={`w-4 h-4 shrink-0 mt-0.5 ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`} />
+                    <span className={isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}>
                       Live Cloud Deployment on Vercel CDN
                     </span>
                   </div>
                   <div className="flex items-start gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-[#00F0FF] shrink-0 mt-0.5" />
-                    <span className={isDark ? 'text-zinc-300' : 'text-zinc-700'}>
+                    <CheckCircle2 className={`w-4 h-4 shrink-0 mt-0.5 ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`} />
+                    <span className={isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}>
                       100% Responsive Desktop, Tablet & Mobile UI
                     </span>
                   </div>
@@ -145,8 +147,8 @@ export const RecentWorksSection: React.FC<RecentWorksSectionProps> = ({ onNaviga
                     key={idx}
                     className={`text-xs font-mono px-3 py-1 rounded-lg border ${
                       isDark
-                        ? 'bg-white/5 border-white/10 text-zinc-300'
-                        : 'bg-zinc-100 border-zinc-200 text-zinc-800'
+                        ? 'bg-white/5 border-white/10 text-[#94A3B8]'
+                        : 'bg-[#F3F6FA] border-stone-200 text-[#0F172A]'
                     }`}
                   >
                     {tag}
@@ -160,7 +162,7 @@ export const RecentWorksSection: React.FC<RecentWorksSectionProps> = ({ onNaviga
                   href="https://owaisdashboard.vercel.app"
                   target="_blank"
                   rel="noreferrer"
-                  className="px-6 py-3.5 rounded-xl bg-[#00F0FF] hover:bg-[#38bdf8] text-black font-mono font-bold text-xs uppercase tracking-wider shadow-[0_0_20px_rgba(0,240,255,0.4)] hover:shadow-[0_0_30px_rgba(0,240,255,0.7)] flex items-center gap-2 transition-all cursor-pointer"
+                  className="px-6 py-3.5 rounded-xl bg-[#38BDF8] hover:bg-[#7DD3FC] text-[#060913] font-mono font-bold text-xs uppercase tracking-wider shadow-[0_8px_24px_rgba(56, 189, 248,0.28)] flex items-center gap-2 transition-all cursor-pointer"
                 >
                   <Globe className="w-4 h-4" />
                   <span>Visit Live Website</span>
@@ -172,8 +174,8 @@ export const RecentWorksSection: React.FC<RecentWorksSectionProps> = ({ onNaviga
                   onClick={() => onNavigate('/contact')}
                   className={`px-5 py-3.5 rounded-xl border text-xs font-mono font-semibold uppercase tracking-wider transition-colors cursor-pointer ${
                     isDark
-                      ? 'border-white/20 hover:bg-white/10 text-white'
-                      : 'border-zinc-300 bg-white hover:bg-zinc-50 text-zinc-900 shadow-2xs'
+                      ? 'border-white/20 hover:bg-white/10 text-[#F1F5F9]'
+                      : 'border-stone-300 bg-white hover:bg-stone-50 text-[#0F172A] shadow-2xs'
                   }`}
                 >
                   Request Similar Project
@@ -181,13 +183,13 @@ export const RecentWorksSection: React.FC<RecentWorksSectionProps> = ({ onNaviga
               </div>
             </div>
 
-            {/* Right Column: Interactive Browser Window Mockup (Clean, without OD logo) */}
+            {/* Right Column: Interactive Browser Window Mockup */}
             <div className="lg:col-span-6">
               <div
                 className={`rounded-2xl border p-4 sm:p-6 shadow-2xl relative overflow-hidden backdrop-blur-xl ${
                   isDark
-                    ? 'border-cyan-500/40 bg-[#080914] shadow-[0_15px_45px_rgba(0,240,255,0.18)]'
-                    : 'border-cyan-300 bg-white shadow-xl'
+                    ? 'border-[#38BDF8]/30 bg-[#0D0F14] shadow-[0_15px_45px_rgba(56, 189, 248,0.12)]'
+                    : 'border-stone-300 bg-white shadow-xl'
                 }`}
               >
                 {/* Browser Window Header */}
@@ -203,7 +205,9 @@ export const RecentWorksSection: React.FC<RecentWorksSectionProps> = ({ onNaviga
                     href="https://owaisdashboard.vercel.app"
                     target="_blank"
                     rel="noreferrer"
-                    className="px-3.5 py-1 rounded-lg bg-black/10 dark:bg-white/10 font-mono text-[11px] text-cyan-600 dark:text-cyan-300 flex items-center gap-1.5 hover:underline"
+                    className={`px-3.5 py-1 rounded-lg bg-black/10 dark:bg-white/10 font-mono text-[11px] flex items-center gap-1.5 hover:underline ${
+                      isDark ? 'text-[#BAE6FD]' : 'text-[#1D4ED8]'
+                    }`}
                   >
                     <span className="opacity-50">https://</span>
                     <span className="font-bold">owaisdashboard.vercel.app</span>
@@ -211,30 +215,32 @@ export const RecentWorksSection: React.FC<RecentWorksSectionProps> = ({ onNaviga
                   </a>
 
                   <span className="text-[10px] font-mono text-emerald-400 font-bold hidden sm:inline-flex items-center gap-1">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
                     VERCEL LIVE
                   </span>
                 </div>
 
                 {/* Dashboard Inner Layout Mockup */}
                 <div className="space-y-4">
-                  {/* Top Profile Banner in Mockup (Clean, No OD Logo) */}
+                  {/* Top Profile Banner in Mockup */}
                   <div
                     className={`p-4 rounded-xl border flex items-center justify-between ${
                       isDark
-                        ? 'border-white/10 bg-gradient-to-r from-cyan-950/40 via-purple-950/30 to-black/60'
-                        : 'border-cyan-100 bg-gradient-to-r from-cyan-50 via-sky-50 to-white'
+                        ? 'border-white/10 bg-gradient-to-r from-[#38BDF8]/15 via-[#1A1D25] to-[#060913]'
+                        : 'border-stone-200 bg-gradient-to-r from-[#F3F6FA] via-white to-stone-50'
                     }`}
                   >
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-xl bg-cyan-500/15 border border-cyan-500/30 text-cyan-400 flex items-center justify-center shrink-0">
+                      <div className={`w-10 h-10 rounded-xl border flex items-center justify-center shrink-0 ${
+                        isDark ? 'bg-[#38BDF8]/15 border-[#38BDF8]/30 text-[#38BDF8]' : 'bg-[#F3E9DC] border-[#1D4ED8]/30 text-[#1D4ED8]'
+                      }`}>
                         <GraduationCap className="w-5 h-5" />
                       </div>
                       <div>
-                        <h4 className="font-display font-bold text-base text-zinc-950 dark:text-white leading-tight">
+                        <h4 className={`font-display font-bold text-base leading-tight ${isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'}`}>
                           Owais Dashboard
                         </h4>
-                        <p className="text-xs font-mono text-cyan-600 dark:text-cyan-300">
+                        <p className={`text-xs font-mono ${isDark ? 'text-[#7DD3FC]' : 'text-[#1D4ED8]'}`}>
                           Student Academic Portfolio & Skills
                         </p>
                       </div>
@@ -247,13 +253,12 @@ export const RecentWorksSection: React.FC<RecentWorksSectionProps> = ({ onNaviga
 
                   {/* Dashboard Widgets Grid */}
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
-                    {/* Widget 1: Academic Trajectory */}
                     <div
                       className={`p-3 rounded-xl border ${
-                        isDark ? 'border-cyan-500/20 bg-cyan-950/20 text-zinc-200' : 'border-cyan-200 bg-cyan-50/70 text-zinc-800'
+                        isDark ? 'border-[#38BDF8]/25 bg-[#38BDF8]/10 text-[#F1F5F9]' : 'border-[#1D4ED8]/25 bg-[#F3E9DC]/70 text-[#0F172A]'
                       }`}
                     >
-                      <div className="flex items-center gap-1.5 text-cyan-500 mb-1">
+                      <div className={`flex items-center gap-1.5 mb-1 ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`}>
                         <GraduationCap className="w-4 h-4" />
                         <span className="text-[10px] font-mono uppercase font-bold">Academics</span>
                       </div>
@@ -261,13 +266,12 @@ export const RecentWorksSection: React.FC<RecentWorksSectionProps> = ({ onNaviga
                       <div className="text-[10px] text-zinc-500 font-mono mt-0.5">Verified Records</div>
                     </div>
 
-                    {/* Widget 2: Skill Sets Matrix */}
                     <div
                       className={`p-3 rounded-xl border ${
-                        isDark ? 'border-purple-500/20 bg-purple-950/20 text-zinc-200' : 'border-purple-200 bg-purple-50/70 text-zinc-800'
+                        isDark ? 'border-white/10 bg-white/5 text-[#F1F5F9]' : 'border-stone-200 bg-stone-50 text-[#0F172A]'
                       }`}
                     >
-                      <div className="flex items-center gap-1.5 text-purple-400 mb-1">
+                      <div className={`flex items-center gap-1.5 mb-1 ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>
                         <Cpu className="w-4 h-4" />
                         <span className="text-[10px] font-mono uppercase font-bold">Skills Matrix</span>
                       </div>
@@ -275,13 +279,12 @@ export const RecentWorksSection: React.FC<RecentWorksSectionProps> = ({ onNaviga
                       <div className="text-[10px] text-zinc-500 font-mono mt-0.5">Categorized Matrix</div>
                     </div>
 
-                    {/* Widget 3: Live Vercel Architecture */}
                     <div
                       className={`p-3 rounded-xl border col-span-2 sm:col-span-1 ${
-                        isDark ? 'border-emerald-500/20 bg-emerald-950/20 text-zinc-200' : 'border-emerald-200 bg-emerald-50/70 text-zinc-800'
+                        isDark ? 'border-emerald-500/20 bg-emerald-950/20 text-[#F1F5F9]' : 'border-emerald-200 bg-emerald-50/70 text-[#0F172A]'
                       }`}
                     >
-                      <div className="flex items-center gap-1.5 text-emerald-400 mb-1">
+                      <div className="flex items-center gap-1.5 text-emerald-500 mb-1">
                         <Globe className="w-4 h-4" />
                         <span className="text-[10px] font-mono uppercase font-bold">Deployment</span>
                       </div>
@@ -293,7 +296,7 @@ export const RecentWorksSection: React.FC<RecentWorksSectionProps> = ({ onNaviga
                   {/* Bottom Verification Seal in Mockup */}
                   <div className="p-3 rounded-xl border border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 flex items-center justify-between text-xs font-mono">
                     <span className="text-zinc-500">Client Delivery: Completed & Live</span>
-                    <span className="text-cyan-500 font-bold">Saad M · Click N Create</span>
+                    <span className={`font-bold ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`}>Saad M · Click N Create</span>
                   </div>
                 </div>
               </div>
@@ -310,12 +313,12 @@ export const RecentWorksSection: React.FC<RecentWorksSectionProps> = ({ onNaviga
             transition={{ duration: 0.6 }}
             className={`rounded-3xl border p-6 sm:p-10 md:p-12 mb-10 relative overflow-hidden backdrop-blur-2xl transition-all duration-300 ${
               isDark
-                ? 'border-purple-500/35 bg-gradient-to-br from-[#0D0A1E]/95 via-[#080916]/90 to-[#04040A]/95 shadow-[0_20px_60px_-10px_rgba(168,85,247,0.18)]'
-                : 'border-purple-300 bg-white/95 shadow-xl hover:border-purple-400'
+                ? 'border-[#38BDF8]/30 bg-gradient-to-br from-[#161922]/95 via-[#111319]/95 to-[#060913]/95 shadow-[0_20px_60px_-10px_rgba(56, 189, 248,0.14)]'
+                : 'border-stone-200 bg-white/95 shadow-xl hover:border-[#1D4ED8]/50'
             }`}
           >
             {/* Subtle Ambient Glow */}
-            <div className="absolute top-0 left-0 w-96 h-96 bg-gradient-to-br from-[#A855F7]/20 via-[#00F0FF]/10 to-transparent rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute top-0 left-0 w-96 h-96 bg-gradient-to-br from-[#38BDF8]/15 via-[#2563EB]/10 to-transparent rounded-full blur-3xl pointer-events-none" />
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center relative z-10">
               {/* Left Column: Interactive Browser Window Mockup */}
@@ -323,8 +326,8 @@ export const RecentWorksSection: React.FC<RecentWorksSectionProps> = ({ onNaviga
                 <div
                   className={`rounded-2xl border p-4 sm:p-6 shadow-2xl relative overflow-hidden backdrop-blur-xl ${
                     isDark
-                      ? 'border-purple-500/40 bg-[#080914] shadow-[0_15px_45px_rgba(168,85,247,0.16)]'
-                      : 'border-purple-300 bg-white shadow-xl'
+                      ? 'border-[#38BDF8]/30 bg-[#0D0F14] shadow-[0_15px_45px_rgba(56, 189, 248,0.12)]'
+                      : 'border-stone-300 bg-white shadow-xl'
                   }`}
                 >
                   {/* Browser Window Header */}
@@ -340,7 +343,9 @@ export const RecentWorksSection: React.FC<RecentWorksSectionProps> = ({ onNaviga
                       href="https://hammadpatel.vercel.app"
                       target="_blank"
                       rel="noreferrer"
-                      className="px-3.5 py-1 rounded-lg bg-black/10 dark:bg-white/10 font-mono text-[11px] text-purple-600 dark:text-purple-300 flex items-center gap-1.5 hover:underline"
+                      className={`px-3.5 py-1 rounded-lg bg-black/10 dark:bg-white/10 font-mono text-[11px] flex items-center gap-1.5 hover:underline ${
+                        isDark ? 'text-[#BAE6FD]' : 'text-[#1D4ED8]'
+                      }`}
                     >
                       <span className="opacity-50">https://</span>
                       <span className="font-bold">hammadpatel.vercel.app</span>
@@ -348,7 +353,7 @@ export const RecentWorksSection: React.FC<RecentWorksSectionProps> = ({ onNaviga
                     </a>
 
                     <span className="text-[10px] font-mono text-emerald-400 font-bold hidden sm:inline-flex items-center gap-1">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
                       VERCEL LIVE
                     </span>
                   </div>
@@ -359,26 +364,28 @@ export const RecentWorksSection: React.FC<RecentWorksSectionProps> = ({ onNaviga
                     <div
                       className={`p-4 rounded-xl border flex items-center justify-between ${
                         isDark
-                          ? 'border-white/10 bg-gradient-to-r from-purple-950/40 via-cyan-950/30 to-black/60'
-                          : 'border-purple-100 bg-gradient-to-r from-purple-50 via-cyan-50 to-white'
+                          ? 'border-white/10 bg-gradient-to-r from-[#38BDF8]/15 via-[#1A1D25] to-[#060913]'
+                          : 'border-stone-200 bg-gradient-to-r from-[#F3F6FA] via-white to-stone-50'
                       }`}
                     >
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-purple-500/15 border border-purple-500/30 text-purple-400 flex items-center justify-center shrink-0">
-                          <Code2 className="w-5 h-5" />
+                        <div className={`w-10 h-10 rounded-xl border flex items-center justify-center shrink-0 ${
+                          isDark ? 'bg-[#38BDF8]/15 border-[#38BDF8]/30 text-[#38BDF8]' : 'bg-[#F3E9DC] border-[#1D4ED8]/30 text-[#1D4ED8]'
+                        }`}>
+                          <Cpu className="w-5 h-5" />
                         </div>
                         <div>
-                          <h4 className="font-display font-bold text-base text-zinc-950 dark:text-white leading-tight">
+                          <h4 className={`font-display font-bold text-base leading-tight ${isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'}`}>
                             Hammad Patel
                           </h4>
-                          <p className="text-xs font-mono text-purple-600 dark:text-purple-300">
-                            E&amp;C Engineer &amp; Web Developer Portfolio
+                          <p className={`text-xs font-mono ${isDark ? 'text-[#7DD3FC]' : 'text-[#1D4ED8]'}`}>
+                            E&amp;C Portfolio &amp; ECE Virtual Lab Studio
                           </p>
                         </div>
                       </div>
 
                       <span className="text-[10px] font-mono px-2.5 py-1 rounded-full bg-emerald-500/15 text-emerald-500 font-bold border border-emerald-500/30">
-                        Live Portfolio
+                        Virtual Lab Live
                       </span>
                     </div>
 
@@ -386,36 +393,36 @@ export const RecentWorksSection: React.FC<RecentWorksSectionProps> = ({ onNaviga
                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
                       <div
                         className={`p-3 rounded-xl border ${
-                          isDark ? 'border-purple-500/20 bg-purple-950/20 text-zinc-200' : 'border-purple-200 bg-purple-50/70 text-zinc-800'
+                          isDark ? 'border-[#38BDF8]/25 bg-[#38BDF8]/10 text-[#F1F5F9]' : 'border-[#1D4ED8]/25 bg-[#F3E9DC]/70 text-[#0F172A]'
                         }`}
                       >
-                        <div className="flex items-center gap-1.5 text-purple-400 mb-1">
+                        <div className={`flex items-center gap-1.5 mb-1 ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`}>
                           <Cpu className="w-4 h-4" />
-                          <span className="text-[10px] font-mono uppercase font-bold">Engineering</span>
+                          <span className="text-[10px] font-mono uppercase font-bold">Virtual Lab</span>
                         </div>
-                        <div className="text-xs font-bold leading-tight">E&amp;C &amp; IIT Bombay</div>
-                        <div className="text-[10px] text-zinc-500 font-mono mt-0.5">Technical Profile</div>
+                        <div className="text-xs font-bold leading-tight">ECE Lab Studio</div>
+                        <div className="text-[10px] text-zinc-500 font-mono mt-0.5">Circuit &amp; Signals</div>
                       </div>
 
                       <div
                         className={`p-3 rounded-xl border ${
-                          isDark ? 'border-cyan-500/20 bg-cyan-950/20 text-zinc-200' : 'border-cyan-200 bg-cyan-50/70 text-zinc-800'
+                          isDark ? 'border-white/10 bg-white/5 text-[#F1F5F9]' : 'border-stone-200 bg-stone-50 text-[#0F172A]'
                         }`}
                       >
-                        <div className="flex items-center gap-1.5 text-cyan-400 mb-1">
+                        <div className={`flex items-center gap-1.5 mb-1 ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>
                           <Code2 className="w-4 h-4" />
-                          <span className="text-[10px] font-mono uppercase font-bold">Web Showcase</span>
+                          <span className="text-[10px] font-mono uppercase font-bold">Curriculum</span>
                         </div>
-                        <div className="text-xs font-bold leading-tight">Projects &amp; Resume</div>
-                        <div className="text-[10px] text-zinc-500 font-mono mt-0.5">Dark/Light UI</div>
+                        <div className="text-xs font-bold leading-tight">All Studied Topics</div>
+                        <div className="text-[10px] text-zinc-500 font-mono mt-0.5">Interactive Demos</div>
                       </div>
 
                       <div
                         className={`p-3 rounded-xl border col-span-2 sm:col-span-1 ${
-                          isDark ? 'border-emerald-500/20 bg-emerald-950/20 text-zinc-200' : 'border-emerald-200 bg-emerald-50/70 text-zinc-800'
+                          isDark ? 'border-emerald-500/20 bg-emerald-950/20 text-[#F1F5F9]' : 'border-emerald-200 bg-emerald-50/70 text-[#0F172A]'
                         }`}
                       >
-                        <div className="flex items-center gap-1.5 text-emerald-400 mb-1">
+                        <div className="flex items-center gap-1.5 text-emerald-500 mb-1">
                           <Globe className="w-4 h-4" />
                           <span className="text-[10px] font-mono uppercase font-bold">Deployment</span>
                         </div>
@@ -427,7 +434,7 @@ export const RecentWorksSection: React.FC<RecentWorksSectionProps> = ({ onNaviga
                     {/* Bottom Verification Seal in Mockup */}
                     <div className="p-3 rounded-xl border border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 flex items-center justify-between text-xs font-mono">
                       <span className="text-zinc-500">Client Delivery: Completed &amp; Live</span>
-                      <span className="text-purple-400 font-bold">Saad M · Click N Create</span>
+                      <span className={`font-bold ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`}>Saad M · Click N Create</span>
                     </div>
                   </div>
                 </div>
@@ -438,38 +445,40 @@ export const RecentWorksSection: React.FC<RecentWorksSectionProps> = ({ onNaviga
                 <div>
                   <div className="flex flex-wrap items-center gap-2.5 mb-3.5">
                     <span className="px-3 py-1 rounded-full text-[11px] font-mono font-bold uppercase tracking-wider bg-emerald-500/15 border border-emerald-500/35 text-emerald-400 flex items-center gap-1.5 shadow-xs">
-                      <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                      <span>RECENT CLIENT WORK // 2026</span>
+                      <span className="w-2 h-2 rounded-full bg-emerald-400" />
+                      <span>RECENT CLIENT WORK · 2026</span>
                     </span>
 
-                    <span className="px-3 py-1 rounded-full text-[11px] font-mono font-bold uppercase tracking-wider bg-purple-500/10 border border-purple-500/30 text-purple-400">
-                      PERSONAL &amp; ENGINEERING PORTFOLIO
+                    <span className={`px-3 py-1 rounded-full text-[11px] font-mono font-bold uppercase tracking-wider border ${
+                      isDark ? 'bg-[#38BDF8]/10 border-[#38BDF8]/30 text-[#BAE6FD]' : 'bg-[#F3E9DC] border-[#1D4ED8]/35 text-[#1E40AF]'
+                    }`}>
+                      ECE VIRTUAL LAB STUDIO &amp; PORTFOLIO
                     </span>
                   </div>
 
                   <h3 className={`text-2xl sm:text-3xl md:text-4xl font-black font-display tracking-tight leading-tight break-words ${
-                    isDark ? 'text-white' : 'text-zinc-950'
+                    isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'
                   }`}>
-                    Hammad Patel — <span className="text-cyber-gradient">Personal Portfolio</span>
+                    Hammad Patel — <span className="text-cyber-gradient">ECE Virtual Lab Studio</span>
                   </h3>
 
                   <p className={`mt-4 text-sm sm:text-base leading-relaxed ${
-                    isDark ? 'text-zinc-300' : 'text-zinc-700'
+                    isDark ? 'text-[#94A3B8]' : 'text-[#475569]'
                   }`}>
-                    Designed, engineered, and deployed for client <strong>Hammad Patel</strong>. A bespoke personal and engineering portfolio website showcasing his Electronics &amp; Communication Engineering credentials at GEC Bharuch, IIT Bombay internship experience, technical competencies, and web development projects.
+                    Designed, engineered, and deployed for client <strong>Hammad Patel</strong>. A comprehensive personal and engineering portfolio website featuring an interactive <strong>ECE Virtual Lab Studio</strong> covering core electronics &amp; communication coursework studied at GEC Bharuch (analog &amp; digital signal processing, circuit simulations, modulation, and communications) alongside his IIT Bombay internship experience.
                   </p>
                 </div>
 
                 {/* Key Deliverables Matrix */}
                 <div className="space-y-2.5 pt-1">
-                  <span className="text-xs font-mono text-zinc-400 uppercase tracking-widest font-bold block">
+                  <span className={`text-xs font-mono uppercase tracking-widest font-bold block ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>
                     Delivered Features &amp; Technical Highlights:
                   </span>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
                     {hammadProject.achievements.map((ach, idx) => (
                       <div key={idx} className="flex items-start gap-2">
-                        <CheckCircle2 className="w-4 h-4 text-[#00F0FF] shrink-0 mt-0.5" />
-                        <span className={isDark ? 'text-zinc-300' : 'text-zinc-700'}>
+                        <CheckCircle2 className={`w-4 h-4 shrink-0 mt-0.5 ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`} />
+                        <span className={isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}>
                           {ach}
                         </span>
                       </div>
@@ -484,8 +493,8 @@ export const RecentWorksSection: React.FC<RecentWorksSectionProps> = ({ onNaviga
                       key={idx}
                       className={`text-xs font-mono px-3 py-1 rounded-lg border ${
                         isDark
-                          ? 'bg-white/5 border-white/10 text-zinc-300'
-                          : 'bg-zinc-100 border-zinc-200 text-zinc-800'
+                          ? 'bg-white/5 border-white/10 text-[#94A3B8]'
+                          : 'bg-[#F3F6FA] border-stone-200 text-[#0F172A]'
                       }`}
                     >
                       {tag}
@@ -499,7 +508,7 @@ export const RecentWorksSection: React.FC<RecentWorksSectionProps> = ({ onNaviga
                     href="https://hammadpatel.vercel.app"
                     target="_blank"
                     rel="noreferrer"
-                    className="px-6 py-3.5 rounded-xl bg-[#00F0FF] hover:bg-[#38bdf8] text-black font-mono font-bold text-xs uppercase tracking-wider shadow-[0_0_20px_rgba(0,240,255,0.4)] hover:shadow-[0_0_30px_rgba(0,240,255,0.7)] flex items-center gap-2 transition-all cursor-pointer"
+                    className="px-6 py-3.5 rounded-xl bg-[#38BDF8] hover:bg-[#7DD3FC] text-[#060913] font-mono font-bold text-xs uppercase tracking-wider shadow-[0_8px_24px_rgba(56, 189, 248,0.28)] flex items-center gap-2 transition-all cursor-pointer"
                   >
                     <Globe className="w-4 h-4" />
                     <span>Visit Live Website</span>
@@ -511,8 +520,8 @@ export const RecentWorksSection: React.FC<RecentWorksSectionProps> = ({ onNaviga
                     onClick={() => onNavigate('/contact')}
                     className={`px-5 py-3.5 rounded-xl border text-xs font-mono font-semibold uppercase tracking-wider transition-colors cursor-pointer ${
                       isDark
-                        ? 'border-white/20 hover:bg-white/10 text-white'
-                        : 'border-zinc-300 bg-white hover:bg-zinc-50 text-zinc-900 shadow-2xs'
+                        ? 'border-white/20 hover:bg-white/10 text-[#F1F5F9]'
+                        : 'border-stone-300 bg-white hover:bg-stone-50 text-[#0F172A] shadow-2xs'
                     }`}
                   >
                     Request Similar Project
@@ -532,8 +541,8 @@ export const RecentWorksSection: React.FC<RecentWorksSectionProps> = ({ onNaviga
             transition={{ duration: 0.6 }}
             className={`rounded-3xl border p-6 sm:p-10 md:p-12 relative overflow-hidden backdrop-blur-2xl transition-all duration-300 ${
               isDark
-                ? 'border-white/15 bg-gradient-to-br from-[#0A0A16]/90 via-[#070712]/90 to-black shadow-xl'
-                : 'border-zinc-200 bg-white/95 shadow-lg'
+                ? 'border-white/12 bg-gradient-to-br from-[#161922]/90 via-[#111319]/90 to-[#060913] shadow-xl'
+                : 'border-stone-200 bg-white/95 shadow-lg'
             }`}
           >
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center relative z-10">
@@ -542,15 +551,15 @@ export const RecentWorksSection: React.FC<RecentWorksSectionProps> = ({ onNaviga
                 <div
                   className={`rounded-2xl border p-6 shadow-xl relative overflow-hidden flex flex-col items-center justify-center text-center space-y-4 ${
                     isDark
-                      ? 'border-cyan-500/30 bg-[#06060F]'
-                      : 'border-zinc-200 bg-zinc-50'
+                      ? 'border-[#38BDF8]/30 bg-[#0D0F14]'
+                      : 'border-stone-200 bg-[#F3F6FA]'
                   }`}
                 >
                   <div className="p-3 rounded-2xl bg-black/30 dark:bg-white/[0.04] border border-black/10 dark:border-white/10">
                     <ClickNCreateLogo size="lg" />
                   </div>
                   <div className="space-y-1">
-                    <span className="text-xs font-mono text-[#00F0FF] uppercase font-bold">
+                    <span className={`text-xs font-mono uppercase font-bold ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`}>
                       Official Brand & Digital System
                     </span>
                     <p className="text-xs text-zinc-500 font-mono">
@@ -560,7 +569,7 @@ export const RecentWorksSection: React.FC<RecentWorksSectionProps> = ({ onNaviga
 
                   <div className="w-full pt-3 border-t border-black/10 dark:border-white/10 flex items-center justify-between text-[11px] font-mono text-zinc-500">
                     <span>Founder & Creator</span>
-                    <span className="text-[#00F0FF] font-bold">clickncreate.co.uk</span>
+                    <span className={`font-bold ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`}>clickncreate.co.uk</span>
                   </div>
                 </div>
               </div>
@@ -569,18 +578,20 @@ export const RecentWorksSection: React.FC<RecentWorksSectionProps> = ({ onNaviga
               <div className="lg:col-span-7 space-y-5 order-1 lg:order-2">
                 <div>
                   <div className="flex items-center gap-2 mb-3">
-                    <span className="px-3 py-1 rounded-full text-[11px] font-mono font-bold uppercase tracking-wider bg-cyan-500/15 border border-cyan-500/30 text-[#00F0FF]">
+                    <span className={`px-3 py-1 rounded-full text-[11px] font-mono font-bold uppercase tracking-wider border ${
+                      isDark ? 'bg-[#38BDF8]/15 border-[#38BDF8]/30 text-[#BAE6FD]' : 'bg-[#F3E9DC] border-[#1D4ED8]/35 text-[#1E40AF]'
+                    }`}>
                       FLAGSHIP PLATFORM & BRAND
                     </span>
                   </div>
 
                   <h3 className={`text-2xl sm:text-3xl font-black font-display tracking-tight leading-tight break-words ${
-                    isDark ? 'text-white' : 'text-zinc-950'
+                    isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'
                   }`}>
                     {clickNCreateProject.title}
                   </h3>
 
-                  <p className={`mt-3 text-sm leading-relaxed ${isDark ? 'text-zinc-300' : 'text-zinc-700'}`}>
+                  <p className={`mt-3 text-sm leading-relaxed ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>
                     {clickNCreateProject.description}
                   </p>
                 </div>
@@ -588,8 +599,8 @@ export const RecentWorksSection: React.FC<RecentWorksSectionProps> = ({ onNaviga
                 <div className="space-y-2 text-xs">
                   {clickNCreateProject.achievements.map((ach, i) => (
                     <div key={i} className="flex items-start gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-[#00F0FF] shrink-0 mt-0.5" />
-                      <span className={isDark ? 'text-zinc-300' : 'text-zinc-700'}>{ach}</span>
+                      <CheckCircle2 className={`w-4 h-4 shrink-0 mt-0.5 ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`} />
+                      <span className={isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}>{ach}</span>
                     </div>
                   ))}
                 </div>
@@ -599,7 +610,7 @@ export const RecentWorksSection: React.FC<RecentWorksSectionProps> = ({ onNaviga
                     <span
                       key={idx}
                       className={`text-xs font-mono px-3 py-1 rounded-lg border ${
-                        isDark ? 'bg-white/5 border-white/10 text-zinc-300' : 'bg-zinc-100 border-zinc-200 text-zinc-800'
+                        isDark ? 'bg-white/5 border-white/10 text-[#94A3B8]' : 'bg-[#F3F6FA] border-stone-200 text-[#0F172A]'
                       }`}
                     >
                       {tag}

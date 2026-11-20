@@ -41,7 +41,7 @@ export const PrivacyPolicyPage: React.FC<PrivacyPolicyPageProps> = ({ onNavigate
   ];
 
   return (
-    <div className="pt-28 pb-20 md:pt-36 relative overflow-x-hidden w-full max-w-full">
+    <div className="pt-28 pb-20 md:pt-36 relative overflow-x-clip w-full max-w-full">
       <SEOHead
         title="Privacy Policy | Click N Create (Saad M)"
         description="Review Click N Create's UK GDPR and Data Protection Act 2018 compliance, data processing standards, and privacy safeguards."
@@ -53,15 +53,15 @@ export const PrivacyPolicyPage: React.FC<PrivacyPolicyPageProps> = ({ onNavigate
           <button
             type="button"
             onClick={() => onNavigate('/')}
-            className="inline-flex items-center gap-2 text-xs font-mono text-zinc-900 dark:text-zinc-200 hover:text-cyan-600 dark:hover:text-[#00F0FF] transition-colors cursor-pointer group font-bold"
+            className="inline-flex items-center gap-2 text-xs font-mono text-zinc-900 dark:text-zinc-200 hover:text-[#1D4ED8] dark:hover:text-[#7DD3FC] transition-colors cursor-pointer group font-bold"
           >
-            <ArrowLeft className="w-3.5 h-3.5 text-cyan-600 dark:text-[#00F0FF] group-hover:-translate-x-1 transition-transform" />
+            <ArrowLeft className="w-3.5 h-3.5 text-[#1D4ED8] dark:text-[#7DD3FC] group-hover:-translate-x-1 transition-transform" />
             <span>Back to Home</span>
           </button>
 
           <div className="flex items-center gap-2 text-[11px] font-mono text-zinc-800 dark:text-zinc-300 font-semibold">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span>UK GDPR & DPA 2018 Compliant</span>
+            <span className="w-2 h-2 rounded-full bg-emerald-500" />
+            <span>UK GDPR &amp; DPA 2018 Compliant</span>
           </div>
         </div>
 
@@ -69,44 +69,44 @@ export const PrivacyPolicyPage: React.FC<PrivacyPolicyPageProps> = ({ onNavigate
         <div
           className={`rounded-3xl border p-8 sm:p-10 mb-8 backdrop-blur-2xl relative overflow-hidden transition-colors ${
             isDark
-              ? 'border-[#00F0FF]/30 bg-[#060612]/90 shadow-[0_20px_60px_rgba(0,0,0,0.8)]'
-              : 'border-zinc-200 bg-white shadow-xl'
+              ? 'border-[#252A36] bg-[#0C1222]/95 shadow-[0_20px_60px_rgba(0,0,0,0.65)]'
+              : 'border-[#E6E2D8] bg-white shadow-xl'
           }`}
         >
-          <div className="absolute top-0 right-0 w-80 h-80 bg-cyan-500/10 dark:bg-[#00F0FF]/5 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute top-0 right-0 w-80 h-80 bg-[#38BDF8]/10 rounded-full blur-3xl pointer-events-none" />
           
-          <div className="flex items-center gap-2 text-xs font-mono text-cyan-700 dark:text-[#00F0FF] uppercase tracking-wider mb-3 font-bold">
+          <div className="flex items-center gap-2 text-xs font-mono text-[#1D4ED8] dark:text-[#7DD3FC] uppercase tracking-wider mb-3 font-bold">
             <Shield className="w-4 h-4" />
-            <span>Legal Notice & Transparency Declaration</span>
+            <span>Legal Notice &amp; Transparency Declaration</span>
           </div>
 
-          <h1 className="text-3xl sm:text-5xl font-display font-black tracking-tight text-black dark:text-white">
+          <h1 className="text-3xl sm:text-5xl font-display font-black tracking-tight text-black dark:text-[#F1F5F9]">
             Privacy Policy
           </h1>
 
-          <div className="mt-4 flex flex-wrap items-center gap-4 text-xs font-mono text-zinc-900 dark:text-zinc-200 font-medium">
+          <div className="mt-4 flex flex-wrap items-center gap-4 text-xs font-mono text-zinc-900 dark:text-[#94A3B8] font-medium">
             <span><strong>Effective Date:</strong> September 2026</span>
             <span>·</span>
             <span><strong>Brand:</strong> Click N Create (Saad M)</span>
             <span>·</span>
-            <span><strong>Jurisdiction:</strong> United Kingdom & European Union</span>
+            <span><strong>Jurisdiction:</strong> United Kingdom &amp; European Union</span>
           </div>
 
-          <p className="mt-4 text-sm sm:text-base leading-relaxed text-black dark:text-white max-w-3xl font-medium">
-            This Privacy Policy sets out how <strong className="font-bold text-cyan-700 dark:text-[#00F0FF]">Click N Create</strong> (operated by independent freelance web developer Saad M) collects, protects, processes, and respects your personal data in strict compliance with the <strong className="font-bold text-black dark:text-white">UK General Data Protection Regulation (UK GDPR)</strong>, the <strong className="font-bold text-black dark:text-white">Data Protection Act 2018</strong>, and the <strong className="font-bold text-black dark:text-white">EU GDPR</strong>.
+          <p className="mt-4 text-sm sm:text-base leading-relaxed text-black dark:text-[#F1F5F9]/90 max-w-3xl font-medium">
+            This Privacy Policy sets out how <strong className="font-bold text-[#1D4ED8] dark:text-[#7DD3FC]">Click N Create</strong> (operated by independent freelance web developer Saad M) collects, protects, processes, and respects your personal data in strict compliance with the <strong className="font-bold text-black dark:text-white">UK General Data Protection Regulation (UK GDPR)</strong>, the <strong className="font-bold text-black dark:text-white">Data Protection Act 2018</strong>, and the <strong className="font-bold text-black dark:text-white">EU GDPR</strong>.
           </p>
         </div>
 
         {/* Two-Column Structured Content */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          {/* Left Table of Contents Sticky Pill Navigator */}
+          {/* Left Table of Contents Sticky Navigator */}
           <div className="lg:col-span-4 sticky top-28 hidden lg:block">
             <div
               className={`p-4 rounded-2xl border backdrop-blur-xl ${
-                isDark ? 'border-white/10 bg-[#080814]/80' : 'border-zinc-200 bg-zinc-50'
+                isDark ? 'border-[#252A36] bg-[#0C1222]/90' : 'border-[#E6E2D8] bg-[#F3F6FA]'
               }`}
             >
-              <div className="text-[10px] font-mono uppercase tracking-widest text-cyan-700 dark:text-[#00F0FF] font-bold px-2 mb-3">
+              <div className="text-[10px] font-mono uppercase tracking-widest text-[#1D4ED8] dark:text-[#7DD3FC] font-bold px-2 mb-3">
                 Contents Jump Matrix
               </div>
               <nav className="space-y-1 text-xs font-mono">
@@ -116,9 +116,9 @@ export const PrivacyPolicyPage: React.FC<PrivacyPolicyPageProps> = ({ onNavigate
                     <a
                       key={sec.id}
                       href={`#${sec.id}`}
-                      className="p-2 rounded-xl flex items-center gap-2.5 text-black dark:text-white hover:text-cyan-700 dark:hover:text-[#00F0FF] hover:bg-zinc-100 dark:hover:bg-white/5 transition-colors group cursor-pointer font-medium"
+                      className="p-2 rounded-xl flex items-center gap-2.5 text-black dark:text-[#F1F5F9] hover:text-[#1D4ED8] dark:hover:text-[#7DD3FC] hover:bg-black/5 dark:hover:bg-white/5 transition-colors group cursor-pointer font-medium"
                     >
-                      <Icon className="w-3.5 h-3.5 text-cyan-600 dark:text-[#00F0FF] shrink-0" />
+                      <Icon className="w-3.5 h-3.5 text-[#1D4ED8] dark:text-[#7DD3FC] shrink-0" />
                       <span className="truncate">{sec.title}</span>
                     </a>
                   );
@@ -133,25 +133,25 @@ export const PrivacyPolicyPage: React.FC<PrivacyPolicyPageProps> = ({ onNavigate
             <div
               id="controller"
               className={`rounded-3xl border p-6 sm:p-8 backdrop-blur-xl transition-all ${
-                isDark ? 'border-white/10 bg-[#070712]/80' : 'border-zinc-200 bg-white shadow-sm'
+                isDark ? 'border-[#252A36] bg-[#0C1222]/90' : 'border-[#E6E2D8] bg-white shadow-sm'
               }`}
             >
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-8 h-8 rounded-xl bg-cyan-500/15 dark:bg-[#00F0FF]/15 text-cyan-700 dark:text-[#00F0FF] flex items-center justify-center">
+                <div className="w-8 h-8 rounded-xl bg-[#F3E9DC] dark:bg-[#38BDF8]/15 text-[#1D4ED8] dark:text-[#7DD3FC] flex items-center justify-center">
                   <Shield className="w-4 h-4" />
                 </div>
-                <h2 className="text-xl font-display font-bold text-black dark:text-white">
-                  1. Data Controller & Identity
+                <h2 className="text-xl font-display font-bold text-black dark:text-[#F1F5F9]">
+                  1. Data Controller &amp; Identity
                 </h2>
               </div>
-              <div className="space-y-3 text-sm text-black dark:text-white leading-relaxed font-sans font-medium">
+              <div className="space-y-3 text-sm text-black dark:text-[#F1F5F9]/90 leading-relaxed font-sans font-medium">
                 <p>
-                  The data controller responsible for the processing of your personal information collected via this website (<code className="text-cyan-700 dark:text-[#00F0FF] font-mono font-bold">clickncreate.co.uk</code>) is:
+                  The data controller responsible for the processing of your personal information collected via this website (<code className="text-[#1D4ED8] dark:text-[#7DD3FC] font-mono font-bold">clickncreate.co.uk</code>) is:
                 </p>
-                <div className="p-4 rounded-2xl bg-zinc-100 dark:bg-white/5 border border-zinc-200 dark:border-white/10 space-y-1 text-xs font-mono">
+                <div className="p-4 rounded-2xl bg-[#F3F6FA] dark:bg-white/5 border border-[#E6E2D8] dark:border-white/10 space-y-1 text-xs font-mono">
                   <p className="font-bold text-black dark:text-white">Click N Create (Sole Freelance Practice)</p>
                   <p className="text-black dark:text-white">Saad M</p>
-                  <p className="text-cyan-700 dark:text-[#00F0FF] font-bold">saadm.clickncreate@gmail.com</p>
+                  <p className="text-[#1D4ED8] dark:text-[#7DD3FC] font-bold">saadm.clickncreate@gmail.com</p>
                   <p className="text-black dark:text-white">United Kingdom (Available Worldwide)</p>
                 </div>
                 <p>
@@ -164,11 +164,11 @@ export const PrivacyPolicyPage: React.FC<PrivacyPolicyPageProps> = ({ onNavigate
             <div
               id="lawful-basis"
               className={`rounded-3xl border p-6 sm:p-8 backdrop-blur-xl transition-all ${
-                isDark ? 'border-white/10 bg-[#070712]/80' : 'border-zinc-200 bg-white shadow-sm'
+                isDark ? 'border-[#252A36] bg-[#0C1222]/90' : 'border-zinc-200 bg-white shadow-sm'
               }`}
             >
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-8 h-8 rounded-xl bg-cyan-500/15 dark:bg-[#00F0FF]/15 text-cyan-700 dark:text-[#00F0FF] flex items-center justify-center">
+                <div className="w-8 h-8 rounded-xl bg-[#F3E9DC] dark:bg-[#38BDF8]/15 text-[#1D4ED8] dark:text-[#7DD3FC] flex items-center justify-center">
                   <Scale className="w-4 h-4" />
                 </div>
                 <h2 className="text-xl font-display font-bold text-black dark:text-white">
@@ -198,11 +198,11 @@ export const PrivacyPolicyPage: React.FC<PrivacyPolicyPageProps> = ({ onNavigate
             <div
               id="data-collected"
               className={`rounded-3xl border p-6 sm:p-8 backdrop-blur-xl transition-all ${
-                isDark ? 'border-white/10 bg-[#070712]/80' : 'border-zinc-200 bg-white shadow-sm'
+                isDark ? 'border-[#252A36] bg-[#0C1222]/90' : 'border-zinc-200 bg-white shadow-sm'
               }`}
             >
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-8 h-8 rounded-xl bg-cyan-500/15 dark:bg-[#00F0FF]/15 text-cyan-700 dark:text-[#00F0FF] flex items-center justify-center">
+                <div className="w-8 h-8 rounded-xl bg-[#F3E9DC] dark:bg-[#38BDF8]/15 text-[#1D4ED8] dark:text-[#7DD3FC] flex items-center justify-center">
                   <Eye className="w-4 h-4" />
                 </div>
                 <h2 className="text-xl font-display font-bold text-black dark:text-white">
@@ -240,11 +240,11 @@ export const PrivacyPolicyPage: React.FC<PrivacyPolicyPageProps> = ({ onNavigate
             <div
               id="data-use"
               className={`rounded-3xl border p-6 sm:p-8 backdrop-blur-xl transition-all ${
-                isDark ? 'border-white/10 bg-[#070712]/80' : 'border-zinc-200 bg-white shadow-sm'
+                isDark ? 'border-[#252A36] bg-[#0C1222]/90' : 'border-zinc-200 bg-white shadow-sm'
               }`}
             >
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-8 h-8 rounded-xl bg-cyan-500/15 dark:bg-[#00F0FF]/15 text-cyan-700 dark:text-[#00F0FF] flex items-center justify-center">
+                <div className="w-8 h-8 rounded-xl bg-[#F3E9DC] dark:bg-[#38BDF8]/15 text-[#1D4ED8] dark:text-[#7DD3FC] flex items-center justify-center">
                   <FileCheck className="w-4 h-4" />
                 </div>
                 <h2 className="text-xl font-display font-bold text-black dark:text-white">
@@ -260,7 +260,7 @@ export const PrivacyPolicyPage: React.FC<PrivacyPolicyPageProps> = ({ onNavigate
                   <li>Provide 30 days of post-launch technical warranty and bug remediation.</li>
                   <li>Issue compliant commercial invoices with Barclays UK or PayPal details.</li>
                 </ul>
-                <p className="font-bold text-cyan-700 dark:text-[#00F0FF] pt-1">
+                <p className="font-bold text-[#1D4ED8] dark:text-[#7DD3FC] pt-1">
                   We NEVER sell, rent, monetize, or disclose your personal contact information or source code repositories to third-party advertisers.
                 </p>
               </div>
@@ -270,11 +270,11 @@ export const PrivacyPolicyPage: React.FC<PrivacyPolicyPageProps> = ({ onNavigate
             <div
               id="third-parties"
               className={`rounded-3xl border p-6 sm:p-8 backdrop-blur-xl transition-all ${
-                isDark ? 'border-white/10 bg-[#070712]/80' : 'border-zinc-200 bg-white shadow-sm'
+                isDark ? 'border-[#252A36] bg-[#0C1222]/90' : 'border-zinc-200 bg-white shadow-sm'
               }`}
             >
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-8 h-8 rounded-xl bg-cyan-500/15 dark:bg-[#00F0FF]/15 text-cyan-700 dark:text-[#00F0FF] flex items-center justify-center">
+                <div className="w-8 h-8 rounded-xl bg-[#F3E9DC] dark:bg-[#38BDF8]/15 text-[#1D4ED8] dark:text-[#7DD3FC] flex items-center justify-center">
                   <Server className="w-4 h-4" />
                 </div>
                 <h2 className="text-xl font-display font-bold text-black dark:text-white">
@@ -308,11 +308,11 @@ export const PrivacyPolicyPage: React.FC<PrivacyPolicyPageProps> = ({ onNavigate
             <div
               id="cookies"
               className={`rounded-3xl border p-6 sm:p-8 backdrop-blur-xl transition-all ${
-                isDark ? 'border-white/10 bg-[#070712]/80' : 'border-zinc-200 bg-white shadow-sm'
+                isDark ? 'border-[#252A36] bg-[#0C1222]/90' : 'border-zinc-200 bg-white shadow-sm'
               }`}
             >
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-8 h-8 rounded-xl bg-cyan-500/15 dark:bg-[#00F0FF]/15 text-cyan-700 dark:text-[#00F0FF] flex items-center justify-center">
+                <div className="w-8 h-8 rounded-xl bg-[#F3E9DC] dark:bg-[#38BDF8]/15 text-[#1D4ED8] dark:text-[#7DD3FC] flex items-center justify-center">
                   <Cookie className="w-4 h-4" />
                 </div>
                 <h2 className="text-xl font-display font-bold text-black dark:text-white">
@@ -321,7 +321,7 @@ export const PrivacyPolicyPage: React.FC<PrivacyPolicyPageProps> = ({ onNavigate
               </div>
               <div className="space-y-3 text-sm text-black dark:text-white leading-relaxed font-sans font-medium">
                 <p>
-                  This site uses only essential first-party cookies and local storage tokens (<code className="text-cyan-700 dark:text-[#00F0FF] font-mono font-bold">saad_theme</code>, <code className="text-cyan-700 dark:text-[#00F0FF] font-mono font-bold">saad_admin_token</code>) required to remember your Dark/Light mode theme preferences and authenticate admin sessions.
+                  This site uses only essential first-party cookies and local storage tokens (<code className="text-[#1D4ED8] dark:text-[#7DD3FC] font-mono font-bold">saad_theme</code>, <code className="text-[#1D4ED8] dark:text-[#7DD3FC] font-mono font-bold">saad_admin_token</code>) required to remember your Dark/Light mode theme preferences and authenticate admin sessions.
                 </p>
                 <p>
                   We do not use intrusive third-party cross-site advertising cookies or invasive tracking beacons.
@@ -333,11 +333,11 @@ export const PrivacyPolicyPage: React.FC<PrivacyPolicyPageProps> = ({ onNavigate
             <div
               id="retention"
               className={`rounded-3xl border p-6 sm:p-8 backdrop-blur-xl transition-all ${
-                isDark ? 'border-white/10 bg-[#070712]/80' : 'border-zinc-200 bg-white shadow-sm'
+                isDark ? 'border-[#252A36] bg-[#0C1222]/90' : 'border-zinc-200 bg-white shadow-sm'
               }`}
             >
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-8 h-8 rounded-xl bg-cyan-500/15 dark:bg-[#00F0FF]/15 text-cyan-700 dark:text-[#00F0FF] flex items-center justify-center">
+                <div className="w-8 h-8 rounded-xl bg-[#F3E9DC] dark:bg-[#38BDF8]/15 text-[#1D4ED8] dark:text-[#7DD3FC] flex items-center justify-center">
                   <Clock className="w-4 h-4" />
                 </div>
                 <h2 className="text-xl font-display font-bold text-black dark:text-white">
@@ -357,11 +357,11 @@ export const PrivacyPolicyPage: React.FC<PrivacyPolicyPageProps> = ({ onNavigate
             <div
               id="your-rights"
               className={`rounded-3xl border p-6 sm:p-8 backdrop-blur-xl transition-all ${
-                isDark ? 'border-white/10 bg-[#070712]/80' : 'border-zinc-200 bg-white shadow-sm'
+                isDark ? 'border-[#252A36] bg-[#0C1222]/90' : 'border-zinc-200 bg-white shadow-sm'
               }`}
             >
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-8 h-8 rounded-xl bg-cyan-500/15 dark:bg-[#00F0FF]/15 text-cyan-700 dark:text-[#00F0FF] flex items-center justify-center">
+                <div className="w-8 h-8 rounded-xl bg-[#F3E9DC] dark:bg-[#38BDF8]/15 text-[#1D4ED8] dark:text-[#7DD3FC] flex items-center justify-center">
                   <UserCheck className="w-4 h-4" />
                 </div>
                 <h2 className="text-xl font-display font-bold text-black dark:text-white">
@@ -377,7 +377,7 @@ export const PrivacyPolicyPage: React.FC<PrivacyPolicyPageProps> = ({ onNavigate
                   <li><strong className="text-black dark:text-white">Right to Data Portability:</strong> Receive your data in a structured, machine-readable format.</li>
                 </ul>
                 <p className="text-xs text-black dark:text-white pt-1">
-                  To exercise any statutory right, simply email Saad M at <a href="mailto:saadm.clickncreate@gmail.com" className="text-cyan-700 dark:text-[#00F0FF] font-bold hover:underline">saadm.clickncreate@gmail.com</a>. Requests will be fulfilled free of charge within 30 calendar days.
+                  To exercise any statutory right, simply email Saad M at <a href="mailto:saadm.clickncreate@gmail.com" className="text-[#1D4ED8] dark:text-[#7DD3FC] font-bold hover:underline">saadm.clickncreate@gmail.com</a>. Requests will be fulfilled free of charge within 30 calendar days.
                 </p>
               </div>
             </div>
@@ -386,11 +386,11 @@ export const PrivacyPolicyPage: React.FC<PrivacyPolicyPageProps> = ({ onNavigate
             <div
               id="security"
               className={`rounded-3xl border p-6 sm:p-8 backdrop-blur-xl transition-all ${
-                isDark ? 'border-white/10 bg-[#070712]/80' : 'border-zinc-200 bg-white shadow-sm'
+                isDark ? 'border-[#252A36] bg-[#0C1222]/90' : 'border-zinc-200 bg-white shadow-sm'
               }`}
             >
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-8 h-8 rounded-xl bg-cyan-500/15 dark:bg-[#00F0FF]/15 text-cyan-700 dark:text-[#00F0FF] flex items-center justify-center">
+                <div className="w-8 h-8 rounded-xl bg-[#F3E9DC] dark:bg-[#38BDF8]/15 text-[#1D4ED8] dark:text-[#7DD3FC] flex items-center justify-center">
                   <Lock className="w-4 h-4" />
                 </div>
                 <h2 className="text-xl font-display font-bold text-black dark:text-white">
@@ -408,11 +408,11 @@ export const PrivacyPolicyPage: React.FC<PrivacyPolicyPageProps> = ({ onNavigate
             <div
               id="contact"
               className={`rounded-3xl border p-6 sm:p-8 backdrop-blur-xl transition-all ${
-                isDark ? 'border-white/10 bg-[#070712]/80' : 'border-zinc-200 bg-white shadow-sm'
+                isDark ? 'border-[#252A36] bg-[#0C1222]/90' : 'border-zinc-200 bg-white shadow-sm'
               }`}
             >
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-8 h-8 rounded-xl bg-cyan-500/15 dark:bg-[#00F0FF]/15 text-cyan-700 dark:text-[#00F0FF] flex items-center justify-center">
+                <div className="w-8 h-8 rounded-xl bg-[#F3E9DC] dark:bg-[#38BDF8]/15 text-[#1D4ED8] dark:text-[#7DD3FC] flex items-center justify-center">
                   <Mail className="w-4 h-4" />
                 </div>
                 <h2 className="text-xl font-display font-bold text-black dark:text-white">
@@ -421,10 +421,10 @@ export const PrivacyPolicyPage: React.FC<PrivacyPolicyPageProps> = ({ onNavigate
               </div>
               <div className="space-y-3 text-sm text-black dark:text-white leading-relaxed font-sans font-medium">
                 <p>
-                  If you have questions regarding this Privacy Policy, please contact Saad M directly at <a href="mailto:saadm.clickncreate@gmail.com" className="text-cyan-700 dark:text-[#00F0FF] font-bold hover:underline">saadm.clickncreate@gmail.com</a>.
+                  If you have questions regarding this Privacy Policy, please contact Saad M directly at <a href="mailto:saadm.clickncreate@gmail.com" className="text-[#1D4ED8] dark:text-[#7DD3FC] font-bold hover:underline">saadm.clickncreate@gmail.com</a>.
                 </p>
                 <p className="text-xs text-black dark:text-white">
-                  You also hold the statutory right to lodge a complaint with the UK supervisory authority: Information Commissioner's Office (ICO) at <a href="https://ico.org.uk" target="_blank" rel="noreferrer" className="text-cyan-700 dark:text-[#00F0FF] font-bold hover:underline">ico.org.uk</a>.
+                  You also hold the statutory right to lodge a complaint with the UK supervisory authority: Information Commissioner's Office (ICO) at <a href="https://ico.org.uk" target="_blank" rel="noreferrer" className="text-[#1D4ED8] dark:text-[#7DD3FC] font-bold hover:underline">ico.org.uk</a>.
                 </p>
               </div>
             </div>

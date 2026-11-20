@@ -38,7 +38,7 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({ onNavigate }) => {
   });
 
   return (
-    <div className="pt-28 pb-20 md:pt-36 relative overflow-x-hidden w-full max-w-full">
+    <div className="pt-28 pb-20 md:pt-36 relative overflow-x-clip w-full max-w-full">
       <SEOHead
         title="Web Development & Design Services UK | Click N Create — Saad M"
         description="Explore freelance services by Saad M: Custom React Web Development, Shopify E-Commerce, WordPress, Branding Logos, Google SEO, and Hosting at £35/hr."
@@ -95,19 +95,21 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({ onNavigate }) => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Page Hero */}
         <div className="max-w-3xl mb-16 md:mb-24">
-          <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border text-xs font-mono uppercase tracking-wider mb-4 ${
-            isDark ? 'border-white/10 bg-white/5 text-blue-400' : 'border-zinc-300 bg-white text-blue-600 shadow-2xs font-semibold'
+          <div className={`inline-flex items-center gap-2 px-3.5 py-1 rounded-full border text-xs font-mono uppercase tracking-wider mb-4 ${
+            isDark
+              ? 'border-[#38BDF8]/30 bg-[#0C1222]/90 text-[#38BDF8]'
+              : 'border-[#1D4ED8]/30 bg-[#F3E9DC]/75 text-[#1E40AF] shadow-2xs font-semibold'
           }`}>
             <Sparkles className="w-3.5 h-3.5" />
             <span>{cms.badgeText || 'Digital Offerings'}</span>
           </div>
           <h1 className={`text-4xl sm:text-5xl md:text-6xl font-black font-display tracking-tight leading-[1.1] ${
-            isDark ? 'text-white' : 'text-zinc-950'
+            isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'
           }`}>
             {cms.heroTitle || 'SERVICES &'} <span className="text-luxury-gradient">{cms.heroHighlight || 'CAPABILITIES'}</span>
           </h1>
           <p className={`mt-5 text-base sm:text-lg leading-relaxed ${
-            isDark ? 'text-zinc-400' : 'text-zinc-600'
+            isDark ? 'text-[#94A3B8]' : 'text-[#475569]'
           }`}>
             {cms.heroSubtitle || 'Click N Create provides focused, high-standard digital services tailored for businesses, founders, creators, and individuals. Every service is delivered with direct communication, clean architecture, and modern visual design.'}
           </p>
@@ -127,8 +129,8 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({ onNavigate }) => {
                 transition={{ duration: 0.6 }}
                 className={`rounded-3xl border p-6 sm:p-10 md:p-12 relative overflow-hidden backdrop-blur-2xl transition-all duration-300 group ${
                   isDark
-                    ? 'border-white/10 bg-[#0E0E12]/85 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.8)] hover:border-white/20'
-                    : 'border-zinc-200 bg-white/90 shadow-md hover:border-zinc-300'
+                    ? 'border-white/10 bg-[#0C1222]/90 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.8)] hover:border-[#38BDF8]/35'
+                    : 'border-black/10 bg-white/95 shadow-md hover:border-[#1D4ED8]/40'
                 }`}
               >
                 <div className={`grid grid-cols-1 lg:grid-cols-12 gap-10 items-center ${isEven ? 'lg:flex-row-reverse' : ''}`}>
@@ -153,23 +155,25 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({ onNavigate }) => {
                     <div>
                       <div className="flex items-center gap-3 mb-3">
                         <span className={`text-xs font-mono font-bold px-2.5 py-1 rounded border ${
-                          isDark ? 'text-[#00F0FF] bg-[#00F0FF]/10 border-[#00F0FF]/30' : 'text-cyan-800 bg-cyan-100 border-cyan-300'
+                          isDark ? 'text-[#38BDF8] bg-[#38BDF8]/10 border-[#38BDF8]/30' : 'text-[#1E40AF] bg-[#F3E9DC] border-[#1D4ED8]/30'
                         }`}>
-                          // {service.number}
+                          {service.number}
                         </span>
-                        <span className="text-xs font-mono text-[#00F0FF] uppercase tracking-wider font-semibold">
-                          [{service.categoryTag || 'DIGITAL SERVICE'}]
+                        <span className={`text-xs font-mono uppercase tracking-wider font-semibold ${
+                          isDark ? 'text-[#7DD3FC]' : 'text-[#1D4ED8]'
+                        }`}>
+                          {service.categoryTag || 'DIGITAL SERVICE'}
                         </span>
                       </div>
 
                       <h2 className={`text-2xl sm:text-3xl md:text-4xl font-bold font-display tracking-tight ${
-                        isDark ? 'text-white' : 'text-zinc-950'
+                        isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'
                       }`}>
                         {service.title}
                       </h2>
 
                       <p className={`mt-3 text-sm sm:text-base leading-relaxed ${
-                        isDark ? 'text-zinc-400' : 'text-zinc-600'
+                        isDark ? 'text-[#94A3B8]' : 'text-[#475569]'
                       }`}>
                         {service.fullDescription}
                       </p>
@@ -181,8 +185,8 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({ onNavigate }) => {
                             key={tIdx}
                             className={`text-[11px] font-mono px-2 py-0.5 rounded border ${
                               isDark
-                                ? 'bg-white/5 border-white/10 text-zinc-300'
-                                : 'bg-zinc-100 border-zinc-200 text-zinc-700'
+                                ? 'bg-[#1A1D25] border-white/10 text-[#F1F5F9]/85'
+                                : 'bg-[#F3F6FA] border-black/10 text-[#475569]'
                             }`}
                           >
                             {tech}
@@ -194,15 +198,15 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({ onNavigate }) => {
                     {/* Features */}
                     <div>
                       <h4 className={`text-xs font-mono uppercase tracking-wider mb-3 ${
-                        isDark ? 'text-zinc-300' : 'text-zinc-800'
+                        isDark ? 'text-[#94A3B8]' : 'text-[#0F172A]'
                       }`}>
                         Key Deliverables & Features:
                       </h4>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                         {(service.features || service.deliverables || []).slice(0, 4).map((feat: string, idx: number) => (
                           <div key={idx} className="flex items-start gap-2 text-xs sm:text-sm">
-                            <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5 text-blue-500" />
-                            <span className={isDark ? 'text-zinc-300' : 'text-zinc-700'}>{feat}</span>
+                            <CheckCircle2 className={`w-4 h-4 shrink-0 mt-0.5 ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`} />
+                            <span className={isDark ? 'text-[#F1F5F9]/85' : 'text-[#475569]'}>{feat}</span>
                           </div>
                         ))}
                       </div>
@@ -210,8 +214,8 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({ onNavigate }) => {
 
                     {/* Who It Is For */}
                     <div className="pt-4 border-t border-black/[0.06] dark:border-white/[0.06]">
-                      <div className="flex items-center gap-2 text-xs font-mono text-zinc-500 uppercase tracking-wider mb-2">
-                        <UserCheck className="w-3.5 h-3.5 text-blue-500" />
+                      <div className={`flex items-center gap-2 text-xs font-mono uppercase tracking-wider mb-2 ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>
+                        <UserCheck className={`w-3.5 h-3.5 ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`} />
                         <span>Ideal For:</span>
                       </div>
                       <div className="flex flex-wrap gap-1.5">
@@ -220,8 +224,8 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({ onNavigate }) => {
                             key={idx}
                             className={`text-xs font-mono px-2.5 py-1 rounded-md border ${
                               isDark
-                                ? 'text-zinc-300 bg-white/5 border-white/10'
-                                : 'text-zinc-700 bg-zinc-100 border-zinc-200'
+                                ? 'text-[#F1F5F9]/85 bg-[#1A1D25] border-white/10'
+                                : 'text-[#475569] bg-[#F3F6FA] border-black/10'
                             }`}
                           >
                             {target}
@@ -237,19 +241,21 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({ onNavigate }) => {
                         onClick={() => onNavigate(`/services/${service.slug}`)}
                         className={`inline-flex items-center gap-2 px-6 py-3 rounded-xl font-display font-semibold text-sm border transition-all cursor-pointer group/btn ${
                           isDark
-                            ? 'text-white bg-white/10 hover:bg-white/15 border-white/20'
-                            : 'text-zinc-950 bg-zinc-100 hover:bg-zinc-200 border-zinc-300 shadow-2xs'
+                            ? 'text-[#F1F5F9] bg-[#1A1D25] hover:bg-[#38BDF8]/15 border-white/15 hover:border-[#38BDF8]/40'
+                            : 'text-[#0F172A] bg-[#F3F6FA] hover:bg-[#F3E9DC] border-black/15 hover:border-[#1D4ED8]/40 shadow-2xs'
                         }`}
                       >
                         <span>Full Details & FAQs</span>
-                        <ArrowUpRight className="w-4 h-4 text-blue-500 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform" />
+                        <ArrowUpRight className={`w-4 h-4 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform ${
+                          isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'
+                        }`} />
                       </button>
 
                       <button
                         type="button"
                         onClick={() => onNavigate('/contact')}
                         className={`text-xs font-mono transition-colors cursor-pointer ${
-                          isDark ? 'text-zinc-400 hover:text-white' : 'text-zinc-600 hover:text-zinc-950'
+                          isDark ? 'text-[#94A3B8] hover:text-[#F1F5F9]' : 'text-[#475569] hover:text-[#0F172A]'
                         }`}
                       >
                         Inquire about this service →

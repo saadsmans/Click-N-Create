@@ -13,7 +13,7 @@ export const WhyUsSection: React.FC = () => {
 
   return (
     <section className={`relative py-24 md:py-32 border-t transition-colors ${
-      isDark ? 'bg-[#0E0E12]/30 border-white/[0.06]' : 'bg-[#F4F4F6]/50 border-zinc-200/80'
+      isDark ? 'bg-[#0C1222]/45 border-white/[0.06]' : 'bg-[#EFECE5]/60 border-stone-200/80'
     }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <SectionHeading
@@ -37,44 +37,44 @@ export const WhyUsSection: React.FC = () => {
                 transition={{ duration: 0.5, delay: index * 0.07 }}
                 className={`relative rounded-3xl border p-8 flex flex-col justify-between transition-all duration-300 backdrop-blur-xl ${
                   isDark
-                    ? 'border-white/10 bg-white/[0.025] hover:border-white/20 hover:bg-white/[0.04]'
-                    : 'border-zinc-200 bg-white hover:border-zinc-300 hover:shadow-md'
+                    ? 'border-white/10 bg-[#1A1D25]/60 hover:border-[#38BDF8]/40 hover:bg-[#1A1D25]/90'
+                    : 'border-stone-200 bg-white hover:border-[#1D4ED8]/45 hover:shadow-md'
                 } ${isMarquee ? 'lg:col-span-2' : ''}`}
               >
                 <div>
                   <div className="flex items-center justify-between mb-6">
                     <div className={`w-11 h-11 rounded-2xl border flex items-center justify-center transition-colors ${
                       isDark
-                        ? 'border-white/15 bg-white/5 text-blue-400'
-                        : 'border-zinc-200 bg-zinc-50 text-blue-600'
+                        ? 'border-white/12 bg-white/5 text-[#38BDF8]'
+                        : 'border-stone-200 bg-[#F3F6FA] text-[#1D4ED8]'
                     }`}>
                       <Icon className="w-5 h-5" />
                     </div>
                     <span className={`text-xs font-mono font-bold px-2 py-0.5 rounded border ${
                       isDark
-                        ? 'text-zinc-500 bg-white/5 border-white/10'
-                        : 'text-zinc-500 bg-zinc-100 border-zinc-200'
+                        ? 'text-[#94A3B8] bg-white/5 border-white/10'
+                        : 'text-[#475569] bg-stone-100 border-stone-200'
                     }`}>
                       {reason.number}
                     </span>
                   </div>
 
                   <h3 className={`text-xl sm:text-2xl font-bold font-display tracking-tight mb-3 ${
-                    isDark ? 'text-white' : 'text-zinc-950'
+                    isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'
                   }`}>
                     {reason.title}
                   </h3>
 
                   <p className={`text-sm sm:text-base leading-relaxed ${
-                    isDark ? 'text-zinc-400' : 'text-zinc-600'
+                    isDark ? 'text-[#94A3B8]' : 'text-[#475569]'
                   }`}>
                     {reason.description}
                   </p>
                 </div>
 
                 <div className="pt-6 mt-6 border-t border-black/[0.06] dark:border-white/[0.06] flex items-center justify-between text-xs font-mono text-zinc-500">
-                  <span>Dedicated Craft</span>
-                  <span className="text-blue-500">
+                  <span className={isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}>Dedicated Craft</span>
+                  <span className={isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}>
                     Direct Execution
                   </span>
                 </div>

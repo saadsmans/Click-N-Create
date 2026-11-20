@@ -59,26 +59,26 @@ export const CustomCursor: React.FC = () => {
 
   return (
     <div className="hidden lg:block pointer-events-none fixed inset-0 z-50 overflow-hidden">
-      {/* Cyber diffused aura */}
+      {/* Subtle architectural aura */}
       <motion.div
         className={`absolute top-0 left-0 w-44 h-44 -ml-22 -mt-22 rounded-full blur-2xl transition-opacity duration-300 pointer-events-none ${
-          isDark ? 'bg-[#00F0FF]/20' : 'bg-cyan-500/15'
+          isDark ? 'bg-[#38BDF8]/18' : 'bg-[#1D4ED8]/14'
         }`}
         style={{
           x: auraX,
           y: auraY,
           scale: isHovered ? 1.5 : 1,
-          opacity: isHovered ? 0.45 : 0.2,
+          opacity: isHovered ? 0.42 : 0.18,
         }}
       />
 
-      {/* Outer cyber ring */}
+      {/* Outer ring */}
       <motion.div
         className={`absolute top-0 left-0 w-7 h-7 -ml-3.5 -mt-3.5 rounded-full border backdrop-blur-[1px] transition-colors ${
           isHovered
             ? isDark
-              ? 'border-[#00F0FF] shadow-[0_0_12px_#00F0FF]'
-              : 'border-cyan-600 shadow-sm'
+              ? 'border-[#7DD3FC] shadow-[0_0_10px_rgba(56, 189, 248,0.45)]'
+              : 'border-[#1D4ED8] shadow-sm'
             : isDark
             ? 'border-white/30'
             : 'border-zinc-800/40'
@@ -91,10 +91,10 @@ export const CustomCursor: React.FC = () => {
         transition={{ type: 'spring', damping: 20, stiffness: 300 }}
       />
 
-      {/* Center cyber dot */}
+      {/* Center dot */}
       <motion.div
         className={`absolute top-0 left-0 w-1.5 h-1.5 -ml-[3px] -mt-[3px] rounded-full shadow-xs ${
-          isDark ? 'bg-[#00F0FF] shadow-[0_0_6px_#00F0FF]' : 'bg-cyan-700'
+          isDark ? 'bg-[#7DD3FC] shadow-[0_0_6px_rgba(56, 189, 248,0.5)]' : 'bg-[#1D4ED8]'
         }`}
         style={{
           x: mouseX,

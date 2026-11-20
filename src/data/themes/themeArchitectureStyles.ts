@@ -7,6 +7,14 @@ export interface StyleMapping {
 }
 
 export const THEME_HEADER_STYLES: Record<string, StyleMapping> = {
+  'hdr_architectural_amber': {
+    dark: 'max-w-5xl px-5 py-2.5 rounded-full border border-[#D99B52]/30 shadow-[0_12px_36px_rgba(0,0,0,0.45)] backdrop-blur-2xl bg-[#111318]/92 text-[#ECEAE4]',
+    light: 'max-w-5xl px-5 py-2.5 rounded-full border border-stone-300/90 shadow-[0_10px_30px_rgba(20,21,24,0.08)] backdrop-blur-2xl bg-[#FAF8F4]/92 text-[#141518]'
+  },
+  'architectural_amber': {
+    dark: 'max-w-5xl px-5 py-2.5 rounded-full border border-[#D99B52]/30 shadow-[0_12px_36px_rgba(0,0,0,0.45)] backdrop-blur-2xl bg-[#111318]/92 text-[#ECEAE4]',
+    light: 'max-w-5xl px-5 py-2.5 rounded-full border border-stone-300/90 shadow-[0_10px_30px_rgba(20,21,24,0.08)] backdrop-blur-2xl bg-[#FAF8F4]/92 text-[#141518]'
+  },
   'hdr_cyber_cyan': {
     dark: 'max-w-5xl px-5 py-2.5 rounded-full border border-cyan-400/40 shadow-[0_0_25px_rgba(0,240,255,0.25)] backdrop-blur-2xl bg-[#06060F]/90 text-white backdrop-blur-2xl',
     light: 'max-w-5xl px-5 py-2.5 rounded-full border border-cyan-400/40 shadow-[0_0_25px_rgba(0,240,255,0.25)] backdrop-blur-2xl bg-white/92 text-zinc-950 backdrop-blur-2xl'
@@ -810,6 +818,14 @@ export const THEME_HEADER_STYLES: Record<string, StyleMapping> = {
 };
 
 export const THEME_DROPDOWN_STYLES: Record<string, StyleMapping> = {
+  'dd_architectural_amber': {
+    dark: 'rounded-2xl border border-[#D99B52]/30 shadow-[0_24px_60px_rgba(0,0,0,0.65)] p-4 font-mono bg-[#12141A]/96 text-[#ECEAE4]',
+    light: 'rounded-2xl border border-stone-300 shadow-[0_20px_50px_rgba(20,21,24,0.12)] p-4 font-mono bg-[#FAF8F4]/98 text-[#141518]'
+  },
+  'architectural_amber': {
+    dark: 'rounded-2xl border border-[#D99B52]/30 shadow-[0_24px_60px_rgba(0,0,0,0.65)] p-4 font-mono bg-[#12141A]/96 text-[#ECEAE4]',
+    light: 'rounded-2xl border border-stone-300 shadow-[0_20px_50px_rgba(20,21,24,0.12)] p-4 font-mono bg-[#FAF8F4]/98 text-[#141518]'
+  },
   'dd_cyber_cyan': {
     dark: 'rounded-lg border-2 shadow-[0_0_35px_var(--accent-glow,rgba(0,240,255,0.3))] p-4 font-mono bg-[#0A0A16]/98 text-white',
     light: 'rounded-lg border-2 shadow-[0_0_35px_var(--accent-glow,rgba(0,240,255,0.3))] p-4 font-mono bg-white/98 text-zinc-950'
@@ -1613,6 +1629,14 @@ export const THEME_DROPDOWN_STYLES: Record<string, StyleMapping> = {
 };
 
 export const THEME_FOOTER_STYLES: Record<string, StyleMapping> = {
+  'ftr_architectural_amber': {
+    dark: 'rounded-[2.25rem] sm:rounded-[2.75rem] p-6 sm:p-10 lg:p-12 border border-[#D99B52]/25 shadow-[0_25px_70px_rgba(0,0,0,0.72)] bg-[#111319] text-[#ECEAE4]',
+    light: 'rounded-[2.25rem] sm:rounded-[2.75rem] p-6 sm:p-10 lg:p-12 border border-stone-300/90 shadow-[0_20px_50px_rgba(20,21,24,0.08)] bg-[#FAF8F4] text-[#141518]'
+  },
+  'architectural_amber': {
+    dark: 'rounded-[2.25rem] sm:rounded-[2.75rem] p-6 sm:p-10 lg:p-12 border border-[#D99B52]/25 shadow-[0_25px_70px_rgba(0,0,0,0.72)] bg-[#111319] text-[#ECEAE4]',
+    light: 'rounded-[2.25rem] sm:rounded-[2.75rem] p-6 sm:p-10 lg:p-12 border border-stone-300/90 shadow-[0_20px_50px_rgba(20,21,24,0.08)] bg-[#FAF8F4] text-[#141518]'
+  },
   'ftr_cyber_cyan': {
     dark: 'rounded-[2.5rem] sm:rounded-[3rem] p-6 sm:p-10 lg:p-12 border border-cyan-400/40 shadow-[0_25px_70px_rgba(0,0,0,0.8)] bg-[#06060E] text-white',
     light: 'rounded-[2.5rem] sm:rounded-[3rem] p-6 sm:p-10 lg:p-12 border border-cyan-400/40 shadow-[0_25px_70px_rgba(0,0,0,0.8)] bg-white text-zinc-950'
@@ -2462,7 +2486,7 @@ export const LEGACY_FOOTER_STYLES: Record<string, StyleMapping> = {
 };
 
 export function getHeaderClass(styleKey?: string, presetId?: string, isDark: boolean = true): string {
-  const key = styleKey || presetId || 'floating_glass';
+  const key = styleKey || presetId || 'hdr_architectural_amber';
   if (THEME_HEADER_STYLES[key]) {
     return isDark ? THEME_HEADER_STYLES[key].dark : THEME_HEADER_STYLES[key].light;
   }
@@ -2472,11 +2496,11 @@ export function getHeaderClass(styleKey?: string, presetId?: string, isDark: boo
   if (LEGACY_HEADER_STYLES[key]) {
     return isDark ? LEGACY_HEADER_STYLES[key].dark : LEGACY_HEADER_STYLES[key].light;
   }
-  return isDark ? THEME_HEADER_STYLES['hdr_cyber_cyan'].dark : THEME_HEADER_STYLES['hdr_cyber_cyan'].light;
+  return isDark ? THEME_HEADER_STYLES['hdr_architectural_amber'].dark : THEME_HEADER_STYLES['hdr_architectural_amber'].light;
 }
 
 export function getDropdownClass(styleKey?: string, presetId?: string, isDark: boolean = true): string {
-  const key = styleKey || presetId || 'glass_blur';
+  const key = styleKey || presetId || 'dd_architectural_amber';
   if (THEME_DROPDOWN_STYLES[key]) {
     return isDark ? THEME_DROPDOWN_STYLES[key].dark : THEME_DROPDOWN_STYLES[key].light;
   }
@@ -2486,11 +2510,11 @@ export function getDropdownClass(styleKey?: string, presetId?: string, isDark: b
   if (LEGACY_DROPDOWN_STYLES[key]) {
     return isDark ? LEGACY_DROPDOWN_STYLES[key].dark : LEGACY_DROPDOWN_STYLES[key].light;
   }
-  return isDark ? THEME_DROPDOWN_STYLES['dd_cyber_cyan'].dark : THEME_DROPDOWN_STYLES['dd_cyber_cyan'].light;
+  return isDark ? THEME_DROPDOWN_STYLES['dd_architectural_amber'].dark : THEME_DROPDOWN_STYLES['dd_architectural_amber'].light;
 }
 
 export function getFooterClass(styleKey?: string, presetId?: string, isDark: boolean = true): string {
-  const key = styleKey || presetId || 'modern_columns';
+  const key = styleKey || presetId || 'ftr_architectural_amber';
   if (THEME_FOOTER_STYLES[key]) {
     return isDark ? THEME_FOOTER_STYLES[key].dark : THEME_FOOTER_STYLES[key].light;
   }
@@ -2500,5 +2524,5 @@ export function getFooterClass(styleKey?: string, presetId?: string, isDark: boo
   if (LEGACY_FOOTER_STYLES[key]) {
     return isDark ? LEGACY_FOOTER_STYLES[key].dark : LEGACY_FOOTER_STYLES[key].light;
   }
-  return isDark ? THEME_FOOTER_STYLES['ftr_cyber_cyan'].dark : THEME_FOOTER_STYLES['ftr_cyber_cyan'].light;
+  return isDark ? THEME_FOOTER_STYLES['ftr_architectural_amber'].dark : THEME_FOOTER_STYLES['ftr_architectural_amber'].light;
 }

@@ -6728,6 +6728,175 @@
           "dwellSeconds": 1
         }
       ]
+    },
+    {
+      "id": "log_1795019054823_16ts",
+      "sessionId": "sess_1795019052802_oq3nx",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "tablet",
+      "browser": "Chrome",
+      "os": "Windows",
+      "screen": "998x550",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Organic Search",
+      "localTime": "09:54:12 PM",
+      "timestamp": "2026-11-18T16:24:14.823Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-11-18T16:24:14.823Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1795019054886_ehds",
+      "sessionId": "sess_1795019052802_oq3nx",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "desktop",
+      "browser": "Google Chrome",
+      "os": "Windows",
+      "screen": "1536x864",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Search",
+      "localTime": "09:54 PM",
+      "timestamp": "2026-11-18T16:24:14.886Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-11-18T16:24:14.823Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/",
+          "timestamp": "2026-11-18T16:24:14.886Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1795019054889_bbg8",
+      "sessionId": "sess_1795019052802_oq3nx",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "desktop",
+      "browser": "Google Chrome",
+      "os": "Windows",
+      "screen": "1536x864",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Search",
+      "localTime": "09:54 PM",
+      "timestamp": "2026-11-18T16:24:14.889Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-11-18T16:24:14.823Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/",
+          "timestamp": "2026-11-18T16:24:14.889Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1795019791416_0ux5",
+      "sessionId": "sess_1795019052802_oq3nx",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "desktop",
+      "browser": "Google Chrome",
+      "os": "Windows",
+      "screen": "1536x864",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Search",
+      "localTime": "10:06 PM",
+      "timestamp": "2026-11-18T16:36:31.416Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-11-18T16:24:14.823Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/",
+          "timestamp": "2026-11-18T16:36:31.416Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1795019791421_t1p4",
+      "sessionId": "sess_1795019052802_oq3nx",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "tablet",
+      "browser": "Chrome",
+      "os": "Windows",
+      "screen": "998x550",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Organic Search",
+      "localTime": "10:06:28 PM",
+      "timestamp": "2026-11-18T16:36:31.421Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-11-18T16:24:14.823Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/",
+          "timestamp": "2026-11-18T16:36:31.421Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1795019791428_30i0",
+      "sessionId": "sess_1795019052802_oq3nx",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "desktop",
+      "browser": "Google Chrome",
+      "os": "Windows",
+      "screen": "1536x864",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Search",
+      "localTime": "10:06 PM",
+      "timestamp": "2026-11-18T16:36:31.429Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-11-18T16:24:14.823Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/",
+          "timestamp": "2026-11-18T16:36:31.428Z",
+          "dwellSeconds": 1
+        }
+      ]
     }
   ],
   "activeSessions": {
@@ -7303,6 +7472,40 @@
         "/"
       ],
       "totalDwellSeconds": 272
+    },
+    "sess_1795018093630_u4j0q": {
+      "sessionId": "sess_1795018093630_u4j0q",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "mobile",
+      "browser": "Browser Client",
+      "os": "Desktop / Mobile",
+      "source": "Direct Traffic",
+      "lastSeen": 1795020579628,
+      "startedAt": "2026-11-18T16:17:58.812Z",
+      "pageHistory": [
+        "/"
+      ],
+      "totalDwellSeconds": 2441
+    },
+    "sess_1795019052802_oq3nx": {
+      "sessionId": "sess_1795019052802_oq3nx",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "desktop",
+      "browser": "Google Chrome",
+      "os": "Windows",
+      "source": "Google Search",
+      "lastSeen": 1795020606843,
+      "startedAt": "2026-11-18T16:24:14.823Z",
+      "pageHistory": [
+        "/"
+      ],
+      "totalDwellSeconds": 816
     }
   },
   "auditLogs": [
@@ -7506,32 +7709,32 @@
   ],
   "customization": {
     "theme": {
-      "presetId": "cyber_cyan",
-      "presetName": "Cyber Neon Cyan (Default)",
-      "accentCyan": "#00F0FF",
-      "accentPurple": "#A855F7",
-      "accentGradient": "linear-gradient(135deg, #00F0FF 0%, #A855F7 50%, #FF0055 100%)",
-      "bgTone": "default",
-      "bgMainDark": "#07070F",
-      "bgSecondaryDark": "#0D0D1C",
-      "bgMainLight": "#F8FAFC",
+      "presetId": "architectural_amber",
+      "presetName": "Architectural Charcoal & Amber (Default)",
+      "accentCyan": "#D99B52",
+      "accentPurple": "#C2B8A3",
+      "accentGradient": "linear-gradient(135deg, #F3C178 0%, #D99B52 55%, #A37B4E 100%)",
+      "bgTone": "obsidian",
+      "bgMainDark": "#0B0C0F",
+      "bgSecondaryDark": "#13151B",
+      "bgMainLight": "#F4F2ED",
       "bgSecondaryLight": "#FFFFFF",
-      "textColorDark": "#F8FAFC",
-      "textColorLight": "#0F172A",
+      "textColorDark": "#ECEAE4",
+      "textColorLight": "#141518",
       "fontDisplay": "Syne",
       "fontSans": "Plus Jakarta Sans",
-      "fontMono": "Hubot Sans",
+      "fontMono": "JetBrains Mono",
       "borderRadius": "modern",
       "borderWidth": "thin",
-      "glowIntensity": "cyber",
+      "glowIntensity": "subtle",
       "buttonStyle": "glow",
-      "headerStyle": "hdr_cyber_cyan",
-      "footerStyle": "ftr_cyber_cyan",
-      "dropdownStyle": "dd_cyber_cyan",
-      "backgroundPattern": "grid",
+      "headerStyle": "hdr_architectural_amber",
+      "footerStyle": "ftr_architectural_amber",
+      "dropdownStyle": "dd_architectural_amber",
+      "backgroundPattern": "clean",
       "glowEffect": true,
       "showGame": true,
-      "showGrid": true,
+      "showGrid": false,
       "customBadge": "AVAILABLE FOR 2026 CLIENT PROJECTS · £35/HR",
       "customLogoUrl": "/uploads/header-logo-1791033749583.png",
       "logoDisplayMode": "image_text",

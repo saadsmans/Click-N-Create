@@ -47,7 +47,7 @@ export const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({ slug, onNa
   }));
 
   return (
-    <div className="pt-28 pb-20 md:pt-36 relative overflow-x-hidden w-full max-w-full">
+    <div className="pt-28 pb-20 md:pt-36 relative overflow-x-clip w-full max-w-full">
       <SEOHead
         title={`${service.title} | Click N Create — Saad M`}
         description={service.shortDescription || `${service.title} services by freelance developer Saad M. Transparent rates, quick delivery, and high technical quality.`}
@@ -81,9 +81,9 @@ export const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({ slug, onNa
           <button
             type="button"
             onClick={() => onNavigate('/services')}
-            className="inline-flex items-center gap-2 text-xs font-mono text-zinc-500 hover:text-zinc-950 dark:hover:text-white transition-colors cursor-pointer group"
+            className="inline-flex items-center gap-2 text-xs font-mono text-[#94A3B8] hover:text-[#0F172A] dark:hover:text-[#F1F5F9] transition-colors cursor-pointer group"
           >
-            <ArrowLeft className="w-3.5 h-3.5 text-blue-500 group-hover:-translate-x-1 transition-transform" />
+            <ArrowLeft className={`w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`} />
             <span>Back to All Services</span>
           </button>
         </div>
@@ -93,23 +93,25 @@ export const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({ slug, onNa
           <div className="lg:col-span-7 space-y-6">
             <div className="flex items-center gap-3">
               <span className={`text-xs font-mono font-bold px-2.5 py-1 rounded border ${
-                isDark ? 'text-white bg-white/10 border-white/10' : 'text-zinc-900 bg-zinc-100 border-zinc-200'
+                isDark ? 'text-[#F1F5F9] bg-[#1A1D25] border-white/10' : 'text-[#0F172A] bg-[#F3F6FA] border-black/10'
               }`}>
                 Service {service.number}
               </span>
-              <span className="text-xs font-mono text-blue-500 uppercase tracking-wider font-semibold">
+              <span className={`text-xs font-mono uppercase tracking-wider font-semibold ${
+                isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'
+              }`}>
                 Click N Create
               </span>
             </div>
 
             <h1 className={`text-3xl sm:text-5xl md:text-6xl font-black font-display tracking-tight leading-[1.1] ${
-              isDark ? 'text-white' : 'text-zinc-950'
+              isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'
             }`}>
               {service.title}
             </h1>
 
             <p className={`text-base sm:text-lg md:text-xl leading-relaxed ${
-              isDark ? 'text-zinc-400' : 'text-zinc-600'
+              isDark ? 'text-[#94A3B8]' : 'text-[#475569]'
             }`}>
               {service.fullDescription}
             </p>
@@ -130,8 +132,8 @@ export const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({ slug, onNa
                 }}
                 className={`px-5 py-2.5 rounded-xl border text-xs font-mono transition-colors cursor-pointer ${
                   isDark
-                    ? 'border-white/15 bg-white/5 hover:bg-white/10 text-white'
-                    : 'border-zinc-300 bg-white hover:bg-zinc-50 text-zinc-900 shadow-2xs'
+                    ? 'border-white/15 bg-[#0C1222] hover:bg-[#1A1D25] text-[#F1F5F9]'
+                    : 'border-black/15 bg-white hover:bg-[#F3F6FA] text-[#0F172A] shadow-2xs'
                 }`}
               >
                 View Features & FAQs ↓
@@ -153,17 +155,19 @@ export const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({ slug, onNa
         {/* ===================== PRICING & SCOPE BANNER ===================== */}
         <div className={`my-12 p-6 sm:p-8 rounded-3xl border flex flex-col md:flex-row items-start md:items-center justify-between gap-6 backdrop-blur-xl ${
           isDark
-            ? 'border-white/10 bg-white/[0.02]'
-            : 'border-zinc-200 bg-white shadow-sm'
+            ? 'border-[#38BDF8]/25 bg-[#0C1222]/90'
+            : 'border-black/10 bg-white shadow-sm'
         }`}>
           <div>
-            <span className="text-xs font-mono uppercase tracking-widest text-blue-500 font-semibold block mb-1">
+            <span className={`text-xs font-mono uppercase tracking-widest font-semibold block mb-1 ${
+              isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'
+            }`}>
               Investment & Pricing
             </span>
-            <div className={`text-2xl sm:text-3xl font-extrabold font-display ${isDark ? 'text-white' : 'text-zinc-950'}`}>
+            <div className={`text-2xl sm:text-3xl font-extrabold font-display ${isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'}`}>
               Standard Rate: £35 / hr
             </div>
-            <p className="text-xs sm:text-sm text-zinc-500 mt-1 max-w-xl">
+            <p className={`text-xs sm:text-sm mt-1 max-w-xl ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>
               {service.pricingEstimate}. Available on an hourly basis or as a guaranteed fixed milestone agreement.
             </p>
           </div>
@@ -172,7 +176,11 @@ export const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({ slug, onNa
             <button
               type="button"
               onClick={() => onNavigate('/estimator')}
-              className="py-2.5 px-4 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-mono text-xs font-semibold uppercase tracking-wider transition-colors cursor-pointer"
+              className={`py-2.5 px-4 rounded-xl font-mono text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer ${
+                isDark
+                  ? 'bg-[#38BDF8] hover:bg-[#7DD3FC] text-[#060913]'
+                  : 'bg-[#1D4ED8] hover:bg-[#1D4ED8] text-white'
+              }`}
             >
               Estimate This Scope
             </button>
@@ -199,9 +207,9 @@ export const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({ slug, onNa
               />
 
               <p className={`text-sm sm:text-base leading-relaxed pt-2 ${
-                isDark ? 'text-zinc-400' : 'text-zinc-600'
+                isDark ? 'text-[#94A3B8]' : 'text-[#475569]'
               }`}>
-                When we collaborate on <strong className={isDark ? 'text-white' : 'text-zinc-950'}>{service.title}</strong>, you receive direct communication from Saad M throughout every iteration. No templates, no inflated promises—just solid code, responsive UI, and thoughtful design.
+                When we collaborate on <strong className={isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'}>{service.title}</strong>, you receive direct communication from Saad M throughout every iteration. No templates, no inflated promises—just solid code, responsive UI, and thoughtful design.
               </p>
             </div>
 
@@ -211,19 +219,19 @@ export const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({ slug, onNa
                   key={idx}
                   className={`rounded-2xl border p-5 backdrop-blur-xl transition-all flex flex-col justify-between ${
                     isDark
-                      ? 'border-white/10 bg-white/[0.025] hover:border-white/20'
-                      : 'border-zinc-200 bg-white hover:border-zinc-300 shadow-2xs'
+                      ? 'border-white/10 bg-[#0C1222]/85 hover:border-[#38BDF8]/35'
+                      : 'border-black/10 bg-white hover:border-[#1D4ED8]/40 shadow-2xs'
                   }`}
                 >
                   <div className="flex items-start gap-3">
-                    <CheckCircle2 className="w-5 h-5 shrink-0 mt-0.5 text-blue-500" />
+                    <CheckCircle2 className={`w-5 h-5 shrink-0 mt-0.5 ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`} />
                     <span className={`text-sm font-medium leading-snug ${
-                      isDark ? 'text-zinc-200' : 'text-zinc-800'
+                      isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'
                     }`}>
                       {item}
                     </span>
                   </div>
-                  <span className="text-[10px] font-mono text-zinc-500 mt-4 self-end uppercase">
+                  <span className={`text-[10px] font-mono mt-4 self-end uppercase ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>
                     Deliverable 0{idx + 1}
                   </span>
                 </div>
@@ -235,7 +243,7 @@ export const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({ slug, onNa
         {/* ===================== SCOPE INCLUSIONS & EXCLUSIONS ===================== */}
         <section className="py-16 md:py-24 border-b border-black/[0.08] dark:border-white/[0.08]">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className={`p-8 rounded-3xl border ${isDark ? 'border-white/10 bg-white/[0.02]' : 'border-zinc-200 bg-white shadow-2xs'}`}>
+            <div className={`p-8 rounded-3xl border ${isDark ? 'border-white/10 bg-[#0C1222]/85' : 'border-black/10 bg-white shadow-2xs'}`}>
               <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-emerald-500 font-semibold mb-4">
                 <CheckCircle2 className="w-4 h-4" />
                 <span>Scope Inclusions</span>
@@ -244,22 +252,22 @@ export const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({ slug, onNa
                 {service.scopeInclusions.map((inc, i) => (
                   <li key={i} className="flex items-start gap-3 text-xs sm:text-sm">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-2 shrink-0" />
-                    <span className={isDark ? 'text-zinc-300' : 'text-zinc-700'}>{inc}</span>
+                    <span className={isDark ? 'text-[#F1F5F9]/85' : 'text-[#475569]'}>{inc}</span>
                   </li>
                 ))}
               </ul>
             </div>
 
-            <div className={`p-8 rounded-3xl border ${isDark ? 'border-white/10 bg-white/[0.02]' : 'border-zinc-200 bg-white shadow-2xs'}`}>
-              <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-zinc-400 font-semibold mb-4">
-                <span className="w-2 h-2 rounded-full bg-zinc-400" />
+            <div className={`p-8 rounded-3xl border ${isDark ? 'border-white/10 bg-[#0C1222]/85' : 'border-black/10 bg-white shadow-2xs'}`}>
+              <div className={`flex items-center gap-2 text-xs font-mono uppercase tracking-wider font-semibold mb-4 ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>
+                <span className="w-2 h-2 rounded-full bg-[#94A3B8]" />
                 <span>Exclusions & Third-Party Boundaries</span>
               </div>
               <ul className="space-y-3">
                 {service.scopeExclusions.map((exc, i) => (
                   <li key={i} className="flex items-start gap-3 text-xs sm:text-sm">
-                    <span className="w-1.5 h-1.5 rounded-full bg-zinc-400 mt-2 shrink-0" />
-                    <span className="text-zinc-500">{exc}</span>
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#94A3B8] mt-2 shrink-0" />
+                    <span className={isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}>{exc}</span>
                   </li>
                 ))}
               </ul>
@@ -281,16 +289,16 @@ export const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({ slug, onNa
                 key={idx}
                 className={`rounded-2xl border p-6 transition-all space-y-3 ${
                   isDark
-                    ? 'border-white/10 bg-white/[0.02] hover:border-white/20'
-                    : 'border-zinc-200 bg-white hover:border-zinc-300 shadow-2xs'
+                    ? 'border-white/10 bg-[#0C1222]/85 hover:border-[#38BDF8]/35'
+                    : 'border-black/10 bg-white hover:border-[#1D4ED8]/40 shadow-2xs'
                 }`}
               >
                 <div className={`w-8 h-8 rounded-lg flex items-center justify-center font-mono text-xs font-bold border ${
-                  isDark ? 'border-white/15 bg-white/5 text-blue-400' : 'border-zinc-200 bg-zinc-50 text-blue-600'
+                  isDark ? 'border-[#38BDF8]/30 bg-[#1A1D25] text-[#38BDF8]' : 'border-[#1D4ED8]/30 bg-[#F3E9DC]/70 text-[#1E40AF]'
                 }`}>
                   0{idx + 1}
                 </div>
-                <h4 className={`text-base font-bold font-display ${isDark ? 'text-white' : 'text-zinc-950'}`}>
+                <h4 className={`text-base font-bold font-display ${isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'}`}>
                   {feat}
                 </h4>
               </div>
@@ -312,10 +320,10 @@ export const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({ slug, onNa
                 <div
                   key={idx}
                   className={`flex items-center gap-3 p-4 rounded-xl border ${
-                    isDark ? 'border-white/10 bg-white/[0.025] text-zinc-300' : 'border-zinc-200 bg-white text-zinc-800 shadow-2xs'
+                    isDark ? 'border-white/10 bg-[#0C1222]/85 text-[#F1F5F9]/85' : 'border-black/10 bg-white text-[#0F172A] shadow-2xs'
                   }`}
                 >
-                  <UserCheck className="w-5 h-5 text-blue-500 shrink-0" />
+                  <UserCheck className={`w-5 h-5 shrink-0 ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`} />
                   <span className="text-sm sm:text-base">{target}</span>
                 </div>
               ))}
@@ -340,15 +348,15 @@ export const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({ slug, onNa
 
         {/* ===================== ENQUIRY CTA ===================== */}
         <div className="py-20 text-center max-w-3xl mx-auto space-y-6">
-          <span className="text-xs font-mono text-blue-500 tracking-widest uppercase block font-semibold">
+          <span className={`text-xs font-mono tracking-widest uppercase block font-semibold ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`}>
             Let's Collaborate
           </span>
           <h2 className={`text-3xl sm:text-4xl md:text-5xl font-extrabold font-display tracking-tight ${
-            isDark ? 'text-white' : 'text-zinc-950'
+            isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'
           }`}>
             Ready to Build Your {service.title}?
           </h2>
-          <p className={`text-base leading-relaxed ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>
+          <p className={`text-base leading-relaxed ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>
             Let's talk through your goals, features, and timeline. You communicate directly with Saad M.
           </p>
           <div className="pt-4 flex justify-center">

@@ -140,11 +140,11 @@ export const generateCvPdf = async () => {
   doc.text(owaisLines, margin, y);
   y += owaisLines.length * 3.5 + 2;
 
-  // Project 2: Hammad Patel Portfolio
+  // Project 2: Hammad Patel Portfolio & ECE Virtual Lab Studio
   doc.setTextColor(15, 23, 42);
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(8.8);
-  doc.text('Hammad Patel — Personal & Engineering Portfolio', margin, y);
+  doc.text('Hammad Patel — ECE Virtual Lab Studio & Portfolio', margin, y);
 
   doc.setTextColor(0, 150, 180);
   doc.setFont('helvetica', 'bold');
@@ -156,7 +156,7 @@ export const generateCvPdf = async () => {
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(7.8);
   const hammadLines = doc.splitTextToSize(
-    '• Designed & built custom personal portfolio website for client Hammad Patel showcasing his E&C Engineering profile at GEC Bharuch, IIT Bombay internship experience, and web skills on Vercel edge CDN.',
+    '• Designed & built client portfolio featuring an interactive ECE Virtual Lab Studio simulating electronics & communication engineering coursework (signals, circuits, modulation) alongside IIT Bombay credentials.',
     contentWidth
   );
   doc.text(hammadLines, margin, y);

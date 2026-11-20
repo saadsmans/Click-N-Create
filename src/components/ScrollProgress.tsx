@@ -19,11 +19,11 @@ export const ScrollProgress: React.FC = () => {
       style={{
         scaleX,
         background: isDark
-          ? 'linear-gradient(90deg, #00F0FF 0%, #7928CA 50%, #FF0055 100%)'
-          : 'linear-gradient(90deg, #00B4D8 0%, #6366F1 50%, #E11D48 100%)',
+          ? 'linear-gradient(90deg, #2563EB 0%, #38BDF8 55%, #BAE6FD 100%)'
+          : 'linear-gradient(90deg, #1E40AF 0%, #1D4ED8 60%, #38BDF8 100%)',
         boxShadow: isDark
-          ? '0 0 12px rgba(0, 240, 255, 0.7)'
-          : '0 0 10px rgba(0, 180, 216, 0.4)',
+          ? '0 0 10px rgba(56, 189, 248, 0.55)'
+          : '0 0 8px rgba(29, 78, 216, 0.35)',
       }}
     />
   );

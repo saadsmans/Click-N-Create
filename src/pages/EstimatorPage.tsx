@@ -1,24 +1,18 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
 import {
   Calculator,
   CheckCircle2,
-  ArrowRight,
   MessageSquare,
   Mail,
   ShieldCheck,
-  RefreshCw,
   ShoppingBag,
   Cpu,
   Palette,
   Search,
   Server,
-  Globe2,
   Code2,
   Copy,
   Check,
-  PhoneCall,
-  Sparkles,
 } from 'lucide-react';
 import { SITE_CONFIG } from '../data/site.ts';
 import { useTheme } from '../context/ThemeContext.tsx';
@@ -73,64 +67,64 @@ interface Step2Config {
 
 const PROJECT_ARCHETYPES: ProjectArchetype[] = [
   {
-    id: 'branding-design',
-    name: 'Logo, Banners & Graphic Design',
-    serviceCategory: 'BRANDING & GRAPHIC DESIGN',
-    subtitle: 'Logos, Social Banners, Business Cards & Print',
-    description: 'A complete visual look for your brand: high-resolution logos, matching social media banners, printed flyers, business cards, and promo paper.',
-    baseHours: 5,
-    timeline: '3 – 5 Days',
-    icon: Palette,
-  },
-  {
-    id: 'web-development',
-    name: 'Business Website (WordPress / Custom)',
-    serviceCategory: 'BUSINESS WEBSITES',
-    subtitle: 'Fast, Mobile-Friendly & Easy to Edit',
-    description: 'A clean, modern website designed to make your business look trustworthy, look great on phones, and bring you customer inquiries.',
-    baseHours: 8,
-    timeline: '1 – 2 Weeks',
-    icon: Code2,
-  },
-  {
     id: 'ecommerce-development',
-    name: 'Online Shop (Shopify / WooCommerce)',
-    serviceCategory: 'ONLINE STORES & E-COMMERCE',
-    subtitle: 'Sell Products & Take Card Payments Online',
+    name: 'E-Commerce Development',
+    serviceCategory: '01 · E-COMMERCE DEVELOPMENT',
+    subtitle: 'Shopify, WooCommerce & Custom Online Stores',
     description: 'A complete online shop where customers can browse your products on their phone, add to cart, and pay safely with credit cards, Apple Pay, or PayPal.',
     baseHours: 12,
     timeline: '2 – 3 Weeks',
     icon: ShoppingBag,
   },
   {
+    id: 'web-development',
+    name: 'Web Development',
+    serviceCategory: '02 · WEB DEVELOPMENT',
+    subtitle: 'Fast, Mobile-Friendly & Easy to Edit Websites',
+    description: 'A clean, modern website designed to make your business look trustworthy, open instantly on phones, and bring you customer inquiries.',
+    baseHours: 8,
+    timeline: '1 – 2 Weeks',
+    icon: Code2,
+  },
+  {
+    id: 'branding-design',
+    name: 'Branding & Design',
+    serviceCategory: '03 · BRANDING & DESIGN',
+    subtitle: 'Logos, Brand Systems, Social Banners & Print',
+    description: 'A complete visual identity for your brand: high-resolution logos, matching social media banners, printed flyers, business cards, and design systems.',
+    baseHours: 5,
+    timeline: '3 – 5 Days',
+    icon: Palette,
+  },
+  {
     id: 'digital-marketing',
-    name: 'Get Found on Google & Marketing',
-    serviceCategory: 'GOOGLE SEARCH & MARKETING',
-    subtitle: 'Google Search, Local Maps & Ad Campaigns',
-    description: 'Help your business show up higher when people search for what you do on Google, set up targeted ads, and track how many new leads you get.',
+    name: 'Digital Marketing',
+    serviceCategory: '04 · DIGITAL MARKETING',
+    subtitle: 'SEO, Google Maps, Paid Ads & Lead Analytics',
+    description: 'Help your business rank higher on Google search and maps, launch targeted ad campaigns, and track every new lead and conversion.',
     baseHours: 5,
     timeline: '4 – 7 Days',
     icon: Search,
   },
   {
-    id: 'hosting-maintenance',
-    name: 'Website Hosting & Monthly Support',
-    serviceCategory: 'HOSTING, BACKUPS & MAINTENANCE',
-    subtitle: 'Fast Hosting, Daily Backups & Friendly Care',
-    description: 'Fast, reliable website hosting, automatic daily safety backups, connecting your domain name, and friendly WhatsApp support whenever you need edits.',
-    baseHours: 3,
-    timeline: '1 – 3 Days / Monthly',
-    icon: Server,
-  },
-  {
     id: 'web-app-development',
-    name: 'Custom Web Tools & Online Portals',
-    serviceCategory: 'CUSTOM TOOLS & APPS',
-    subtitle: 'Instant Price Calculators, Logins & Dashboards',
-    description: 'Have a custom idea? An instant quote estimator for your clients, a customer booking portal, or a private dashboard to track business data.',
+    name: 'Web App Development',
+    serviceCategory: '05 · WEB APP DEVELOPMENT',
+    subtitle: 'Interactive Calculators, Client Portals & Dashboards',
+    description: 'Have a custom workflow or SaaS idea? An instant quote estimator for your clients, a customer booking portal, or a private analytics dashboard.',
     baseHours: 16,
     timeline: '2 – 4 Weeks',
     icon: Cpu,
+  },
+  {
+    id: 'hosting-maintenance',
+    name: 'Hosting & Maintenance',
+    serviceCategory: '06 · HOSTING & MAINTENANCE',
+    subtitle: 'Cloud Hosting, Daily Backups & 24/7 Care',
+    description: 'Fast, reliable cloud hosting, automatic daily safety backups, domain & SSL setup, and direct WhatsApp support whenever you need updates.',
+    baseHours: 3,
+    timeline: '1 – 3 Days / Monthly',
+    icon: Server,
   },
 ];
 
@@ -602,15 +596,15 @@ export const EstimatorPage: React.FC<EstimatorPageProps> = ({ onNavigate }) => {
   const cms = getPageContent('estimator') || {};
 
   // State
-  const [selectedArchetypeId, setSelectedArchetypeId] = useState<string>('branding-design');
+  const [selectedArchetypeId, setSelectedArchetypeId] = useState<string>('ecommerce-development');
   const [pageCount, setPageCount] = useState<number>(5);
   const [productCount, setProductCount] = useState<number>(10);
-  const [secondaryOptionId, setSecondaryOptionId] = useState<string>('essential');
+  const [secondaryOptionId, setSecondaryOptionId] = useState<string>('shopify');
   const [selectedDeliverables, setSelectedDeliverables] = useState<string[]>([
-    'brand-logo-suite',
-    'brand-digital-banners',
-    'brand-social-pack',
-    'brand-print-flyers',
+    'ecom-payment-gateway',
+    'ecom-cart-drawer',
+    'ecom-product-variants',
+    'ecom-coupons-discounts',
   ]);
   const [deliveryTier, setDeliveryTier] = useState<'standard' | 'express'>('standard');
   const [copiedQuote, setCopiedQuote] = useState(false);
@@ -620,7 +614,7 @@ export const EstimatorPage: React.FC<EstimatorPageProps> = ({ onNavigate }) => {
     PROJECT_ARCHETYPES.find((a) => a.id === selectedArchetypeId) || PROJECT_ARCHETYPES[0];
 
   const currentStep2Config =
-    ARCHETYPE_STEP2_CONFIG[selectedArchetypeId] || ARCHETYPE_STEP2_CONFIG['branding-design'];
+    ARCHETYPE_STEP2_CONFIG[selectedArchetypeId] || ARCHETYPE_STEP2_CONFIG['ecommerce-development'];
 
   // When user switches archetype in Step 1, smart-sync initial defaults for Step 2
   const handleSelectArchetype = (archetypeId: string) => {
@@ -759,7 +753,7 @@ WhatsApp: +44 7927 548123`;
   };
 
   return (
-    <div className="pt-28 pb-24 md:pt-36 relative overflow-x-hidden w-full max-w-full">
+    <div className="pt-28 pb-24 md:pt-36 relative overflow-x-clip w-full max-w-full">
       <SEOHead
         title="Interactive Project Cost & Hour Estimator | Click N Create"
         description="Calculate instant upfront website prices, development hours, and milestone scopes with Saad M's transparent £35/hr interactive project estimator."
@@ -778,8 +772,8 @@ WhatsApp: +44 7927 548123`;
           <div
             className={`inline-flex items-center gap-2 px-3.5 py-1 rounded-full border text-xs font-mono uppercase tracking-wider mb-4 ${
               isDark
-                ? 'border-[#00F0FF]/30 bg-[#00F0FF]/10 text-[#00F0FF]'
-                : 'border-cyan-400 bg-cyan-50 text-cyan-800 font-semibold'
+                ? 'border-[#38BDF8]/30 bg-[#0C1222]/90 text-[#38BDF8]'
+                : 'border-[#1D4ED8]/30 bg-[#F3E9DC]/75 text-[#1E40AF] font-semibold'
             }`}
           >
             <Calculator className="w-3.5 h-3.5" />
@@ -788,15 +782,15 @@ WhatsApp: +44 7927 548123`;
 
           <h1
             className={`text-4xl sm:text-6xl md:text-7xl font-black font-display tracking-tight leading-[1.05] ${
-              isDark ? 'text-white' : 'text-zinc-950'
+              isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'
             }`}
           >
-            {cms.heroTitle || 'PROJECT'} <span className="text-cyber-gradient">{cms.heroHighlight || 'ESTIMATOR'}</span>
+            {cms.heroTitle || 'PROJECT'} <span className="text-luxury-gradient">{cms.heroHighlight || 'ESTIMATOR'}</span>
           </h1>
 
           <p
             className={`mt-4 text-base sm:text-lg leading-relaxed ${
-              isDark ? 'text-zinc-400' : 'text-zinc-600'
+              isDark ? 'text-[#94A3B8]' : 'text-[#475569]'
             }`}
           >
             {cms.heroSubtitle || (
@@ -815,13 +809,13 @@ WhatsApp: +44 7927 548123`;
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <h2
-                  className={`text-xs font-mono uppercase tracking-widest ${
-                    isDark ? 'text-[#00F0FF]' : 'text-cyan-800 font-bold'
+                  className={`text-xs font-mono uppercase tracking-widest font-bold ${
+                    isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'
                   }`}
                 >
                   Step 01 · What does your business need?
                 </h2>
-                <span className="text-xs text-zinc-500 font-mono">
+                <span className={`text-xs font-mono ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>
                   6 Clear Options
                 </span>
               </div>
@@ -839,48 +833,52 @@ WhatsApp: +44 7927 548123`;
                       className={`text-left p-4 rounded-2xl border transition-all text-sm relative group cursor-pointer ${
                         isSelected
                           ? isDark
-                            ? 'border-[#00F0FF] bg-[#00F0FF]/10 shadow-[0_0_25px_rgba(0,240,255,0.25)]'
-                            : 'border-cyan-600 bg-cyan-50/80 shadow-md'
+                            ? 'border-[#38BDF8] bg-[#38BDF8]/10 shadow-[0_0_25px_rgba(56, 189, 248,0.18)]'
+                            : 'border-[#1D4ED8] bg-[#F3E9DC]/70 shadow-md'
                           : isDark
-                          ? 'border-white/10 bg-white/[0.02] hover:border-[#00F0FF]/40'
-                          : 'border-zinc-200 bg-white hover:border-zinc-300 shadow-2xs'
+                          ? 'border-white/10 bg-[#0C1222]/85 hover:border-[#38BDF8]/40'
+                          : 'border-black/10 bg-white hover:border-[#1D4ED8]/40 shadow-2xs'
                       }`}
                     >
                       <div className="flex items-center justify-between mb-2">
                         <div
                           className={`w-9 h-9 rounded-xl flex items-center justify-center transition-colors ${
                             isSelected
-                              ? 'bg-[#00F0FF] text-black font-bold'
+                              ? isDark
+                                ? 'bg-[#38BDF8] text-[#060913] font-bold'
+                                : 'bg-[#1D4ED8] text-white font-bold'
                               : isDark
-                              ? 'bg-white/5 text-[#00F0FF]'
-                              : 'bg-cyan-50 text-cyan-700'
+                              ? 'bg-[#1A1D25] text-[#38BDF8]'
+                              : 'bg-[#F3E9DC] text-[#1E40AF]'
                           }`}
                         >
                           <Icon className="w-4 h-4" />
                         </div>
                         <span
                           className={`font-mono text-xs ${
-                            isSelected ? 'text-[#00F0FF] font-bold' : 'text-zinc-500'
+                            isSelected
+                              ? isDark ? 'text-[#38BDF8] font-bold' : 'text-[#1E40AF] font-bold'
+                              : isDark ? 'text-[#94A3B8]' : 'text-[#475569]'
                           }`}
                         >
                           ~{archetype.baseHours}h base
                         </span>
                       </div>
 
-                      <div className="text-[10px] font-mono text-[#00F0FF] uppercase tracking-wider mb-0.5">
+                      <div className={`text-[10px] font-mono uppercase tracking-wider mb-0.5 ${isDark ? 'text-[#7DD3FC]' : 'text-[#1D4ED8]'}`}>
                         {archetype.serviceCategory}
                       </div>
 
                       <h3
                         className={`font-bold mb-1 ${
-                          isDark ? 'text-white' : 'text-zinc-950'
+                          isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'
                         }`}
                       >
                         {archetype.name}
                       </h3>
                       <p
                         className={`text-xs leading-relaxed ${
-                          isDark ? 'text-zinc-400' : 'text-zinc-600'
+                          isDark ? 'text-[#94A3B8]' : 'text-[#475569]'
                         }`}
                       >
                         {archetype.description}
@@ -897,12 +895,12 @@ WhatsApp: +44 7927 548123`;
                 <div>
                   <h2
                     className={`text-xs font-mono uppercase tracking-widest ${
-                      isDark ? 'text-[#00F0FF]' : 'text-cyan-800 font-bold'
+                      isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8] font-bold'
                     }`}
                   >
                     {currentStep2Config.title}
                   </h2>
-                  <p className="text-xs text-zinc-500 mt-0.5">
+                  <p className={`text-xs mt-0.5 ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>
                     {currentStep2Config.subtitle}
                   </p>
                 </div>
@@ -911,15 +909,19 @@ WhatsApp: +44 7927 548123`;
                   <button
                     type="button"
                     onClick={handleSelectAllDeliverables}
-                    className="text-[#00F0FF] hover:underline cursor-pointer"
+                    className={`hover:underline cursor-pointer ${
+                      isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8] font-semibold'
+                    }`}
                   >
                     Select All
                   </button>
-                  <span className="text-zinc-500">·</span>
+                  <span className={isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}>·</span>
                   <button
                     type="button"
                     onClick={handleClearDeliverables}
-                    className="text-zinc-400 hover:underline cursor-pointer"
+                    className={`hover:underline cursor-pointer ${
+                      isDark ? 'text-[#94A3B8]' : 'text-[#475569]'
+                    }`}
                   >
                     Clear All
                   </button>
@@ -930,7 +932,7 @@ WhatsApp: +44 7927 548123`;
               {currentStep2Config.primaryControl && (
                 <div
                   className={`p-5 rounded-2xl border transition-colors ${
-                    isDark ? 'border-white/10 bg-white/[0.02]' : 'border-zinc-200 bg-white shadow-2xs'
+                    isDark ? 'border-white/10 bg-[#0C1222]' : 'border-stone-200 bg-white shadow-2xs'
                   }`}
                 >
                   <div className="flex items-center justify-between mb-3">
@@ -938,13 +940,13 @@ WhatsApp: +44 7927 548123`;
                       <span className="text-xs font-mono font-bold block mb-0.5">
                         {currentStep2Config.primaryControl.label}
                       </span>
-                      <p className="text-xs text-zinc-500">
+                      <p className={`text-xs ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>
                         {currentStep2Config.primaryControl.description}
                       </p>
                     </div>
                     <span
                       className={`text-xl font-bold font-mono px-3.5 py-1 rounded-xl ${
-                        isDark ? 'bg-[#00F0FF]/15 text-[#00F0FF]' : 'bg-cyan-50 text-cyan-800'
+                        isDark ? 'bg-[#38BDF8]/15 text-[#BAE6FD]' : 'bg-[#F3E9DC] text-[#1E40AF]'
                       }`}
                     >
                       {selectedArchetypeId === 'web-development' ? pageCount : productCount}{' '}
@@ -959,7 +961,9 @@ WhatsApp: +44 7927 548123`;
                       max={currentStep2Config.primaryControl.max || 15}
                       value={pageCount}
                       onChange={(e) => setPageCount(Number(e.target.value))}
-                      className="w-full accent-[#00F0FF] cursor-pointer"
+                      className={`w-full cursor-pointer ${
+                        isDark ? 'accent-[#38BDF8]' : 'accent-[#1D4ED8]'
+                      }`}
                     />
                   ) : (
                     <input
@@ -968,7 +972,9 @@ WhatsApp: +44 7927 548123`;
                       max={currentStep2Config.primaryControl.max || 50}
                       value={productCount}
                       onChange={(e) => setProductCount(Number(e.target.value))}
-                      className="w-full accent-[#00F0FF] cursor-pointer"
+                      className={`w-full cursor-pointer ${
+                        isDark ? 'accent-[#38BDF8]' : 'accent-[#1D4ED8]'
+                      }`}
                     />
                   )}
                 </div>
@@ -978,10 +984,14 @@ WhatsApp: +44 7927 548123`;
               {currentStep2Config.secondaryControl && (
                 <div
                   className={`p-5 rounded-2xl border transition-colors ${
-                    isDark ? 'border-white/10 bg-white/[0.02]' : 'border-zinc-200 bg-white shadow-2xs'
+                    isDark ? 'border-white/10 bg-[#0C1222]' : 'border-stone-200 bg-white shadow-2xs'
                   }`}
                 >
-                  <span className="text-xs font-mono text-zinc-400 block mb-2.5 uppercase tracking-wider">
+                  <span
+                    className={`text-xs font-mono block mb-2.5 uppercase tracking-wider ${
+                      isDark ? 'text-[#94A3B8]' : 'text-[#475569]'
+                    }`}
+                  >
                     {currentStep2Config.secondaryControl.label}
                   </span>
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
@@ -995,18 +1005,28 @@ WhatsApp: +44 7927 548123`;
                           className={`p-3 rounded-xl border text-left text-xs font-mono transition-all cursor-pointer ${
                             isSelected
                               ? isDark
-                                ? 'border-[#00F0FF] bg-[#00F0FF]/15 text-white font-bold shadow-[0_0_15px_rgba(0,240,255,0.15)]'
-                                : 'border-cyan-600 bg-cyan-100 text-cyan-950 font-bold'
+                                ? 'border-[#38BDF8] bg-[#38BDF8]/15 text-[#F1F5F9] font-bold'
+                                : 'border-[#1D4ED8] bg-[#F3E9DC] text-[#0F172A] font-bold'
                               : isDark
-                              ? 'border-white/10 text-zinc-400 hover:text-white'
-                              : 'border-zinc-200 text-zinc-600 bg-white'
+                              ? 'border-white/10 text-[#94A3B8] hover:text-[#F1F5F9]'
+                              : 'border-stone-200 text-[#475569] bg-white'
                           }`}
                         >
                           <div className="font-bold flex items-center justify-between">
                             <span>{opt.label}</span>
-                            {isSelected && <Check className="w-3.5 h-3.5 text-[#00F0FF]" />}
+                            {isSelected && (
+                              <Check
+                                className={`w-3.5 h-3.5 ${
+                                  isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'
+                                }`}
+                              />
+                            )}
                           </div>
-                          <div className="text-[10px] text-zinc-500 mt-1 leading-snug">
+                          <div
+                            className={`text-[10px] mt-1 leading-snug ${
+                              isDark ? 'text-[#94A3B8]' : 'text-[#475569]'
+                            }`}
+                          >
                             {opt.sub}
                           </div>
                         </button>
@@ -1018,7 +1038,11 @@ WhatsApp: +44 7927 548123`;
 
               {/* Plain English Deliverables Checklist */}
               <div className="space-y-2.5 pt-2">
-                <span className="text-xs font-mono text-zinc-400 block mb-1 uppercase tracking-wider">
+                <span
+                  className={`text-xs font-mono block mb-1 uppercase tracking-wider ${
+                    isDark ? 'text-[#94A3B8]' : 'text-[#475569]'
+                  }`}
+                >
                   Check the items you want included ({selectedDeliverables.length} selected):
                 </span>
 
@@ -1032,21 +1056,23 @@ WhatsApp: +44 7927 548123`;
                       className={`p-4 rounded-xl border transition-all flex items-start justify-between gap-4 cursor-pointer ${
                         isChecked
                           ? isDark
-                            ? 'border-[#00F0FF]/60 bg-[#00F0FF]/10 shadow-[0_0_15px_rgba(0,240,255,0.12)]'
-                            : 'border-cyan-500 bg-cyan-50/70 shadow-2xs'
+                            ? 'border-[#38BDF8]/65 bg-[#38BDF8]/10'
+                            : 'border-[#1D4ED8] bg-[#F3E9DC]/70 shadow-2xs'
                           : isDark
-                          ? 'border-white/5 bg-white/[0.01] hover:border-white/20'
-                          : 'border-zinc-200 bg-white hover:border-zinc-300'
+                          ? 'border-white/8 bg-[#0C1222] hover:border-white/20'
+                          : 'border-stone-200 bg-white hover:border-stone-300'
                       }`}
                     >
                       <div className="flex items-start gap-3">
                         <div
                           className={`mt-0.5 w-5 h-5 rounded-md flex items-center justify-center border transition-colors shrink-0 ${
                             isChecked
-                              ? 'bg-[#00F0FF] border-[#00F0FF] text-black font-bold'
+                              ? isDark
+                                ? 'bg-[#38BDF8] border-[#38BDF8] text-[#060913] font-bold'
+                                : 'bg-[#1D4ED8] border-[#1D4ED8] text-white font-bold'
                               : isDark
-                              ? 'border-zinc-700 bg-zinc-900'
-                              : 'border-zinc-300 bg-white'
+                              ? 'border-white/20 bg-[#060913]'
+                              : 'border-stone-300 bg-white'
                           }`}
                         >
                           {isChecked && <CheckCircle2 className="w-3.5 h-3.5" />}
@@ -1055,25 +1081,25 @@ WhatsApp: +44 7927 548123`;
                           <div className="flex flex-wrap items-center gap-2">
                             <span
                               className={`text-sm font-semibold ${
-                                isDark ? 'text-white' : 'text-zinc-950'
+                                isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'
                               }`}
                             >
                               {item.name}
                             </span>
                             {item.badge && (
                               <span
-                                className={`text-[9px] font-mono px-2 py-0.5 rounded-full font-bold uppercase ${
+                                className={`text-[9px] font-mono px-2 py-0.5 rounded-md font-bold uppercase ${
                                   isDark
-                                    ? 'bg-[#00F0FF]/15 text-[#00F0FF] border border-[#00F0FF]/30'
-                                    : 'bg-cyan-100 text-cyan-800'
+                                    ? 'bg-[#38BDF8]/15 text-[#BAE6FD] border border-[#38BDF8]/30'
+                                    : 'bg-[#F3E9DC] text-[#1E40AF]'
                                 }`}
                               >
                                 {item.badge}
                               </span>
                             )}
                             <span
-                              className={`text-[10px] font-mono px-2 py-0.5 rounded-full ${
-                                isDark ? 'bg-white/10 text-[#00F0FF]' : 'bg-cyan-100 text-cyan-800'
+                              className={`text-[10px] font-mono px-2 py-0.5 rounded-md ${
+                                isDark ? 'bg-white/8 text-[#BAE6FD]' : 'bg-[#F3E9DC] text-[#1E40AF]'
                               }`}
                             >
                               +{item.hours}h (~£{Math.round(item.hours * SITE_CONFIG.hourlyRateNumber)})
@@ -1081,7 +1107,7 @@ WhatsApp: +44 7927 548123`;
                           </div>
                           <p
                             className={`text-xs mt-1 leading-relaxed ${
-                              isDark ? 'text-zinc-400' : 'text-zinc-600'
+                              isDark ? 'text-[#94A3B8]' : 'text-[#475569]'
                             }`}
                           >
                             {item.description}
@@ -1098,7 +1124,7 @@ WhatsApp: +44 7927 548123`;
             <div className="space-y-4">
               <h2
                 className={`text-xs font-mono uppercase tracking-widest ${
-                  isDark ? 'text-[#00F0FF]' : 'text-cyan-800 font-bold'
+                  isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8] font-bold'
                 }`}
               >
                 Step 03 · Delivery Pace & Timeline
@@ -1116,28 +1142,30 @@ WhatsApp: +44 7927 548123`;
                       className={`p-4 rounded-2xl border text-left transition-all cursor-pointer ${
                         isSelected
                           ? isDark
-                            ? 'border-[#00F0FF] bg-[#00F0FF]/10 text-white'
-                            : 'border-cyan-600 bg-cyan-50/80 text-zinc-950'
+                            ? 'border-[#38BDF8] bg-[#38BDF8]/12 text-[#F1F5F9]'
+                            : 'border-[#1D4ED8] bg-[#F3E9DC]/80 text-[#0F172A]'
                           : isDark
-                          ? 'border-white/10 bg-white/[0.02] text-zinc-400'
-                          : 'border-zinc-200 bg-white text-zinc-600'
+                          ? 'border-white/10 bg-[#0C1222] text-[#94A3B8]'
+                          : 'border-stone-200 bg-white text-[#475569]'
                       }`}
                     >
                       <div className="flex items-center justify-between mb-1.5">
                         <span className="font-bold text-sm">{tier.name}</span>
                         <span
-                          className={`text-[10px] font-mono px-2 py-0.5 rounded-full ${
+                          className={`text-[10px] font-mono px-2 py-0.5 rounded-md ${
                             isSelected
-                              ? 'bg-[#00F0FF] text-black font-bold'
+                              ? isDark
+                                ? 'bg-[#38BDF8] text-[#060913] font-bold'
+                                : 'bg-[#1D4ED8] text-white font-bold'
                               : isDark
-                              ? 'bg-white/5 text-zinc-500'
-                              : 'bg-zinc-100 text-zinc-500'
+                              ? 'bg-white/5 text-[#94A3B8]'
+                              : 'bg-stone-100 text-[#475569]'
                           }`}
                         >
                           {tier.tag}
                         </span>
                       </div>
-                      <p className="text-xs text-zinc-500 leading-relaxed">
+                      <p className={`text-xs leading-relaxed ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>
                         {tier.description}
                       </p>
                     </button>
@@ -1150,32 +1178,40 @@ WhatsApp: +44 7927 548123`;
           {/* Right Column: Sticky Live Price Summary & Direct Contact */}
           <div className="lg:col-span-5 sticky top-28 space-y-6">
             <div
-              className={`p-6 sm:p-8 rounded-3xl border backdrop-blur-2xl relative overflow-hidden transition-colors ${
+              className={`p-6 sm:p-8 rounded-3xl border relative overflow-hidden transition-colors ${
                 isDark
-                  ? 'border-[#00F0FF]/40 bg-[#070714]/95 shadow-[0_20px_60px_rgba(0,240,255,0.18)]'
-                  : 'border-cyan-300 bg-white/95 shadow-xl'
+                  ? 'border-[#38BDF8]/35 bg-[#0C1222] shadow-[0_20px_50px_rgba(0,0,0,0.65)]'
+                  : 'border-[#1D4ED8]/30 bg-white shadow-xl'
               }`}
             >
-              <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#00F0FF] to-transparent opacity-80" />
+              <div
+                className={`absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent ${
+                  isDark ? 'via-[#38BDF8]' : 'via-[#1D4ED8]'
+                } to-transparent opacity-80`}
+              />
 
               <div className="flex items-center justify-between pb-5 border-b border-black/[0.08] dark:border-white/[0.08]">
                 <div>
-                  <span className="text-[10px] font-mono uppercase tracking-widest text-[#00F0FF] font-bold block">
-                    [ YOUR INSTANT ESTIMATE ]
+                  <span
+                    className={`text-[10px] font-mono uppercase tracking-widest font-bold block ${
+                      isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'
+                    }`}
+                  >
+                    Your Instant Estimate
                   </span>
                   <h3
                     className={`text-xl font-bold font-display ${
-                      isDark ? 'text-white' : 'text-zinc-950'
+                      isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'
                     }`}
                   >
                     Click N Create · Saad M
                   </h3>
                 </div>
                 <div
-                  className={`px-3 py-1 rounded-full text-xs font-mono font-bold ${
+                  className={`px-3 py-1 rounded-md text-xs font-mono font-bold ${
                     isDark
-                      ? 'bg-[#00F0FF]/15 text-[#00F0FF] border border-[#00F0FF]/30'
-                      : 'bg-cyan-50 text-cyan-800 border border-cyan-300'
+                      ? 'bg-[#38BDF8]/15 text-[#BAE6FD] border border-[#38BDF8]/30'
+                      : 'bg-[#F3E9DC] text-[#1E40AF] border border-[#1D4ED8]/30'
                   }`}
                 >
                   Rate: £35/hr
@@ -1185,23 +1221,23 @@ WhatsApp: +44 7927 548123`;
               {/* Plain English Scope Summary */}
               <div className="py-5 space-y-3 font-mono text-xs border-b border-black/[0.08] dark:border-white/[0.08]">
                 <div className="flex justify-between items-center">
-                  <span className="text-zinc-500">Service:</span>
-                  <span className={`font-semibold text-right ${isDark ? 'text-zinc-200' : 'text-zinc-800'}`}>
+                  <span className={isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}>Service:</span>
+                  <span className={`font-semibold text-right ${isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'}`}>
                     {currentArchetype.serviceCategory}
                   </span>
                 </div>
 
                 <div className="flex justify-between items-center">
-                  <span className="text-zinc-500">Selected Type:</span>
-                  <span className="font-semibold text-right text-[#00F0FF]">
+                  <span className={isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}>Selected Type:</span>
+                  <span className={`font-semibold text-right ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`}>
                     {currentArchetype.name}
                   </span>
                 </div>
 
                 {selectedArchetypeId === 'web-development' && (
                   <div className="flex justify-between items-center">
-                    <span className="text-zinc-500">Page Count:</span>
-                    <span className={`font-semibold ${isDark ? 'text-zinc-200' : 'text-zinc-800'}`}>
+                    <span className={isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}>Page Count:</span>
+                    <span className={`font-semibold ${isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'}`}>
                       {pageCount} Total Pages
                     </span>
                   </div>
@@ -1209,30 +1245,30 @@ WhatsApp: +44 7927 548123`;
 
                 {selectedArchetypeId === 'ecommerce-development' && (
                   <div className="flex justify-between items-center">
-                    <span className="text-zinc-500">Products:</span>
-                    <span className={`font-semibold ${isDark ? 'text-zinc-200' : 'text-zinc-800'}`}>
+                    <span className={isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}>Products:</span>
+                    <span className={`font-semibold ${isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'}`}>
                       {productCount} Products Configured
                     </span>
                   </div>
                 )}
 
                 <div className="flex justify-between items-center">
-                  <span className="text-zinc-500">Included Items:</span>
-                  <span className="font-bold text-[#00F0FF]">
+                  <span className={isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}>Included Items:</span>
+                  <span className={`font-bold ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`}>
                     {selectedDeliverables.length} Specific Items Checked
                   </span>
                 </div>
 
                 <div className="flex justify-between items-center">
-                  <span className="text-zinc-500">Delivery Pace:</span>
-                  <span className={`font-semibold ${isDark ? 'text-zinc-200' : 'text-zinc-800'}`}>
+                  <span className={isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}>Delivery Pace:</span>
+                  <span className={`font-semibold ${isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'}`}>
                     {currentTierObj.name}
                   </span>
                 </div>
 
                 <div className="flex justify-between items-center">
-                  <span className="text-zinc-500">Estimated Timeline:</span>
-                  <span className={`font-semibold ${isDark ? 'text-zinc-200' : 'text-zinc-800'}`}>
+                  <span className={isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}>Estimated Timeline:</span>
+                  <span className={`font-semibold ${isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'}`}>
                     {currentArchetype.timeline}
                   </span>
                 </div>
@@ -1242,18 +1278,26 @@ WhatsApp: +44 7927 548123`;
               <div className="py-6 space-y-2">
                 <div className="flex items-baseline justify-between">
                   <div>
-                    <span className="text-xs uppercase font-mono tracking-wider text-zinc-500 block">
+                    <span
+                      className={`text-xs uppercase font-mono tracking-wider block ${
+                        isDark ? 'text-[#94A3B8]' : 'text-[#475569]'
+                      }`}
+                    >
                       Estimated Investment:
                     </span>
-                    <span className="text-xs font-mono text-[#00F0FF]">
+                    <span className={`text-xs font-mono ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`}>
                       ~{totalEstimatedHours} hours of work
                     </span>
                   </div>
-                  <span className="text-3xl sm:text-4xl font-extrabold font-display tracking-tight text-[#00F0FF] neon-text-cyan">
+                  <span
+                    className={`text-3xl sm:text-4xl font-extrabold font-display tracking-tight tabular-nums ${
+                      isDark ? 'text-[#BAE6FD]' : 'text-[#1E40AF]'
+                    }`}
+                  >
                     £{totalCost.toLocaleString()}
                   </span>
                 </div>
-                <p className="text-[11px] text-zinc-500 leading-relaxed">
+                <p className={`text-[11px] leading-relaxed ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>
                   Clear, honest pricing based on £35/hr. Full ownership of all files and code, zero surprise charges, and direct communication with Saad.
                 </p>
               </div>
@@ -1263,7 +1307,7 @@ WhatsApp: +44 7927 548123`;
                 <button
                   type="button"
                   onClick={handleSendToWhatsApp}
-                  className="w-full py-3.5 px-4 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-white font-display font-bold text-sm transition-all flex items-center justify-center gap-2 cursor-pointer shadow-lg hover:shadow-emerald-500/25"
+                  className="w-full py-3.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-display font-bold text-sm transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md"
                 >
                   <MessageSquare className="w-4 h-4" />
                   <span>Send This Estimate to WhatsApp</span>
@@ -1275,15 +1319,15 @@ WhatsApp: +44 7927 548123`;
                     onClick={handleCopyQuote}
                     className={`py-3 px-3 rounded-xl border text-xs font-mono transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
                       copiedQuote
-                        ? 'border-emerald-500 bg-emerald-500/20 text-emerald-400'
+                        ? 'border-emerald-500 bg-emerald-500/20 text-emerald-500'
                         : isDark
-                        ? 'border-white/10 bg-white/5 hover:bg-white/10 text-white'
-                        : 'border-zinc-300 bg-white hover:bg-zinc-50 text-zinc-900 shadow-2xs'
+                        ? 'border-white/15 bg-white/5 hover:bg-white/10 text-[#F1F5F9]'
+                        : 'border-stone-300 bg-white hover:bg-stone-50 text-[#0F172A] shadow-2xs'
                     }`}
                   >
                     {copiedQuote ? (
                       <>
-                        <Check className="w-3.5 h-3.5 text-emerald-400" />
+                        <Check className="w-3.5 h-3.5 text-emerald-500" />
                         <span>Copied!</span>
                       </>
                     ) : (
@@ -1299,8 +1343,8 @@ WhatsApp: +44 7927 548123`;
                     onClick={() => onNavigate('/contact')}
                     className={`py-3 px-3 rounded-xl border text-xs font-mono transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
                       isDark
-                        ? 'border-white/10 bg-white/5 hover:bg-white/10 text-white'
-                        : 'border-zinc-300 bg-white hover:bg-zinc-50 text-zinc-900 shadow-2xs'
+                        ? 'border-white/15 bg-white/5 hover:bg-white/10 text-[#F1F5F9]'
+                        : 'border-stone-300 bg-white hover:bg-stone-50 text-[#0F172A] shadow-2xs'
                     }`}
                   >
                     <Mail className="w-3.5 h-3.5" />
@@ -1313,10 +1357,16 @@ WhatsApp: +44 7927 548123`;
             {/* Reassurance Guarantees in Plain English */}
             <div
               className={`p-5 rounded-2xl border text-xs space-y-2.5 font-mono ${
-                isDark ? 'border-white/5 bg-white/[0.01] text-zinc-400' : 'border-zinc-200 bg-white text-zinc-600 shadow-2xs'
+                isDark
+                  ? 'border-white/10 bg-[#0C1222] text-[#94A3B8]'
+                  : 'border-stone-200 bg-white text-[#475569] shadow-2xs'
               }`}
             >
-              <div className="flex items-center gap-2 text-[#00F0FF] font-bold">
+              <div
+                className={`flex items-center gap-2 font-bold ${
+                  isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'
+                }`}
+              >
                 <ShieldCheck className="w-4 h-4" />
                 <span>The Click N Create Guarantee:</span>
               </div>

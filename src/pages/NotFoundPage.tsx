@@ -13,13 +13,13 @@ export const NotFoundPage: React.FC<NotFoundPageProps> = ({ onNavigate }) => {
   const isDark = theme === 'dark';
 
   return (
-    <div className="min-h-[80vh] flex items-center justify-center pt-28 pb-20 px-4 relative overflow-x-hidden w-full max-w-full">
+    <div className="min-h-[80vh] flex items-center justify-center pt-28 pb-20 px-4 relative overflow-x-clip w-full max-w-full">
       <SEOHead
         title="404 — Page Not Found | Click N Create"
         description="The requested page could not be found on Click N Create."
       />
       <div className={`max-w-md w-full rounded-3xl border p-8 sm:p-10 text-center shadow-xl relative z-10 space-y-6 backdrop-blur-2xl transition-colors ${
-        isDark ? 'border-white/10 bg-[#0E0E12]/85' : 'border-zinc-200 bg-white/95'
+        isDark ? 'border-white/10 bg-[#0C1222]/90' : 'border-black/10 bg-white/95'
       }`}>
         <motion.div
           initial={{ scale: 0.8, opacity: 0 }}
@@ -33,10 +33,10 @@ export const NotFoundPage: React.FC<NotFoundPageProps> = ({ onNavigate }) => {
         </motion.div>
 
         <div className="space-y-2">
-          <h2 className={`text-xl font-bold font-display ${isDark ? 'text-white' : 'text-zinc-950'}`}>
+          <h2 className={`text-xl font-bold font-display ${isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'}`}>
             Looks like this page doesn't exist.
           </h2>
-          <p className={`text-sm ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>
+          <p className={`text-sm ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>
             The route you navigated to could not be found or has moved.
           </p>
         </div>

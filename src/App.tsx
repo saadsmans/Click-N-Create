@@ -172,7 +172,7 @@ function AppContent() {
   };
 
   return (
-    <div className="min-h-screen bg-[var(--bg-main)] text-[var(--text-main)] transition-colors duration-300 relative flex flex-col justify-between overflow-x-hidden w-full max-w-full">
+    <div className="min-h-screen bg-[var(--bg-main)] text-[var(--text-main)] transition-colors duration-300 relative flex flex-col justify-between overflow-x-clip w-full max-w-full">
       {/* Scroll Progress Indicator */}
       <ScrollProgress />
 
@@ -200,7 +200,7 @@ function AppContent() {
       />
 
       {/* Main Page Viewport */}
-      <main className="flex-1 w-full max-w-full overflow-x-hidden relative">
+      <main className="flex-1 w-full max-w-full overflow-x-clip relative">
         {renderCurrentPage()}
       </main>
 

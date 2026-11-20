@@ -64,18 +64,18 @@ export const MagneticButton: React.FC<MagneticButtonProps> = ({
   const getVariantClasses = () => {
     if (variant === 'primary') {
       return isDark
-        ? 'text-black font-bold border border-[#00F0FF] bg-[#00F0FF] hover:bg-[#38bdf8] shadow-[0_0_20px_rgba(0,240,255,0.4)] hover:shadow-[0_0_30px_rgba(0,240,255,0.8)]'
-        : 'text-white font-bold border border-cyan-600 bg-cyan-600 hover:bg-cyan-700 shadow-[0_4px_14px_rgba(0,180,216,0.3)] hover:shadow-[0_6px_20px_rgba(0,180,216,0.5)]';
+        ? 'text-[#060913] font-bold border border-[#38BDF8] bg-[#38BDF8] hover:bg-[#7DD3FC] shadow-[0_8px_24px_rgba(56, 189, 248,0.28)] hover:shadow-[0_10px_28px_rgba(56, 189, 248,0.45)]'
+        : 'text-white font-bold border border-[#1D4ED8] bg-[#1D4ED8] hover:bg-[#1D4ED8] shadow-[0_6px_18px_rgba(29, 78, 216,0.28)]';
     }
     if (variant === 'secondary') {
       return isDark
-        ? 'text-zinc-200 border border-[#00F0FF]/30 bg-[#00F0FF]/5 hover:bg-[#00F0FF]/15 hover:text-[#00F0FF] hover:border-[#00F0FF]/60 shadow-[0_0_10px_rgba(0,240,255,0.1)]'
-        : 'text-cyan-900 border border-cyan-300 bg-cyan-50/60 hover:bg-cyan-100 hover:text-cyan-950 hover:border-cyan-400 shadow-sm';
+        ? 'text-[#F1F5F9] border border-[#38BDF8]/35 bg-[#38BDF8]/10 hover:bg-[#38BDF8]/18 hover:text-[#BAE6FD] hover:border-[#38BDF8]/65'
+        : 'text-[#0F172A] border border-stone-300 bg-[#FFFFFF] hover:bg-stone-200/70 hover:border-[#1D4ED8] shadow-xs';
     }
     // glass
     return isDark
-      ? 'text-[#00F0FF] border border-[#00F0FF]/30 bg-[#00F0FF]/5 hover:bg-[#00F0FF]/10 backdrop-blur-md shadow-[0_0_12px_rgba(0,240,255,0.15)]'
-      : 'text-cyan-800 border border-cyan-400/40 bg-white/80 hover:bg-white backdrop-blur-md shadow-sm';
+      ? 'text-[#7DD3FC] border border-[#38BDF8]/30 bg-[#0C1222]/85 hover:bg-[#1C1F28] backdrop-blur-md'
+      : 'text-[#1E40AF] border border-stone-300 bg-white/90 hover:bg-white backdrop-blur-md shadow-sm';
   };
 
   const content = (

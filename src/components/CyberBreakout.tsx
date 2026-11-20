@@ -58,14 +58,14 @@ export const CyberBreakout: React.FC = () => {
   const particlesRef = useRef<Particle[]>([]);
   const inputRef = useRef({ left: false, right: false, mouseX: 0, isMouseActive: false });
 
-  // Palette corresponding to Saad's 6 services in plain English
+  // Palette corresponding to Saad's 6 services in architectural bronze/amber/stone/emerald tones
   const SERVICE_BRICK_COLORS = [
-    { title: 'Business Websites (WordPress/Custom)', color: '#00F0FF', points: 150 },
-    { title: 'Online Shops (Shopify/Woo)', color: '#FF0055', points: 200 },
-    { title: 'Logos, Banners & Graphic Design', color: '#8B5CF6', points: 120 },
-    { title: 'Get Found on Google & Marketing', color: '#FFE600', points: 180 },
-    { title: 'Fast Hosting & Daily Backups', color: '#10B981', points: 250 },
-    { title: 'Custom Web Tools & Calculators', color: '#A855F7', points: 300 },
+    { title: 'E-Commerce Development', color: '#38BDF8', points: 200 },
+    { title: 'Web Development', color: '#7DD3FC', points: 150 },
+    { title: 'Branding & Design', color: '#94A3B8', points: 120 },
+    { title: 'Digital Marketing', color: '#BAE6FD', points: 180 },
+    { title: 'Web App Development', color: '#2563EB', points: 300 },
+    { title: 'Hosting & Maintenance', color: '#06B6D4', points: 250 },
   ];
 
   // Initialize Bricks Grid
@@ -120,7 +120,6 @@ export const CyberBreakout: React.FC = () => {
     paddleRef.current.x = (canvasWidth - paddleRef.current.width) / 2;
     paddleRef.current.y = canvasHeight - 24;
 
-    const angle = (Math.PI / 4) + (Math.random() * Math.PI) / 2; // launch upwards
     const speed = 4.2;
     ballRef.current.x = canvasWidth / 2;
     ballRef.current.y = paddleRef.current.y - 12;
@@ -221,11 +220,11 @@ export const CyberBreakout: React.FC = () => {
       const h = canvas.height / window.devicePixelRatio;
 
       // 1. Clear background
-      ctx.fillStyle = isDark ? '#060612' : '#f8fafc';
+      ctx.fillStyle = isDark ? '#060913' : '#F3F6FA';
       ctx.fillRect(0, 0, w, h);
 
       // Subtle Background Grid
-      ctx.strokeStyle = isDark ? 'rgba(255, 255, 255, 0.03)' : 'rgba(0, 0, 0, 0.03)';
+      ctx.strokeStyle = isDark ? 'rgba(255, 255, 255, 0.035)' : 'rgba(0, 0, 0, 0.035)';
       ctx.lineWidth = 1;
       for (let x = 0; x < w; x += 30) {
         ctx.beginPath();
@@ -294,7 +293,7 @@ export const CyberBreakout: React.FC = () => {
             ball.vy *= 1.02;
           }
 
-          createExplosion(ball.x, paddle.y, '#00F0FF');
+          createExplosion(ball.x, paddle.y, '#38BDF8');
         }
 
         // Ball - Bricks Collisions
@@ -368,30 +367,30 @@ export const CyberBreakout: React.FC = () => {
 
       // 4. Render Paddle
       const paddle = paddleRef.current;
-      ctx.shadowColor = '#00F0FF';
-      ctx.shadowBlur = isDark ? 14 : 4;
-      ctx.fillStyle = isDark ? '#ffffff' : '#09090b';
+      ctx.shadowColor = '#38BDF8';
+      ctx.shadowBlur = isDark ? 12 : 4;
+      ctx.fillStyle = isDark ? '#F1F5F9' : '#0F172A';
 
       ctx.beginPath();
       ctx.roundRect(paddle.x, paddle.y, paddle.width, paddle.height, 5);
       ctx.fill();
 
-      // Neon cyan border
-      ctx.strokeStyle = '#00F0FF';
+      // Warm amber border
+      ctx.strokeStyle = '#38BDF8';
       ctx.lineWidth = 2;
       ctx.stroke();
 
       // 5. Render Ball
       const ball = ballRef.current;
-      ctx.shadowColor = '#FF0055';
-      ctx.shadowBlur = isDark ? 16 : 6;
-      ctx.fillStyle = '#FF0055';
+      ctx.shadowColor = '#BAE6FD';
+      ctx.shadowBlur = isDark ? 14 : 6;
+      ctx.fillStyle = '#38BDF8';
 
       ctx.beginPath();
       ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
       ctx.fill();
 
-      // White hot core
+      // Bright core
       ctx.fillStyle = '#ffffff';
       ctx.beginPath();
       ctx.arc(ball.x, ball.y, 2.5, 0, Math.PI * 2);
@@ -435,42 +434,43 @@ export const CyberBreakout: React.FC = () => {
 
   return (
     <section className={`relative py-20 border-t transition-colors overflow-hidden ${
-      isDark ? 'bg-[#05050E] border-white/[0.06]' : 'bg-[#F8FAFC] border-zinc-200'
+      isDark ? 'bg-[#0D0F14] border-white/[0.06]' : 'bg-[#F3F6FA] border-stone-200'
     }`}>
-      {/* Background Volumetric Neon Ambiance */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full blur-[140px] pointer-events-none bg-[#00F0FF]/15" />
-      <div className="absolute top-1/2 right-10 -translate-y-1/2 w-80 h-80 rounded-full blur-[130px] pointer-events-none bg-[#FF0055]/10" />
+      {/* Background Volumetric Warm Ambiance */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full blur-[140px] pointer-events-none bg-[#38BDF8]/12" />
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#00F0FF]/30 bg-[#00F0FF]/10 text-[#00F0FF] text-[11px] font-mono font-bold tracking-wider mb-2">
+            <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border text-[11px] font-mono font-bold tracking-wider mb-2 ${
+              isDark ? 'border-[#38BDF8]/30 bg-[#38BDF8]/10 text-[#BAE6FD]' : 'border-[#1D4ED8]/35 bg-[#F3E9DC] text-[#1E40AF]'
+            }`}>
               <Gamepad2 className="w-3.5 h-3.5" />
               <span>INTERACTIVE SERVICE EXPLORER</span>
             </div>
             <h2 className={`text-2xl sm:text-3xl lg:text-4xl font-black font-display tracking-tight ${
-              isDark ? 'text-white' : 'text-zinc-950'
+              isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'
             }`}>
               PLAY BREAKOUT & DISCOVER WHAT I BUILD
             </h2>
-            <p className={`text-xs sm:text-sm font-mono mt-1 ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>
+            <p className={`text-xs sm:text-sm font-mono mt-1 ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>
               Move your mouse or slide your finger to bounce the ball and uncover all 6 ways I can help your business.
             </p>
           </div>
 
           {/* Stats Bar */}
-          <div className="flex items-center gap-4 bg-black/40 dark:bg-black/60 p-3 rounded-2xl border border-white/10 font-mono">
+          <div className="flex items-center gap-4 bg-[#0C1222] p-3 rounded-2xl border border-white/10 font-mono">
             <div className="text-right">
-              <span className="text-[10px] text-zinc-500 uppercase block leading-none">SCORE</span>
+              <span className="text-[10px] text-zinc-400 uppercase block leading-none">SCORE</span>
               <span className="text-base sm:text-lg font-black text-emerald-400">{score.toLocaleString()}</span>
             </div>
 
             <div className="h-6 w-px bg-white/10" />
 
             <div className="text-right">
-              <span className="text-[10px] text-zinc-500 uppercase block leading-none">HIGH</span>
-              <span className="text-base sm:text-lg font-black text-[#00F0FF]">{highScore.toLocaleString()}</span>
+              <span className="text-[10px] text-zinc-400 uppercase block leading-none">HIGH</span>
+              <span className="text-base sm:text-lg font-black text-[#38BDF8]">{highScore.toLocaleString()}</span>
             </div>
 
             <div className="h-6 w-px bg-white/10" />
@@ -481,7 +481,7 @@ export const CyberBreakout: React.FC = () => {
                 <Heart
                   key={i}
                   className={`w-4 h-4 transition-all ${
-                    i < lives ? 'text-rose-500 fill-rose-500 animate-pulse' : 'text-zinc-700'
+                    i < lives ? 'text-[#38BDF8] fill-[#38BDF8]' : 'text-zinc-700'
                   }`}
                 />
               ))}
@@ -491,13 +491,13 @@ export const CyberBreakout: React.FC = () => {
 
         {/* The Game Canvas Box */}
         <div className={`relative rounded-3xl border overflow-hidden shadow-2xl ${
-          isDark ? 'border-white/10 bg-[#060613]' : 'border-zinc-300 bg-white'
+          isDark ? 'border-white/10 bg-[#060913]' : 'border-stone-300 bg-white'
         }`}>
           {/* Top Bar HUD */}
           <div className="px-5 py-3 border-b border-black/[0.08] dark:border-white/[0.08] flex items-center justify-between font-mono text-xs">
             <div className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
-              <span className="text-zinc-400">
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-400" />
+              <span className={isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}>
                 {unlockedService ? `UNLOCKED: ${unlockedService}` : 'MOVE PADDLE TO BEGIN'}
               </span>
             </div>
@@ -527,28 +527,28 @@ export const CyberBreakout: React.FC = () => {
 
             {/* Ready / Game Over / Victory Overlay Modals */}
             {gameState !== 'playing' && (
-              <div className="absolute inset-0 bg-black/80 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center z-30">
+              <div className="absolute inset-0 bg-[#060913]/85 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center z-30">
                 {gameState === 'ready' && (
                   <motion.div
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
                     className="space-y-4 max-w-sm"
                   >
-                    <div className="w-14 h-14 mx-auto rounded-2xl bg-[#00F0FF]/15 text-[#00F0FF] border border-[#00F0FF]/30 flex items-center justify-center shadow-lg">
+                    <div className="w-14 h-14 mx-auto rounded-2xl bg-[#38BDF8]/15 text-[#38BDF8] border border-[#38BDF8]/30 flex items-center justify-center shadow-lg">
                       <Gamepad2 className="w-8 h-8" />
                     </div>
-                    <h3 className="font-display font-black text-2xl text-white">
+                    <h3 className="font-display font-black text-2xl text-[#F1F5F9]">
                       SERVICE BREAKOUT
                     </h3>
-                    <p className="font-mono text-xs text-zinc-400">
+                    <p className="font-mono text-xs text-[#94A3B8]">
                       Bounce the ball to knock out the blocks and explore our services! Move your paddle with your mouse, finger, or arrow keys.
                     </p>
                     <button
                       type="button"
                       onClick={restartGame}
-                      className="w-full py-3 px-6 rounded-xl font-display font-bold text-sm bg-[#00F0FF] text-black hover:bg-cyan-300 transition-all shadow-[0_0_20px_rgba(0,240,255,0.4)] cursor-pointer flex items-center justify-center gap-2"
+                      className="w-full py-3 px-6 rounded-xl font-display font-bold text-sm bg-[#38BDF8] text-[#060913] hover:bg-[#7DD3FC] transition-all shadow-[0_8px_24px_rgba(56, 189, 248,0.3)] cursor-pointer flex items-center justify-center gap-2"
                     >
-                      <Play className="w-4 h-4 fill-black" />
+                      <Play className="w-4 h-4 fill-[#060913]" />
                       <span>START BREAKOUT GAME</span>
                     </button>
                   </motion.div>
@@ -563,16 +563,16 @@ export const CyberBreakout: React.FC = () => {
                     <div className="w-14 h-14 mx-auto rounded-2xl bg-rose-500/15 text-rose-400 border border-rose-500/30 flex items-center justify-center">
                       <Flame className="w-8 h-8" />
                     </div>
-                    <h3 className="font-display font-black text-2xl text-white">
+                    <h3 className="font-display font-black text-2xl text-[#F1F5F9]">
                       GAME OVER
                     </h3>
-                    <p className="font-mono text-xs text-zinc-400">
+                    <p className="font-mono text-xs text-[#94A3B8]">
                       Final Score: <strong className="text-emerald-400">{score.toLocaleString()}</strong>
                     </p>
                     <button
                       type="button"
                       onClick={restartGame}
-                      className="w-full py-3 px-6 rounded-xl font-display font-bold text-sm bg-white text-zinc-950 hover:bg-zinc-200 transition-all cursor-pointer flex items-center justify-center gap-2"
+                      className="w-full py-3 px-6 rounded-xl font-display font-bold text-sm bg-[#F1F5F9] text-[#060913] hover:bg-white transition-all cursor-pointer flex items-center justify-center gap-2"
                     >
                       <RotateCcw className="w-4 h-4" />
                       <span>PLAY AGAIN</span>
@@ -592,13 +592,13 @@ export const CyberBreakout: React.FC = () => {
                     <h3 className="font-display font-black text-2xl text-emerald-400">
                       VICTORY! ALL SERVICES SMASHED
                     </h3>
-                    <p className="font-mono text-xs text-zinc-400">
+                    <p className="font-mono text-xs text-[#94A3B8]">
                       Outstanding agility! Score: <strong className="text-emerald-400">{score.toLocaleString()}</strong>
                     </p>
                     <button
                       type="button"
                       onClick={restartGame}
-                      className="w-full py-3 px-6 rounded-xl font-display font-bold text-sm bg-emerald-400 text-black hover:bg-emerald-300 transition-all cursor-pointer flex items-center justify-center gap-2"
+                      className="w-full py-3 px-6 rounded-xl font-display font-bold text-sm bg-emerald-400 text-[#060913] hover:bg-emerald-300 transition-all cursor-pointer flex items-center justify-center gap-2"
                     >
                       <RotateCcw className="w-4 h-4" />
                       <span>PLAY AGAIN</span>
@@ -612,13 +612,13 @@ export const CyberBreakout: React.FC = () => {
                     animate={{ opacity: 1, scale: 1 }}
                     className="space-y-4 max-w-sm"
                   >
-                    <h3 className="font-display font-black text-2xl text-white">
+                    <h3 className="font-display font-black text-2xl text-[#F1F5F9]">
                       GAME PAUSED
                     </h3>
                     <button
                       type="button"
                       onClick={() => setGameState('playing')}
-                      className="w-full py-3 px-6 rounded-xl font-display font-bold text-sm bg-[#00F0FF] text-black hover:bg-cyan-300 transition-all cursor-pointer"
+                      className="w-full py-3 px-6 rounded-xl font-display font-bold text-sm bg-[#38BDF8] text-[#060913] hover:bg-[#7DD3FC] transition-all cursor-pointer"
                     >
                       RESUME GAME
                     </button>
@@ -644,7 +644,7 @@ export const CyberBreakout: React.FC = () => {
                     style={{ backgroundColor: s.color }}
                   />
                   <div className="overflow-hidden">
-                    <span className="truncate block font-bold text-zinc-800 dark:text-zinc-200 text-[10px]">
+                    <span className="truncate block font-bold text-zinc-800 dark:text-[#F1F5F9] text-[10px]">
                       {s.title.split(' ')[0]}
                     </span>
                     <span className="text-[9px] text-zinc-500">+{s.points} PTS</span>

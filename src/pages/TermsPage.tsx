@@ -100,7 +100,7 @@ export const TermsPage: React.FC<TermsPageProps> = ({ onNavigate }) => {
   ];
 
   return (
-    <div className="pt-28 pb-20 md:pt-36 relative overflow-x-hidden w-full max-w-full">
+    <div className="pt-28 pb-20 md:pt-36 relative overflow-x-clip w-full max-w-full">
       <SEOHead
         title="Terms & Commercial Conditions | Click N Create (Saad M)"
         description="Review Click N Create's commercial terms of service, payment schedules, IP ownership rights, code warranties, and client agreements."
@@ -112,14 +112,14 @@ export const TermsPage: React.FC<TermsPageProps> = ({ onNavigate }) => {
           <button
             type="button"
             onClick={() => onNavigate('/')}
-            className="inline-flex items-center gap-2 text-xs font-mono text-zinc-900 dark:text-zinc-200 hover:text-cyan-600 dark:hover:text-[#00F0FF] transition-colors cursor-pointer group font-bold"
+            className="inline-flex items-center gap-2 text-xs font-mono text-zinc-900 dark:text-zinc-200 hover:text-[#1D4ED8] dark:hover:text-[#7DD3FC] transition-colors cursor-pointer group font-bold"
           >
-            <ArrowLeft className="w-3.5 h-3.5 text-cyan-600 dark:text-[#00F0FF] group-hover:-translate-x-1 transition-transform" />
+            <ArrowLeft className="w-3.5 h-3.5 text-[#1D4ED8] dark:text-[#7DD3FC] group-hover:-translate-x-1 transition-transform" />
             <span>Back to Home</span>
           </button>
 
-          <div className="flex items-center gap-2 text-[11px] font-mono text-zinc-800 dark:text-zinc-300 font-semibold">
-            <span className="w-2 h-2 rounded-full bg-cyan-600 dark:bg-[#00F0FF] animate-pulse" />
+          <div className="flex items-center gap-2 text-[11px] font-mono text-zinc-800 dark:text-[#94A3B8] font-semibold">
+            <span className="w-2 h-2 rounded-full bg-[#38BDF8]" />
             <span>Commercial Terms · Saad M</span>
           </div>
         </div>
@@ -128,22 +128,22 @@ export const TermsPage: React.FC<TermsPageProps> = ({ onNavigate }) => {
         <div
           className={`rounded-3xl border p-8 sm:p-10 mb-10 backdrop-blur-2xl relative overflow-hidden transition-colors ${
             isDark
-              ? 'border-[#00F0FF]/30 bg-[#060612]/90 shadow-[0_20px_60px_rgba(0,0,0,0.8)]'
-              : 'border-zinc-200 bg-white shadow-xl'
+              ? 'border-[#252A36] bg-[#0C1222]/95 shadow-[0_20px_60px_rgba(0,0,0,0.65)]'
+              : 'border-[#E6E2D8] bg-white shadow-xl'
           }`}
         >
-          <div className="absolute top-0 right-0 w-80 h-80 bg-cyan-500/10 dark:bg-[#00F0FF]/5 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute top-0 right-0 w-80 h-80 bg-[#38BDF8]/10 rounded-full blur-3xl pointer-events-none" />
 
-          <div className="flex items-center gap-2 text-xs font-mono text-cyan-700 dark:text-[#00F0FF] uppercase tracking-wider mb-3 font-bold">
+          <div className="flex items-center gap-2 text-xs font-mono text-[#1D4ED8] dark:text-[#7DD3FC] uppercase tracking-wider mb-3 font-bold">
             <FileText className="w-4 h-4" />
             <span>Freelance Engineering Agreement</span>
           </div>
 
-          <h1 className="text-3xl sm:text-5xl font-display font-black tracking-tight text-black dark:text-white">
-            Terms & Conditions
+          <h1 className="text-3xl sm:text-5xl font-display font-black tracking-tight text-black dark:text-[#F1F5F9]">
+            Terms &amp; Conditions
           </h1>
 
-          <div className="mt-4 flex flex-wrap items-center gap-4 text-xs font-mono text-zinc-900 dark:text-zinc-200 font-medium">
+          <div className="mt-4 flex flex-wrap items-center gap-4 text-xs font-mono text-zinc-900 dark:text-[#94A3B8] font-medium">
             <span><strong>Last Updated:</strong> September 2026</span>
             <span>·</span>
             <span><strong>Standard Rate:</strong> £35/hour</span>
@@ -151,8 +151,8 @@ export const TermsPage: React.FC<TermsPageProps> = ({ onNavigate }) => {
             <span><strong>Operator:</strong> Saad M (Click N Create)</span>
           </div>
 
-          <p className="mt-4 text-sm sm:text-base leading-relaxed text-black dark:text-white max-w-3xl font-medium">
-            These terms establish a transparent, fair, and professional working relationship between you (the Client) and <strong className="font-bold text-cyan-700 dark:text-[#00F0FF]">Saad M</strong> operating as <strong className="font-bold text-black dark:text-white">Click N Create</strong>. No hidden fees, no confusing legal jargon — just clean engineering agreements.
+          <p className="mt-4 text-sm sm:text-base leading-relaxed text-black dark:text-[#F1F5F9]/90 max-w-3xl font-medium">
+            These terms establish a transparent, fair, and professional working relationship between you (the Client) and <strong className="font-bold text-[#1D4ED8] dark:text-[#7DD3FC]">Saad M</strong> operating as <strong className="font-bold text-black dark:text-white">Click N Create</strong>. No hidden fees, no confusing legal jargon — just clean engineering agreements.
           </p>
         </div>
 
@@ -165,25 +165,25 @@ export const TermsPage: React.FC<TermsPageProps> = ({ onNavigate }) => {
                 key={sec.number}
                 className={`rounded-3xl border p-6 sm:p-8 backdrop-blur-xl transition-all ${
                   isDark
-                    ? 'border-white/10 bg-[#070714]/80 hover:border-[#00F0FF]/30'
-                    : 'border-zinc-200 bg-white shadow-sm hover:border-cyan-500'
+                    ? 'border-[#252A36] bg-[#0C1222]/90 hover:border-[#38BDF8]/40'
+                    : 'border-[#E6E2D8] bg-white shadow-sm hover:border-[#1D4ED8]/60'
                 }`}
               >
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 pb-3 border-b border-zinc-200 dark:border-white/10">
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-xl bg-cyan-500/15 dark:bg-[#00F0FF]/15 text-cyan-700 dark:text-[#00F0FF] flex items-center justify-center shrink-0">
+                    <div className="w-8 h-8 rounded-xl bg-[#F3E9DC] dark:bg-[#38BDF8]/15 text-[#1D4ED8] dark:text-[#7DD3FC] flex items-center justify-center shrink-0">
                       <Icon className="w-4 h-4" />
                     </div>
-                    <h2 className="text-lg sm:text-xl font-display font-bold text-black dark:text-white">
+                    <h2 className="text-lg sm:text-xl font-display font-bold text-black dark:text-[#F1F5F9]">
                       {sec.title}
                     </h2>
                   </div>
-                  <span className="text-xs font-mono font-bold text-cyan-700 dark:text-[#00F0FF] px-2.5 py-1 rounded-full bg-cyan-500/10 dark:bg-[#00F0FF]/10 border border-cyan-500/30 dark:border-[#00F0FF]/25 self-start sm:self-auto">
+                  <span className="text-xs font-mono font-bold text-[#1E40AF] dark:text-[#BAE6FD] px-2.5 py-1 rounded-md bg-[#F3E9DC] dark:bg-[#38BDF8]/10 border border-[#38BDF8]/30 self-start sm:self-auto">
                     SECTION {sec.number}
                   </span>
                 </div>
 
-                <p className="text-sm sm:text-base text-black dark:text-white leading-relaxed font-sans font-medium">
+                <p className="text-sm sm:text-base text-black dark:text-[#F1F5F9]/85 leading-relaxed font-sans font-medium">
                   {sec.content}
                 </p>
               </div>
@@ -195,20 +195,20 @@ export const TermsPage: React.FC<TermsPageProps> = ({ onNavigate }) => {
         <div
           className={`mt-10 rounded-3xl border p-8 sm:p-10 backdrop-blur-xl ${
             isDark
-              ? 'border-[#00F0FF]/40 bg-[#08081A]/95 text-white shadow-[0_20px_50px_rgba(0,0,0,0.9)]'
-              : 'border-cyan-400 bg-cyan-50/70 text-black shadow-lg'
+              ? 'border-[#38BDF8]/35 bg-[#0C1222]/95 text-[#F1F5F9] shadow-[0_20px_50px_rgba(0,0,0,0.7)]'
+              : 'border-[#38BDF8]/40 bg-[#FBF7F1] text-[#0F172A] shadow-lg'
           }`}
         >
           <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
             <div className="space-y-2 max-w-xl">
-              <span className="text-xs font-mono font-bold uppercase tracking-wider text-cyan-700 dark:text-[#00F0FF] flex items-center gap-1.5">
+              <span className="text-xs font-mono font-bold uppercase tracking-wider text-[#1D4ED8] dark:text-[#7DD3FC] flex items-center gap-1.5">
                 <HelpCircle className="w-4 h-4" />
                 <span>Questions About These Terms?</span>
               </span>
-              <h3 className="text-2xl font-display font-bold text-black dark:text-white">
+              <h3 className="text-2xl font-display font-bold text-black dark:text-[#F1F5F9]">
                 Have a specific project contract or NDA requirement?
               </h3>
-              <p className="text-sm text-black dark:text-white leading-relaxed font-sans font-medium">
+              <p className="text-sm text-black dark:text-[#94A3B8] leading-relaxed font-sans font-medium">
                 I am happy to review and sign mutual Non-Disclosure Agreements (NDAs) and customize milestone deliverables to suit your enterprise or startup requirements.
               </p>
             </div>
@@ -217,7 +217,7 @@ export const TermsPage: React.FC<TermsPageProps> = ({ onNavigate }) => {
               <button
                 type="button"
                 onClick={() => onNavigate('/contact')}
-                className="px-7 py-3.5 rounded-xl bg-[#00F0FF] hover:bg-[#38bdf8] text-black font-mono font-bold text-xs flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(0,240,255,0.4)] transition-all cursor-pointer"
+                className="px-7 py-3.5 rounded-xl bg-[#38BDF8] hover:bg-[#7DD3FC] text-[#111318] font-mono font-bold text-xs flex items-center justify-center gap-2 shadow-[0_8px_22px_rgba(56, 189, 248,0.3)] transition-all cursor-pointer"
               >
                 <span>Start a Project</span>
               </button>
@@ -226,11 +226,11 @@ export const TermsPage: React.FC<TermsPageProps> = ({ onNavigate }) => {
                 href="mailto:saadm.clickncreate@gmail.com"
                 className={`px-5 py-3.5 rounded-xl border font-mono text-xs flex items-center justify-center gap-2 transition-colors ${
                   isDark
-                    ? 'border-white/10 hover:bg-white/10 text-white'
-                    : 'border-zinc-300 bg-white hover:bg-zinc-100 text-black'
+                    ? 'border-white/15 hover:bg-white/10 text-[#F1F5F9]'
+                    : 'border-[#D6CFC2] bg-white hover:bg-[#F3F6FA] text-[#0F172A]'
                 }`}
               >
-                <Mail className="w-3.5 h-3.5 text-cyan-600 dark:text-[#00F0FF]" />
+                <Mail className="w-3.5 h-3.5 text-[#1D4ED8] dark:text-[#7DD3FC]" />
                 <span>Email Saad M</span>
               </a>
             </div>

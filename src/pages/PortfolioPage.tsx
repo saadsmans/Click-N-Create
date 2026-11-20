@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   Download,
@@ -7,11 +7,9 @@ import {
   GraduationCap,
   Code2,
   Cpu,
-  Globe2,
   Mail,
   Phone,
   MapPin,
-  ExternalLink,
   Sparkles,
   CheckCircle2,
   MessageSquare,
@@ -21,15 +19,9 @@ import {
   Award,
   ArrowUpRight,
   UserCheck,
-  Camera,
-  Upload,
   Printer,
-  ShieldCheck,
-  ShoppingCart,
-  Palette,
-  Terminal,
 } from 'lucide-react';
-import { SAAD_PORTFOLIO, PortfolioProject, SkillCategory } from '../data/portfolio.ts';
+import { SAAD_PORTFOLIO } from '../data/portfolio.ts';
 import { ClickNCreateLogo } from '../components/ClickNCreateLogo.tsx';
 import { generateCvPdf } from '../utils/cvPdfGenerator.ts';
 import { useTheme } from '../context/ThemeContext.tsx';
@@ -55,82 +47,102 @@ const ProjectVisualCard: React.FC<{ projectId: string; title: string; category: 
       <div
         className={`w-full aspect-video rounded-2xl border p-3.5 sm:p-5 flex flex-col justify-between relative overflow-hidden transition-all group ${
           isDark
-            ? 'border-cyan-500/30 bg-gradient-to-br from-[#0b0c1e] via-[#080916] to-[#04040a] shadow-[0_15px_35px_rgba(0,240,255,0.15)]'
-            : 'border-cyan-300 bg-gradient-to-br from-cyan-50 via-white to-sky-50 shadow-md'
+            ? 'border-[#2B303D] bg-gradient-to-br from-[#161922] via-[#12151C] to-[#0D0F14] shadow-[0_15px_35px_rgba(0,0,0,0.45)]'
+            : 'border-[#E6E2D8] bg-gradient-to-br from-[#FBF9F5] via-white to-[#F4F0E7] shadow-sm'
         }`}
       >
-        <div className="absolute -top-12 -right-12 w-48 h-48 rounded-full blur-3xl opacity-35 pointer-events-none bg-[#00F0FF]" />
-        <div className="absolute -bottom-10 -left-10 w-44 h-44 rounded-full blur-3xl opacity-25 pointer-events-none bg-indigo-500" />
+        <div className="absolute -top-12 -right-12 w-48 h-48 rounded-full blur-3xl opacity-20 pointer-events-none bg-[#38BDF8]" />
+        <div className="absolute -bottom-10 -left-10 w-44 h-44 rounded-full blur-3xl opacity-15 pointer-events-none bg-[#10B981]" />
 
         {/* Browser Top Window Bar */}
         <div className="flex items-center justify-between pb-2.5 border-b border-black/10 dark:border-white/10 relative z-10">
           <div className="flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-rose-500/90 shadow-xs" />
-            <span className="w-2.5 h-2.5 rounded-full bg-amber-500/90 shadow-xs" />
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/90 shadow-xs" />
-            <div className="ml-2 px-2.5 py-0.5 rounded-md bg-black/10 dark:bg-white/10 font-mono text-[10px] text-cyan-600 dark:text-cyan-300 flex items-center gap-1.5">
-              <span className="opacity-60">https://</span>
+            <span className="w-2.5 h-2.5 rounded-full bg-rose-500/85 shadow-xs" />
+            <span className="w-2.5 h-2.5 rounded-full bg-amber-500/85 shadow-xs" />
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/85 shadow-xs" />
+            <div className={`ml-2 px-2.5 py-0.5 rounded-md font-mono text-[10px] flex items-center gap-1.5 ${
+              isDark ? 'bg-white/10 text-[#BAE6FD]' : 'bg-[#F3E9DC] text-[#1E40AF]'
+            }`}>
+              <span className="opacity-65">https://</span>
               <span className="font-bold">owaisdashboard.vercel.app</span>
             </div>
           </div>
 
-          <span className="text-[10px] font-mono px-2 py-0.5 rounded-full border border-emerald-500/40 bg-emerald-500/10 text-emerald-400 font-bold flex items-center gap-1">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+          <span className={`text-[10px] font-mono px-2 py-0.5 rounded-md border font-bold flex items-center gap-1.5 ${
+            isDark
+              ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-400'
+              : 'border-emerald-600/30 bg-emerald-50 text-emerald-700'
+          }`}>
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
             <span>LIVE CLIENT WORK</span>
           </span>
         </div>
 
-        {/* Dashboard Preview Cards Layout (Clean, without OD logo) */}
+        {/* Dashboard Preview Cards Layout */}
         <div className="my-auto py-2 relative z-10 space-y-2">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-xl bg-cyan-500/15 border border-cyan-500/30 text-cyan-400 flex items-center justify-center shrink-0 shadow-sm">
+              <div className={`w-9 h-9 rounded-xl border flex items-center justify-center shrink-0 shadow-sm ${
+                isDark
+                  ? 'bg-[#38BDF8]/15 border-[#38BDF8]/35 text-[#BAE6FD]'
+                  : 'bg-[#F3E9DC] border-[#38BDF8]/40 text-[#1D4ED8]'
+              }`}>
                 <GraduationCap className="w-5 h-5" />
               </div>
               <div>
-                <h4 className="font-display font-black text-sm sm:text-base leading-tight">
-                  Owais <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00F0FF] to-indigo-400">Portfolio & Dashboard</span>
+                <h4 className={`font-display font-black text-sm sm:text-base leading-tight ${isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'}`}>
+                  Owais <span className={isDark ? 'text-[#7DD3FC]' : 'text-[#1D4ED8]'}>Portfolio &amp; Dashboard</span>
                 </h4>
-                <span className="text-[10px] font-mono text-zinc-400 block">
-                  Academic Trajectory & Technical Skills
+                <span className={`text-[10px] font-mono block ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>
+                  Academic Trajectory &amp; Technical Skills
                 </span>
               </div>
             </div>
 
-            <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 text-[10px] font-mono text-zinc-400">
-              <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
+            <div className={`hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-lg border text-[10px] font-mono ${
+              isDark ? 'border-white/10 bg-white/5 text-[#94A3B8]' : 'border-[#E6E2D8] bg-[#F3F6FA] text-[#475569]'
+            }`}>
+              <Sparkles className={`w-3.5 h-3.5 ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`} />
               <span>Full Academic Records</span>
             </div>
           </div>
 
-          {/* Mini Dashboard Widget Pills */}
+          {/* Mini Dashboard Widgets */}
           <div className="grid grid-cols-3 gap-2 pt-1 font-mono text-[10px]">
-            <div className="p-2 rounded-xl border border-cyan-500/25 bg-cyan-500/5 text-cyan-400 flex flex-col justify-between">
-              <span className="text-zinc-400 text-[9px] uppercase">Education</span>
+            <div className={`p-2 rounded-xl border flex flex-col justify-between ${
+              isDark ? 'border-[#38BDF8]/25 bg-[#38BDF8]/5 text-[#BAE6FD]' : 'border-[#38BDF8]/30 bg-[#FBF7F1] text-[#1E40AF]'
+            }`}>
+              <span className={`text-[9px] uppercase ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>Education</span>
               <span className="font-bold truncate">Academic Record</span>
             </div>
-            <div className="p-2 rounded-xl border border-indigo-500/25 bg-indigo-500/5 text-indigo-300 flex flex-col justify-between">
-              <span className="text-zinc-400 text-[9px] uppercase">Skills Matrix</span>
-              <span className="font-bold truncate">Tech & Soft Skills</span>
+            <div className={`p-2 rounded-xl border flex flex-col justify-between ${
+              isDark ? 'border-white/10 bg-white/5 text-[#F1F5F9]' : 'border-[#E6E2D8] bg-[#F3F6FA] text-[#0F172A]'
+            }`}>
+              <span className={`text-[9px] uppercase ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>Skills Matrix</span>
+              <span className="font-bold truncate">Tech &amp; Soft Skills</span>
             </div>
-            <div className="p-2 rounded-xl border border-emerald-500/25 bg-emerald-500/5 text-emerald-400 flex flex-col justify-between">
-              <span className="text-zinc-400 text-[9px] uppercase">Hosting</span>
+            <div className={`p-2 rounded-xl border flex flex-col justify-between ${
+              isDark ? 'border-emerald-500/25 bg-emerald-500/5 text-emerald-400' : 'border-emerald-600/25 bg-emerald-50 text-emerald-700'
+            }`}>
+              <span className={`text-[9px] uppercase ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>Hosting</span>
               <span className="font-bold truncate">Vercel Edge</span>
             </div>
           </div>
         </div>
 
         {/* Footer Bar with Live Site Link */}
-        <div className="flex items-center justify-between text-[11px] font-mono text-zinc-500 border-t border-black/10 dark:border-white/10 pt-2 relative z-10">
-          <span className="flex items-center gap-1.5 text-cyan-500 font-semibold">
-            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-            <span>Built & Delivered by Saad M</span>
+        <div className={`flex items-center justify-between text-[11px] font-mono border-t pt-2 relative z-10 ${
+          isDark ? 'border-white/10 text-[#94A3B8]' : 'border-black/10 text-[#475569]'
+        }`}>
+          <span className={`flex items-center gap-1.5 font-semibold ${isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'}`}>
+            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
+            <span>Built &amp; Delivered by Saad M</span>
           </span>
           <a
             href="https://owaisdashboard.vercel.app"
             target="_blank"
             rel="noreferrer"
-            className="flex items-center gap-1 font-bold text-[#00F0FF] hover:underline"
+            className={`flex items-center gap-1 font-bold hover:underline ${isDark ? 'text-[#7DD3FC]' : 'text-[#1D4ED8]'}`}
           >
             <span>owaisdashboard.vercel.app</span>
             <ArrowUpRight className="w-3 h-3" />
@@ -145,27 +157,33 @@ const ProjectVisualCard: React.FC<{ projectId: string; title: string; category: 
       <div
         className={`w-full aspect-video rounded-2xl border p-3.5 sm:p-5 flex flex-col justify-between relative overflow-hidden transition-all group ${
           isDark
-            ? 'border-purple-500/30 bg-gradient-to-br from-[#0d0a1e] via-[#080916] to-[#04040a] shadow-[0_15px_35px_rgba(168,85,247,0.15)]'
-            : 'border-purple-300 bg-gradient-to-br from-purple-50 via-white to-cyan-50 shadow-md'
+            ? 'border-[#2B303D] bg-gradient-to-br from-[#171923] via-[#12151C] to-[#0D0F14] shadow-[0_15px_35px_rgba(0,0,0,0.45)]'
+            : 'border-[#E6E2D8] bg-gradient-to-br from-[#FBF9F5] via-white to-[#F4F0E7] shadow-sm'
         }`}
       >
-        <div className="absolute -top-12 -right-12 w-48 h-48 rounded-full blur-3xl opacity-35 pointer-events-none bg-[#A855F7]" />
-        <div className="absolute -bottom-10 -left-10 w-44 h-44 rounded-full blur-3xl opacity-25 pointer-events-none bg-[#00F0FF]" />
+        <div className="absolute -top-12 -right-12 w-48 h-48 rounded-full blur-3xl opacity-20 pointer-events-none bg-[#38BDF8]" />
+        <div className="absolute -bottom-10 -left-10 w-44 h-44 rounded-full blur-3xl opacity-15 pointer-events-none bg-[#0EA5E9]" />
 
         {/* Browser Top Window Bar */}
         <div className="flex items-center justify-between pb-2.5 border-b border-black/10 dark:border-white/10 relative z-10">
           <div className="flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-rose-500/90 shadow-xs" />
-            <span className="w-2.5 h-2.5 rounded-full bg-amber-500/90 shadow-xs" />
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/90 shadow-xs" />
-            <div className="ml-2 px-2.5 py-0.5 rounded-md bg-black/10 dark:bg-white/10 font-mono text-[10px] text-purple-600 dark:text-purple-300 flex items-center gap-1.5">
-              <span className="opacity-60">https://</span>
+            <span className="w-2.5 h-2.5 rounded-full bg-rose-500/85 shadow-xs" />
+            <span className="w-2.5 h-2.5 rounded-full bg-amber-500/85 shadow-xs" />
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/85 shadow-xs" />
+            <div className={`ml-2 px-2.5 py-0.5 rounded-md font-mono text-[10px] flex items-center gap-1.5 ${
+              isDark ? 'bg-white/10 text-[#BAE6FD]' : 'bg-[#F3E9DC] text-[#1E40AF]'
+            }`}>
+              <span className="opacity-65">https://</span>
               <span className="font-bold">hammadpatel.vercel.app</span>
             </div>
           </div>
 
-          <span className="text-[10px] font-mono px-2 py-0.5 rounded-full border border-emerald-500/40 bg-emerald-500/10 text-emerald-400 font-bold flex items-center gap-1">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+          <span className={`text-[10px] font-mono px-2 py-0.5 rounded-md border font-bold flex items-center gap-1.5 ${
+            isDark
+              ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-400'
+              : 'border-emerald-600/30 bg-emerald-50 text-emerald-700'
+          }`}>
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
             <span>LIVE CLIENT WORK</span>
           </span>
         </div>
@@ -174,53 +192,67 @@ const ProjectVisualCard: React.FC<{ projectId: string; title: string; category: 
         <div className="my-auto py-2 relative z-10 space-y-2">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-xl bg-purple-500/15 border border-purple-500/30 text-purple-400 flex items-center justify-center shrink-0 shadow-sm">
-                <Code2 className="w-5 h-5" />
+              <div className={`w-9 h-9 rounded-xl border flex items-center justify-center shrink-0 shadow-sm ${
+                isDark
+                  ? 'bg-[#38BDF8]/15 border-[#38BDF8]/35 text-[#BAE6FD]'
+                  : 'bg-[#F3E9DC] border-[#38BDF8]/40 text-[#1D4ED8]'
+              }`}>
+                <Cpu className="w-5 h-5" />
               </div>
               <div>
-                <h4 className="font-display font-black text-sm sm:text-base leading-tight">
-                  Hammad Patel <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#A855F7] to-[#00F0FF]">Portfolio</span>
+                <h4 className={`font-display font-black text-sm sm:text-base leading-tight ${isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'}`}>
+                  Hammad Patel <span className={isDark ? 'text-[#7DD3FC]' : 'text-[#1D4ED8]'}>ECE Virtual Lab</span>
                 </h4>
-                <span className="text-[10px] font-mono text-zinc-400 block">
-                  E&amp;C Engineer &amp; Web Developer Showcase
+                <span className={`text-[10px] font-mono block ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>
+                  Interactive ECE Field Lab Studio &amp; Portfolio
                 </span>
               </div>
             </div>
 
-            <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 text-[10px] font-mono text-zinc-400">
-              <Sparkles className="w-3.5 h-3.5 text-purple-400" />
-              <span>GEC Bharuch &amp; IITB</span>
+            <div className={`hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-lg border text-[10px] font-mono ${
+              isDark ? 'border-white/10 bg-white/5 text-[#94A3B8]' : 'border-[#E6E2D8] bg-[#F3F6FA] text-[#475569]'
+            }`}>
+              <Sparkles className={`w-3.5 h-3.5 ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`} />
+              <span>Full ECE Studies Lab</span>
             </div>
           </div>
 
-          {/* Mini Portfolio Widget Pills */}
+          {/* Mini Portfolio Widgets */}
           <div className="grid grid-cols-3 gap-2 pt-1 font-mono text-[10px]">
-            <div className="p-2 rounded-xl border border-purple-500/25 bg-purple-500/5 text-purple-300 flex flex-col justify-between">
-              <span className="text-zinc-400 text-[9px] uppercase">Credentials</span>
-              <span className="font-bold truncate">E&amp;C Engineering</span>
+            <div className={`p-2 rounded-xl border flex flex-col justify-between ${
+              isDark ? 'border-[#38BDF8]/25 bg-[#38BDF8]/5 text-[#BAE6FD]' : 'border-[#38BDF8]/30 bg-[#FBF7F1] text-[#1E40AF]'
+            }`}>
+              <span className={`text-[9px] uppercase ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>Virtual Lab</span>
+              <span className="font-bold truncate">ECE Field Studio</span>
             </div>
-            <div className="p-2 rounded-xl border border-cyan-500/25 bg-cyan-500/5 text-cyan-400 flex flex-col justify-between">
-              <span className="text-zinc-400 text-[9px] uppercase">Experience</span>
-              <span className="font-bold truncate">IIT Bombay Intern</span>
+            <div className={`p-2 rounded-xl border flex flex-col justify-between ${
+              isDark ? 'border-white/10 bg-white/5 text-[#F1F5F9]' : 'border-[#E6E2D8] bg-[#F3F6FA] text-[#0F172A]'
+            }`}>
+              <span className={`text-[9px] uppercase ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>Coursework</span>
+              <span className="font-bold truncate">All ECE Topics</span>
             </div>
-            <div className="p-2 rounded-xl border border-emerald-500/25 bg-emerald-500/5 text-emerald-400 flex flex-col justify-between">
-              <span className="text-zinc-400 text-[9px] uppercase">Hosting</span>
+            <div className={`p-2 rounded-xl border flex flex-col justify-between ${
+              isDark ? 'border-emerald-500/25 bg-emerald-500/5 text-emerald-400' : 'border-emerald-600/25 bg-emerald-50 text-emerald-700'
+            }`}>
+              <span className={`text-[9px] uppercase ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>Hosting</span>
               <span className="font-bold truncate">Vercel Edge</span>
             </div>
           </div>
         </div>
 
         {/* Footer Bar with Live Site Link */}
-        <div className="flex items-center justify-between text-[11px] font-mono text-zinc-500 border-t border-black/10 dark:border-white/10 pt-2 relative z-10">
-          <span className="flex items-center gap-1.5 text-purple-400 font-semibold">
-            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+        <div className={`flex items-center justify-between text-[11px] font-mono border-t pt-2 relative z-10 ${
+          isDark ? 'border-white/10 text-[#94A3B8]' : 'border-black/10 text-[#475569]'
+        }`}>
+          <span className={`flex items-center gap-1.5 font-semibold ${isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'}`}>
+            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
             <span>Built &amp; Delivered by Saad M</span>
           </span>
           <a
             href="https://hammadpatel.vercel.app"
             target="_blank"
             rel="noreferrer"
-            className="flex items-center gap-1 font-bold text-[#00F0FF] hover:underline"
+            className={`flex items-center gap-1 font-bold hover:underline ${isDark ? 'text-[#7DD3FC]' : 'text-[#1D4ED8]'}`}
           >
             <span>hammadpatel.vercel.app</span>
             <ArrowUpRight className="w-3 h-3" />
@@ -235,47 +267,57 @@ const ProjectVisualCard: React.FC<{ projectId: string; title: string; category: 
       <div
         className={`w-full aspect-video rounded-2xl border p-3.5 sm:p-5 flex flex-col justify-between relative overflow-hidden transition-all group ${
           isDark
-            ? 'border-cyan-500/30 bg-gradient-to-br from-[#0c0d1e] via-[#070714] to-black shadow-[0_15px_35px_rgba(0,240,255,0.15)]'
-            : 'border-cyan-300 bg-gradient-to-br from-cyan-50 via-white to-sky-50 shadow-md'
+            ? 'border-[#2B303D] bg-gradient-to-br from-[#161922] via-[#12151C] to-[#0D0F14] shadow-[0_15px_35px_rgba(0,0,0,0.45)]'
+            : 'border-[#E6E2D8] bg-gradient-to-br from-[#FBF9F5] via-white to-[#F4F0E7] shadow-sm'
         }`}
       >
-        <div className="absolute -top-12 -right-12 w-48 h-48 rounded-full blur-3xl opacity-35 pointer-events-none bg-[#00F0FF]" />
-        <div className="absolute -bottom-10 -left-10 w-44 h-44 rounded-full blur-3xl opacity-20 pointer-events-none bg-purple-500" />
+        <div className="absolute -top-12 -right-12 w-48 h-48 rounded-full blur-3xl opacity-20 pointer-events-none bg-[#38BDF8]" />
+        <div className="absolute -bottom-10 -left-10 w-44 h-44 rounded-full blur-3xl opacity-15 pointer-events-none bg-[#1D4ED8]" />
 
         {/* Top Window Bar */}
         <div className="flex items-center justify-between pb-2.5 border-b border-black/10 dark:border-white/10 relative z-10">
           <div className="flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-rose-500/90 shadow-xs" />
-            <span className="w-2.5 h-2.5 rounded-full bg-amber-500/90 shadow-xs" />
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/90 shadow-xs" />
-            <div className="ml-2 px-2.5 py-0.5 rounded-md bg-black/10 dark:bg-white/10 font-mono text-[10px] text-cyan-600 dark:text-cyan-300 flex items-center gap-1.5">
-              <span className="opacity-60">https://</span>
+            <span className="w-2.5 h-2.5 rounded-full bg-rose-500/85 shadow-xs" />
+            <span className="w-2.5 h-2.5 rounded-full bg-amber-500/85 shadow-xs" />
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/85 shadow-xs" />
+            <div className={`ml-2 px-2.5 py-0.5 rounded-md font-mono text-[10px] flex items-center gap-1.5 ${
+              isDark ? 'bg-white/10 text-[#BAE6FD]' : 'bg-[#F3E9DC] text-[#1E40AF]'
+            }`}>
+              <span className="opacity-65">https://</span>
               <span className="font-bold">clickncreate.co.uk</span>
             </div>
           </div>
 
-          <span className="text-[10px] font-mono px-2 py-0.5 rounded-full border border-cyan-500/40 bg-cyan-500/10 text-[#00F0FF] font-bold">
+          <span className={`text-[10px] font-mono px-2 py-0.5 rounded-md border font-bold ${
+            isDark
+              ? 'border-[#38BDF8]/40 bg-[#38BDF8]/10 text-[#BAE6FD]'
+              : 'border-[#1D4ED8]/35 bg-[#F3E9DC] text-[#1E40AF]'
+          }`}>
             FLAGSHIP PLATFORM
           </span>
         </div>
 
         {/* Middle Brand Showcase with Click N Create Logo */}
         <div className="my-auto py-3 relative z-10 flex flex-col items-center justify-center text-center space-y-2">
-          <div className="p-2 rounded-2xl bg-black/40 dark:bg-white/[0.04] border border-black/10 dark:border-white/10 backdrop-blur-md">
+          <div className={`p-2.5 rounded-2xl border ${
+            isDark ? 'bg-[#0D0F14]/80 border-white/10' : 'bg-white/90 border-[#E6E2D8] shadow-xs'
+          }`}>
             <ClickNCreateLogo size="md" />
           </div>
-          <p className="text-[11px] font-mono text-zinc-400">
-            Freelance Web Development & Custom Estimator
+          <p className={`text-[11px] font-mono ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>
+            Freelance Web Development &amp; Custom Estimator
           </p>
         </div>
 
         {/* Bottom Status */}
-        <div className="flex items-center justify-between text-[11px] font-mono text-zinc-500 border-t border-black/10 dark:border-white/10 pt-2 relative z-10">
-          <span className="flex items-center gap-1.5 text-cyan-500 font-semibold">
-            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-            <span>Founder & Lead Developer · Saad M</span>
+        <div className={`flex items-center justify-between text-[11px] font-mono border-t pt-2 relative z-10 ${
+          isDark ? 'border-white/10 text-[#94A3B8]' : 'border-black/10 text-[#475569]'
+        }`}>
+          <span className={`flex items-center gap-1.5 font-semibold ${isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'}`}>
+            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
+            <span>Founder &amp; Lead Developer · Saad M</span>
           </span>
-          <span className="text-[#00F0FF] font-bold">clickncreate.co.uk</span>
+          <span className={`font-bold ${isDark ? 'text-[#7DD3FC]' : 'text-[#1D4ED8]'}`}>clickncreate.co.uk</span>
         </div>
       </div>
     );
@@ -285,35 +327,38 @@ const ProjectVisualCard: React.FC<{ projectId: string; title: string; category: 
     <div
       className={`w-full aspect-video rounded-2xl border p-4 sm:p-6 flex flex-col justify-between relative overflow-hidden transition-all ${
         isDark
-          ? 'border-white/10 bg-gradient-to-br from-[#0c0d1c] via-[#070712] to-black'
-          : 'border-zinc-200 bg-gradient-to-br from-cyan-50/60 via-white to-zinc-50'
+          ? 'border-[#2B303D] bg-gradient-to-br from-[#161922] via-[#12151C] to-[#0D0F14]'
+          : 'border-[#E6E2D8] bg-gradient-to-br from-[#FBF9F5] via-white to-[#F4F0E7]'
       }`}
     >
-      <div className="absolute -top-10 -right-10 w-40 h-40 rounded-full blur-3xl opacity-30 pointer-events-none bg-[#00F0FF]" />
+      <div className="absolute -top-10 -right-10 w-40 h-40 rounded-full blur-3xl opacity-20 pointer-events-none bg-[#38BDF8]" />
 
       <div className="flex items-center justify-between relative z-10">
         <div className="flex items-center gap-2">
-          <div className="p-2 rounded-xl bg-[#00F0FF]/15 text-[#00F0FF]">
+          <div className={`p-2 rounded-xl ${isDark ? 'bg-[#38BDF8]/15 text-[#7DD3FC]' : 'bg-[#F3E9DC] text-[#1D4ED8]'}`}>
             <Code2 className="w-5 h-5" />
           </div>
-          <span className="text-[10px] font-mono text-zinc-400 uppercase tracking-wider">
+          <span className={`text-[10px] font-mono uppercase tracking-wider ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>
             {category}
           </span>
         </div>
 
-        <span className="text-[10px] font-mono px-2 py-0.5 rounded-full border border-black/10 dark:border-white/10 bg-white/5 text-zinc-400">
+        <span className={`text-[10px] font-mono px-2 py-0.5 rounded-md border ${
+          isDark ? 'border-white/10 bg-white/5 text-[#94A3B8]' : 'border-[#E6E2D8] bg-[#F3F6FA] text-[#475569]'
+        }`}>
           PROD 2026
         </span>
       </div>
 
       <div className="space-y-1 relative z-10 my-auto py-2">
-        <div className="text-xs font-mono text-[#00F0FF]">// {projectId}</div>
-        <div className="text-lg font-bold font-display leading-snug">{title}</div>
+        <div className={`text-lg font-bold font-display leading-snug ${isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'}`}>{title}</div>
       </div>
 
-      <div className="flex items-center justify-between text-[11px] font-mono text-zinc-500 border-t border-black/10 dark:border-white/10 pt-2 relative z-10">
+      <div className={`flex items-center justify-between text-[11px] font-mono border-t pt-2 relative z-10 ${
+        isDark ? 'border-white/10 text-[#94A3B8]' : 'border-black/10 text-[#475569]'
+      }`}>
         <span className="flex items-center gap-1.5">
-          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+          <span className="w-2 h-2 rounded-full bg-emerald-500" />
           <span>Active Architecture</span>
         </span>
         <span className="text-xs">Saad M</span>
@@ -342,7 +387,7 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
   };
 
   return (
-    <div className="pt-28 pb-24 md:pt-36 relative overflow-x-hidden w-full max-w-full">
+    <div className="pt-28 pb-24 md:pt-36 relative overflow-x-clip w-full max-w-full">
       <SEOHead
         title="Web Developer Portfolio & Case Studies UK | Click N Create — Saad M"
         description="Explore Saad M's freelance web development portfolio: high-converting React apps, Shopify e-commerce, custom UI design, and live verified client projects."
@@ -388,44 +433,44 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
         <div
           className={`rounded-3xl border p-6 sm:p-10 md:p-12 mb-12 relative overflow-hidden backdrop-blur-2xl transition-all duration-300 ${
             isDark
-              ? 'border-white/10 bg-[#0A0A16]/90 shadow-[0_20px_60px_rgba(0,0,0,0.8)]'
-              : 'border-zinc-200 bg-white/95 shadow-xl'
+              ? 'border-[#252A36] bg-[#0C1222]/95 shadow-[0_20px_60px_rgba(0,0,0,0.65)]'
+              : 'border-[#E6E2D8] bg-white/95 shadow-lg'
           }`}
         >
-          {/* Subtle neon gradient ambient background */}
-          <div className="absolute top-0 right-0 w-96 h-96 rounded-full blur-[140px] pointer-events-none bg-[#00F0FF]/15" />
-          <div className="absolute bottom-0 left-1/4 w-80 h-80 rounded-full blur-[130px] pointer-events-none bg-[#A855F7]/10" />
+          {/* Subtle Warm Amber architectural backdrop */}
+          <div className="absolute top-0 right-0 w-96 h-96 rounded-full blur-[140px] pointer-events-none bg-[#38BDF8]/12" />
+          <div className="absolute bottom-0 left-1/4 w-80 h-80 rounded-full blur-[130px] pointer-events-none bg-[#1D4ED8]/8" />
 
           <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
             {/* Left Content Column */}
             <div className="lg:col-span-8 space-y-6">
               <div>
                 <div
-                  className={`inline-flex items-center gap-2 px-3.5 py-1 rounded-full border text-xs font-mono uppercase tracking-wider mb-3 ${
+                  className={`inline-flex items-center gap-2 px-3.5 py-1 rounded-md border text-xs font-mono uppercase tracking-wider mb-3 ${
                     isDark
-                      ? 'border-[#00F0FF]/30 bg-[#00F0FF]/10 text-[#00F0FF]'
-                      : 'border-cyan-400 bg-cyan-50 text-cyan-800 font-semibold'
+                      ? 'border-[#38BDF8]/35 bg-[#38BDF8]/10 text-[#BAE6FD]'
+                      : 'border-[#38BDF8]/40 bg-[#F3E9DC] text-[#1E40AF] font-semibold'
                   }`}
                 >
                   <Sparkles className="w-3.5 h-3.5" />
-                  <span>Official Portfolio & Verified Credentials</span>
+                  <span>Official Portfolio &amp; Verified Credentials</span>
                 </div>
 
                 <h1
                   className={`text-3xl sm:text-5xl md:text-6xl font-black font-display tracking-tight leading-[1.1] ${
-                    isDark ? 'text-white' : 'text-zinc-950'
+                    isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'
                   }`}
                 >
                   SAAD M
                 </h1>
 
-                <p className="text-base sm:text-xl font-medium text-[#00F0FF] mt-1.5 font-mono">
+                <p className={`text-base sm:text-xl font-medium mt-1.5 font-mono ${isDark ? 'text-[#7DD3FC]' : 'text-[#1D4ED8]'}`}>
                   {SAAD_PORTFOLIO.title}
                 </p>
 
                 <p
                   className={`mt-4 text-sm sm:text-base md:text-lg leading-relaxed max-w-3xl ${
-                    isDark ? 'text-zinc-300' : 'text-zinc-600'
+                    isDark ? 'text-[#94A3B8]' : 'text-[#475569]'
                   }`}
                 >
                   {SAAD_PORTFOLIO.tagline}
@@ -436,10 +481,10 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
               <div className="flex flex-wrap items-center gap-2.5 text-xs font-mono">
                 <div
                   className={`px-3 py-1.5 rounded-xl border flex items-center gap-1.5 ${
-                    isDark ? 'border-white/10 bg-white/5 text-zinc-300' : 'border-zinc-200 bg-zinc-50 text-zinc-700'
+                    isDark ? 'border-white/10 bg-white/5 text-[#F1F5F9]' : 'border-[#E6E2D8] bg-[#F3F6FA] text-[#0F172A]'
                   }`}
                 >
-                  <MapPin className="w-3.5 h-3.5 text-[#00F0FF]" />
+                  <MapPin className={`w-3.5 h-3.5 ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`} />
                   <span>{SAAD_PORTFOLIO.location}</span>
                 </div>
 
@@ -447,20 +492,20 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
                   href={`mailto:${SAAD_PORTFOLIO.email}`}
                   className={`px-3 py-1.5 rounded-xl border flex items-center gap-1.5 transition-colors ${
                     isDark
-                      ? 'border-white/10 bg-white/5 hover:border-[#00F0FF]/40 text-zinc-300'
-                      : 'border-zinc-200 bg-zinc-50 hover:border-cyan-400 text-zinc-700'
+                      ? 'border-white/10 bg-white/5 hover:border-[#38BDF8]/45 text-[#F1F5F9]'
+                      : 'border-[#E6E2D8] bg-[#F3F6FA] hover:border-[#1D4ED8] text-[#0F172A]'
                   }`}
                 >
-                  <Mail className="w-3.5 h-3.5 text-[#00F0FF]" />
+                  <Mail className={`w-3.5 h-3.5 ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`} />
                   <span>{SAAD_PORTFOLIO.email}</span>
                 </a>
 
                 <div
                   className={`px-3 py-1.5 rounded-xl border flex items-center gap-1.5 ${
-                    isDark ? 'border-white/10 bg-white/5 text-zinc-300' : 'border-zinc-200 bg-zinc-50 text-zinc-700'
+                    isDark ? 'border-white/10 bg-white/5 text-[#F1F5F9]' : 'border-[#E6E2D8] bg-[#F3F6FA] text-[#0F172A]'
                   }`}
                 >
-                  <Phone className="w-3.5 h-3.5 text-[#00F0FF]" />
+                  <Phone className={`w-3.5 h-3.5 ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`} />
                   <span>{SAAD_PORTFOLIO.phone} / {SAAD_PORTFOLIO.ukPhone}</span>
                 </div>
 
@@ -468,10 +513,10 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
                   className={`px-3 py-1.5 rounded-xl border flex items-center gap-1.5 ${
                     isDark
                       ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-400'
-                      : 'border-emerald-400 bg-emerald-50 text-emerald-700 font-semibold'
+                      : 'border-emerald-600/30 bg-emerald-50 text-emerald-700 font-semibold'
                   }`}
                 >
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                  <span className="w-2 h-2 rounded-full bg-emerald-500" />
                   <span>Open for Worldwide Projects</span>
                 </div>
               </div>
@@ -483,7 +528,7 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
                   type="button"
                   onClick={handleDownloadPdf}
                   disabled={downloading}
-                  className="px-6 py-3.5 rounded-xl font-display font-bold text-xs uppercase tracking-wider bg-[#00F0FF] hover:bg-[#38bdf8] text-black shadow-[0_0_20px_rgba(0,240,255,0.35)] hover:shadow-[0_0_30px_rgba(0,240,255,0.6)] transition-all cursor-pointer flex items-center gap-2"
+                  className="px-6 py-3.5 rounded-xl font-display font-bold text-xs uppercase tracking-wider bg-[#38BDF8] hover:bg-[#7DD3FC] text-[#111318] shadow-[0_8px_22px_rgba(56, 189, 248,0.28)] transition-all cursor-pointer flex items-center gap-2"
                 >
                   <Download className="w-4 h-4" />
                   <span>{downloading ? 'Creating PDF...' : 'Download CV (PDF)'}</span>
@@ -495,11 +540,11 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
                   onClick={() => setShowCvModal(true)}
                   className={`px-5 py-3.5 rounded-xl border font-mono text-xs font-semibold uppercase tracking-wider transition-all cursor-pointer flex items-center gap-2 ${
                     isDark
-                      ? 'border-white/20 bg-white/5 hover:bg-white/10 text-white'
-                      : 'border-zinc-300 bg-white hover:bg-zinc-50 text-zinc-900 shadow-2xs'
+                      ? 'border-white/15 bg-white/5 hover:bg-white/10 text-[#F1F5F9]'
+                      : 'border-[#D6CFC2] bg-white hover:bg-[#F3F6FA] text-[#0F172A] shadow-2xs'
                   }`}
                 >
-                  <FileText className="w-4 h-4 text-[#00F0FF]" />
+                  <FileText className={`w-4 h-4 ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`} />
                   <span>View Full CV Document</span>
                 </button>
 
@@ -508,7 +553,7 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
                   href={SAAD_PORTFOLIO.whatsappUrl}
                   target="_blank"
                   rel="noreferrer"
-                  className="px-5 py-3.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 font-mono text-xs font-semibold flex items-center gap-2 transition-colors"
+                  className="px-5 py-3.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 font-mono text-xs font-semibold flex items-center gap-2 transition-colors"
                 >
                   <MessageSquare className="w-4 h-4" />
                   <span>WhatsApp Saad</span>
@@ -520,10 +565,12 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
             <div className="lg:col-span-4 flex flex-col items-center justify-center">
               <div className="relative group">
                 {/* Ambient glow */}
-                <div className="absolute -inset-2 rounded-full bg-gradient-to-r from-[#00F0FF] via-[#A855F7] to-[#2EE59D] opacity-60 blur-xl group-hover:opacity-85 transition-opacity duration-500" />
+                <div className="absolute -inset-2 rounded-full bg-gradient-to-r from-[#2563EB] via-[#38BDF8] to-[#BAE6FD] opacity-40 blur-xl group-hover:opacity-65 transition-opacity duration-500" />
 
                 {/* Permanent Circular Avatar Frame */}
-                <div className="relative w-44 h-44 sm:w-52 sm:h-52 md:w-56 md:h-56 rounded-full overflow-hidden border-4 border-white/80 dark:border-[#00F0FF]/80 bg-[#0C0D18] shadow-2xl">
+                <div className={`relative w-44 h-44 sm:w-52 sm:h-52 md:w-56 md:h-56 rounded-full overflow-hidden border-4 shadow-2xl ${
+                  isDark ? 'border-[#38BDF8]/75 bg-[#0C1222]' : 'border-white bg-[#F3F6FA]'
+                }`}>
                   <img
                     src="/assets/aistudio/profile_photo_under_1mb-1_26da4b57.jpg"
                     alt="Saad M — Official Portrait"
@@ -532,30 +579,34 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
                 </div>
 
                 {/* Status Badge */}
-                <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 px-3.5 py-1 rounded-full border border-emerald-400/40 bg-[#0B0D14]/90 backdrop-blur-md shadow-lg flex items-center gap-2 whitespace-nowrap text-xs font-mono font-bold text-emerald-400">
-                  <span className="w-2 h-2 rounded-full bg-[#2EE59D] animate-pulse" />
+                <div className={`absolute -bottom-2 left-1/2 -translate-x-1/2 px-3.5 py-1 rounded-md border shadow-lg flex items-center gap-2 whitespace-nowrap text-xs font-mono font-bold ${
+                  isDark
+                    ? 'border-emerald-500/40 bg-[#0C1222]/95 text-emerald-400'
+                    : 'border-emerald-600/35 bg-white text-emerald-700'
+                }`}>
+                  <span className="w-2 h-2 rounded-full bg-emerald-500" />
                   <span>Available For Work</span>
                 </div>
               </div>
 
               <div className="mt-4 text-center">
-                <span className="text-xs font-mono text-zinc-400">Verified Web Developer</span>
+                <span className={`text-xs font-mono ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>Verified Web Developer</span>
               </div>
             </div>
           </div>
         </div>
 
         {/* ===================== NAVIGATION TABS ===================== */}
-        <div className="flex items-center justify-center gap-2 sm:gap-4 mb-10 border-b border-black/[0.08] dark:border-white/[0.08] pb-4">
+        <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4 mb-10 border-b border-black/[0.08] dark:border-white/[0.08] pb-4">
           <button
             type="button"
             onClick={() => setActiveTab('projects')}
             className={`px-5 py-2.5 rounded-xl font-mono text-xs font-bold transition-all cursor-pointer flex items-center gap-2 ${
               activeTab === 'projects'
-                ? 'bg-[#00F0FF] text-black shadow-[0_0_15px_rgba(0,240,255,0.3)]'
+                ? 'bg-[#38BDF8] text-[#111318] shadow-[0_6px_18px_rgba(56, 189, 248,0.28)]'
                 : isDark
-                ? 'text-zinc-400 hover:text-white bg-white/5'
-                : 'text-zinc-600 hover:text-zinc-900 bg-zinc-100'
+                ? 'text-[#94A3B8] hover:text-[#F1F5F9] bg-white/5'
+                : 'text-[#475569] hover:text-[#0F172A] bg-[#F3F6FA]'
             }`}
           >
             <Briefcase className="w-4 h-4" />
@@ -567,10 +618,10 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
             onClick={() => setActiveTab('resume')}
             className={`px-5 py-2.5 rounded-xl font-mono text-xs font-bold transition-all cursor-pointer flex items-center gap-2 ${
               activeTab === 'resume'
-                ? 'bg-[#00F0FF] text-black shadow-[0_0_15px_rgba(0,240,255,0.3)]'
+                ? 'bg-[#38BDF8] text-[#111318] shadow-[0_6px_18px_rgba(56, 189, 248,0.28)]'
                 : isDark
-                ? 'text-zinc-400 hover:text-white bg-white/5'
-                : 'text-zinc-600 hover:text-zinc-900 bg-zinc-100'
+                ? 'text-[#94A3B8] hover:text-[#F1F5F9] bg-white/5'
+                : 'text-[#475569] hover:text-[#0F172A] bg-[#F3F6FA]'
             }`}
           >
             <FileText className="w-4 h-4" />
@@ -582,14 +633,14 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
             onClick={() => setActiveTab('skills')}
             className={`px-5 py-2.5 rounded-xl font-mono text-xs font-bold transition-all cursor-pointer flex items-center gap-2 ${
               activeTab === 'skills'
-                ? 'bg-[#00F0FF] text-black shadow-[0_0_15px_rgba(0,240,255,0.3)]'
+                ? 'bg-[#38BDF8] text-[#111318] shadow-[0_6px_18px_rgba(56, 189, 248,0.28)]'
                 : isDark
-                ? 'text-zinc-400 hover:text-white bg-white/5'
-                : 'text-zinc-600 hover:text-zinc-900 bg-zinc-100'
+                ? 'text-[#94A3B8] hover:text-[#F1F5F9] bg-white/5'
+                : 'text-[#475569] hover:text-[#0F172A] bg-[#F3F6FA]'
             }`}
           >
             <Cpu className="w-4 h-4" />
-            <span>Skills & Engineering</span>
+            <span>Skills &amp; Engineering</span>
           </button>
         </div>
 
@@ -607,8 +658,8 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
                   key={proj.id}
                   className={`rounded-3xl border overflow-hidden p-6 sm:p-8 flex flex-col justify-between transition-all group ${
                     isDark
-                      ? 'border-white/10 bg-[#0A0A16]/80 hover:border-[#00F0FF]/40'
-                      : 'border-zinc-200 bg-white hover:border-cyan-400 shadow-sm'
+                      ? 'border-[#252A36] bg-[#0C1222]/90 hover:border-[#38BDF8]/45'
+                      : 'border-[#E6E2D8] bg-white hover:border-[#1D4ED8]/60 shadow-sm'
                   }`}
                 >
                   <div className="space-y-4">
@@ -621,17 +672,17 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
                     />
 
                     <div className="flex items-center justify-between pt-2">
-                      <span className="text-[10px] font-mono text-[#00F0FF] uppercase tracking-wider font-bold">
+                      <span className={`text-[10px] font-mono uppercase tracking-wider font-bold ${isDark ? 'text-[#7DD3FC]' : 'text-[#1D4ED8]'}`}>
                         {proj.category}
                       </span>
-                      <span className="text-xs text-zinc-500 font-mono">
+                      <span className={`text-xs font-mono ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>
                         {proj.timeline}
                       </span>
                     </div>
 
                     <h3
                       className={`text-xl sm:text-2xl font-bold font-display ${
-                        isDark ? 'text-white' : 'text-zinc-950'
+                        isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'
                       }`}
                     >
                       {proj.title}
@@ -639,21 +690,21 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
 
                     <p
                       className={`text-xs sm:text-sm leading-relaxed ${
-                        isDark ? 'text-zinc-400' : 'text-zinc-600'
+                        isDark ? 'text-[#94A3B8]' : 'text-[#475569]'
                       }`}
                     >
                       {proj.description}
                     </p>
 
                     <div className="space-y-2 pt-1">
-                      <span className="text-[11px] font-mono uppercase text-zinc-400 block font-semibold">
+                      <span className={`text-[11px] font-mono uppercase block font-semibold ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>
                         Key Accomplishments:
                       </span>
                       <ul className="space-y-1 text-xs">
                         {proj.achievements.map((ach, i) => (
                           <li key={i} className="flex items-start gap-2">
-                            <CheckCircle2 className="w-3.5 h-3.5 text-[#00F0FF] shrink-0 mt-0.5" />
-                            <span className={isDark ? 'text-zinc-300' : 'text-zinc-700'}>
+                            <CheckCircle2 className={`w-3.5 h-3.5 shrink-0 mt-0.5 ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`} />
+                            <span className={isDark ? 'text-[#F1F5F9]/85' : 'text-[#3A3832]'}>
                               {ach}
                             </span>
                           </li>
@@ -667,10 +718,10 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
                       {proj.tags.map((t, idx) => (
                         <span
                           key={idx}
-                          className={`text-[10px] font-mono px-2 py-0.5 rounded-full ${
+                          className={`text-[10px] font-mono px-2 py-0.5 rounded-md ${
                             isDark
-                              ? 'bg-white/5 text-zinc-300'
-                              : 'bg-zinc-100 text-zinc-700'
+                              ? 'bg-white/5 text-[#94A3B8]'
+                              : 'bg-[#F3F6FA] text-[#475569]'
                           }`}
                         >
                           {t}
@@ -683,7 +734,9 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
                         href={proj.liveUrl}
                         target="_blank"
                         rel="noreferrer"
-                        className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-[#00F0FF] hover:underline"
+                        className={`inline-flex items-center gap-1.5 text-xs font-mono font-bold hover:underline ${
+                          isDark ? 'text-[#7DD3FC]' : 'text-[#1D4ED8]'
+                        }`}
                       >
                         <span>Visit Site</span>
                         <ArrowUpRight className="w-3.5 h-3.5" />
@@ -707,11 +760,13 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
             {/* Top CV Action Bar */}
             <div
               className={`p-6 rounded-2xl border flex flex-col sm:flex-row items-center justify-between gap-4 ${
-                isDark ? 'border-white/10 bg-white/[0.02]' : 'border-zinc-200 bg-white shadow-2xs'
+                isDark ? 'border-[#252A36] bg-[#0C1222]/90' : 'border-[#E6E2D8] bg-white shadow-2xs'
               }`}
             >
               <div className="flex items-center gap-4">
-                <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl overflow-hidden border-2 border-[#00F0FF]/40 bg-zinc-900 shrink-0 shadow-md">
+                <div className={`w-14 h-14 sm:w-16 sm:h-16 rounded-2xl overflow-hidden border-2 shrink-0 shadow-md ${
+                  isDark ? 'border-[#38BDF8]/50 bg-[#1A1D25]' : 'border-[#38BDF8]/40 bg-[#F3F6FA]'
+                }`}>
                   <img
                     src={SAAD_PORTFOLIO.cvAvatarImage}
                     alt="Saad M — Official CV Avatar"
@@ -719,8 +774,8 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
                   />
                 </div>
                 <div>
-                  <h3 className="font-display font-bold text-lg">Curriculum Vitae Credentials</h3>
-                  <p className="text-xs text-zinc-500 font-mono mt-0.5">
+                  <h3 className={`font-display font-bold text-lg ${isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'}`}>Curriculum Vitae Credentials</h3>
+                  <p className={`text-xs font-mono mt-0.5 ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>
                     Imported directly from official CV Resume · Saad M
                   </p>
                 </div>
@@ -731,7 +786,7 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
                   type="button"
                   onClick={handleDownloadPdf}
                   disabled={downloading}
-                  className="px-4 py-2.5 rounded-xl bg-[#00F0FF] text-black font-mono font-bold text-xs flex items-center gap-2 hover:bg-cyan-300 cursor-pointer shadow-md"
+                  className="px-4 py-2.5 rounded-xl bg-[#38BDF8] text-[#111318] font-mono font-bold text-xs flex items-center gap-2 hover:bg-[#7DD3FC] cursor-pointer shadow-md"
                 >
                   <Download className="w-3.5 h-3.5" />
                   <span>Download CV (PDF)</span>
@@ -741,10 +796,10 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
                   type="button"
                   onClick={() => setShowCvModal(true)}
                   className={`px-4 py-2.5 rounded-xl border text-xs font-mono flex items-center gap-2 cursor-pointer ${
-                    isDark ? 'border-white/20 hover:bg-white/10 text-white' : 'border-zinc-300 hover:bg-zinc-50'
+                    isDark ? 'border-white/15 hover:bg-white/10 text-[#F1F5F9]' : 'border-[#D6CFC2] hover:bg-[#F3F6FA] text-[#0F172A]'
                   }`}
                 >
-                  <Eye className="w-3.5 h-3.5 text-[#00F0FF]" />
+                  <Eye className={`w-3.5 h-3.5 ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`} />
                   <span>View Printable CV</span>
                 </button>
               </div>
@@ -757,10 +812,10 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
                 {/* Education Card */}
                 <div
                   className={`p-6 rounded-3xl border space-y-4 ${
-                    isDark ? 'border-white/10 bg-[#0A0A16]/80' : 'border-zinc-200 bg-white shadow-xs'
+                    isDark ? 'border-[#252A36] bg-[#0C1222]/90' : 'border-[#E6E2D8] bg-white shadow-xs'
                   }`}
                 >
-                  <div className="flex items-center gap-2 text-[#00F0FF]">
+                  <div className={`flex items-center gap-2 ${isDark ? 'text-[#7DD3FC]' : 'text-[#1D4ED8]'}`}>
                     <GraduationCap className="w-5 h-5" />
                     <h4 className="font-display font-bold text-base uppercase tracking-wider">
                       Education
@@ -768,18 +823,18 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
                   </div>
 
                   {SAAD_PORTFOLIO.education.map((edu, idx) => (
-                    <div key={idx} className="space-y-1.5 border-l-2 border-[#00F0FF] pl-4">
-                      <span className="text-[10px] font-mono text-[#00F0FF] font-bold">
+                    <div key={idx} className={`space-y-1.5 border-l pl-4 ${isDark ? 'border-[#38BDF8]/60' : 'border-[#1D4ED8]/50'}`}>
+                      <span className={`text-[10px] font-mono font-bold ${isDark ? 'text-[#7DD3FC]' : 'text-[#1D4ED8]'}`}>
                         {edu.timeline}
                       </span>
-                      <h5 className="font-bold text-sm">{edu.degree}</h5>
-                      <div className="text-xs font-semibold text-zinc-400">
+                      <h5 className={`font-bold text-sm ${isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'}`}>{edu.degree}</h5>
+                      <div className={`text-xs font-semibold ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>
                         {edu.field}
                       </div>
-                      <p className="text-xs text-zinc-500">
+                      <p className={`text-xs ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>
                         {edu.institution}
                       </p>
-                      <p className="text-[11px] text-zinc-400">
+                      <p className={`text-[11px] ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>
                         {edu.location}
                       </p>
                     </div>
@@ -789,10 +844,10 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
                 {/* Languages Card */}
                 <div
                   className={`p-6 rounded-3xl border space-y-4 ${
-                    isDark ? 'border-white/10 bg-[#0A0A16]/80' : 'border-zinc-200 bg-white shadow-xs'
+                    isDark ? 'border-[#252A36] bg-[#0C1222]/90' : 'border-[#E6E2D8] bg-white shadow-xs'
                   }`}
                 >
-                  <div className="flex items-center gap-2 text-[#00F0FF]">
+                  <div className={`flex items-center gap-2 ${isDark ? 'text-[#7DD3FC]' : 'text-[#1D4ED8]'}`}>
                     <Languages className="w-5 h-5" />
                     <h4 className="font-display font-bold text-base uppercase tracking-wider">
                       Languages
@@ -804,9 +859,9 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
                       <div key={idx} className="flex items-center justify-between text-xs font-mono">
                         <div className="flex items-center gap-2">
                           <span className="text-base">{lang.flag}</span>
-                          <span className="font-bold">{lang.name}</span>
+                          <span className={`font-bold ${isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'}`}>{lang.name}</span>
                         </div>
-                        <span className="text-zinc-500">{lang.proficiency}</span>
+                        <span className={isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}>{lang.proficiency}</span>
                       </div>
                     ))}
                   </div>
@@ -815,28 +870,28 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
                 {/* Contact Information */}
                 <div
                   className={`p-6 rounded-3xl border space-y-3 font-mono text-xs ${
-                    isDark ? 'border-white/10 bg-[#0A0A16]/80' : 'border-zinc-200 bg-white shadow-xs'
+                    isDark ? 'border-[#252A36] bg-[#0C1222]/90' : 'border-[#E6E2D8] bg-white shadow-xs'
                   }`}
                 >
-                  <h4 className="font-display font-bold text-sm text-[#00F0FF] uppercase mb-2">
+                  <h4 className={`font-display font-bold text-sm uppercase mb-2 ${isDark ? 'text-[#7DD3FC]' : 'text-[#1D4ED8]'}`}>
                     Contact Details
                   </h4>
-                  <div className="text-zinc-400">
-                    <span className="text-zinc-500 block text-[10px]">EMAIL:</span>
-                    <a href={`mailto:${SAAD_PORTFOLIO.email}`} className="hover:text-[#00F0FF]">
+                  <div className={isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'}>
+                    <span className={`block text-[10px] ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>EMAIL:</span>
+                    <a href={`mailto:${SAAD_PORTFOLIO.email}`} className="hover:text-[#38BDF8]">
                       {SAAD_PORTFOLIO.email}
                     </a>
                   </div>
-                  <div className="text-zinc-400">
-                    <span className="text-zinc-500 block text-[10px]">PHONE (INDIA):</span>
+                  <div className={isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'}>
+                    <span className={`block text-[10px] ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>PHONE (INDIA):</span>
                     <span>{SAAD_PORTFOLIO.phone}</span>
                   </div>
-                  <div className="text-zinc-400">
-                    <span className="text-zinc-500 block text-[10px]">PHONE / WHATSAPP (UK):</span>
+                  <div className={isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'}>
+                    <span className={`block text-[10px] ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>PHONE / WHATSAPP (UK):</span>
                     <span>{SAAD_PORTFOLIO.ukPhone}</span>
                   </div>
-                  <div className="text-zinc-400">
-                    <span className="text-zinc-500 block text-[10px]">LOCATION:</span>
+                  <div className={isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'}>
+                    <span className={`block text-[10px] ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>LOCATION:</span>
                     <span>{SAAD_PORTFOLIO.location}</span>
                   </div>
                 </div>
@@ -847,10 +902,10 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
                 {/* About Me Section */}
                 <div
                   className={`p-6 sm:p-8 rounded-3xl border space-y-3 ${
-                    isDark ? 'border-white/10 bg-[#0A0A16]/80' : 'border-zinc-200 bg-white shadow-xs'
+                    isDark ? 'border-[#252A36] bg-[#0C1222]/90' : 'border-[#E6E2D8] bg-white shadow-xs'
                   }`}
                 >
-                  <div className="flex items-center gap-2 text-[#00F0FF] mb-2">
+                  <div className={`flex items-center gap-2 mb-2 ${isDark ? 'text-[#7DD3FC]' : 'text-[#1D4ED8]'}`}>
                     <UserCheck className="w-5 h-5" />
                     <h4 className="font-display font-bold text-base uppercase tracking-wider">
                       About Me
@@ -858,7 +913,7 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
                   </div>
                   <p
                     className={`text-xs sm:text-sm leading-relaxed whitespace-pre-line ${
-                      isDark ? 'text-zinc-300' : 'text-zinc-700'
+                      isDark ? 'text-[#F1F5F9]/85' : 'text-[#3A3832]'
                     }`}
                   >
                     {SAAD_PORTFOLIO.aboutBio}
@@ -868,30 +923,30 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
                 {/* Dedicated Key Projects Section in CV */}
                 <div
                   className={`p-6 sm:p-8 rounded-3xl border space-y-6 ${
-                    isDark ? 'border-white/10 bg-[#0A0A16]/80' : 'border-zinc-200 bg-white shadow-xs'
+                    isDark ? 'border-[#252A36] bg-[#0C1222]/90' : 'border-[#E6E2D8] bg-white shadow-xs'
                   }`}
                 >
                   <div className="flex items-center justify-between pb-2 border-b border-black/[0.08] dark:border-white/[0.08]">
-                    <div className="flex items-center gap-2 text-[#00F0FF]">
+                    <div className={`flex items-center gap-2 ${isDark ? 'text-[#7DD3FC]' : 'text-[#1D4ED8]'}`}>
                       <Code2 className="w-5 h-5" />
                       <h4 className="font-display font-bold text-base uppercase tracking-wider">
-                        Key Projects & Deliveries
+                        Key Projects &amp; Deliveries
                       </h4>
                     </div>
-                    <span className="text-[10px] font-mono text-zinc-500 uppercase">
+                    <span className={`text-[10px] font-mono uppercase ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>
                       3 Verified Works
                     </span>
                   </div>
 
                   <div className="space-y-6">
                     {/* Project 1: Owais Academic Portfolio */}
-                    <div className="border-l-2 border-[#00F0FF] pl-4 sm:pl-6 space-y-2 relative">
+                    <div className={`border-l pl-4 sm:pl-6 space-y-2 relative ${isDark ? 'border-[#38BDF8]/60' : 'border-[#1D4ED8]/50'}`}>
                       <div className="flex flex-wrap items-center justify-between gap-2">
                         <div>
-                          <h5 className="font-bold text-base sm:text-lg">
-                            Owais Portfolio & Academic Dashboard
+                          <h5 className={`font-bold text-base sm:text-lg ${isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'}`}>
+                            Owais Portfolio &amp; Academic Dashboard
                           </h5>
-                          <span className="text-xs font-mono text-[#00F0FF]">
+                          <span className={`text-xs font-mono ${isDark ? 'text-[#7DD3FC]' : 'text-[#1D4ED8]'}`}>
                             Client Project · Live on Vercel
                           </span>
                         </div>
@@ -899,27 +954,27 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
                           href="https://owaisdashboard.vercel.app"
                           target="_blank"
                           rel="noreferrer"
-                          className="inline-flex items-center gap-1 text-xs font-mono text-cyan-400 hover:underline"
+                          className={`inline-flex items-center gap-1 text-xs font-mono hover:underline ${isDark ? 'text-[#7DD3FC]' : 'text-[#1D4ED8]'}`}
                         >
                           <span>owaisdashboard.vercel.app</span>
                           <ArrowUpRight className="w-3.5 h-3.5" />
                         </a>
                       </div>
 
-                      <p className={`text-xs sm:text-sm leading-relaxed ${isDark ? 'text-zinc-300' : 'text-zinc-700'}`}>
+                      <p className={`text-xs sm:text-sm leading-relaxed ${isDark ? 'text-[#F1F5F9]/85' : 'text-[#3A3832]'}`}>
                         Comprehensive personal portfolio and interactive student dashboard built for client Owais to showcase his entire academic background, qualifications, and skill proficiency.
                       </p>
 
                       <ul className="space-y-1 text-xs">
                         <li className="flex items-start gap-2">
-                          <span className="text-[#00F0FF] font-bold">•</span>
-                          <span className={isDark ? 'text-zinc-300' : 'text-zinc-700'}>
-                            Engineered complete academic records, degree trajectory, and interactive technical & soft skills matrix.
+                          <span className={`font-bold ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`}>•</span>
+                          <span className={isDark ? 'text-[#F1F5F9]/85' : 'text-[#3A3832]'}>
+                            Engineered complete academic records, degree trajectory, and interactive technical &amp; soft skills matrix.
                           </span>
                         </li>
                         <li className="flex items-start gap-2">
-                          <span className="text-[#00F0FF] font-bold">•</span>
-                          <span className={isDark ? 'text-zinc-300' : 'text-zinc-700'}>
+                          <span className={`font-bold ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`}>•</span>
+                          <span className={isDark ? 'text-[#F1F5F9]/85' : 'text-[#3A3832]'}>
                             Deployed live on Vercel edge infrastructure with sub-second page loads and mobile-responsive layout.
                           </span>
                         </li>
@@ -929,8 +984,8 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
                         {['React / Next.js', 'Tailwind CSS', 'Vercel Edge', 'Academic Dashboard', 'Client Delivery'].map((t, idx) => (
                           <span
                             key={idx}
-                            className={`text-[10px] font-mono px-2 py-0.5 rounded-full ${
-                              isDark ? 'bg-cyan-500/10 text-cyan-300 border border-cyan-500/30' : 'bg-cyan-50 text-cyan-800'
+                            className={`text-[10px] font-mono px-2 py-0.5 rounded-md ${
+                              isDark ? 'bg-[#38BDF8]/10 text-[#BAE6FD] border border-[#38BDF8]/30' : 'bg-[#F3E9DC] text-[#1E40AF]'
                             }`}
                           >
                             {t}
@@ -940,13 +995,13 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
                     </div>
 
                     {/* Project 2: Hammad Patel Personal & Engineering Portfolio */}
-                    <div className="border-l-2 border-purple-500 pl-4 sm:pl-6 space-y-2 relative">
+                    <div className={`border-l pl-4 sm:pl-6 space-y-2 relative ${isDark ? 'border-[#38BDF8]/60' : 'border-[#1D4ED8]/50'}`}>
                       <div className="flex flex-wrap items-center justify-between gap-2">
                         <div>
-                          <h5 className="font-bold text-base sm:text-lg">
-                            Hammad Patel — Personal & Engineering Portfolio
+                          <h5 className={`font-bold text-base sm:text-lg ${isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'}`}>
+                            Hammad Patel — Engineering Portfolio &amp; ECE Virtual Lab Studio
                           </h5>
-                          <span className="text-xs font-mono text-purple-400">
+                          <span className={`text-xs font-mono ${isDark ? 'text-[#7DD3FC]' : 'text-[#1D4ED8]'}`}>
                             Client Project · Live on Vercel
                           </span>
                         </div>
@@ -954,38 +1009,38 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
                           href="https://hammadpatel.vercel.app"
                           target="_blank"
                           rel="noreferrer"
-                          className="inline-flex items-center gap-1 text-xs font-mono text-purple-400 hover:underline"
+                          className={`inline-flex items-center gap-1 text-xs font-mono hover:underline ${isDark ? 'text-[#7DD3FC]' : 'text-[#1D4ED8]'}`}
                         >
                           <span>hammadpatel.vercel.app</span>
                           <ArrowUpRight className="w-3.5 h-3.5" />
                         </a>
                       </div>
 
-                      <p className={`text-xs sm:text-sm leading-relaxed ${isDark ? 'text-zinc-300' : 'text-zinc-700'}`}>
-                        Bespoke personal and engineering portfolio website designed and built for client Hammad Patel showcasing his Electronics & Communication Engineering credentials, GEC Bharuch academic profile, IIT Bombay internship, and web development skills.
+                      <p className={`text-xs sm:text-sm leading-relaxed ${isDark ? 'text-[#F1F5F9]/85' : 'text-[#3A3832]'}`}>
+                        Bespoke personal and engineering portfolio website designed and built for client Hammad Patel, featuring an interactive <strong>ECE Virtual Lab Studio</strong> covering all fundamental Electronics &amp; Communication topics studied in our curriculum (signals, systems, modulation, circuit simulations) along with GEC Bharuch academics and IIT Bombay internship credentials.
                       </p>
 
                       <ul className="space-y-1 text-xs">
                         <li className="flex items-start gap-2">
-                          <span className="text-purple-400 font-bold">•</span>
-                          <span className={isDark ? 'text-zinc-300' : 'text-zinc-700'}>
-                            Crafted custom personal portfolio presenting engineering coursework, IIT Bombay internship highlights, and technical competencies.
+                          <span className={`font-bold ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`}>•</span>
+                          <span className={isDark ? 'text-[#F1F5F9]/85' : 'text-[#3A3832]'}>
+                            Engineered an interactive ECE Virtual Lab Studio simulating electronics &amp; communication coursework topics studied at GEC Bharuch.
                           </span>
                         </li>
                         <li className="flex items-start gap-2">
-                          <span className="text-purple-400 font-bold">•</span>
-                          <span className={isDark ? 'text-zinc-300' : 'text-zinc-700'}>
-                            Deployed live on Vercel (hammadpatel.vercel.app) with dark/light responsive UI and instant page performance.
+                          <span className={`font-bold ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`}>•</span>
+                          <span className={isDark ? 'text-[#F1F5F9]/85' : 'text-[#3A3832]'}>
+                            Deployed live on Vercel (hammadpatel.vercel.app) with dark/light responsive UI, global edge CDN, and sub-second load times.
                           </span>
                         </li>
                       </ul>
 
                       <div className="flex flex-wrap gap-1.5 pt-1">
-                        {['React / TypeScript', 'Tailwind CSS', 'Vercel Edge', 'Engineering Portfolio', 'Client Delivery'].map((t, idx) => (
+                        {['ECE Virtual Lab Studio', 'React / TypeScript', 'Tailwind CSS', 'Circuit Simulation', 'Vercel Edge', 'Client Delivery'].map((t, idx) => (
                           <span
                             key={idx}
-                            className={`text-[10px] font-mono px-2 py-0.5 rounded-full ${
-                              isDark ? 'bg-purple-500/10 text-purple-300 border border-purple-500/30' : 'bg-purple-50 text-purple-800'
+                            className={`text-[10px] font-mono px-2 py-0.5 rounded-md ${
+                              isDark ? 'bg-[#38BDF8]/10 text-[#BAE6FD] border border-[#38BDF8]/30' : 'bg-[#F3E9DC] text-[#1E40AF]'
                             }`}
                           >
                             {t}
@@ -995,13 +1050,13 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
                     </div>
 
                     {/* Project 3: Click N Create */}
-                    <div className="border-l-2 border-indigo-500 pl-4 sm:pl-6 space-y-2 relative">
+                    <div className={`border-l pl-4 sm:pl-6 space-y-2 relative ${isDark ? 'border-[#38BDF8]/60' : 'border-[#1D4ED8]/50'}`}>
                       <div className="flex flex-wrap items-center justify-between gap-2">
                         <div>
-                          <h5 className="font-bold text-base sm:text-lg">
-                            Click N Create Web Platform & Brand System
+                          <h5 className={`font-bold text-base sm:text-lg ${isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'}`}>
+                            Click N Create Web Platform &amp; Brand System
                           </h5>
-                          <span className="text-xs font-mono text-indigo-400">
+                          <span className={`text-xs font-mono ${isDark ? 'text-[#7DD3FC]' : 'text-[#1D4ED8]'}`}>
                             Flagship Freelance Platform
                           </span>
                         </div>
@@ -1009,27 +1064,27 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
                           href="https://clickncreate.co.uk"
                           target="_blank"
                           rel="noreferrer"
-                          className="inline-flex items-center gap-1 text-xs font-mono text-indigo-400 hover:underline"
+                          className={`inline-flex items-center gap-1 text-xs font-mono hover:underline ${isDark ? 'text-[#7DD3FC]' : 'text-[#1D4ED8]'}`}
                         >
                           <span>clickncreate.co.uk</span>
                           <ArrowUpRight className="w-3.5 h-3.5" />
                         </a>
                       </div>
 
-                      <p className={`text-xs sm:text-sm leading-relaxed ${isDark ? 'text-zinc-300' : 'text-zinc-700'}`}>
+                      <p className={`text-xs sm:text-sm leading-relaxed ${isDark ? 'text-[#F1F5F9]/85' : 'text-[#3A3832]'}`}>
                         The official digital freelance platform featuring custom geometric vector logo, real-time cost estimator, dark/light theme engine, and direct client quotation pipeline.
                       </p>
 
                       <ul className="space-y-1 text-xs">
                         <li className="flex items-start gap-2">
-                          <span className="text-indigo-400 font-bold">•</span>
-                          <span className={isDark ? 'text-zinc-300' : 'text-zinc-700'}>
+                          <span className={`font-bold ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`}>•</span>
+                          <span className={isDark ? 'text-[#F1F5F9]/85' : 'text-[#3A3832]'}>
                             Engineered dynamic instant cost calculator with £35/hr and fixed milestone breakdown.
                           </span>
                         </li>
                         <li className="flex items-start gap-2">
-                          <span className="text-indigo-400 font-bold">•</span>
-                          <span className={isDark ? 'text-zinc-300' : 'text-zinc-700'}>
+                          <span className={`font-bold ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`}>•</span>
+                          <span className={isDark ? 'text-[#F1F5F9]/85' : 'text-[#3A3832]'}>
                             Designed complete brand identity, typography wordmark, and multi-device responsive UI.
                           </span>
                         </li>
@@ -1039,8 +1094,8 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
                         {['React 19', 'TypeScript', 'Tailwind CSS', 'Vector Logo', 'Interactive Estimator'].map((t, idx) => (
                           <span
                             key={idx}
-                            className={`text-[10px] font-mono px-2 py-0.5 rounded-full ${
-                              isDark ? 'bg-indigo-500/10 text-indigo-300 border border-indigo-500/30' : 'bg-indigo-50 text-indigo-800'
+                            className={`text-[10px] font-mono px-2 py-0.5 rounded-md ${
+                              isDark ? 'bg-[#38BDF8]/10 text-[#BAE6FD] border border-[#38BDF8]/30' : 'bg-[#F3E9DC] text-[#1E40AF]'
                             }`}
                           >
                             {t}
@@ -1054,13 +1109,13 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
                 {/* Experience & Internship Section */}
                 <div
                   className={`p-6 sm:p-8 rounded-3xl border space-y-6 ${
-                    isDark ? 'border-white/10 bg-[#0A0A16]/80' : 'border-zinc-200 bg-white shadow-xs'
+                    isDark ? 'border-[#252A36] bg-[#0C1222]/90' : 'border-[#E6E2D8] bg-white shadow-xs'
                   }`}
                 >
-                  <div className="flex items-center gap-2 text-[#00F0FF] mb-2">
+                  <div className={`flex items-center gap-2 mb-2 ${isDark ? 'text-[#7DD3FC]' : 'text-[#1D4ED8]'}`}>
                     <Briefcase className="w-5 h-5" />
                     <h4 className="font-display font-bold text-base uppercase tracking-wider">
-                      Experience & Internships
+                      Experience &amp; Internships
                     </h4>
                   </div>
 
@@ -1068,30 +1123,30 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
                     {SAAD_PORTFOLIO.experience.map((exp, idx) => (
                       <div
                         key={idx}
-                        className="border-l-2 border-[#00F0FF] pl-4 sm:pl-6 space-y-2 relative"
+                        className={`border-l pl-4 sm:pl-6 space-y-2 relative ${isDark ? 'border-[#38BDF8]/60' : 'border-[#1D4ED8]/50'}`}
                       >
                         <div className="flex flex-wrap items-center justify-between gap-2">
-                          <h5 className="font-bold text-base sm:text-lg">
-                            {exp.role} <span className="text-[#00F0FF]">@ {exp.company}</span>
+                          <h5 className={`font-bold text-base sm:text-lg ${isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'}`}>
+                            {exp.role} <span className={isDark ? 'text-[#7DD3FC]' : 'text-[#1D4ED8]'}>@ {exp.company}</span>
                           </h5>
-                          <span className="text-xs font-mono text-zinc-500">
+                          <span className={`text-xs font-mono ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>
                             {exp.timeline}
                           </span>
                         </div>
 
-                        <p className="text-xs text-zinc-400 font-mono">
+                        <p className={`text-xs font-mono ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>
                           {exp.type}
                         </p>
 
-                        <p className={`text-xs sm:text-sm leading-relaxed ${isDark ? 'text-zinc-300' : 'text-zinc-700'}`}>
+                        <p className={`text-xs sm:text-sm leading-relaxed ${isDark ? 'text-[#F1F5F9]/85' : 'text-[#3A3832]'}`}>
                           {exp.description}
                         </p>
 
                         <ul className="space-y-1.5 pt-1 text-xs">
                           {exp.keyResponsibilities.map((resp, rIdx) => (
                             <li key={rIdx} className="flex items-start gap-2">
-                              <span className="text-[#00F0FF] font-bold">•</span>
-                              <span className={isDark ? 'text-zinc-400' : 'text-zinc-600'}>
+                              <span className={`font-bold ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`}>•</span>
+                              <span className={isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}>
                                 {resp}
                               </span>
                             </li>
@@ -1102,8 +1157,8 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
                           {exp.techStack.map((tech, tIdx) => (
                             <span
                               key={tIdx}
-                              className={`text-[10px] font-mono px-2 py-0.5 rounded-full ${
-                                isDark ? 'bg-white/5 text-[#00F0FF]' : 'bg-cyan-50 text-cyan-800'
+                              className={`text-[10px] font-mono px-2 py-0.5 rounded-md ${
+                                isDark ? 'bg-white/5 text-[#BAE6FD]' : 'bg-[#F3E9DC] text-[#1E40AF]'
                               }`}
                             >
                               {tech}
@@ -1132,12 +1187,12 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
                 <div
                   key={idx}
                   className={`p-6 sm:p-8 rounded-3xl border space-y-5 ${
-                    isDark ? 'border-white/10 bg-[#0A0A16]/80' : 'border-zinc-200 bg-white shadow-xs'
+                    isDark ? 'border-[#252A36] bg-[#0C1222]/90' : 'border-[#E6E2D8] bg-white shadow-xs'
                   }`}
                 >
                   <div className="flex items-center justify-between pb-3 border-b border-black/[0.08] dark:border-white/[0.08]">
-                    <h3 className="font-display font-bold text-base sm:text-lg flex items-center gap-2">
-                      <Cpu className="w-4 h-4 text-[#00F0FF]" />
+                    <h3 className={`font-display font-bold text-base sm:text-lg flex items-center gap-2 ${isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'}`}>
+                      <Cpu className={`w-4 h-4 ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`} />
                       <span>{cat.title}</span>
                     </h3>
                   </div>
@@ -1146,20 +1201,20 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
                     {cat.skills.map((skill, sIdx) => (
                       <div key={sIdx} className="space-y-1.5">
                         <div className="flex items-center justify-between text-xs">
-                          <span className="font-bold">{skill.name}</span>
-                          <span className="font-mono text-[#00F0FF]">{skill.level}%</span>
+                          <span className={`font-bold ${isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'}`}>{skill.name}</span>
+                          <span className={`font-mono ${isDark ? 'text-[#7DD3FC]' : 'text-[#1D4ED8]'}`}>{skill.level}%</span>
                         </div>
 
                         {/* Progress Bar */}
-                        <div className="w-full h-2 rounded-full bg-zinc-200 dark:bg-zinc-800 overflow-hidden">
+                        <div className="w-full h-2 rounded-full bg-[#E6E2D8] dark:bg-[#222632] overflow-hidden">
                           <div
-                            className="h-full rounded-full bg-gradient-to-r from-[#00F0FF] to-[#A855F7]"
+                            className="h-full rounded-full bg-gradient-to-r from-[#2563EB] via-[#38BDF8] to-[#BAE6FD]"
                             style={{ width: `${skill.level}%` }}
                           />
                         </div>
 
                         {skill.note && (
-                          <p className="text-[11px] text-zinc-500 font-mono">
+                          <p className={`text-[11px] font-mono ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>
                             {skill.note}
                           </p>
                         )}
@@ -1176,23 +1231,23 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
         <div
           className={`mt-16 p-8 sm:p-12 rounded-3xl border text-center space-y-5 relative overflow-hidden ${
             isDark
-              ? 'border-white/15 bg-gradient-to-b from-[#0A0A16] to-black shadow-2xl'
-              : 'border-zinc-200 bg-gradient-to-b from-white to-zinc-50 shadow-md'
+              ? 'border-[#252A36] bg-gradient-to-b from-[#0C1222] to-[#0D0F14] shadow-2xl'
+              : 'border-[#E6E2D8] bg-gradient-to-b from-white to-[#F3F6FA] shadow-md'
           }`}
         >
-          <span className="text-xs font-mono text-[#00F0FF] uppercase tracking-wider font-bold block">
-            [ READY TO WORK TOGETHER? ]
+          <span className={`text-xs font-mono uppercase tracking-[0.2em] font-bold block ${isDark ? 'text-[#7DD3FC]' : 'text-[#1D4ED8]'}`}>
+            Ready to Work Together
           </span>
 
           <h2
             className={`text-2xl sm:text-4xl font-black font-display tracking-tight max-w-xl mx-auto ${
-              isDark ? 'text-white' : 'text-zinc-950'
+              isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'
             }`}
           >
-            LET'S BRING YOUR VISION TO LIFE.
+            LET&apos;S BRING YOUR VISION TO LIFE.
           </h2>
 
-          <p className={`text-xs sm:text-sm max-w-lg mx-auto ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>
+          <p className={`text-xs sm:text-sm max-w-lg mx-auto ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>
             Whether you need a custom website, an e-commerce shop, or electronics engineering consultation, I am ready to collaborate.
           </p>
 
@@ -1200,7 +1255,7 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
             <button
               type="button"
               onClick={() => onNavigate('/contact')}
-              className="px-6 py-3.5 rounded-xl font-mono text-xs font-bold uppercase tracking-wider bg-[#00F0FF] hover:bg-[#38bdf8] text-black shadow-lg transition-all cursor-pointer flex items-center gap-2"
+              className="px-6 py-3.5 rounded-xl font-mono text-xs font-bold uppercase tracking-wider bg-[#38BDF8] hover:bg-[#7DD3FC] text-[#111318] shadow-lg transition-all cursor-pointer flex items-center gap-2"
             >
               <span>Start a Project</span>
               <ArrowUpRight className="w-4 h-4" />
@@ -1210,7 +1265,7 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
               type="button"
               onClick={() => onNavigate('/estimator')}
               className={`px-5 py-3.5 rounded-xl border font-mono text-xs font-semibold uppercase tracking-wider transition-all cursor-pointer ${
-                isDark ? 'border-white/20 hover:bg-white/10 text-white' : 'border-zinc-300 hover:bg-zinc-100 text-zinc-900'
+                isDark ? 'border-white/15 hover:bg-white/10 text-[#F1F5F9]' : 'border-[#D6CFC2] hover:bg-[#F3F6FA] text-[#0F172A]'
               }`}
             >
               <span>Instant Cost Calculator</span>
@@ -1232,14 +1287,14 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
               {/* Modal Top Bar (Full White with Clean Border) */}
               <div className="px-6 py-4 bg-white border-b border-zinc-200 flex items-center justify-between shrink-0">
                 <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-lg bg-cyan-50 border border-cyan-200 text-cyan-700 flex items-center justify-center">
+                  <div className="w-8 h-8 rounded-lg bg-[#F3E9DC] border border-[#38BDF8]/40 text-[#1D4ED8] flex items-center justify-center">
                     <FileText className="w-4 h-4" />
                   </div>
                   <div>
                     <span className="font-display font-bold text-sm text-zinc-950 block leading-tight">
                       Official Curriculum Vitae · Saad M
                     </span>
-                    <span className="text-[11px] font-mono text-cyan-800">
+                    <span className="text-[11px] font-mono text-[#1E40AF]">
                       Click N Create · Verified Credentials
                     </span>
                   </div>
@@ -1249,7 +1304,7 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
                   <button
                     type="button"
                     onClick={handleDownloadPdf}
-                    className="px-3.5 py-1.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-mono text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-sm transition-all"
+                    className="px-3.5 py-1.5 rounded-lg bg-[#1D4ED8] hover:bg-[#1D4ED8] text-white font-mono text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-sm transition-all"
                   >
                     <Download className="w-3.5 h-3.5" />
                     <span>Download PDF</span>
@@ -1283,13 +1338,13 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
                     <h1 className="text-3xl sm:text-4xl font-black font-display tracking-tight text-zinc-950">
                       SAAD M
                     </h1>
-                    <div className="text-cyan-800 font-bold text-sm sm:text-base mt-0.5">
-                      Electronics & Communication Engineer | Web Developer
+                    <div className="text-[#1E40AF] font-bold text-sm sm:text-base mt-0.5">
+                      Electronics &amp; Communication Engineer | Web Developer
                     </div>
                     <div className="text-xs text-zinc-600 mt-2 flex flex-wrap gap-2 font-mono">
                       <span>Bharuch, Gujarat, India</span>
                       <span>•</span>
-                      <a href="mailto:saadm.clickncreate@gmail.com" className="text-cyan-800 hover:underline">
+                      <a href="mailto:saadm.clickncreate@gmail.com" className="text-[#1E40AF] hover:underline">
                         saadm.clickncreate@gmail.com
                       </a>
                       <span>•</span>
@@ -1315,17 +1370,17 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
                     {/* Education */}
                     <div className="space-y-2">
                       <h4 className="font-bold text-xs uppercase tracking-wider text-zinc-950 border-b border-zinc-200 pb-1.5 flex items-center gap-1.5">
-                        <GraduationCap className="w-3.5 h-3.5 text-cyan-700" />
+                        <GraduationCap className="w-3.5 h-3.5 text-[#1D4ED8]" />
                         <span>Education</span>
                       </h4>
                       <div className="pt-1">
                         <div className="font-bold text-zinc-950 text-xs">
-                          BE Electronics & Communication Engineering
+                          BE Electronics &amp; Communication Engineering
                         </div>
                         <div className="text-[11px] text-zinc-600 font-medium">
                           Government Engineering College, Bharuch
                         </div>
-                        <div className="text-[10px] text-cyan-800 font-mono font-bold mt-0.5">
+                        <div className="text-[10px] text-[#1E40AF] font-mono font-bold mt-0.5">
                           2023 – 2027
                         </div>
                       </div>
@@ -1334,26 +1389,26 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
                     {/* Skills */}
                     <div className="space-y-2">
                       <h4 className="font-bold text-xs uppercase tracking-wider text-zinc-950 border-b border-zinc-200 pb-1.5 flex items-center gap-1.5">
-                        <Code2 className="w-3.5 h-3.5 text-cyan-700" />
-                        <span>Skills & Capabilities</span>
+                        <Code2 className="w-3.5 h-3.5 text-[#1D4ED8]" />
+                        <span>Skills &amp; Capabilities</span>
                       </h4>
                       <ul className="space-y-1.5 text-[11px] text-zinc-800 pt-1">
                         <li>• Web Development (WordPress, Shopify, React)</li>
-                        <li>• E-commerce Setup & Website Optimization</li>
-                        <li>• Google Ads, SEO & UI/UX Basics</li>
-                        <li>• Analog & Digital Signal Conversion</li>
+                        <li>• E-commerce Setup &amp; Website Optimization</li>
+                        <li>• Google Ads, SEO &amp; UI/UX Basics</li>
+                        <li>• Analog &amp; Digital Signal Conversion</li>
                         <li>• Communication Systems Fundamentals</li>
-                        <li>• Satellite & Wireless Communication</li>
+                        <li>• Satellite &amp; Wireless Communication</li>
                         <li>• Microsoft Office (Word, Excel, PowerPoint)</li>
-                        <li>• Proficiency in AI Tools & Workflows</li>
-                        <li>• Social Media Design & Brand Identity</li>
+                        <li>• Proficiency in AI Tools &amp; Workflows</li>
+                        <li>• Social Media Design &amp; Brand Identity</li>
                       </ul>
                     </div>
 
                     {/* Languages */}
                     <div className="space-y-2">
                       <h4 className="font-bold text-xs uppercase tracking-wider text-zinc-950 border-b border-zinc-200 pb-1.5 flex items-center gap-1.5">
-                        <Languages className="w-3.5 h-3.5 text-cyan-700" />
+                        <Languages className="w-3.5 h-3.5 text-[#1D4ED8]" />
                         <span>Languages</span>
                       </h4>
                       <div className="space-y-1 text-[11px] text-zinc-800 pt-1">
@@ -1369,11 +1424,11 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
                     {/* About Me */}
                     <div className="space-y-1.5">
                       <h4 className="font-bold text-xs uppercase tracking-wider text-zinc-950 border-b border-zinc-200 pb-1 flex items-center gap-1.5">
-                        <UserCheck className="w-3.5 h-3.5 text-cyan-700" />
+                        <UserCheck className="w-3.5 h-3.5 text-[#1D4ED8]" />
                         <span>About Me</span>
                       </h4>
                       <p className="text-[11px] text-zinc-700 leading-relaxed pt-0.5">
-                        Motivated and enthusiastic Electronics & Communication Engineering student with a strong interest in communication technologies, satellite communication, wireless systems, and modern web development. Experienced in developing web applications using WordPress with PHP and CSS customization, React, and responsive UI layouts. Proficient in AI tools for productivity, technical research, and innovative problem-solving.
+                        Motivated and enthusiastic Electronics &amp; Communication Engineering student with a strong interest in communication technologies, satellite communication, wireless systems, and modern web development. Experienced in developing web applications using WordPress with PHP and CSS customization, React, and responsive UI layouts. Proficient in AI tools for productivity, technical research, and innovative problem-solving.
                       </p>
                     </div>
 
@@ -1381,8 +1436,8 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
                     <div className="space-y-2">
                       <h4 className="font-bold text-xs uppercase tracking-wider text-zinc-950 border-b border-zinc-200 pb-1 flex items-center justify-between">
                         <div className="flex items-center gap-1.5">
-                          <Code2 className="w-3.5 h-3.5 text-cyan-700" />
-                          <span>Key Projects & Web Deliveries</span>
+                          <Code2 className="w-3.5 h-3.5 text-[#1D4ED8]" />
+                          <span>Key Projects &amp; Web Deliveries</span>
                         </div>
                         <span className="text-[10px] text-zinc-500 font-mono">3 Verified Works</span>
                       </h4>
@@ -1392,45 +1447,45 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
                         <div className="p-2.5 rounded-xl border border-zinc-200 bg-zinc-50/70 space-y-1">
                           <div className="flex items-center justify-between">
                             <span className="font-bold text-zinc-950 text-[11px]">
-                              Owais Portfolio & Academic Dashboard
+                              Owais Portfolio &amp; Academic Dashboard
                             </span>
                             <a
                               href="https://owaisdashboard.vercel.app"
                               target="_blank"
                               rel="noreferrer"
-                              className="text-[10px] font-mono text-cyan-700 hover:underline font-bold"
+                              className="text-[10px] font-mono text-[#1D4ED8] hover:underline font-bold"
                             >
                               owaisdashboard.vercel.app ↗
                             </a>
                           </div>
-                          <div className="text-[10px] text-cyan-800 font-mono">
-                            Client Delivery · Academic Portfolio & Trajectory Dashboard (Vercel)
+                          <div className="text-[10px] text-[#1E40AF] font-mono">
+                            Client Delivery · Academic Portfolio &amp; Trajectory Dashboard (Vercel)
                           </div>
                           <p className="text-[10.5px] text-zinc-700 leading-tight">
-                            • Designed and deployed comprehensive student portfolio featuring verified academic records, degree milestones, and interactive technical & soft skills matrix with sub-second responsive performance.
+                            • Designed and deployed comprehensive student portfolio featuring verified academic records, degree milestones, and interactive technical &amp; soft skills matrix with sub-second responsive performance.
                           </p>
                         </div>
 
-                        {/* Project 2: Hammad Patel Portfolio */}
+                        {/* Project 2: Hammad Patel Portfolio & ECE Virtual Lab */}
                         <div className="p-2.5 rounded-xl border border-zinc-200 bg-zinc-50/70 space-y-1">
                           <div className="flex items-center justify-between">
                             <span className="font-bold text-zinc-950 text-[11px]">
-                              Hammad Patel — Personal & Engineering Portfolio
+                              Hammad Patel — Engineering Portfolio &amp; ECE Virtual Lab Studio
                             </span>
                             <a
                               href="https://hammadpatel.vercel.app"
                               target="_blank"
                               rel="noreferrer"
-                              className="text-[10px] font-mono text-cyan-700 hover:underline font-bold"
+                              className="text-[10px] font-mono text-[#1D4ED8] hover:underline font-bold"
                             >
                               hammadpatel.vercel.app ↗
                             </a>
                           </div>
-                          <div className="text-[10px] text-cyan-800 font-mono">
-                            Client Delivery · Engineering & Web Portfolio Website (Vercel)
+                          <div className="text-[10px] text-[#1E40AF] font-mono">
+                            Client Delivery · ECE Virtual Lab Studio &amp; Engineering Showcase (Vercel)
                           </div>
                           <p className="text-[10.5px] text-zinc-700 leading-tight">
-                            • Designed and built custom personal portfolio for client Hammad Patel showcasing his E&C Engineering profile at GEC Bharuch, IIT Bombay internship, and web skills on Vercel edge CDN.
+                            • Designed and built custom portfolio for client Hammad Patel featuring an interactive ECE Virtual Lab Studio simulating electronics &amp; communication curriculum concepts (signals, circuits, modulation) alongside IIT Bombay internship credentials.
                           </p>
                         </div>
 
@@ -1438,22 +1493,22 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
                         <div className="p-2.5 rounded-xl border border-zinc-200 bg-zinc-50/70 space-y-1">
                           <div className="flex items-center justify-between">
                             <span className="font-bold text-zinc-950 text-[11px]">
-                              Click N Create Web Platform & Brand System
+                              Click N Create Web Platform &amp; Brand System
                             </span>
                             <a
                               href="https://clickncreate.co.uk"
                               target="_blank"
                               rel="noreferrer"
-                              className="text-[10px] font-mono text-cyan-700 hover:underline font-bold"
+                              className="text-[10px] font-mono text-[#1D4ED8] hover:underline font-bold"
                             >
                               clickncreate.co.uk ↗
                             </a>
                           </div>
-                          <div className="text-[10px] text-cyan-800 font-mono">
-                            Flagship Freelance Platform & Vector Brand Identity
+                          <div className="text-[10px] text-[#1E40AF] font-mono">
+                            Flagship Freelance Platform &amp; Vector Brand Identity
                           </div>
                           <p className="text-[10.5px] text-zinc-700 leading-tight">
-                            • Built full-stack freelance website featuring custom geometric vector logo, real-time cost estimator (£35/hr & fixed packages), dark/light theme engine, and direct WhatsApp quote automation.
+                            • Built full-stack freelance website featuring custom geometric vector logo, real-time cost estimator (£35/hr &amp; fixed packages), dark/light theme engine, and direct WhatsApp quote automation.
                           </p>
                         </div>
                       </div>
@@ -1462,15 +1517,15 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
                     {/* Experience */}
                     <div className="space-y-1.5">
                       <h4 className="font-bold text-xs uppercase tracking-wider text-zinc-950 border-b border-zinc-200 pb-1 flex items-center gap-1.5">
-                        <Briefcase className="w-3.5 h-3.5 text-cyan-700" />
+                        <Briefcase className="w-3.5 h-3.5 text-[#1D4ED8]" />
                         <span>Experience</span>
                       </h4>
                       <div className="space-y-1 pt-0.5">
                         <div className="font-bold text-zinc-950 text-xs">
                           Click N Create – clickncreate.co.uk
                         </div>
-                        <div className="text-[10px] text-cyan-800 font-mono font-bold">
-                          Lead Web Developer & Founder (2024 – Present)
+                        <div className="text-[10px] text-[#1E40AF] font-mono font-bold">
+                          Lead Web Developer &amp; Founder (2024 – Present)
                         </div>
                         <ul className="space-y-1 text-[10.5px] text-zinc-700 list-disc pl-4 pt-0.5">
                           <li>Designed and developed freelance web development website using WordPress, PHP, and modern CSS/React.</li>
@@ -1483,7 +1538,7 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
                     {/* Internship */}
                     <div className="space-y-1.5">
                       <h4 className="font-bold text-xs uppercase tracking-wider text-zinc-950 border-b border-zinc-200 pb-1 flex items-center gap-1.5">
-                        <Award className="w-3.5 h-3.5 text-cyan-700" />
+                        <Award className="w-3.5 h-3.5 text-[#1D4ED8]" />
                         <span>Internship</span>
                       </h4>
                       <div className="space-y-0.5 pt-0.5">
@@ -1491,7 +1546,7 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
                           Spoken Tutorial Project – IIT Bombay
                         </div>
                         <p className="text-[10.5px] text-zinc-700 leading-relaxed">
-                          Electronic Circuit Simulation using <strong>eSim</strong> & <strong>CircuitJS</strong>. Analyzed circuit behavior, signal conversion, and frequency waveforms.
+                          Electronic Circuit Simulation using <strong>eSim</strong> &amp; <strong>CircuitJS</strong>. Analyzed circuit behavior, signal conversion, and frequency waveforms.
                         </p>
                       </div>
                     </div>

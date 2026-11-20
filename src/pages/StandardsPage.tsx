@@ -1,21 +1,15 @@
 import React from 'react';
-import { motion } from 'motion/react';
 import {
   ShieldCheck,
-  Zap,
   Gauge,
   CheckCircle2,
-  Cpu,
   Smartphone,
   Eye,
   Lock,
   Code2,
-  FileCode,
-  ArrowUpRight,
   Terminal,
 } from 'lucide-react';
 import { SectionHeading } from '../components/SectionHeading.tsx';
-import { SITE_CONFIG } from '../data/site.ts';
 import { useTheme } from '../context/ThemeContext.tsx';
 import { useCustomization } from '../context/CustomizationContext.tsx';
 import { SEOHead } from '../components/SEOHead.tsx';
@@ -129,7 +123,7 @@ export const StandardsPage: React.FC<StandardsPageProps> = ({ onNavigate }) => {
   ];
 
   return (
-    <div className="pt-28 pb-24 md:pt-36 relative overflow-x-hidden w-full max-w-full">
+    <div className="pt-28 pb-24 md:pt-36 relative overflow-x-clip w-full max-w-full">
       <SEOHead
         title="Technical Standards, Core Web Vitals & Speed | Click N Create"
         description="Review Click N Create's rigorous technical standards: 98+ Google Lighthouse scores, sub-second load times, WCAG AA accessibility, and 100% clean code ownership."
@@ -148,8 +142,8 @@ export const StandardsPage: React.FC<StandardsPageProps> = ({ onNavigate }) => {
           <div
             className={`inline-flex items-center gap-2 px-3.5 py-1 rounded-full border text-xs font-mono uppercase tracking-wider mb-4 ${
               isDark
-                ? 'border-white/10 bg-white/5 text-blue-400'
-                : 'border-zinc-300 bg-white text-blue-600 shadow-2xs font-semibold'
+                ? 'border-[#38BDF8]/30 bg-[#0C1222]/90 text-[#38BDF8]'
+                : 'border-[#1D4ED8]/30 bg-[#F3E9DC]/75 text-[#1E40AF] shadow-2xs font-semibold'
             }`}
           >
             <Terminal className="w-3.5 h-3.5" />
@@ -158,7 +152,7 @@ export const StandardsPage: React.FC<StandardsPageProps> = ({ onNavigate }) => {
 
           <h1
             className={`text-4xl sm:text-6xl md:text-7xl font-black font-display tracking-tight leading-[1.05] ${
-              isDark ? 'text-white' : 'text-zinc-950'
+              isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'
             }`}
           >
             {cms.heroTitle || 'TECHNICAL'} <span className="text-luxury-gradient">{cms.heroHighlight || 'STANDARDS'}</span>
@@ -166,7 +160,7 @@ export const StandardsPage: React.FC<StandardsPageProps> = ({ onNavigate }) => {
 
           <p
             className={`mt-5 text-base sm:text-xl leading-relaxed ${
-              isDark ? 'text-zinc-400' : 'text-zinc-600'
+              isDark ? 'text-[#94A3B8]' : 'text-[#475569]'
             }`}
           >
             {cms.heroSubtitle || 'Behind the elevated design lies uncompromising frontend engineering. Here is how Saad M builds websites for speed, accessibility, bulletproof security, and seamless long-term scalability.'}
@@ -180,23 +174,23 @@ export const StandardsPage: React.FC<StandardsPageProps> = ({ onNavigate }) => {
               key={b.label}
               className={`p-6 rounded-2xl border transition-colors ${
                 isDark
-                  ? 'border-white/10 bg-white/[0.02]'
-                  : 'border-zinc-200 bg-white shadow-2xs'
+                  ? 'border-white/10 bg-[#0C1222]/85'
+                  : 'border-black/10 bg-white shadow-2xs'
               }`}
             >
-              <div className="text-3xl sm:text-4xl font-black font-display text-blue-600 dark:text-blue-400 mb-1">
+              <div className={`text-3xl sm:text-4xl font-black font-display mb-1 ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`}>
                 {b.metric}
               </div>
               <div
                 className={`text-xs font-bold uppercase tracking-wider font-mono mb-2 ${
-                  isDark ? 'text-white' : 'text-zinc-900'
+                  isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'
                 }`}
               >
                 {b.label}
               </div>
               <p
                 className={`text-xs leading-relaxed ${
-                  isDark ? 'text-zinc-400' : 'text-zinc-600'
+                  isDark ? 'text-[#94A3B8]' : 'text-[#475569]'
                 }`}
               >
                 {b.detail}
@@ -223,14 +217,14 @@ export const StandardsPage: React.FC<StandardsPageProps> = ({ onNavigate }) => {
                   key={pillar.title}
                   className={`p-7 rounded-3xl border flex flex-col justify-between transition-all ${
                     isDark
-                      ? 'border-white/10 bg-white/[0.02] hover:border-white/20'
-                      : 'border-zinc-200 bg-white hover:border-zinc-300 shadow-2xs'
+                      ? 'border-white/10 bg-[#0C1222]/85 hover:border-[#38BDF8]/35'
+                      : 'border-black/10 bg-white hover:border-[#1D4ED8]/40 shadow-2xs'
                   }`}
                 >
                   <div>
                     <div
                       className={`w-12 h-12 rounded-2xl flex items-center justify-center mb-6 ${
-                        isDark ? 'bg-white/5 text-blue-400' : 'bg-blue-50 text-blue-600'
+                        isDark ? 'bg-[#1A1D25] text-[#38BDF8]' : 'bg-[#F3E9DC] text-[#1D4ED8]'
                       }`}
                     >
                       <Icon className="w-6 h-6" />
@@ -238,7 +232,7 @@ export const StandardsPage: React.FC<StandardsPageProps> = ({ onNavigate }) => {
 
                     <h3
                       className={`text-lg font-bold font-display mb-3 ${
-                        isDark ? 'text-white' : 'text-zinc-950'
+                        isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'
                       }`}
                     >
                       {pillar.title}
@@ -246,7 +240,7 @@ export const StandardsPage: React.FC<StandardsPageProps> = ({ onNavigate }) => {
 
                     <p
                       className={`text-xs sm:text-sm leading-relaxed mb-6 ${
-                        isDark ? 'text-zinc-400' : 'text-zinc-600'
+                        isDark ? 'text-[#94A3B8]' : 'text-[#475569]'
                       }`}
                     >
                       {pillar.description}
@@ -256,8 +250,8 @@ export const StandardsPage: React.FC<StandardsPageProps> = ({ onNavigate }) => {
                   <div className="pt-6 border-t border-black/[0.06] dark:border-white/[0.06] space-y-2.5">
                     {pillar.checklist.map((item, idx) => (
                       <div key={idx} className="flex items-start gap-2.5 text-xs">
-                        <CheckCircle2 className="w-3.5 h-3.5 text-blue-500 shrink-0 mt-0.5" />
-                        <span className={isDark ? 'text-zinc-300' : 'text-zinc-700'}>
+                        <CheckCircle2 className={`w-3.5 h-3.5 shrink-0 mt-0.5 ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`} />
+                        <span className={isDark ? 'text-[#F1F5F9]/85' : 'text-[#475569]'}>
                           {item}
                         </span>
                       </div>
@@ -272,19 +266,19 @@ export const StandardsPage: React.FC<StandardsPageProps> = ({ onNavigate }) => {
         {/* CTA Bar */}
         <div
           className={`mt-20 p-8 sm:p-12 rounded-3xl border text-center max-w-4xl mx-auto ${
-            isDark ? 'border-white/10 bg-white/[0.02]' : 'border-zinc-200 bg-white shadow-xl'
+            isDark ? 'border-white/10 bg-[#0C1222]/90' : 'border-black/10 bg-white shadow-xl'
           }`}
         >
           <h2
             className={`text-2xl sm:text-3xl font-extrabold font-display mb-3 ${
-              isDark ? 'text-white' : 'text-zinc-950'
+              isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'
             }`}
           >
             Ready to upgrade your website with real engineering standards?
           </h2>
           <p
             className={`text-sm sm:text-base max-w-xl mx-auto mb-8 ${
-              isDark ? 'text-zinc-400' : 'text-zinc-600'
+              isDark ? 'text-[#94A3B8]' : 'text-[#475569]'
             }`}
           >
             Available at a transparent standard rate of £35/hr, or as a fixed milestone package with full cost predictability.
@@ -294,7 +288,9 @@ export const StandardsPage: React.FC<StandardsPageProps> = ({ onNavigate }) => {
             <button
               type="button"
               onClick={() => onNavigate('/estimator')}
-              className="py-3 px-6 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-mono text-xs font-semibold tracking-wider uppercase transition-colors shadow-lg cursor-pointer"
+              className={`py-3 px-6 rounded-xl font-mono text-xs font-bold tracking-wider uppercase transition-colors shadow-lg cursor-pointer ${
+                isDark ? 'bg-[#38BDF8] hover:bg-[#7DD3FC] text-[#060913]' : 'bg-[#1D4ED8] hover:bg-[#1D4ED8] text-white'
+              }`}
             >
               Calculate Project Estimate
             </button>
@@ -303,8 +299,8 @@ export const StandardsPage: React.FC<StandardsPageProps> = ({ onNavigate }) => {
               onClick={() => onNavigate('/contact')}
               className={`py-3 px-6 rounded-xl border font-mono text-xs font-semibold tracking-wider uppercase transition-colors cursor-pointer ${
                 isDark
-                  ? 'border-white/15 bg-white/5 hover:bg-white/10 text-white'
-                  : 'border-zinc-300 bg-zinc-100 hover:bg-zinc-200 text-zinc-900'
+                  ? 'border-white/15 bg-[#1A1D25] hover:bg-[#38BDF8]/15 text-[#F1F5F9]'
+                  : 'border-black/15 bg-[#F3F6FA] hover:bg-[#F3E9DC] text-[#0F172A]'
               }`}
             >
               Contact Saad M Direct
