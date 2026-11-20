@@ -81,6 +81,8 @@ export const ClickNCreateLogo: React.FC<LogoProps> = ({
           <img
             src={customLogoUrl}
             alt="Click N Create Logo"
+            decoding="async"
+            fetchPriority="high"
             onError={() => setImageError(true)}
             style={{ height: `${logoHeight}px`, maxHeight: '56px' }}
             className={`w-auto max-w-[240px] object-contain transition-transform duration-200 group-hover:scale-105 rounded-md`}
@@ -96,6 +98,8 @@ export const ClickNCreateLogo: React.FC<LogoProps> = ({
             <img
               src={customLogoUrl}
               alt="Click N Create Logo Icon"
+              decoding="async"
+              fetchPriority="high"
               onError={() => setImageError(true)}
               style={{ height: `${Math.min(logoHeight, 44)}px`, maxHeight: '44px' }}
               className={`w-auto max-w-[140px] object-contain transition-transform duration-200 group-hover:scale-105 rounded-lg`}

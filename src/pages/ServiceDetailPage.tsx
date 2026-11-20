@@ -1,10 +1,17 @@
 import React from 'react';
-import { ArrowLeft, CheckCircle2, UserCheck } from 'lucide-react';
+import {
+  ArrowLeft,
+  ArrowRight,
+  ArrowUpRight,
+  CheckCircle2,
+  Clock,
+  Layers,
+  MessageSquare,
+  PoundSterling,
+} from 'lucide-react';
 import { SERVICES } from '../data/services.ts';
 import { AdaptiveServiceImage } from '../components/AdaptiveServiceImage.tsx';
 import { FAQAccordion } from '../components/FAQAccordion.tsx';
-import { MagneticButton } from '../components/MagneticButton.tsx';
-import { SectionHeading } from '../components/SectionHeading.tsx';
 import { useTheme } from '../context/ThemeContext.tsx';
 import { SEOHead } from '../components/SEOHead.tsx';
 
@@ -16,28 +23,38 @@ interface ServiceDetailPageProps {
 export const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({ slug, onNavigate }) => {
   const { theme } = useTheme();
   const isDark = theme === 'dark';
-  const service = SERVICES.find((s) => s.slug === slug);
+  const serviceIndex = SERVICES.findIndex((s) => s.slug === slug);
+  const service = serviceIndex >= 0 ? SERVICES[serviceIndex] : undefined;
 
   if (!service) {
     return (
-      <div className="pt-40 pb-20 text-center px-4">
+      <div className="pt-40 pb-24 text-center px-4">
         <SEOHead
           title="Service Not Found | Click N Create"
           description="The requested freelance service could not be located."
           canonicalPath="/services"
         />
         <h1 className="text-3xl font-display font-bold mb-4">Service Not Found</h1>
-        <p className="text-zinc-500 mb-8">The requested service page does not exist.</p>
+        <p className={isDark ? 'text-slate-400 mb-8' : 'text-slate-600 mb-8'}>
+          The requested service page does not exist.
+        </p>
         <button
           type="button"
           onClick={() => onNavigate('/services')}
-          className="px-6 py-3 rounded-xl border border-zinc-300 dark:border-white/20 bg-zinc-100 dark:bg-white/5 font-mono text-sm"
+          className={`px-6 py-3 rounded-xl border text-sm font-semibold transition-colors cursor-pointer ${
+            isDark
+              ? 'border-white/15 bg-[#0C1222] text-slate-100 hover:bg-white/10'
+              : 'border-slate-300 bg-white text-slate-900 hover:bg-slate-50'
+          }`}
         >
           View All Services
         </button>
       </div>
     );
   }
+
+  const prevService = SERVICES[(serviceIndex - 1 + SERVICES.length) % SERVICES.length];
+  const nextService = SERVICES[(serviceIndex + 1) % SERVICES.length];
 
   const faqItems = service.faqs.map((f, i) => ({
     id: `faq-${service.id}-${i}`,
@@ -47,17 +64,17 @@ export const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({ slug, onNa
   }));
 
   return (
-    <div className="pt-28 pb-20 md:pt-36 relative overflow-x-clip w-full max-w-full">
+    <div className="pt-28 pb-24 md:pt-36 relative overflow-x-clip w-full max-w-full">
       <SEOHead
         title={`${service.title} | Click N Create — Saad M`}
-        description={service.shortDescription || `${service.title} services by freelance developer Saad M. Transparent rates, quick delivery, and high technical quality.`}
+        description={service.shortDescription}
         canonicalPath={`/services/${service.slug}`}
         keywords={[
           service.title.toLowerCase(),
           `freelance ${service.title.toLowerCase()}`,
           `${service.slug} developer`,
-          'hire freelance developer',
-          'Click N Create services'
+          'Click N Create services',
+          'Saad M web developer',
         ]}
         schemaJson={{
           '@context': 'https://schema.org',
@@ -65,309 +82,788 @@ export const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({ slug, onNa
           name: service.title,
           provider: {
             '@type': 'ProfessionalService',
-            name: 'Click N Create — Saad M'
+            name: 'Click N Create — Saad M',
           },
           description: service.shortDescription,
           offers: {
             '@type': 'Offer',
             price: '35',
-            priceCurrency: 'GBP'
-          }
+            priceCurrency: 'GBP',
+          },
         }}
       />
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        {/* Back Link */}
-        <div className="mb-8">
+        {/* Top Utility & 6-Service Switcher Bar */}
+        <div
+          className={`flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-6 mb-10 border-b ${
+            isDark ? 'border-white/10' : 'border-slate-200'
+          }`}
+        >
           <button
             type="button"
             onClick={() => onNavigate('/services')}
-            className="inline-flex items-center gap-2 text-xs font-mono text-[#94A3B8] hover:text-[#0F172A] dark:hover:text-[#F1F5F9] transition-colors cursor-pointer group"
+            className={`inline-flex items-center gap-2 text-xs font-medium transition-colors cursor-pointer group whitespace-nowrap shrink-0 self-start lg:self-auto ${
+              isDark ? 'text-slate-400 hover:text-white' : 'text-slate-600 hover:text-slate-950'
+            }`}
           >
-            <ArrowLeft className={`w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`} />
-            <span>Back to All Services</span>
+            <ArrowLeft
+              className={`w-3.5 h-3.5 group-hover:-translate-x-0.5 transition-transform ${
+                isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'
+              }`}
+            />
+            <span>All 6 Services</span>
           </button>
+
+          <nav
+            aria-label="Switch Service"
+            className="flex items-center gap-1.5 overflow-x-auto pb-1 lg:pb-0 -mx-1 px-1"
+          >
+            {SERVICES.map((item) => {
+              const isCurrent = item.slug === service.slug;
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => onNavigate(`/services/${item.slug}`)}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap shrink-0 transition-colors cursor-pointer ${
+                    isCurrent
+                      ? isDark
+                        ? 'bg-[#38BDF8] text-[#040B16] font-semibold'
+                        : 'bg-[#1D4ED8] text-white font-semibold'
+                      : isDark
+                      ? 'text-slate-300 hover:bg-white/8 hover:text-white'
+                      : 'text-slate-600 hover:bg-slate-100 hover:text-slate-950'
+                  }`}
+                >
+                  <span className="font-mono tabular-nums opacity-75 mr-1.5">{item.number}.</span>
+                  {item.title}
+                </button>
+              );
+            })}
+          </nav>
         </div>
 
-        {/* ===================== HERO ===================== */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center pb-16 md:pb-24 border-b border-black/[0.08] dark:border-white/[0.08]">
-          <div className="lg:col-span-7 space-y-6">
-            <div className="flex items-center gap-3">
-              <span className={`text-xs font-mono font-bold px-2.5 py-1 rounded border ${
-                isDark ? 'text-[#F1F5F9] bg-[#1A1D25] border-white/10' : 'text-[#0F172A] bg-[#F3F6FA] border-black/10'
-              }`}>
-                Service {service.number}
+        {/* ===================== 1. EDITORIAL HERO SPLIT ===================== */}
+        <header
+          className={`grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-stretch pb-16 md:pb-20 border-b ${
+            isDark ? 'border-white/10' : 'border-slate-200'
+          }`}
+        >
+          <div className="lg:col-span-7 flex flex-col justify-center space-y-6">
+            {/* Unboxed Metadata Line (Zero-Pill Discipline) */}
+            <div className="flex flex-wrap items-center gap-2 text-xs font-medium">
+              <span
+                className={`font-mono font-bold tabular-nums ${
+                  isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'
+                }`}
+              >
+                Service {service.number} of 06
               </span>
-              <span className={`text-xs font-mono uppercase tracking-wider font-semibold ${
-                isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'
-              }`}>
-                Click N Create
+              <span aria-hidden="true" className={isDark ? 'text-slate-600' : 'text-slate-300'}>
+                ·
+              </span>
+              <span className={isDark ? 'text-slate-400' : 'text-slate-600'}>
+                {service.categoryTag}
               </span>
             </div>
 
-            <h1 className={`text-3xl sm:text-5xl md:text-6xl font-black font-display tracking-tight leading-[1.1] ${
-              isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'
-            }`}>
-              {service.title}
-            </h1>
+            <div className="space-y-3">
+              <h1
+                className={`text-3xl sm:text-5xl lg:text-[3.5rem] font-extrabold font-display tracking-tight leading-[1.08] text-balance ${
+                  isDark ? 'text-[#F8FAFC]' : 'text-[#0F172A]'
+                }`}
+              >
+                {service.title}
+              </h1>
 
-            <p className={`text-base sm:text-lg md:text-xl leading-relaxed ${
-              isDark ? 'text-[#94A3B8]' : 'text-[#475569]'
-            }`}>
-              {service.fullDescription}
-            </p>
+              <p
+                className={`text-lg sm:text-xl font-semibold tracking-tight leading-snug text-balance ${
+                  isDark ? 'text-[#7DD3FC]' : 'text-[#1D4ED8]'
+                }`}
+              >
+                {service.tagline}
+              </p>
+            </div>
 
-            <div className="pt-2 flex flex-wrap items-center gap-4">
-              <MagneticButton
-                text={`Enquire About ${service.title}`}
-                size="md"
-                variant="primary"
+            <div className="space-y-4 max-w-2xl">
+              {service.introParagraphs.map((paragraph, pIdx) => (
+                <p
+                  key={pIdx}
+                  className={`text-[15px] sm:text-base leading-[1.75] ${
+                    isDark ? 'text-slate-300' : 'text-slate-600'
+                  }`}
+                >
+                  {paragraph}
+                </p>
+              ))}
+            </div>
+
+            <div className="pt-2 flex flex-wrap items-center gap-3">
+              <button
+                type="button"
                 onClick={() => onNavigate('/contact')}
-              />
+                className={`px-6 py-3 rounded-xl text-sm font-semibold inline-flex items-center gap-2 whitespace-nowrap shrink-0 transition-colors cursor-pointer ${
+                  isDark
+                    ? 'bg-[#38BDF8] hover:bg-[#7DD3FC] text-[#040B16]'
+                    : 'bg-[#1D4ED8] hover:bg-[#1E40AF] text-white'
+                }`}
+              >
+                <span>Start a Project Enquiry</span>
+                <ArrowUpRight className="w-4 h-4" />
+              </button>
 
               <button
                 type="button"
-                onClick={() => {
-                  const el = document.getElementById('details-section');
-                  el?.scrollIntoView({ behavior: 'smooth' });
-                }}
-                className={`px-5 py-2.5 rounded-xl border text-xs font-mono transition-colors cursor-pointer ${
+                onClick={() => onNavigate('/estimator')}
+                className={`px-5 py-3 rounded-xl border text-sm font-semibold inline-flex items-center gap-2 whitespace-nowrap shrink-0 transition-colors cursor-pointer ${
                   isDark
-                    ? 'border-white/15 bg-[#0C1222] hover:bg-[#1A1D25] text-[#F1F5F9]'
-                    : 'border-black/15 bg-white hover:bg-[#F3F6FA] text-[#0F172A] shadow-2xs'
+                    ? 'border-white/15 bg-white/[0.03] hover:bg-white/[0.08] text-slate-100'
+                    : 'border-slate-300 bg-white hover:bg-slate-50 text-slate-900'
                 }`}
               >
-                View Features & FAQs ↓
+                <span>Estimate Project Scope</span>
               </button>
             </div>
           </div>
 
-          <div className="lg:col-span-5">
+          <div className="lg:col-span-5 flex flex-col justify-between gap-4">
             <AdaptiveServiceImage
               slug={service.slug}
               imageSrc={service.image}
               altText={service.altText}
               accentColor={service.accentColor}
-              className="w-full aspect-[4/3] shadow-lg"
+              className="w-full aspect-[4/3] lg:h-full lg:min-h-[340px]"
             />
           </div>
-        </div>
+        </header>
 
-        {/* ===================== PRICING & SCOPE BANNER ===================== */}
-        <div className={`my-12 p-6 sm:p-8 rounded-3xl border flex flex-col md:flex-row items-start md:items-center justify-between gap-6 backdrop-blur-xl ${
-          isDark
-            ? 'border-[#38BDF8]/25 bg-[#0C1222]/90'
-            : 'border-black/10 bg-white shadow-sm'
-        }`}>
-          <div>
-            <span className={`text-xs font-mono uppercase tracking-widest font-semibold block mb-1 ${
-              isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'
-            }`}>
-              Investment & Pricing
-            </span>
-            <div className={`text-2xl sm:text-3xl font-extrabold font-display ${isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'}`}>
-              Standard Rate: £35 / hr
+        {/* ===================== 2. COMMERCIAL SUMMARY STRIP ===================== */}
+        <div
+          className={`grid grid-cols-1 sm:grid-cols-3 gap-6 py-8 border-b ${
+            isDark ? 'border-white/10' : 'border-slate-200'
+          }`}
+        >
+          <div className="space-y-1">
+            <div
+              className={`flex items-center gap-1.5 text-xs font-medium ${
+                isDark ? 'text-slate-400' : 'text-slate-500'
+              }`}
+            >
+              <PoundSterling
+                className={`w-3.5 h-3.5 ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`}
+              />
+              <span>Engagement &amp; Pricing</span>
             </div>
-            <p className={`text-xs sm:text-sm mt-1 max-w-xl ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>
-              {service.pricingEstimate}. Available on an hourly basis or as a guaranteed fixed milestone agreement.
+            <p className={`text-sm font-semibold tabular-nums ${isDark ? 'text-white' : 'text-slate-900'}`}>
+              {service.pricingEstimate}
+            </p>
+            <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+              {service.rateNote}
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
-            <button
-              type="button"
-              onClick={() => onNavigate('/estimator')}
-              className={`py-2.5 px-4 rounded-xl font-mono text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer ${
-                isDark
-                  ? 'bg-[#38BDF8] hover:bg-[#7DD3FC] text-[#060913]'
-                  : 'bg-[#1D4ED8] hover:bg-[#1D4ED8] text-white'
+          <div className="space-y-1">
+            <div
+              className={`flex items-center gap-1.5 text-xs font-medium ${
+                isDark ? 'text-slate-400' : 'text-slate-500'
               }`}
             >
-              Estimate This Scope
-            </button>
-            <a
-              href="https://wa.me/447927548123"
-              target="_blank"
-              rel="noreferrer"
-              className="py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-mono text-xs font-semibold uppercase tracking-wider transition-colors"
+              <Clock className={`w-3.5 h-3.5 ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`} />
+              <span>Typical Delivery</span>
+            </div>
+            <p className={`text-sm font-semibold tabular-nums ${isDark ? 'text-white' : 'text-slate-900'}`}>
+              {service.typicalTimeline}
+            </p>
+            <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+              Direct communication with Saad M
+            </p>
+          </div>
+
+          <div className="space-y-1">
+            <div
+              className={`flex items-center gap-1.5 text-xs font-medium ${
+                isDark ? 'text-slate-400' : 'text-slate-500'
+              }`}
             >
-              WhatsApp Direct
-            </a>
+              <Layers className={`w-3.5 h-3.5 ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`} />
+              <span>Core Stack &amp; Tools</span>
+            </div>
+            <p className={`text-sm font-medium leading-snug ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>
+              {service.techStack.join(' · ')}
+            </p>
           </div>
         </div>
 
-        {/* ===================== OVERVIEW & WHAT I CAN PROVIDE ===================== */}
-        <section id="details-section" className="py-16 md:py-24 border-b border-black/[0.08] dark:border-white/[0.08]">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-            <div className="lg:col-span-5 space-y-4">
-              <SectionHeading
-                category="Overview"
-                title="WHAT I CAN PROVIDE"
-                subtitle="Every deliverable is crafted from scratch according to the specific needs of your project."
-                className="mb-0"
-              />
-
-              <p className={`text-sm sm:text-base leading-relaxed pt-2 ${
-                isDark ? 'text-[#94A3B8]' : 'text-[#475569]'
-              }`}>
-                When we collaborate on <strong className={isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'}>{service.title}</strong>, you receive direct communication from Saad M throughout every iteration. No templates, no inflated promises—just solid code, responsive UI, and thoughtful design.
-              </p>
-            </div>
-
-            <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {service.deliverables.map((item, idx) => (
-                <div
-                  key={idx}
-                  className={`rounded-2xl border p-5 backdrop-blur-xl transition-all flex flex-col justify-between ${
-                    isDark
-                      ? 'border-white/10 bg-[#0C1222]/85 hover:border-[#38BDF8]/35'
-                      : 'border-black/10 bg-white hover:border-[#1D4ED8]/40 shadow-2xs'
-                  }`}
-                >
-                  <div className="flex items-start gap-3">
-                    <CheckCircle2 className={`w-5 h-5 shrink-0 mt-0.5 ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`} />
-                    <span className={`text-sm font-medium leading-snug ${
-                      isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'
-                    }`}>
-                      {item}
-                    </span>
-                  </div>
-                  <span className={`text-[10px] font-mono mt-4 self-end uppercase ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>
-                    Deliverable 0{idx + 1}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* ===================== SCOPE INCLUSIONS & EXCLUSIONS ===================== */}
-        <section className="py-16 md:py-24 border-b border-black/[0.08] dark:border-white/[0.08]">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className={`p-8 rounded-3xl border ${isDark ? 'border-white/10 bg-[#0C1222]/85' : 'border-black/10 bg-white shadow-2xs'}`}>
-              <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-emerald-500 font-semibold mb-4">
-                <CheckCircle2 className="w-4 h-4" />
-                <span>Scope Inclusions</span>
-              </div>
-              <ul className="space-y-3">
-                {service.scopeInclusions.map((inc, i) => (
-                  <li key={i} className="flex items-start gap-3 text-xs sm:text-sm">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-2 shrink-0" />
-                    <span className={isDark ? 'text-[#F1F5F9]/85' : 'text-[#475569]'}>{inc}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div className={`p-8 rounded-3xl border ${isDark ? 'border-white/10 bg-[#0C1222]/85' : 'border-black/10 bg-white shadow-2xs'}`}>
-              <div className={`flex items-center gap-2 text-xs font-mono uppercase tracking-wider font-semibold mb-4 ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>
-                <span className="w-2 h-2 rounded-full bg-[#94A3B8]" />
-                <span>Exclusions & Third-Party Boundaries</span>
-              </div>
-              <ul className="space-y-3">
-                {service.scopeExclusions.map((exc, i) => (
-                  <li key={i} className="flex items-start gap-3 text-xs sm:text-sm">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#94A3B8] mt-2 shrink-0" />
-                    <span className={isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}>{exc}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </section>
-
-        {/* ===================== FEATURES ===================== */}
-        <section className="py-16 md:py-24 border-b border-black/[0.08] dark:border-white/[0.08]">
-          <SectionHeading
-            category="Specifications"
-            title="TECHNICAL & DESIGN FEATURES"
-            subtitle="The core architectural and aesthetic qualities embedded into this service."
-          />
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pt-4">
-            {service.features.map((feat, idx) => (
-              <div
-                key={idx}
-                className={`rounded-2xl border p-6 transition-all space-y-3 ${
-                  isDark
-                    ? 'border-white/10 bg-[#0C1222]/85 hover:border-[#38BDF8]/35'
-                    : 'border-black/10 bg-white hover:border-[#1D4ED8]/40 shadow-2xs'
+        {/* ===================== 3. EDITORIAL SPOTLIGHT BAND ===================== */}
+        <section
+          className={`py-16 md:py-20 border-b ${
+            isDark ? 'border-white/10' : 'border-slate-200'
+          }`}
+        >
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+            <div className="lg:col-span-5 space-y-2.5 lg:sticky lg:top-28">
+              <p
+                className={`text-xs font-semibold tracking-wide ${
+                  isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'
                 }`}
               >
-                <div className={`w-8 h-8 rounded-lg flex items-center justify-center font-mono text-xs font-bold border ${
-                  isDark ? 'border-[#38BDF8]/30 bg-[#1A1D25] text-[#38BDF8]' : 'border-[#1D4ED8]/30 bg-[#F3E9DC]/70 text-[#1E40AF]'
-                }`}>
-                  0{idx + 1}
-                </div>
-                <h4 className={`text-base font-bold font-display ${isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'}`}>
-                  {feat}
-                </h4>
-              </div>
-            ))}
-          </div>
-        </section>
+                {service.spotlight.kicker}
+              </p>
+              <h2
+                className={`text-2xl sm:text-3xl lg:text-4xl font-extrabold font-display tracking-tight leading-tight text-balance ${
+                  isDark ? 'text-[#F8FAFC]' : 'text-[#0F172A]'
+                }`}
+              >
+                {service.spotlight.heading}
+              </h2>
+            </div>
 
-        {/* ===================== WHO IT IS FOR ===================== */}
-        <section className="py-16 md:py-24 border-b border-black/[0.08] dark:border-white/[0.08]">
-          <div className="max-w-3xl">
-            <SectionHeading
-              category="Suitability"
-              title="WHO THIS IS FOR"
-              subtitle="This service is structured to bring maximum value to clients who prioritize direct collaboration, high visual quality, and reliable execution."
-            />
-
-            <div className="space-y-3 pt-2">
-              {service.suitableFor.map((target, idx) => (
-                <div
+            <div className="lg:col-span-7 space-y-5 max-w-2xl">
+              {service.spotlight.paragraphs.map((p, idx) => (
+                <p
                   key={idx}
-                  className={`flex items-center gap-3 p-4 rounded-xl border ${
-                    isDark ? 'border-white/10 bg-[#0C1222]/85 text-[#F1F5F9]/85' : 'border-black/10 bg-white text-[#0F172A] shadow-2xs'
+                  className={`text-[15px] sm:text-base leading-[1.78] ${
+                    isDark ? 'text-slate-300' : 'text-slate-600'
                   }`}
                 >
-                  <UserCheck className={`w-5 h-5 shrink-0 ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`} />
-                  <span className="text-sm sm:text-base">{target}</span>
-                </div>
+                  {p}
+                </p>
               ))}
             </div>
           </div>
         </section>
 
-        {/* ===================== SERVICE SPECIFIC FAQ ===================== */}
-        <section className="py-16 md:py-24 border-b border-black/[0.08] dark:border-white/[0.08]">
-          <div className="max-w-4xl">
-            <SectionHeading
-              category="Questions"
-              title={`${service.title.toUpperCase()} FAQ`}
-              subtitle="Specific questions and honest answers about this service."
-            />
+        {/* ===================== 4. CORE CAPABILITIES DIRECTORY ===================== */}
+        <section
+          id="capabilities"
+          className={`py-16 md:py-20 border-b ${
+            isDark ? 'border-white/10' : 'border-slate-200'
+          }`}
+        >
+          <div className="max-w-2xl mb-12 space-y-2.5">
+            <p
+              className={`text-xs font-semibold tracking-wide ${
+                isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'
+              }`}
+            >
+              What Is Included
+            </p>
+            <h2
+              className={`text-2xl sm:text-3xl lg:text-4xl font-extrabold font-display tracking-tight text-balance ${
+                isDark ? 'text-[#F8FAFC]' : 'text-[#0F172A]'
+              }`}
+            >
+              Core Areas of {service.title}
+            </h2>
+            <p className={`text-sm sm:text-base leading-relaxed ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+              Every layer is carefully planned, structured, and delivered around your business goals.
+            </p>
+          </div>
 
-            <div className="pt-4">
-              <FAQAccordion items={faqItems} defaultOpenIndex={0} />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+            {service.coreCapabilities.map((cap, idx) => {
+              const num = String(idx + 1).padStart(2, '0');
+              return (
+                <article
+                  key={cap.title}
+                  className={`p-6 sm:p-8 rounded-2xl border flex flex-col gap-4 transition-colors ${
+                    isDark
+                      ? 'bg-[#0C1222]/80 border-white/10 hover:border-[#38BDF8]/30'
+                      : 'bg-white border-slate-200 hover:border-[#1D4ED8]/30'
+                  }`}
+                >
+                  <div className="space-y-1.5">
+                    <span
+                      className={`font-mono text-xs font-bold tabular-nums block ${
+                        isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'
+                      }`}
+                    >
+                      {num}.
+                    </span>
+                    <h3
+                      className={`text-lg sm:text-xl font-bold font-display tracking-tight ${
+                        isDark ? 'text-[#F8FAFC]' : 'text-[#0F172A]'
+                      }`}
+                    >
+                      {cap.title}
+                    </h3>
+                    {cap.subtitle && (
+                      <p
+                        className={`text-sm font-semibold ${
+                          isDark ? 'text-[#7DD3FC]' : 'text-[#1D4ED8]'
+                        }`}
+                      >
+                        {cap.subtitle}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="space-y-3.5">
+                    {cap.paragraphs.map((para, pIdx) => (
+                      <p
+                        key={pIdx}
+                        className={`text-sm sm:text-[15px] leading-[1.72] ${
+                          isDark ? 'text-slate-300' : 'text-slate-600'
+                        }`}
+                      >
+                        {para}
+                      </p>
+                    ))}
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        </section>
+
+        {/* ===================== 5. APPROACH, TECHNOLOGY & WHO CAN BENEFIT ===================== */}
+        <section
+          className={`py-16 md:py-20 border-b ${
+            isDark ? 'border-white/10' : 'border-slate-200'
+          }`}
+        >
+          <div
+            className={`grid grid-cols-1 ${
+              service.technologySection ? 'lg:grid-cols-12' : ''
+            } gap-8 lg:gap-12`}
+          >
+            {/* Approach Column */}
+            <div
+              className={`${
+                service.technologySection ? 'lg:col-span-7' : 'max-w-3xl'
+              } space-y-5`}
+            >
+              <div className="space-y-2">
+                <p
+                  className={`text-xs font-semibold tracking-wide ${
+                    isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'
+                  }`}
+                >
+                  Process &amp; Execution
+                </p>
+                <h2
+                  className={`text-2xl sm:text-3xl font-extrabold font-display tracking-tight ${
+                    isDark ? 'text-[#F8FAFC]' : 'text-[#0F172A]'
+                  }`}
+                >
+                  {service.approachSection.title}
+                </h2>
+              </div>
+
+              <div className="space-y-4">
+                {service.approachSection.paragraphs.map((para, idx) => (
+                  <div key={idx} className="flex items-start gap-4">
+                    <span
+                      className={`font-mono text-xs font-bold tabular-nums mt-1.5 shrink-0 ${
+                        isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'
+                      }`}
+                    >
+                      0{idx + 1}
+                    </span>
+                    <p
+                      className={`text-[15px] sm:text-base leading-[1.75] ${
+                        isDark ? 'text-slate-300' : 'text-slate-600'
+                      }`}
+                    >
+                      {para}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Technology & Platforms Column */}
+            {service.technologySection && (
+              <div
+                className={`lg:col-span-5 p-6 sm:p-8 rounded-2xl border space-y-5 self-start ${
+                  isDark
+                    ? 'bg-[#0C1222]/85 border-white/10'
+                    : 'bg-slate-50 border-slate-200'
+                }`}
+              >
+                <div className="space-y-2">
+                  <p
+                    className={`text-xs font-semibold tracking-wide ${
+                      isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'
+                    }`}
+                  >
+                    Toolkit
+                  </p>
+                  <h3
+                    className={`text-xl sm:text-2xl font-bold font-display tracking-tight ${
+                      isDark ? 'text-[#F8FAFC]' : 'text-[#0F172A]'
+                    }`}
+                  >
+                    {service.technologySection.title}
+                  </h3>
+                </div>
+
+                <div className="space-y-4">
+                  {service.technologySection.paragraphs.map((para, idx) => (
+                    <p
+                      key={idx}
+                      className={`text-sm sm:text-[15px] leading-[1.72] ${
+                        isDark ? 'text-slate-300' : 'text-slate-600'
+                      }`}
+                    >
+                      {para}
+                    </p>
+                  ))}
+                </div>
+
+                <div
+                  className={`pt-4 border-t ${
+                    isDark ? 'border-white/10' : 'border-slate-200'
+                  }`}
+                >
+                  <p
+                    className={`text-xs font-medium mb-1.5 ${
+                      isDark ? 'text-slate-400' : 'text-slate-500'
+                    }`}
+                  >
+                    Primary Technologies
+                  </p>
+                  <p
+                    className={`text-xs sm:text-sm font-medium ${
+                      isDark ? 'text-slate-200' : 'text-slate-800'
+                    }`}
+                  >
+                    {service.techStack.join(' · ')}
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Optional Who Can Benefit Section (e.g. Web Application Development) */}
+          {service.whoCanBenefitSection && (
+            <div
+              className={`mt-12 pt-12 border-t grid grid-cols-1 lg:grid-cols-12 gap-8 items-start ${
+                isDark ? 'border-white/10' : 'border-slate-200'
+              }`}
+            >
+              <div className="lg:col-span-4 space-y-2">
+                <p
+                  className={`text-xs font-semibold tracking-wide ${
+                    isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'
+                  }`}
+                >
+                  Audience &amp; Fit
+                </p>
+                <h3
+                  className={`text-2xl font-extrabold font-display tracking-tight ${
+                    isDark ? 'text-[#F8FAFC]' : 'text-[#0F172A]'
+                  }`}
+                >
+                  {service.whoCanBenefitSection.title}
+                </h3>
+              </div>
+              <div className="lg:col-span-8 space-y-4 max-w-2xl">
+                {service.whoCanBenefitSection.paragraphs.map((para, idx) => (
+                  <p
+                    key={idx}
+                    className={`text-[15px] sm:text-base leading-[1.75] ${
+                      isDark ? 'text-slate-300' : 'text-slate-600'
+                    }`}
+                  >
+                    {para}
+                  </p>
+                ))}
+              </div>
+            </div>
+          )}
+        </section>
+
+        {/* ===================== 6. THE RESULT / THE GOAL ===================== */}
+        <section
+          className={`py-16 md:py-20 border-b ${
+            isDark ? 'border-white/10' : 'border-slate-200'
+          }`}
+        >
+          <div
+            className={`p-8 sm:p-12 rounded-2xl border grid grid-cols-1 lg:grid-cols-12 gap-8 items-start ${
+              isDark
+                ? 'bg-[#0C1222]/90 border-[#38BDF8]/20'
+                : 'bg-slate-50 border-slate-200'
+            }`}
+          >
+            <div className="lg:col-span-5 space-y-2.5">
+              <p
+                className={`text-xs font-semibold tracking-wide ${
+                  isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'
+                }`}
+              >
+                {service.resultSection.kicker}
+              </p>
+              <h2
+                className={`text-2xl sm:text-3xl font-extrabold font-display tracking-tight leading-tight text-balance ${
+                  isDark ? 'text-[#F8FAFC]' : 'text-[#0F172A]'
+                }`}
+              >
+                {service.resultSection.heading}
+              </h2>
+            </div>
+
+            <div className="lg:col-span-7 space-y-4">
+              {service.resultSection.paragraphs.map((para, idx) => (
+                <p
+                  key={idx}
+                  className={`text-[15px] sm:text-base leading-[1.75] ${
+                    isDark ? 'text-slate-200' : 'text-slate-700'
+                  }`}
+                >
+                  {para}
+                </p>
+              ))}
             </div>
           </div>
         </section>
 
-        {/* ===================== ENQUIRY CTA ===================== */}
-        <div className="py-20 text-center max-w-3xl mx-auto space-y-6">
-          <span className={`text-xs font-mono tracking-widest uppercase block font-semibold ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`}>
-            Let's Collaborate
-          </span>
-          <h2 className={`text-3xl sm:text-4xl md:text-5xl font-extrabold font-display tracking-tight ${
-            isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'
-          }`}>
-            Ready to Build Your {service.title}?
-          </h2>
-          <p className={`text-base leading-relaxed ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>
-            Let's talk through your goals, features, and timeline. You communicate directly with Saad M.
-          </p>
-          <div className="pt-4 flex justify-center">
-            <MagneticButton
-              text="Send Project Enquiry"
-              size="lg"
-              variant="primary"
-              onClick={() => onNavigate('/contact')}
-            />
+        {/* ===================== 7. DELIVERABLES & SCOPE CHECKLIST ===================== */}
+        <section
+          className={`py-16 md:py-20 border-b ${
+            isDark ? 'border-white/10' : 'border-slate-200'
+          }`}
+        >
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+            <div className="lg:col-span-7 space-y-5">
+              <div className="space-y-1.5">
+                <p
+                  className={`text-xs font-semibold tracking-wide ${
+                    isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'
+                  }`}
+                >
+                  Handover Checklist
+                </p>
+                <h2
+                  className={`text-2xl font-extrabold font-display tracking-tight ${
+                    isDark ? 'text-[#F8FAFC]' : 'text-[#0F172A]'
+                  }`}
+                >
+                  Key Deliverables
+                </h2>
+              </div>
+
+              <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                {service.deliverables.map((item, idx) => (
+                  <li
+                    key={idx}
+                    className={`p-4 rounded-xl border flex items-start gap-3 text-sm leading-snug ${
+                      isDark
+                        ? 'bg-[#0C1222]/75 border-white/10 text-slate-200'
+                        : 'bg-white border-slate-200 text-slate-800'
+                    }`}
+                  >
+                    <CheckCircle2
+                      className={`w-4 h-4 shrink-0 mt-0.5 ${
+                        isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'
+                      }`}
+                    />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="lg:col-span-5 space-y-6">
+              <div className="space-y-3">
+                <h3
+                  className={`text-base font-bold font-display ${
+                    isDark ? 'text-white' : 'text-slate-900'
+                  }`}
+                >
+                  Included in Scope
+                </h3>
+                <ul className="space-y-2.5 text-sm">
+                  {service.scopeInclusions.map((inc, idx) => (
+                    <li
+                      key={idx}
+                      className={`flex items-start gap-2.5 ${
+                        isDark ? 'text-slate-300' : 'text-slate-600'
+                      }`}
+                    >
+                      <span
+                        className={`font-bold shrink-0 ${
+                          isDark ? 'text-emerald-400' : 'text-emerald-700'
+                        }`}
+                      >
+                        +
+                      </span>
+                      <span>{inc}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div
+                className={`pt-5 border-t space-y-2.5 ${
+                  isDark ? 'border-white/10' : 'border-slate-200'
+                }`}
+              >
+                <h3
+                  className={`text-sm font-semibold ${
+                    isDark ? 'text-slate-400' : 'text-slate-500'
+                  }`}
+                >
+                  External Third-Party Costs (Not Included)
+                </h3>
+                <ul className={`space-y-2 text-xs sm:text-sm ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+                  {service.scopeExclusions.map((exc, idx) => (
+                    <li key={idx}>– {exc}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
           </div>
-        </div>
+        </section>
+
+        {/* ===================== 8. FREQUENTLY ASKED QUESTIONS ===================== */}
+        <section
+          className={`py-16 md:py-20 border-b ${
+            isDark ? 'border-white/10' : 'border-slate-200'
+          }`}
+        >
+          <div className="max-w-3xl space-y-6">
+            <div className="space-y-1.5">
+              <p
+                className={`text-xs font-semibold tracking-wide ${
+                  isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'
+                }`}
+              >
+                Questions
+              </p>
+              <h2
+                className={`text-2xl sm:text-3xl font-extrabold font-display tracking-tight ${
+                  isDark ? 'text-[#F8FAFC]' : 'text-[#0F172A]'
+                }`}
+              >
+                Common Questions About {service.title}
+              </h2>
+            </div>
+
+            <FAQAccordion items={faqItems} defaultOpenIndex={0} />
+          </div>
+        </section>
+
+        {/* ===================== 9. CLOSING CTA & PERSONAL SIGN-OFF ===================== */}
+        <section className="py-16 md:py-20">
+          <div className="max-w-3xl mx-auto text-center space-y-6">
+            <h2
+              className={`text-3xl sm:text-4xl md:text-5xl font-extrabold font-display tracking-tight text-balance ${
+                isDark ? 'text-[#F8FAFC]' : 'text-[#0F172A]'
+              }`}
+            >
+              {service.closingCta.heading}
+            </h2>
+
+            <p
+              className={`text-base sm:text-lg leading-relaxed max-w-2xl mx-auto ${
+                isDark ? 'text-slate-300' : 'text-slate-600'
+              }`}
+            >
+              {service.closingCta.description}
+            </p>
+
+            {/* Editorial Author Sign-Off */}
+            <div
+              className={`pt-2 inline-flex flex-col items-center text-sm ${
+                isDark ? 'text-slate-300' : 'text-slate-700'
+              }`}
+            >
+              <span className={`font-display font-bold text-base ${isDark ? 'text-white' : 'text-slate-950'}`}>
+                {service.closingCta.signOffName}
+              </span>
+              <span className={`text-xs mt-0.5 ${isDark ? 'text-[#7DD3FC]' : 'text-[#1D4ED8]'}`}>
+                {service.closingCta.signOffBrand} · {service.closingCta.signOffRole}
+              </span>
+            </div>
+
+            <div className="pt-4 flex flex-wrap items-center justify-center gap-3">
+              <button
+                type="button"
+                onClick={() => onNavigate('/contact')}
+                className={`px-7 py-3.5 rounded-xl text-sm font-semibold inline-flex items-center gap-2 whitespace-nowrap shrink-0 transition-colors cursor-pointer ${
+                  isDark
+                    ? 'bg-[#38BDF8] hover:bg-[#7DD3FC] text-[#040B16]'
+                    : 'bg-[#1D4ED8] hover:bg-[#1E40AF] text-white'
+                }`}
+              >
+                <span>Get In Touch</span>
+                <ArrowUpRight className="w-4 h-4" />
+              </button>
+
+              <a
+                href="https://wa.me/447927548123"
+                target="_blank"
+                rel="noreferrer"
+                className={`px-6 py-3.5 rounded-xl border text-sm font-semibold inline-flex items-center gap-2 whitespace-nowrap shrink-0 transition-colors ${
+                  isDark
+                    ? 'border-white/15 bg-white/[0.04] hover:bg-white/[0.09] text-slate-100'
+                    : 'border-slate-300 bg-white hover:bg-slate-50 text-slate-900'
+                }`}
+              >
+                <MessageSquare className="w-4 h-4 text-emerald-500" />
+                <span>WhatsApp Direct</span>
+              </a>
+            </div>
+          </div>
+
+          {/* Previous / Next Service Navigation Footer */}
+          <div
+            className={`mt-16 pt-8 border-t flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 ${
+              isDark ? 'border-white/10' : 'border-slate-200'
+            }`}
+          >
+            <button
+              type="button"
+              onClick={() => onNavigate(`/services/${prevService.slug}`)}
+              className={`group p-4 rounded-xl border text-left transition-colors cursor-pointer flex items-center gap-3 ${
+                isDark
+                  ? 'border-white/10 bg-[#0C1222]/70 hover:border-[#38BDF8]/35'
+                  : 'border-slate-200 bg-white hover:border-[#1D4ED8]/35'
+              }`}
+            >
+              <ArrowLeft
+                className={`w-4 h-4 shrink-0 group-hover:-translate-x-0.5 transition-transform ${
+                  isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'
+                }`}
+              />
+              <div>
+                <span className={`text-[11px] block ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                  Previous Service
+                </span>
+                <span className={`text-sm font-bold font-display ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                  {prevService.number}. {prevService.title}
+                </span>
+              </div>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => onNavigate(`/services/${nextService.slug}`)}
+              className={`group p-4 rounded-xl border text-right transition-colors cursor-pointer flex items-center justify-end gap-3 ${
+                isDark
+                  ? 'border-white/10 bg-[#0C1222]/70 hover:border-[#38BDF8]/35'
+                  : 'border-slate-200 bg-white hover:border-[#1D4ED8]/35'
+              }`}
+            >
+              <div>
+                <span className={`text-[11px] block ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                  Next Service
+                </span>
+                <span className={`text-sm font-bold font-display ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                  {nextService.number}. {nextService.title}
+                </span>
+              </div>
+              <ArrowRight
+                className={`w-4 h-4 shrink-0 group-hover:translate-x-0.5 transition-transform ${
+                  isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'
+                }`}
+              />
+            </button>
+          </div>
+        </section>
       </div>
     </div>
   );

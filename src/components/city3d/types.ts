@@ -145,6 +145,9 @@ export type ExplorationPhase =
   | 'inside_house'
   | 'exiting_house';
 
+/** Exact scroll progress centers for each of the 6 Service Houses on the Turn-by-Turn Guided Tour */
+export const HOUSE_TOUR_PROGRESS: number[] = [0.6, 0.66, 0.72, 0.78, 0.84, 0.9];
+
 export const HOUSE_PLACEMENTS: HousePlacement[] = [
   {
     serviceIndex: 0,
@@ -221,7 +224,7 @@ export function detectQualityProfile(isSoftwareGl: boolean): QualityProfile {
   if (width < 640) {
     return {
       tier: 'mobile',
-      pixelRatio: Math.min(dpr, 2),
+      pixelRatio: Math.min(dpr, 1.75),
       shadowMapSize: 1024,
       shadowsEnabled: true,
       cityTowerCount: 56,
@@ -236,8 +239,8 @@ export function detectQualityProfile(isSoftwareGl: boolean): QualityProfile {
   if (width < 1024) {
     return {
       tier: 'tablet',
-      pixelRatio: Math.min(dpr, 2),
-      shadowMapSize: 2048,
+      pixelRatio: Math.min(dpr, 1.85),
+      shadowMapSize: 1536,
       shadowsEnabled: true,
       cityTowerCount: 92,
       suburbHouseCount: 36,
@@ -250,8 +253,8 @@ export function detectQualityProfile(isSoftwareGl: boolean): QualityProfile {
 
   return {
     tier: 'desktop',
-    pixelRatio: Math.min(dpr, 2.5),
-    shadowMapSize: 4096,
+    pixelRatio: Math.min(dpr, 2),
+    shadowMapSize: 2048,
     shadowsEnabled: true,
     cityTowerCount: 132,
     suburbHouseCount: 48,

@@ -171,7 +171,7 @@ export const generateCvPdf = async () => {
   doc.setTextColor(0, 150, 180);
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(7.8);
-  doc.text('clickncreate.co.uk  [Flagship Platform · 2024 – Present]', pageWidth - margin, y, { align: 'right' });
+  doc.text('clickncreate.co.uk  [Flagship Platform · 2025 – Present]', pageWidth - margin, y, { align: 'right' });
 
   y += 3.8;
   doc.setTextColor(51, 65, 85);

@@ -164,20 +164,20 @@ export interface SiteCustomization {
 
 export const DEFAULT_CUSTOMIZATION: SiteCustomization = {
   theme: {
-    presetId: 'futuristic_sapphire',
-    presetName: 'Futuristic Sapphire & Glacier Slate (Default)',
+    presetId: 'golden_horizon_metropolis',
+    presetName: 'Azure Day & Golden Sunset Metropolis',
     fontDisplay: 'Syne',
     fontSans: 'Plus Jakarta Sans',
     fontMono: 'JetBrains Mono',
-    accentCyan: '#38BDF8',
-    accentPurple: '#2563EB',
-    accentGradient: 'linear-gradient(135deg, #7DD3FC 0%, #38BDF8 45%, #2563EB 100%)',
+    accentCyan: '#F59E0B',
+    accentPurple: '#EA580C',
+    accentGradient: 'linear-gradient(135deg, #FDE68A 0%, #F59E0B 48%, #EA580C 100%)',
     bgTone: 'navy',
-    bgMainDark: '#060913',
-    bgSecondaryDark: '#0C1222',
-    bgMainLight: '#F3F6FA',
+    bgMainDark: '#0B0D18',
+    bgSecondaryDark: '#131627',
+    bgMainLight: '#F4F8FC',
     bgSecondaryLight: '#FFFFFF',
-    textColorDark: '#F1F5F9',
+    textColorDark: '#FAF6F0',
     textColorLight: '#0F172A',
     borderRadius: 'modern',
     borderWidth: 'thin',
@@ -233,64 +233,107 @@ export const DEFAULT_CUSTOMIZATION: SiteCustomization = {
       techStack: ['React 19', 'TypeScript', 'Node.js & Express', 'Tailwind CSS', 'Next.js', 'PostgreSQL & SQLite', 'Stripe & Shopify API', 'Cloudflare & Cloud Run'],
     },
     services: {
-      heroTitle: 'ENGINEERED DIGITAL',
-      heroHighlight: 'SOLUTIONS & SERVICES',
-      heroSubtitle: 'From rapid commercial websites to bespoke e-commerce storefronts and custom web tools, explore transparent services tailored for business growth.',
-      badgeText: 'TRANSPARENT PRICING · £35/HR OR FIXED MILESTONES',
+      heroTitle: 'DIGITAL SERVICES',
+      heroHighlight: '& CAPABILITIES',
+      heroSubtitle:
+        'Explore six focused disciplines crafted with clear architecture, thoughtful design, and dependable engineering—from digital storefronts and custom websites to branding, marketing, web applications, and ongoing care.',
+      badgeText: 'Click N Create · 6 Core Services',
       servicesList: [
         {
-          id: 'srv-web-dev',
-          title: 'Business Websites (WordPress / Custom React)',
-          slug: 'web-development',
-          rate: '£35/hr or from £500 fixed',
-          turnaround: '1 – 2 Weeks',
-          description: 'Clean, mobile-first websites designed to build trust, showcase your services, and generate customer leads automatically.',
-          deliverables: ['Custom Mobile-Optimized Design', 'Contact Form to Inbox', 'Google Search & SEO Setup', 'Fast Cloud Hosting Setup', 'Video Guide for Easy Editing'],
-        },
-        {
-          id: 'srv-ecom',
-          title: 'E-Commerce Online Stores (Shopify / WooCommerce)',
+          id: 'ecommerce-dev',
+          title: 'E-Commerce Solutions',
           slug: 'ecommerce-development',
-          rate: '£35/hr or from £850 fixed',
+          rate: 'Fixed milestone package or £35/hr',
           turnaround: '2 – 3 Weeks',
-          description: 'High-converting online shops with instant slide-out carts, card payments (Stripe/Apple Pay/PayPal), and inventory tracking.',
-          deliverables: ['Secure Checkout Integration', 'Slide-Out Drawer Cart', 'Product Variant Options', 'Discount & Promo Engine', 'Customer Order Accounts'],
+          description:
+            'Building Digital Stores That Turn Visitors Into Customers. Complete digital commerce platforms with customised storefronts, payments, inventory management, and mobile commerce.',
+          deliverables: [
+            'Customised Digital Storefronts',
+            'Product & Inventory Management',
+            'Payment & Order Management',
+            'Mobile Commerce Optimisation',
+            'Scalable Platform Architecture',
+          ],
         },
         {
-          id: 'srv-branding',
-          title: 'Logos, Banners & Graphic Design',
-          slug: 'branding-design',
-          rate: '£35/hr or from £280 fixed',
+          id: 'web-dev',
+          title: 'Web Development',
+          slug: 'web-development',
+          rate: '£35/hr or fixed project quotes',
+          turnaround: '1 – 3 Weeks',
+          description:
+            'Turning Ideas Into Powerful Digital Experiences. Modern, responsive, and high-performance websites crafted with React, Next.js, TypeScript, Tailwind CSS, or WordPress.',
+          deliverables: [
+            'Custom & Business Websites',
+            'Interactive Frontend Engineering',
+            'Website Redesign & Modernisation',
+            'Responsive Multi-Device Layouts',
+            'Performance & Technical SEO',
+          ],
+        },
+        {
+          id: 'branding-design',
+          title: 'Branding & Design',
+          slug: 'branding-and-design',
+          rate: 'Standalone design package or £35/hr',
           turnaround: '3 – 7 Days',
-          description: 'Complete visual identity kits: high-resolution logos, matching social media cover banners, print flyers, and luxury business cards.',
-          deliverables: ['Primary & Secondary Logo Suite', 'Social Media Graphics Kit', 'Print-Ready Flyers & Leaflets', 'Double-Sided Business Cards', 'Brand Color & Typography Guide'],
+          description:
+            'Creating Identities That Make Brands Unforgettable. Distinctive logos, cohesive visual brand systems, social media design, marketing collateral, and packaging concepts.',
+          deliverables: [
+            'Distinctive Logo Design',
+            'Visual Brand Identity Systems',
+            'Graphic & Social Media Design',
+            'Marketing & Print Materials',
+            'Packaging & Brand Applications',
+          ],
         },
         {
-          id: 'srv-marketing',
-          title: 'Google Search & Digital Marketing',
+          id: 'digital-marketing',
+          title: 'Digital Marketing',
           slug: 'digital-marketing',
-          rate: '£35/hr or from £350 fixed',
+          rate: 'One-time setup or monthly support',
           turnaround: '4 – 7 Days',
-          description: 'Rank higher on Google search results, optimize local Google Maps presence, and set up tracking to measure conversion.',
-          deliverables: ['Technical SEO Audit & Fixes', 'Google Search Rich Snippets', 'Google Analytics (GA4) Tracking', 'WhatsApp & Social Link Previews', 'Search Keyword Optimization'],
+          description:
+            'Building Visibility. Creating Connections. Driving Growth. Strategic SEO, social media marketing, content creation, paid advertising, conversion optimisation, and analytics.',
+          deliverables: [
+            'Search Engine Optimisation (SEO)',
+            'Social Media & Content Marketing',
+            'Targeted Paid Advertising',
+            'Conversion Optimisation',
+            'Analytics & Performance Insights',
+          ],
         },
         {
-          id: 'srv-hosting',
-          title: 'Website Hosting & Monthly Care Support',
-          slug: 'hosting-maintenance',
-          rate: '£35/hr or monthly care',
-          turnaround: '1 – 3 Days',
-          description: 'Fast, secure cloud hosting, automated daily safety backups, domain connection, and direct WhatsApp support whenever you need updates.',
-          deliverables: ['High-Speed Cloud Hosting', 'Free SSL Security Padlock', 'Automated Daily Safety Backups', '24/7 Uptime Monitoring', 'Speed & Security Booster'],
-        },
-        {
-          id: 'srv-custom-apps',
-          title: 'Custom Web Apps & Online Calculators',
+          id: 'web-apps',
+          title: 'Web Application Development',
           slug: 'web-app-development',
-          rate: '£35/hr or custom scope',
+          rate: 'Itemised project quote or £35/hr',
           turnaround: '2 – 4 Weeks',
-          description: 'Interactive price estimators, customer portals, staff dashboards, or bespoke tools tailored to your operational workflows.',
-          deliverables: ['Interactive Estimation Engine', 'User Authentication & Logins', 'Visual Analytics Dashboards', 'PDF & CSV Export Tools', 'REST API & Third-Party Sync'],
+          description:
+            'Engineering Powerful Applications. Transforming Ideas Into Digital Solutions. Custom web applications, interactive dashboards, user authentication, backend systems, and workflow automation.',
+          deliverables: [
+            'Custom Web Applications',
+            'Interactive Dashboards',
+            'Authentication & Role Management',
+            'Database, Backend & APIs',
+            'Business Workflow Automation',
+          ],
+        },
+        {
+          id: 'hosting-maintenance',
+          title: 'Hosting & Maintenance',
+          slug: 'hosting-maintenance',
+          rate: 'Setup included or flexible monthly care',
+          turnaround: '24 – 48 Hours / Ongoing',
+          description:
+            'Reliable Hosting. Continuous Care. Complete Peace of Mind. Dependable hosting environments, smooth deployment, updates, security protection, backups, DNS/SSL, and technical support.',
+          deliverables: [
+            'Tailored Website Hosting',
+            'Live Deployment & Migrations',
+            'Regular Maintenance & Updates',
+            'Security, Backups & SSL/DNS',
+            'Ongoing Technical Support',
+          ],
         },
       ],
     },
@@ -598,12 +641,15 @@ export const CustomizationProvider: React.FC<{ children: React.ReactNode }> = ({
         --bg-main: ${bgMainLight};
         --bg-secondary: ${bgSecondaryLight};
         --card-bg: ${bgSecondaryLight};
-        --card-bg-subtle: #E6EEF8;
+        --card-bg-subtle: #E6F0FA;
         --text-main: ${textColorLight};
         --text-muted: ${textMutedLight};
         --border-main: ${borderColorLight};
         --border-subtle: rgba(15, 23, 42, 0.05);
-        --glow-color: rgba(37, 99, 235, 0.22);
+        --accent-cyan: #1D6FD8;
+        --accent-purple: #0284C7;
+        --accent-gradient: linear-gradient(135deg, #1D6FD8 0%, #0EA5E9 55%, #1E40AF 100%);
+        --glow-color: rgba(29, 111, 216, 0.22);
         color-scheme: light;
       }
 
@@ -611,11 +657,14 @@ export const CustomizationProvider: React.FC<{ children: React.ReactNode }> = ({
         --bg-main: ${bgMainDark};
         --bg-secondary: ${bgSecondaryDark};
         --card-bg: ${bgSecondaryDark};
-        --card-bg-subtle: #131D33;
+        --card-bg-subtle: #1B1F35;
         --text-main: ${textColorDark};
         --text-muted: ${textMutedDark};
         --border-main: ${borderColorDark};
-        --border-subtle: rgba(241, 245, 249, 0.06);
+        --border-subtle: rgba(250, 246, 240, 0.07);
+        --accent-cyan: ${accent1};
+        --accent-purple: ${accent2};
+        --accent-gradient: ${gradient};
         --glow-color: ${accent1}44;
         color-scheme: dark;
       }
@@ -694,13 +743,18 @@ export const CustomizationProvider: React.FC<{ children: React.ReactNode }> = ({
       }
 
       /* Gradients & Text Fills */
-      .text-cyber-gradient, .text-luxury-gradient {
+      html.dark .text-cyber-gradient, html.dark .text-luxury-gradient {
         background: ${gradient} !important;
         -webkit-background-clip: text !important;
         -webkit-text-fill-color: transparent !important;
       }
+      html:not(.dark) .text-cyber-gradient, html:not(.dark) .text-luxury-gradient {
+        background: linear-gradient(135deg, #1D6FD8 0%, #0284C7 55%, #1E40AF 100%) !important;
+        -webkit-background-clip: text !important;
+        -webkit-text-fill-color: transparent !important;
+      }
       .bg-cyber-gradient {
-        background: ${gradient} !important;
+        background: var(--accent-gradient, ${gradient}) !important;
       }
 
       /* Glow & Box Shadows */
@@ -836,7 +890,8 @@ export const CustomizationProvider: React.FC<{ children: React.ReactNode }> = ({
               parsed &&
               typeof parsed === 'object' &&
               parsed.presetId !== 'cyber_cyan' &&
-              parsed.presetId !== 'architectural_amber'
+              parsed.presetId !== 'architectural_amber' &&
+              parsed.presetId !== 'futuristic_sapphire'
             ) {
               applyThemeToDOM(parsed);
             } else {
@@ -865,7 +920,8 @@ export const CustomizationProvider: React.FC<{ children: React.ReactNode }> = ({
         const themeToUse =
           !rawTheme ||
           rawTheme.presetId === 'cyber_cyan' ||
-          rawTheme.presetId === 'architectural_amber'
+          rawTheme.presetId === 'architectural_amber' ||
+          rawTheme.presetId === 'futuristic_sapphire'
             ? DEFAULT_CUSTOMIZATION.theme
             : rawTheme;
         const mergedCustomization = {

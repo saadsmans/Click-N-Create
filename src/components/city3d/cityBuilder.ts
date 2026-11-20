@@ -3,32 +3,18 @@ import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js
 import { QualityProfile } from './types.ts';
 import {
   createSkyscraperPbrSet,
+  createLimestoneTowerPbrSet,
   createPlazaStonePbrSet,
   createBoulevardRoadPbrSet,
   createArchitecturalCladdingPbr,
   createNaturalGrassPbrSet,
   createWoodGrainPbrSet,
   createResidentialWindowTextures,
-  createCarHeadlightBeamTexture,
   createContactShadowTexture,
   createLightPoolTexture,
   createBotanicalLeafClusterTexture,
   applyGroundAO,
 } from './proceduralTextures.ts';
-
-interface VehicleTrack {
-  axis: 'x' | 'z';
-  laneOffset: number;
-  yElevation: number;
-  startPos: number;
-  span: number;
-  minCoord: number;
-  speed: number;
-  dir: 1 | -1;
-  paintHex: number;
-  kind: 'sedan' | 'suv' | 'bus';
-  isParked?: boolean;
-}
 
 export interface CityBuildResult {
   group: THREE.Group;
@@ -39,116 +25,75 @@ export interface CityBuildResult {
 
 // Reusable module-scoped scratch helpers (Zero GC inside render loop)
 const _vDummy = new THREE.Object3D();
-const _wDummy = new THREE.Object3D();
 const _tempColor = new THREE.Color();
 
 /**
- * Sculpts an ultra-realistic aerodynamic luxury EV fastback sedan/SUV body (+Z forward)
- * with low aero nose, crisp hood crease, swept fastback roofline & integrated rear lip spoiler.
+ * Sculpts a classic Neo-Deco multi-tiered stepped limestone/stone tower with setback crown & fluted corners.
  */
-function createSculptedCarBodyGeometry(): THREE.BufferGeometry {
-  const shape = new THREE.Shape();
-  shape.moveTo(-2.12, 0.24);
-  shape.lineTo(2.14, 0.22);
-  shape.quadraticCurveTo(2.24, 0.34, 2.18, 0.56);
-  shape.quadraticCurveTo(2.08, 0.74, 1.62, 0.8);
-  shape.lineTo(0.86, 0.88);
-  shape.quadraticCurveTo(0.42, 1.28, 0.14, 1.37);
-  shape.quadraticCurveTo(-0.44, 1.44, -1.08, 1.32);
-  shape.lineTo(-1.74, 0.94);
-  shape.lineTo(-2.1, 0.9);
-  shape.quadraticCurveTo(-2.22, 0.64, -2.12, 0.24);
-
-  const geo = new THREE.ExtrudeGeometry(shape, {
-    depth: 1.7,
-    bevelEnabled: true,
-    bevelThickness: 0.09,
-    bevelSize: 0.065,
-    bevelSegments: 3,
-    curveSegments: 10,
-  });
-  geo.translate(0, 0, -0.85);
-  geo.rotateY(-Math.PI / 2);
-  geo.computeVertexNormals();
-  return geo;
+function createArtDecoSteppedTowerGeometry(): THREE.BufferGeometry {
+  const parts: THREE.BufferGeometry[] = [];
+  const base = new THREE.BoxGeometry(1.0, 0.56, 1.0);
+  base.translate(0, 0.28, 0);
+  const mid = new THREE.BoxGeometry(0.8, 0.26, 0.8);
+  mid.translate(0, 0.69, 0);
+  const crown = new THREE.BoxGeometry(0.56, 0.16, 0.56);
+  crown.translate(0, 0.9, 0);
+  const pinnacle = new THREE.BoxGeometry(0.32, 0.1, 0.32);
+  pinnacle.translate(0, 1.03, 0);
+  parts.push(base, mid, crown, pinnacle);
+  const merged = mergeGeometries(parts, false);
+  parts.forEach((p) => p.dispose());
+  merged.computeVertexNormals();
+  return merged;
 }
 
 /**
- * Sculpts matching flush panoramic dark-tinted automotive greenhouse & glass roof.
+ * Sculpts a sleek curved elliptical glass landmark drum with projecting horizontal aluminum louver rings.
  */
-function createSculptedCarGlassGeometry(): THREE.BufferGeometry {
-  const shape = new THREE.Shape();
-  shape.moveTo(-1.62, 0.91);
-  shape.lineTo(0.8, 0.86);
-  shape.quadraticCurveTo(0.38, 1.24, 0.12, 1.32);
-  shape.quadraticCurveTo(-0.44, 1.38, -1.04, 1.27);
-  shape.closePath();
-
-  const geo = new THREE.ExtrudeGeometry(shape, {
-    depth: 1.76,
-    bevelEnabled: true,
-    bevelThickness: 0.04,
-    bevelSize: 0.03,
-    bevelSegments: 2,
-    curveSegments: 8,
-  });
-  geo.translate(0, 0, -0.88);
-  geo.rotateY(-Math.PI / 2);
-  geo.computeVertexNormals();
-  return geo;
+function createCurvedDrumTowerGeometry(): THREE.BufferGeometry {
+  const parts: THREE.BufferGeometry[] = [];
+  const mainDrum = new THREE.CylinderGeometry(0.46, 0.52, 0.92, 24);
+  mainDrum.scale(1.12, 1, 0.84);
+  mainDrum.translate(0, 0.46, 0);
+  const upperDrum = new THREE.CylinderGeometry(0.36, 0.44, 0.14, 24);
+  upperDrum.scale(1.12, 1, 0.84);
+  upperDrum.translate(0, 0.98, 0);
+  parts.push(mainDrum, upperDrum);
+  // Crisp projecting horizontal architectural brise-soleil shadow bands
+  for (let i = 1; i <= 5; i++) {
+    const t = i / 6;
+    const rad = 0.53 - t * 0.055;
+    const fin = new THREE.CylinderGeometry(rad, rad, 0.018, 24);
+    fin.scale(1.14, 1, 0.86);
+    fin.translate(0, t * 0.92, 0);
+    parts.push(fin);
+  }
+  const merged = mergeGeometries(parts, false);
+  parts.forEach((p) => p.dispose());
+  merged.computeVertexNormals();
+  return merged;
 }
 
 /**
- * Sculpts a sleek aerodynamic futuristic panoramic-glass electric city coach (+Z forward).
+ * Sculpts a bold terraced contemporary skyscraper with cantilevered sky-garden setbacks & corner fins.
  */
-function createAerodynamicCoachBodyGeometry(): THREE.BufferGeometry {
-  const shape = new THREE.Shape();
-  shape.moveTo(-4.45, 0.38);
-  shape.lineTo(4.35, 0.36);
-  shape.quadraticCurveTo(4.68, 0.56, 4.56, 1.28);
-  shape.quadraticCurveTo(4.36, 2.55, 3.82, 3.12);
-  shape.lineTo(-4.15, 3.14);
-  shape.quadraticCurveTo(-4.52, 3.05, -4.55, 2.55);
-  shape.lineTo(-4.52, 0.72);
-  shape.closePath();
-
-  const geo = new THREE.ExtrudeGeometry(shape, {
-    depth: 2.28,
-    bevelEnabled: true,
-    bevelThickness: 0.12,
-    bevelSize: 0.09,
-    bevelSegments: 3,
-    curveSegments: 10,
-  });
-  geo.translate(0, 0, -1.14);
-  geo.rotateY(-Math.PI / 2);
-  geo.computeVertexNormals();
-  return geo;
-}
-
-/**
- * Sculpts matching wrap-around panoramic glass band for the futuristic electric city coach.
- */
-function createAerodynamicCoachGlassGeometry(): THREE.BufferGeometry {
-  const shape = new THREE.Shape();
-  shape.moveTo(-4.26, 1.22);
-  shape.lineTo(4.36, 1.18);
-  shape.quadraticCurveTo(4.18, 2.38, 3.74, 2.86);
-  shape.lineTo(-4.24, 2.88);
-  shape.closePath();
-
-  const geo = new THREE.ExtrudeGeometry(shape, {
-    depth: 2.38,
-    bevelEnabled: true,
-    bevelThickness: 0.04,
-    bevelSize: 0.03,
-    bevelSegments: 2,
-    curveSegments: 8,
-  });
-  geo.translate(0, 0, -1.19);
-  geo.rotateY(-Math.PI / 2);
-  geo.computeVertexNormals();
-  return geo;
+function createTerracedSkyGardenTowerGeometry(): THREE.BufferGeometry {
+  const parts: THREE.BufferGeometry[] = [];
+  const tier1 = new THREE.BoxGeometry(1.04, 0.36, 0.96);
+  tier1.translate(0, 0.18, 0);
+  const tier2 = new THREE.BoxGeometry(0.86, 0.32, 0.88);
+  tier2.translate(-0.08, 0.52, 0.04);
+  const tier3 = new THREE.BoxGeometry(0.68, 0.28, 0.72);
+  tier3.translate(0.06, 0.82, -0.05);
+  const overhang1 = new THREE.BoxGeometry(1.12, 0.025, 1.04);
+  overhang1.translate(0, 0.365, 0);
+  const overhang2 = new THREE.BoxGeometry(0.94, 0.025, 0.96);
+  overhang2.translate(-0.08, 0.685, 0.04);
+  parts.push(tier1, tier2, tier3, overhang1, overhang2);
+  const merged = mergeGeometries(parts, false);
+  parts.forEach((p) => p.dispose());
+  merged.computeVertexNormals();
+  return merged;
 }
 
 /**
@@ -333,6 +278,7 @@ export function buildArchitecturalCity(
 
   // High-resolution procedural PBR texture suites
   const skyPbr = track(createSkyscraperPbrSet(maxAnisotropy));
+  const limestoneTowerPbr = track(createLimestoneTowerPbrSet(maxAnisotropy));
   const plazaPbr = track(createPlazaStonePbrSet(maxAnisotropy));
   const roadPbr = track(createBoulevardRoadPbrSet(maxAnisotropy));
   const claddingPbr = track(createArchitecturalCladdingPbr(maxAnisotropy));
@@ -340,7 +286,6 @@ export function buildArchitecturalCity(
   const parkGrassPbr = track(createNaturalGrassPbrSet(maxAnisotropy, 5, 5));
   const woodPbr = track(createWoodGrainPbrSet(maxAnisotropy));
   const winTex = track(createResidentialWindowTextures(maxAnisotropy));
-  const headlightBeamTex = track(createCarHeadlightBeamTexture());
   const shadowTex = track(createContactShadowTexture());
   const lightPoolTex = track(createLightPoolTexture());
 
@@ -364,7 +309,7 @@ export function buildArchitecturalCity(
 
   const hillMat = track(
     new THREE.MeshStandardMaterial({
-      color: initialDarkMode ? 0x101622 : 0x62745e,
+      color: initialDarkMode ? 0x26213e : 0x5c8459,
       roughness: 0.96,
       metalness: 0.0,
     })
@@ -549,8 +494,8 @@ export function buildArchitecturalCity(
   );
   const fountainHaloMat = track(
     new THREE.MeshStandardMaterial({
-      color: initialDarkMode ? 0xbae6fd : 0x7dd3fc,
-      emissive: 0x38bdf8,
+      color: initialDarkMode ? 0xffd580 : 0x7dd3fc,
+      emissive: initialDarkMode ? 0xffa73b : 0x38bdf8,
       emissiveIntensity: initialDarkMode ? 2.15 : 0.2,
       roughness: 0.14,
     })
@@ -561,7 +506,6 @@ export function buildArchitecturalCity(
       roughness: 0.12,
       metalness: 0.94,
       clearcoat: 1.0,
-      envMapIntensity: 1.95,
     })
   );
 
@@ -586,20 +530,21 @@ export function buildArchitecturalCity(
   fountainHaloRing.position.set(0, 0.78, -7.5);
   group.add(fountainBasinOuter, fountainBasinCap, fountainHaloRing);
 
-  // Animated Physical Rippling Water Material (Shared by Fountain Basin & City River Canal!)
+  // Mirror-Glassy Animated Rippling Water Material (Shared by Fountain Basin & Scenic City River!)
+  // Light Mode: crisp sunlit azure sky + cloud + emerald bank reflections
+  // Dark/Sunset Mode: golden-hour sunset sky, shimmering orange-gold sun path, and golden embankment lamp reflections!
   const waterUniforms = {
     uTime: { value: 0 },
     uIsDark: { value: initialDarkMode ? 1.0 : 0.0 },
   };
   const waterMat = track(
     new THREE.MeshPhysicalMaterial({
-      color: initialDarkMode ? 0x0b1f34 : 0x1e4d6b,
-      roughness: 0.05,
-      metalness: 0.12,
+      color: initialDarkMode ? 0x1a1c36 : 0x2a7bc8,
+      roughness: 0.08,
+      metalness: 0.14,
       clearcoat: 1.0,
-      clearcoatRoughness: 0.04,
+      clearcoatRoughness: 0.05,
       reflectivity: 1.0,
-      envMapIntensity: 1.95,
     })
   );
   waterMat.onBeforeCompile = (shader) => {
@@ -623,20 +568,45 @@ export function buildArchitecturalCity(
           '#include <normal_fragment_maps>',
           `#include <normal_fragment_maps>
           vec2 wp = vWaterWorldPos.xz;
-          float w1 = sin(wp.x * 0.95 + uTime * 1.65) * cos(wp.y * 1.45 - uTime * 1.35);
-          float w2 = cos(wp.x * 2.1 - wp.y * 1.8 + uTime * 2.1);
-          normal = normalize(normal + vec3((w1 + w2 * 0.5) * 0.08, 0.0, (w2 - w1 * 0.5) * 0.08));`
+          float w1 = sin(wp.x * 0.85 + uTime * 1.45) * cos(wp.y * 1.65 - uTime * 1.15);
+          float w2 = cos(wp.x * 1.9 - wp.y * 2.1 + uTime * 1.85);
+          normal = normalize(normal + vec3((w1 + w2 * 0.45) * 0.065, 0.0, (w2 - w1 * 0.45) * 0.075));`
         )
         .replace(
           '#include <color_fragment>',
           `#include <color_fragment>
           vec2 cp = vWaterWorldPos.xz;
           float rDist = length(cp - vec2(0.0, -7.5));
-          float ripple = sin(cp.x * 1.4 + uTime * 1.9) * cos(cp.y * 1.7 - uTime * 1.5) * 0.5 + 0.5;
-          float shimmer = smoothstep(0.66, 0.98, ripple);
+          float isRiver = step(20.0, cp.y);
+          float bankDist = abs(cp.y - 54.0);
+          float bankMask = smoothstep(5.5, 11.4, bankDist) * isRiver;
+          float centerMask = (1.0 - smoothstep(0.0, 9.8, bankDist)) * isRiver;
+
+          float ripple = sin(cp.x * 1.25 + uTime * 1.65) * cos(cp.y * 2.15 - uTime * 1.35) * 0.5 + 0.5;
+          float microWave = sin(cp.x * 3.4 - cp.y * 2.8 + uTime * 2.2) * 0.5 + 0.5;
+          float shimmer = smoothstep(0.58, 0.98, ripple * 0.7 + microWave * 0.3);
+
+          // LIGHT MODE: Crisp Mediterranean azure river + sunlit cloud reflection + lush emerald tree reflections along both banks!
+          vec3 dayCenterRefl = mix(vec3(0.32, 0.64, 0.96), vec3(0.84, 0.93, 1.0), shimmer * 0.72 + 0.16);
+          vec3 dayBankRefl = mix(vec3(0.18, 0.44, 0.19), vec3(0.34, 0.60, 0.25), microWave * 0.5 + 0.25);
+          vec3 dayRiverCol = mix(dayCenterRefl, dayBankRefl, bankMask * 0.82);
+
+          // DARK / SUNSET MODE: Dramatic golden-hour river
+          float sunPath = exp(-pow((cp.x + 12.0) * 0.022, 2.0)) * centerMask;
+          float lampSpacing = abs(sin(cp.x * 0.2618));
+          float lampStreak = pow(lampSpacing, 7.0) * smoothstep(3.2, 11.2, bankDist) * isRiver;
+          vec3 sunsetWaterBase = mix(vec3(0.18, 0.16, 0.34), vec3(0.76, 0.36, 0.28), centerMask * 0.75 + 0.12);
+          vec3 sunsetGoldPath = vec3(1.0, 0.66, 0.24) * (0.45 + shimmer * 0.85) * (0.42 + sunPath * 0.95);
+          vec3 sunsetLampGlow = vec3(1.0, 0.76, 0.32) * lampStreak * (0.55 + microWave * 0.75) * 1.25;
+          vec3 sunsetRiverCol = sunsetWaterBase + sunsetGoldPath * centerMask + sunsetLampGlow;
+
+          vec3 riverCol = mix(dayRiverCol, sunsetRiverCol, uIsDark);
+          diffuseColor.rgb = mix(diffuseColor.rgb, riverCol, isRiver * 0.88);
+
+          // Fountain splash rings & subtle water glints
           float splashRing = exp(-pow((rDist - 3.25) * 3.0, 2.0)) * step(rDist, 6.2);
-          vec3 glintColor = mix(vec3(0.55, 0.76, 0.92), vec3(0.22, 0.42, 0.64), uIsDark);
-          diffuseColor.rgb += glintColor * shimmer * 0.30 + vec3(0.84, 0.93, 0.99) * splashRing * 0.38;`
+          vec3 glintColor = mix(vec3(0.68, 0.86, 1.0), vec3(1.0, 0.68, 0.34), uIsDark);
+          diffuseColor.rgb += glintColor * shimmer * 0.22 + vec3(0.92, 0.96, 1.0) * splashRing * 0.36;`
         );
   };
 
@@ -724,146 +694,233 @@ export function buildArchitecturalCity(
   }
 
   // ===========================================================================
-  // 3. SHIMMERING CITY RIVER CANAL, CANTILEVERED WATERFRONT PIERS & TIED-ARCH STEEL BRIDGE (z = 54)
+  // 3. SCENIC REFLECTIVE METROPOLIS RIVER, TERRACED EMERALD EMBANKMENTS,
+  //    MOORED RIVER CRUISERS & CLASSIC ILLUMINATED MULTI-ARCH BRIDGE (z = 54)
   // ===========================================================================
-  const riverWater = new THREE.Mesh(track(new THREE.PlaneGeometry(520, 22.5)), waterMat);
+  const riverWater = new THREE.Mesh(track(new THREE.PlaneGeometry(580, 23.2)), waterMat);
   riverWater.rotation.x = -Math.PI / 2;
   riverWater.position.set(0, 0.14, 54);
   group.add(riverWater);
 
   const waterfrontGlassMat = track(
     new THREE.MeshPhysicalMaterial({
-      color: initialDarkMode ? 0x6ba8e5 : 0xcce6ff,
-      roughness: 0.05,
-      metalness: 0.2,
+      color: initialDarkMode ? 0x9ab4d6 : 0xcce6ff,
+      roughness: 0.06,
+      metalness: 0.22,
       transparent: true,
-      opacity: 0.42,
+      opacity: 0.4,
       clearcoat: 1.0,
-      envMapIntensity: 1.85,
     })
   );
 
-  // Carved Stone & Basalt River Embankment Seawalls, Promenade Walkways, Glass Railings & Overlook Piers
-  const embankmentWallGeo = track(new THREE.BoxGeometry(520, 1.45, 2.6));
-  const promenadeGeo = track(new THREE.BoxGeometry(520, 0.22, 4.8));
-  [41.6, 66.4].forEach((ez, sideIdx) => {
+  // Carved Stone River Embankment Seawalls, Terraced Emerald Park Strips & Scenic Waterfront Promenades
+  const embankmentWallGeo = track(new THREE.BoxGeometry(560, 1.45, 2.4));
+  const promenadeGeo = track(new THREE.BoxGeometry(560, 0.22, 4.4));
+  const emeraldSlopeGeo = track(new THREE.BoxGeometry(560, 0.48, 3.8));
+  [41.4, 66.6].forEach((ez, sideIdx) => {
     const sign = sideIdx === 0 ? -1 : 1;
-    const wall = new THREE.Mesh(embankmentWallGeo, fountainBasaltMat);
+    const wall = new THREE.Mesh(embankmentWallGeo, stoneCurbMat);
     wall.position.set(0, 0.45, ez);
     wall.receiveShadow = quality.shadowsEnabled;
     const prom = new THREE.Mesh(promenadeGeo, plazaMat);
-    prom.position.set(0, 0.92, ez + sign * 2.2);
+    prom.position.set(0, 0.94, ez + sign * 2.1);
     prom.receiveShadow = quality.shadowsEnabled;
-    group.add(wall, prom);
+    const emeraldTerrace = new THREE.Mesh(emeraldSlopeGeo, parkGrassMat);
+    emeraldTerrace.position.set(0, 1.06, ez + sign * 5.2);
+    emeraldTerrace.receiveShadow = quality.shadowsEnabled;
+    group.add(wall, prom, emeraldTerrace);
 
-    // Sleek Architectural Glass & Brushed-Steel Waterfront Promenade Balustrades
-    [-138, 138].forEach((segX) => {
-      const rail = new THREE.Mesh(track(new THREE.BoxGeometry(250, 0.08, 0.12)), fountainChromeMat);
-      rail.position.set(segX, 1.76, ez - sign * 0.95);
+    // Classic Stone Coping & Sleek Waterfront Railing along both promenades (skipping bridge center)
+    [-148, 148].forEach((segX) => {
+      const rail = new THREE.Mesh(track(new THREE.BoxGeometry(272, 0.08, 0.12)), fountainChromeMat);
+      rail.position.set(segX, 1.72, ez - sign * 0.95);
       const glassPanel = new THREE.Mesh(
-        track(new THREE.BoxGeometry(250, 0.72, 0.05)),
+        track(new THREE.BoxGeometry(272, 0.68, 0.05)),
         waterfrontGlassMat
       );
-      glassPanel.position.set(segX, 1.38, ez - sign * 0.95);
-      const curb = new THREE.Mesh(track(new THREE.BoxGeometry(250, 0.28, 0.36)), stoneCurbMat);
+      glassPanel.position.set(segX, 1.36, ez - sign * 0.95);
+      const curb = new THREE.Mesh(track(new THREE.BoxGeometry(272, 0.28, 0.38)), stoneCurbMat);
       curb.position.set(segX, 1.04, ez - sign * 0.95);
       group.add(rail, glassPanel, curb);
     });
 
-    // Cantilevered Teak & Glass Waterfront Overlook Piers jutting gracefully out over the shimmering canal!
-    [-52, -26, 26, 52].forEach((px) => {
-      const pierDeck = new THREE.Mesh(track(new THREE.BoxGeometry(7.2, 0.26, 4.2)), benchWoodMat);
-      pierDeck.position.set(px, 0.98, ez - sign * 2.55);
+    // Timber & Stone Waterfront Overlook Landings
+    [-58, -28, 28, 58].forEach((px) => {
+      const pierDeck = new THREE.Mesh(track(new THREE.BoxGeometry(7.2, 0.26, 3.6)), benchWoodMat);
+      pierDeck.position.set(px, 0.96, ez - sign * 2.25);
       pierDeck.receiveShadow = quality.shadowsEnabled;
       const pierRim = new THREE.Mesh(track(new THREE.BoxGeometry(7.35, 0.08, 0.1)), fountainHaloMat);
-      pierRim.position.set(px, 0.86, ez - sign * 4.65);
-      const pierRail = new THREE.Mesh(track(new THREE.BoxGeometry(7.2, 0.78, 0.06)), waterfrontGlassMat);
-      pierRail.position.set(px, 1.48, ez - sign * 4.6);
-      group.add(pierDeck, pierRim, pierRail);
+      pierRim.position.set(px, 0.85, ez - sign * 4.05);
+      group.add(pierDeck, pierRim);
     });
   });
 
-  // Iconic Tied-Arch Steel & Concrete River Bridge carrying the Main Boulevard across the River (z = 40 to 68)
+  // Moored Scenic River Cruiser Vessels docked gracefully along the right waterfront stone quay (matching reference photos!)
+  const boatHullMat = track(
+    new THREE.MeshStandardMaterial({
+      color: initialDarkMode ? 0x1e2536 : 0x29394f,
+      roughness: 0.36,
+      metalness: 0.25,
+    })
+  );
+  const boatCabinMat = track(
+    new THREE.MeshStandardMaterial({
+      color: initialDarkMode ? 0xd9dde6 : 0xf7f9fc,
+      roughness: 0.28,
+      metalness: 0.12,
+    })
+  );
+  const boatWindowMat = track(
+    new THREE.MeshStandardMaterial({
+      color: initialDarkMode ? 0xffd580 : 0x2d4e70,
+      emissive: initialDarkMode ? 0xffa838 : 0x000000,
+      emissiveIntensity: initialDarkMode ? 1.55 : 0.0,
+      roughness: 0.14,
+      metalness: 0.35,
+    })
+  );
+  [
+    [38, 63.4, 0.04, 1.05],
+    [52, 63.6, -0.03, 0.92],
+    [-42, 44.6, Math.PI + 0.03, 1.0],
+    [76, 63.5, 0.02, 0.96],
+  ].forEach(([bx, bz, rotY, sc]) => {
+    const boat = new THREE.Group();
+    boat.position.set(bx, 0.24, bz);
+    boat.rotation.y = rotY;
+    boat.scale.setScalar(sc);
+    const hull = new THREE.Mesh(track(new THREE.BoxGeometry(8.6, 0.82, 2.5)), boatHullMat);
+    hull.position.set(0, 0.35, 0);
+    const bow = new THREE.Mesh(track(new THREE.CylinderGeometry(0.15, 1.25, 2.2, 4)), boatHullMat);
+    bow.rotation.z = -Math.PI / 2;
+    bow.rotation.x = Math.PI / 4;
+    bow.position.set(5.3, 0.36, 0);
+    const cabin = new THREE.Mesh(track(new THREE.BoxGeometry(5.8, 1.08, 2.05)), boatCabinMat);
+    cabin.position.set(-0.3, 1.22, 0);
+    const cabinGlass = new THREE.Mesh(track(new THREE.BoxGeometry(5.1, 0.48, 2.12)), boatWindowMat);
+    cabinGlass.position.set(-0.2, 1.32, 0);
+    const topDeck = new THREE.Mesh(track(new THREE.BoxGeometry(4.8, 0.14, 1.95)), boatCabinMat);
+    topDeck.position.set(-0.4, 1.82, 0);
+    boat.add(hull, bow, cabin, cabinGlass, topDeck);
+    group.add(boat);
+  });
+
+  // Classic Illuminated Multi-Arch Stone & Steel River Bridge (z = 54, matching reference photos!)
+  // Open sky overhead across the boulevard lanes so camera glides smoothly over the water with zero clutter!
   const bridgeGroup = new THREE.Group();
   bridgeGroup.position.set(0, 0, 54);
 
   const bridgeSteelMat = track(
     new THREE.MeshPhysicalMaterial({
-      color: initialDarkMode ? 0x263142 : 0x3b4d63,
-      roughness: 0.34,
-      metalness: 0.78,
-      clearcoat: 0.35,
+      color: initialDarkMode ? 0x2b3242 : 0x52657a,
+      roughness: 0.36,
+      metalness: 0.68,
+      clearcoat: 0.28,
+    })
+  );
+  const bridgeArchLightMat = track(
+    new THREE.MeshStandardMaterial({
+      color: initialDarkMode ? 0xffe49e : 0xeef3f8,
+      emissive: initialDarkMode ? 0xffb84d : 0x000000,
+      emissiveIntensity: initialDarkMode ? 2.35 : 0.0,
+      roughness: 0.18,
     })
   );
 
-  // Bridge Deck + Raised Sidewalk Curbs spanning z = -15 to +15 across the canal
-  const bridgeDeck = new THREE.Mesh(track(new THREE.BoxGeometry(21.4, 0.85, 29.6)), stoneCurbMat);
-  bridgeDeck.position.set(0, 0.42, 0);
+  // Main Bridge Roadway Deck carrying Boulevard traffic across the river
+  const bridgeDeck = new THREE.Mesh(track(new THREE.BoxGeometry(21.6, 0.9, 29.8)), stoneCurbMat);
+  bridgeDeck.position.set(0, 0.45, 0);
   bridgeDeck.receiveShadow = quality.shadowsEnabled;
   bridgeGroup.add(bridgeDeck);
 
-  // Heavy Carved Stone Bridge Abutment Pylons at all 4 Corners of the River Span
-  [
-    [-10.2, -13.2],
-    [10.2, -13.2],
-    [-10.2, 13.2],
-    [10.2, 13.2],
-  ].forEach(([px, pz]) => {
-    const pylon = new THREE.Mesh(track(new THREE.BoxGeometry(2.1, 4.2, 2.2)), stoneCurbMat);
-    pylon.position.set(px, 2.1, pz);
-    pylon.castShadow = quality.shadowsEnabled;
-    const cap = new THREE.Mesh(track(new THREE.BoxGeometry(2.5, 0.36, 2.6)), stoneCurbMat);
-    cap.position.set(px, 4.3, pz);
-    bridgeGroup.add(pylon, cap);
+  // Carved Stone River Bridge Piers & Cutwaters along both bridge faces
+  [-11.0, 0.0, 11.0].forEach((pz) => {
+    [-10.4, 10.4].forEach((px) => {
+      const pier = new THREE.Mesh(track(new THREE.BoxGeometry(1.85, 2.3, 1.95)), stoneCurbMat);
+      pier.position.set(px, 0.95, pz);
+      pier.castShadow = quality.shadowsEnabled;
+      const cap = new THREE.Mesh(track(new THREE.BoxGeometry(2.25, 0.28, 2.3)), stoneCurbMat);
+      cap.position.set(px, 2.15, pz);
+      bridgeGroup.add(pier, cap);
+    });
   });
 
-  // Twin Graceful Overhead Parabolic Tied-Steel Arches spanning lengthwise along the Boulevard!
-  [-8.6, 8.6].forEach((ax) => {
-    const archCurve = new THREE.CatmullRomCurve3([
-      new THREE.Vector3(ax, 1.2, -13.0),
-      new THREE.Vector3(ax, 7.6, -6.5),
-      new THREE.Vector3(ax, 9.8, 0),
-      new THREE.Vector3(ax, 7.6, 6.5),
-      new THREE.Vector3(ax, 1.2, 13.0),
-    ]);
-    const archMesh = new THREE.Mesh(
-      track(new THREE.TubeGeometry(archCurve, 36, 0.34, 12, false)),
-      bridgeSteelMat
-    );
-    archMesh.castShadow = quality.shadowsEnabled;
-    bridgeGroup.add(archMesh);
+  // Graceful Multi-Arch Structural Rib Spans & Warm Golden Illuminated Arch Soffits along both river sides
+  [-9.8, 9.8].forEach((ax) => {
+    // Low sculptural balustrade parapet
+    const parapet = new THREE.Mesh(track(new THREE.BoxGeometry(0.46, 0.98, 28.6)), stoneCurbMat);
+    parapet.position.set(ax, 1.32, 0);
+    const topRail = new THREE.Mesh(track(new THREE.BoxGeometry(0.58, 0.14, 28.8)), bridgeSteelMat);
+    topRail.position.set(ax, 1.84, 0);
+    bridgeGroup.add(parapet, topRail);
 
-    // Bridge side safety parapet
-    const parapet = new THREE.Mesh(track(new THREE.BoxGeometry(0.45, 1.05, 26.2)), bridgeSteelMat);
-    parapet.position.set(ax, 1.25, 0);
-    bridgeGroup.add(parapet);
-
-    // Vertical Suspension Hanger Rods connecting Arch to Road Deck
-    for (let hz = -9.6; hz <= 9.65; hz += 2.4) {
-      const tNorm = (hz + 13.0) / 26.0;
-      const pt = archCurve.getPoint(tNorm);
-      const len = Math.max(0.4, pt.y - 1.2);
-      const hanger = new THREE.Mesh(
-        track(new THREE.CylinderGeometry(0.055, 0.055, len, 8)),
+    // Two wide classical low-rise arches along each river-facing side (z = -11..0 and z = 0..11)
+    [-5.5, 5.5].forEach((archCenterZ) => {
+      const archCurve = new THREE.CatmullRomCurve3([
+        new THREE.Vector3(ax, 0.28, archCenterZ - 5.1),
+        new THREE.Vector3(ax, 0.96, archCenterZ - 2.6),
+        new THREE.Vector3(ax, 1.18, archCenterZ),
+        new THREE.Vector3(ax, 0.96, archCenterZ + 2.6),
+        new THREE.Vector3(ax, 0.28, archCenterZ + 5.1),
+      ]);
+      const archRim = new THREE.Mesh(
+        track(new THREE.TubeGeometry(archCurve, 24, 0.16, 8, false)),
         bridgeSteelMat
       );
-      hanger.position.set(ax, 1.2 + len * 0.5, hz);
-      bridgeGroup.add(hanger);
-    }
+      const archGlowStrip = new THREE.Mesh(
+        track(new THREE.TubeGeometry(archCurve, 24, 0.085, 6, false)),
+        bridgeArchLightMat
+      );
+      archGlowStrip.position.y = -0.14;
+      bridgeGroup.add(archRim, archGlowStrip);
+    });
+
+    // Classic Globe Bridge Streetlamps lining both sides of the river bridge!
+    [-11.0, -5.5, 0.0, 5.5, 11.0].forEach((lz) => {
+      const lampPost = new THREE.Mesh(
+        track(new THREE.CylinderGeometry(0.05, 0.08, 3.1, 8)),
+        bridgeSteelMat
+      );
+      lampPost.position.set(ax, 3.35, lz);
+      const lampGlobe = new THREE.Mesh(
+        track(new THREE.SphereGeometry(0.24, 10, 10)),
+        bridgeArchLightMat
+      );
+      lampGlobe.position.set(ax, 4.98, lz);
+      bridgeGroup.add(lampPost, lampGlobe);
+    });
   });
 
-  // Overhead Steel Cross-Bracing Beams tying the Twin Arches together high above traffic!
-  [-4.8, 0, 4.8].forEach((bz) => {
-    const yArch = bz === 0 ? 9.65 : 8.55;
-    const crossTie = new THREE.Mesh(
-      track(new THREE.BoxGeometry(17.4, 0.36, 0.42)),
-      bridgeSteelMat
-    );
-    crossTie.position.set(0, yArch, bz);
-    crossTie.castShadow = quality.shadowsEnabled;
-    bridgeGroup.add(crossTie);
+  // Secondary Scenic Multi-Arch Pedestrian / Horizon River Bridge further down the river (x = -86, z = 54)
+  // Visible in the panoramic city view just like the multi-arch river bridge spanning the vista in both reference images!
+  const vistaBridge = new THREE.Group();
+  vistaBridge.position.set(-78, 0, 54);
+  const vistaDeck = new THREE.Mesh(track(new THREE.BoxGeometry(7.6, 0.72, 27.6)), stoneCurbMat);
+  vistaDeck.position.set(0, 1.65, 0);
+  vistaBridge.add(vistaDeck);
+  [-11.5, -3.8, 3.8, 11.5].forEach((pz) => {
+    const vPier = new THREE.Mesh(track(new THREE.BoxGeometry(8.4, 2.2, 1.5)), stoneCurbMat);
+    vPier.position.set(0, 0.85, pz);
+    vistaBridge.add(vPier);
   });
-  group.add(bridgeGroup);
+  [-7.65, 0.0, 7.65].forEach((cz) => {
+    const vCurve = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(3.75, 0.32, cz - 3.6),
+      new THREE.Vector3(3.75, 1.38, cz),
+      new THREE.Vector3(3.75, 0.32, cz + 3.6),
+    ]);
+    const vArch = new THREE.Mesh(
+      track(new THREE.TubeGeometry(vCurve, 16, 0.14, 8, false)),
+      bridgeArchLightMat
+    );
+    vistaBridge.add(vArch);
+  });
+  [-9.5, -3.8, 3.8, 9.5].forEach((lz) => {
+    const vLamp = new THREE.Mesh(track(new THREE.SphereGeometry(0.26, 8, 8)), bridgeArchLightMat);
+    vLamp.position.set(3.6, 3.4, lz);
+    vistaBridge.add(vLamp);
+  });
+  group.add(bridgeGroup, vistaBridge);
 
   // ===========================================================================
   // 4. GRAND ROYAL BOULEVARD, CROSS AVENUES, SIDEWALKS & CLEAN INTERSECTIONS
@@ -1056,55 +1113,98 @@ export function buildArchitecturalCity(
   const diagCrownGeo = track(createDiagonalCrownTowerGeometry());
   const twistedTowerGeo = track(createTwistedSupertallGeometry());
   const crystalTowerGeo = track(createFacetedCrystalTowerGeometry());
+  const artDecoTowerGeo = track(createArtDecoSteppedTowerGeometry());
+  const curvedDrumGeo = track(createCurvedDrumTowerGeometry());
+  const terracedTowerGeo = track(createTerracedSkyGardenTowerGeometry());
   const crownHaloGeo = track(new THREE.BoxGeometry(0.8, 0.16, 0.8));
   const helipadRingGeo = track(new THREE.RingGeometry(0.22, 0.28, 24));
   helipadRingGeo.rotateX(-Math.PI / 2);
 
   const podiumMat = track(
     new THREE.MeshStandardMaterial({
-      color: initialDarkMode ? 0x162238 : 0xd6e1ee,
+      color: initialDarkMode ? 0x1e2236 : 0xddd7cc,
       map: claddingPbr.map,
       normalMap: claddingPbr.normalMap,
-      normalScale: new THREE.Vector2(0.36, 0.36),
+      normalScale: new THREE.Vector2(0.42, 0.42),
       roughnessMap: claddingPbr.roughnessMap,
       roughness: 0.62,
-      metalness: 0.22,
+      metalness: 0.18,
     })
   );
   applyGroundAO(podiumMat, 4.6, 0.3);
 
+  // Material 1: Crisp Architectural Sapphire & Silver Curtain-Wall Glass Towers
   const towerMat = track(
     new THREE.MeshPhysicalMaterial({
       color: 0xffffff,
       map: initialDarkMode ? skyPbr.darkMap : skyPbr.lightMap,
       normalMap: skyPbr.normalMap,
-      normalScale: new THREE.Vector2(0.62, 0.62),
+      normalScale: new THREE.Vector2(0.72, 0.72),
       roughnessMap: skyPbr.roughnessMap,
-      emissive: initialDarkMode ? 0xdff2ff : 0x000000,
+      emissive: initialDarkMode ? 0xffcf7a : 0x000000,
       emissiveMap: initialDarkMode ? skyPbr.darkEmissiveMap : null,
-      emissiveIntensity: initialDarkMode ? 1.02 : 0.0,
-      roughness: initialDarkMode ? 0.31 : 0.17,
-      metalness: initialDarkMode ? 0.68 : 0.74,
-      clearcoat: 1.0,
-      clearcoatRoughness: 0.02,
-      reflectivity: 1.0,
-      envMapIntensity: initialDarkMode ? 2.18 : 2.58,
+      emissiveIntensity: initialDarkMode ? 1.32 : 0.0,
+      roughness: initialDarkMode ? 0.32 : 0.2,
+      metalness: initialDarkMode ? 0.28 : 0.34,
+      clearcoat: 0.68,
+      clearcoatRoughness: 0.12,
+      reflectivity: 0.78,
     })
   );
   applyGroundAO(towerMat, 8.0, 0.24);
+
+  // Material 2: Warm Honed Limestone, Sandstone & Bronze-Window Neo-Deco / Terraced Towers
+  const limestoneTowerMat = track(
+    new THREE.MeshPhysicalMaterial({
+      color: 0xffffff,
+      map: initialDarkMode ? limestoneTowerPbr.darkMap : limestoneTowerPbr.lightMap,
+      normalMap: limestoneTowerPbr.normalMap,
+      normalScale: new THREE.Vector2(0.78, 0.78),
+      roughnessMap: limestoneTowerPbr.roughnessMap,
+      emissive: initialDarkMode ? 0xffc66e : 0x000000,
+      emissiveMap: initialDarkMode ? limestoneTowerPbr.darkEmissiveMap : null,
+      emissiveIntensity: initialDarkMode ? 1.25 : 0.0,
+      roughness: initialDarkMode ? 0.56 : 0.52,
+      metalness: initialDarkMode ? 0.16 : 0.12,
+      clearcoat: 0.22,
+      clearcoatRoughness: 0.32,
+    })
+  );
+  applyGroundAO(limestoneTowerMat, 8.0, 0.26);
+
+  // Material 3: Smoked Bronze-Obsidian & Champagne-Steel Sculpted Landmark Towers
+  const bronzeGlassTowerMat = track(
+    new THREE.MeshPhysicalMaterial({
+      color: initialDarkMode ? 0xd8c3b0 : 0xc2d0de,
+      map: initialDarkMode ? skyPbr.darkMap : skyPbr.lightMap,
+      normalMap: skyPbr.normalMap,
+      normalScale: new THREE.Vector2(0.75, 0.75),
+      roughnessMap: skyPbr.roughnessMap,
+      emissive: initialDarkMode ? 0xffbb5c : 0x000000,
+      emissiveMap: initialDarkMode ? skyPbr.darkEmissiveMap : null,
+      emissiveIntensity: initialDarkMode ? 1.38 : 0.0,
+      roughness: initialDarkMode ? 0.24 : 0.18,
+      metalness: initialDarkMode ? 0.44 : 0.48,
+      clearcoat: 0.85,
+      clearcoatRoughness: 0.08,
+      reflectivity: 0.9,
+    })
+  );
+  applyGroundAO(bronzeGlassTowerMat, 8.0, 0.24);
+
   const rooftopMat = track(
     new THREE.MeshStandardMaterial({
-      color: initialDarkMode ? 0x1a2740 : 0x8ea3ba,
+      color: initialDarkMode ? 0x22273a : 0x8ea3ba,
       roughness: 0.46,
       metalness: 0.58,
     })
   );
-  // Subtle crisp glacier-blue architectural LED crown & bridge accent strip (refined Dubai/Singapore realism)
+  // Warm golden-amber sunset crown accents in Dark Mode / crisp architectural steel-blue accents in Day Mode
   const archLedMat = track(
     new THREE.MeshStandardMaterial({
-      color: initialDarkMode ? 0xbae6fd : 0xcbdcf0,
-      emissive: 0x38bdf8,
-      emissiveIntensity: initialDarkMode ? 2.15 : 0.14,
+      color: initialDarkMode ? 0xffe29a : 0xcbdcf0,
+      emissive: initialDarkMode ? 0xffa838 : 0x38bdf8,
+      emissiveIntensity: initialDarkMode ? 2.2 : 0.12,
       roughness: 0.14,
       metalness: 0.28,
     })
@@ -1126,7 +1226,7 @@ export function buildArchitecturalCity(
     yaw: number;
     dayFacadeHex: number;
     nightFacadeHex: number;
-    archetype: 'stepped' | 'diagonal' | 'twisted' | 'crystal';
+    archetype: 'stepped' | 'stone_deco' | 'curved' | 'terraced' | 'diagonal' | 'twisted' | 'crystal';
   }[] = [];
 
   let seed = 9047;
@@ -1135,9 +1235,9 @@ export function buildArchitecturalCity(
     return (seed - 1) / 2147483646;
   };
 
-  // Cohesive Photorealistic Futuristic Sapphire, Glacier-Azure & Cobalt-Glass Skyscraper Tints
-  const realDayTowerTints = [0xd4e8fc, 0xb8d9fa, 0xe2f0ff, 0xa2cbf5, 0xc7dff5, 0x8fbce8];
-  const realNightTowerTints = [0xb6d4f5, 0x9fc2ea, 0xc9e0f8, 0x8fb7e3, 0xaecae8, 0x95bbe2];
+  // Original Realistic Architectural Skyline Tints (Glacier Glass, Pearl Limestone, Warm Travertine, Smoked Slate, Terracotta Sand, Silver-Blue)
+  const realDayTowerTints = [0xd8ebff, 0xf2ebe0, 0xc3ddf6, 0xe8dfd0, 0xb8d4f0, 0xdce4ee];
+  const realNightTowerTints = [0xbcd2ee, 0xd9c7b8, 0xa8bfe2, 0xc9b5a8, 0xb2c4e0, 0xc8bbd0];
 
   for (let gx = -142; gx <= 142; gx += 19) {
     for (let gz = -145; gz <= 165; gz += 19) {
@@ -1160,14 +1260,20 @@ export function buildArchitecturalCity(
       const h = (22 + rand() * 66 * (0.52 + distFactor * 0.8)) * zoneBoost;
       const tintIdx = Math.floor(rand() * realDayTowerTints.length);
       const roll = rand();
-      const archetype =
-        roll < 0.14 && h > 44
-          ? 'twisted'
-          : roll < 0.28 && h > 40
-            ? 'crystal'
-            : roll < 0.46 && h > 34
-              ? 'diagonal'
-              : 'stepped';
+      const archetype: (typeof towerSlots)[number]['archetype'] =
+        roll < 0.22
+          ? 'stone_deco'
+          : roll < 0.38 && h > 32
+            ? 'curved'
+            : roll < 0.54
+              ? 'terraced'
+              : roll < 0.65 && h > 44
+                ? 'twisted'
+                : roll < 0.76 && h > 40
+                  ? 'crystal'
+                  : roll < 0.86 && h > 34
+                    ? 'diagonal'
+                    : 'stepped';
 
       towerSlots.push({
         x: gx + jitterX,
@@ -1186,6 +1292,9 @@ export function buildArchitecturalCity(
   const steppedSlots = towerSlots
     .filter((s) => s.archetype === 'stepped')
     .slice(0, quality.cityTowerCount);
+  const stoneDecoSlots = towerSlots.filter((s) => s.archetype === 'stone_deco').slice(0, 34);
+  const curvedSlots = towerSlots.filter((s) => s.archetype === 'curved').slice(0, 26);
+  const terracedSlots = towerSlots.filter((s) => s.archetype === 'terraced').slice(0, 28);
   const diagSlots = towerSlots.filter((s) => s.archetype === 'diagonal').slice(0, 22);
   const twistedSlots = towerSlots.filter((s) => s.archetype === 'twisted').slice(0, 14);
   const crystalSlots = towerSlots.filter((s) => s.archetype === 'crystal').slice(0, 16);
@@ -1404,9 +1513,163 @@ export function buildArchitecturalCity(
   });
   group.add(crystalTowersMesh, crystalSpiresMesh);
 
+  // 5A-2. NEW ARCHITECTURAL VARIETY: Warm Limestone Neo-Deco Towers, Curved Glass Drum Landmarks & Biophilic Terraced Sky-Garden Towers!
+  const stoneDecoMesh = new THREE.InstancedMesh(
+    artDecoTowerGeo,
+    limestoneTowerMat,
+    Math.max(1, stoneDecoSlots.length)
+  );
+  for (let i = 0; i < stoneDecoSlots.length; i++) {
+    const s = stoneDecoSlots[i];
+    _vDummy.position.set(s.x, 0, s.z);
+    _vDummy.rotation.set(0, s.yaw, 0);
+    _vDummy.scale.set(s.w * 1.06, s.h * 1.04, s.d * 1.06);
+    _vDummy.updateMatrix();
+    stoneDecoMesh.setMatrixAt(i, _vDummy.matrix);
+    _tempColor.setHex(initialDarkMode ? s.nightFacadeHex : s.dayFacadeHex);
+    stoneDecoMesh.setColorAt(i, _tempColor);
+  }
+  if (stoneDecoSlots.length === 0) {
+    _vDummy.scale.setScalar(0.001);
+    _vDummy.updateMatrix();
+    stoneDecoMesh.setMatrixAt(0, _vDummy.matrix);
+  }
+  stoneDecoMesh.instanceMatrix.needsUpdate = true;
+  if (stoneDecoMesh.instanceColor) stoneDecoMesh.instanceColor.needsUpdate = true;
+  stoneDecoMesh.computeBoundingSphere();
+
+  // Curved Elliptical Smoked-Bronze & Champagne-Steel Glass Drum Towers
+  const curvedTowersMesh = new THREE.InstancedMesh(
+    curvedDrumGeo,
+    bronzeGlassTowerMat,
+    Math.max(1, curvedSlots.length)
+  );
+  for (let i = 0; i < curvedSlots.length; i++) {
+    const s = curvedSlots[i];
+    const rad = (s.w + s.d) * 0.54;
+    _vDummy.position.set(s.x, 0, s.z);
+    _vDummy.rotation.set(0, s.yaw + 0.35, 0);
+    _vDummy.scale.set(rad, s.h * 1.12, rad);
+    _vDummy.updateMatrix();
+    curvedTowersMesh.setMatrixAt(i, _vDummy.matrix);
+    _tempColor.setHex(initialDarkMode ? s.nightFacadeHex : s.dayFacadeHex);
+    curvedTowersMesh.setColorAt(i, _tempColor);
+  }
+  if (curvedSlots.length === 0) {
+    _vDummy.scale.setScalar(0.001);
+    _vDummy.updateMatrix();
+    curvedTowersMesh.setMatrixAt(0, _vDummy.matrix);
+  }
+  curvedTowersMesh.instanceMatrix.needsUpdate = true;
+  if (curvedTowersMesh.instanceColor) curvedTowersMesh.instanceColor.needsUpdate = true;
+  curvedTowersMesh.computeBoundingSphere();
+
+  // Biophilic Terraced Sky-Garden Concrete & Glass Towers (with Emerald Planted Mid-Rise Terraces!)
+  const terracedTowersMesh = new THREE.InstancedMesh(
+    terracedTowerGeo,
+    limestoneTowerMat,
+    Math.max(1, terracedSlots.length)
+  );
+  const skyGardenMat = track(
+    new THREE.MeshStandardMaterial({
+      color: initialDarkMode ? 0x264424 : 0x52a634,
+      roughness: 0.85,
+      metalness: 0.02,
+    })
+  );
+  const skyGardenGeo = track(new THREE.BoxGeometry(0.95, 0.75, 0.92));
+  const skyGardensMesh = new THREE.InstancedMesh(
+    skyGardenGeo,
+    skyGardenMat,
+    Math.max(1, terracedSlots.length * 2)
+  );
+  for (let i = 0; i < terracedSlots.length; i++) {
+    const s = terracedSlots[i];
+    _vDummy.position.set(s.x, 0, s.z);
+    _vDummy.rotation.set(0, s.yaw, 0);
+    _vDummy.scale.set(s.w * 1.05, s.h * 0.96, s.d * 1.05);
+    _vDummy.updateMatrix();
+    terracedTowersMesh.setMatrixAt(i, _vDummy.matrix);
+    _tempColor.setHex(initialDarkMode ? s.nightFacadeHex : s.dayFacadeHex);
+    terracedTowersMesh.setColorAt(i, _tempColor);
+
+    // Emerald sky-garden foliage pads sitting cleanly atop setback ledges
+    _vDummy.position.set(s.x, s.h * 0.96 * 0.37, s.z);
+    _vDummy.scale.set(s.w * 1.02, 1.35, s.d * 0.96);
+    _vDummy.updateMatrix();
+    skyGardensMesh.setMatrixAt(i * 2, _vDummy.matrix);
+
+    _vDummy.position.set(s.x, s.h * 0.96 * 0.69, s.z);
+    _vDummy.scale.set(s.w * 0.84, 1.25, s.d * 0.84);
+    _vDummy.updateMatrix();
+    skyGardensMesh.setMatrixAt(i * 2 + 1, _vDummy.matrix);
+  }
+  if (terracedSlots.length === 0) {
+    _vDummy.scale.setScalar(0.001);
+    _vDummy.updateMatrix();
+    terracedTowersMesh.setMatrixAt(0, _vDummy.matrix);
+    skyGardensMesh.setMatrixAt(0, _vDummy.matrix);
+  }
+  [terracedTowersMesh, skyGardensMesh].forEach((m) => {
+    m.instanceMatrix.needsUpdate = true;
+    if (m.instanceColor) m.instanceColor.needsUpdate = true;
+    m.computeBoundingSphere();
+  });
+  group.add(stoneDecoMesh, curvedTowersMesh, terracedTowersMesh, skyGardensMesh);
+
+  // Iconic Left-Waterfront Stepped Supertall Spire Landmark Cluster
+  // Positioned cleanly at x = -54, z = 96 (100% clear of the camera path & boulevard!)
+  const heroSpireGroup = new THREE.Group();
+  heroSpireGroup.position.set(-54, 0, 96);
+  const heroTier1 = new THREE.Mesh(track(new THREE.BoxGeometry(16, 78, 15)), towerMat);
+  heroTier1.position.set(0, 39, 0);
+  const heroTier2 = new THREE.Mesh(track(new THREE.BoxGeometry(11.8, 22, 11.4)), towerMat);
+  heroTier2.position.set(0.8, 89, 0.4);
+  const heroTier3 = new THREE.Mesh(track(new THREE.BoxGeometry(7.2, 13, 7.2)), towerMat);
+  heroTier3.position.set(0.8, 106.5, 0.4);
+  const heroCrownBand = new THREE.Mesh(track(new THREE.BoxGeometry(7.5, 0.85, 7.5)), archLedMat);
+  heroCrownBand.position.set(0.8, 112.8, 0.4);
+  const heroSpireMast = new THREE.Mesh(track(new THREE.CylinderGeometry(0.14, 0.72, 22, 10)), rooftopMat);
+  heroSpireMast.position.set(0.8, 124, 0.4);
+  const heroSpireTip = new THREE.Mesh(track(new THREE.SphereGeometry(0.52, 10, 10)), archLedMat);
+  heroSpireTip.position.set(0.8, 135.2, 0.4);
+  // Flanking sleek bronze-glass corporate tower right beside the supertall spire
+  const flankingTower = new THREE.Mesh(track(new THREE.BoxGeometry(15, 92, 13.5)), bronzeGlassTowerMat);
+  flankingTower.position.set(-22, 46, 6);
+  const flankingCrown = new THREE.Mesh(track(new THREE.BoxGeometry(15.3, 1.4, 13.8)), rooftopMat);
+  flankingCrown.position.set(-22, 92.7, 6);
+  heroSpireGroup.add(
+    heroTier1,
+    heroTier2,
+    heroTier3,
+    heroCrownBand,
+    heroSpireMast,
+    heroSpireTip,
+    flankingTower,
+    flankingCrown
+  );
+
+  // Right-Waterfront Sculpted Twin-Sail Curved Glass & Limestone Architectural Landmark (x = 58, z = 104)
+  const eastLandmarkGroup = new THREE.Group();
+  eastLandmarkGroup.position.set(58, 0, 104);
+  const eastTowerA = new THREE.Mesh(track(new THREE.CylinderGeometry(6.8, 9.2, 94, 24)), bronzeGlassTowerMat);
+  eastTowerA.scale.set(1.25, 1, 0.76);
+  eastTowerA.position.set(0, 47, 0);
+  const eastCrownA = new THREE.Mesh(track(new THREE.TorusGeometry(6.9, 0.42, 12, 32)), archLedMat);
+  eastCrownA.rotation.x = Math.PI / 2;
+  eastCrownA.scale.set(1.25, 0.76, 1);
+  eastCrownA.position.set(0, 93.5, 0);
+  const eastTowerB = new THREE.Mesh(track(new THREE.BoxGeometry(13.5, 68, 12.5)), limestoneTowerMat);
+  eastTowerB.position.set(18, 34, 8);
+  const eastTopB = new THREE.Mesh(track(new THREE.BoxGeometry(9.6, 14, 9.2)), limestoneTowerMat);
+  eastTopB.position.set(18, 75, 8);
+  const eastCrownB = new THREE.Mesh(track(new THREE.BoxGeometry(9.9, 0.65, 9.5)), archLedMat);
+  eastCrownB.position.set(18, 82.2, 8);
+  eastLandmarkGroup.add(eastTowerA, eastCrownA, eastTowerB, eastTopB, eastCrownB);
+  group.add(heroSpireGroup, eastLandmarkGroup);
+
   // ===========================================================================
   // 5B. FUTURISTIC SIGNATURE LANDMARKS: TWIN-TOWER GLAZED SKYBRIDGES WITH 3D TITANIUM FINS
-  // & ELEVATED MAGLEV SKY-RAIL VIADUCT WITH ANIMATED AERODYNAMIC TRAIN!
   // ===========================================================================
   const skybridgeFrameMat = track(
     new THREE.MeshPhysicalMaterial({
@@ -1415,7 +1678,6 @@ export function buildArchitecturalCity(
       metalness: 0.88,
       clearcoat: 0.92,
       clearcoatRoughness: 0.03,
-      envMapIntensity: 2.25,
     })
   );
   const skybridgeGlassMat = track(
@@ -1427,7 +1689,6 @@ export function buildArchitecturalCity(
       opacity: 0.76,
       clearcoat: 1.0,
       clearcoatRoughness: 0.02,
-      envMapIntensity: 2.48,
     })
   );
 
@@ -1523,136 +1784,16 @@ export function buildArchitecturalCity(
     }
   });
 
-  // Subtle architectural LED accent trims along the Tied-Arch Steel River Bridge arches
+  // Subtle architectural LED accent trims along the Multi-Arch River Bridge parapets
   [-8.6, 8.6].forEach((ax) => {
     const strip = new THREE.Mesh(track(new THREE.BoxGeometry(0.16, 0.16, 26.0)), archLedMat);
     strip.position.set(ax, 1.82, 54);
     group.add(strip);
   });
 
-  // Elevated Futuristic Maglev Sky-Rail Viaduct crossing East-West over Downtown (z = 94, y = 15.8)
-  const maglevY = 15.8;
-  const maglevZ = 94;
-  const maglevGroup = new THREE.Group();
-  const viaductBeam = new THREE.Mesh(
-    track(new THREE.BoxGeometry(310, 1.45, 3.6)),
-    skybridgeFrameMat
-  );
-  viaductBeam.position.set(0, maglevY, maglevZ);
-  viaductBeam.castShadow = quality.shadowsEnabled;
-  const viaductRailStrip = new THREE.Mesh(
-    track(new THREE.BoxGeometry(310, 0.18, 3.74)),
-    archLedMat
-  );
-  viaductRailStrip.position.set(0, maglevY + 0.55, maglevZ);
-  maglevGroup.add(viaductBeam, viaductRailStrip);
-
-  // Sculpted Y-shaped concrete-and-steel elevated support piers (cleanly outside the boulevard lanes!)
-  for (let px = -126; px <= 126; px += 28) {
-    if (Math.abs(px) < 16) continue;
-    const pier = new THREE.Mesh(
-      track(new THREE.CylinderGeometry(0.72, 0.96, maglevY - 0.5, 12)),
-      podiumMat
-    );
-    pier.position.set(px, (maglevY - 0.5) * 0.5, maglevZ);
-    pier.castShadow = quality.shadowsEnabled;
-    const pierCap = new THREE.Mesh(
-      track(new THREE.BoxGeometry(2.6, 1.1, 4.2)),
-      skybridgeFrameMat
-    );
-    pierCap.position.set(px, maglevY - 0.9, maglevZ);
-    maglevGroup.add(pier, pierCap);
-  }
-
-  // Animated 3-Car Aerodynamic Silver & Cobalt Maglev Express Train
-  const maglevTrainGroup = new THREE.Group();
-  maglevTrainGroup.position.set(0, maglevY + 0.78, maglevZ);
-  const maglevBodyMat = track(
-    new THREE.MeshPhysicalMaterial({
-      color: 0xe6f0fa,
-      roughness: 0.14,
-      metalness: 0.72,
-      clearcoat: 1.0,
-      clearcoatRoughness: 0.04,
-      envMapIntensity: 1.9,
-    })
-  );
-  const maglevCobaltMat = track(
-    new THREE.MeshPhysicalMaterial({
-      color: 0x1d4ed8,
-      roughness: 0.18,
-      metalness: 0.65,
-      clearcoat: 1.0,
-      envMapIntensity: 1.8,
-    })
-  );
-  const maglevWindowMat = track(
-    new THREE.MeshPhysicalMaterial({
-      color: 0x0b172c,
-      emissive: 0x7dd3fc,
-      emissiveIntensity: initialDarkMode ? 0.55 : 0.06,
-      roughness: 0.04,
-      metalness: 0.35,
-      clearcoat: 1.0,
-    })
-  );
-  [-11.8, 0, 11.8].forEach((cx, idx) => {
-    const carBody = new THREE.Mesh(track(new THREE.BoxGeometry(10.8, 2.35, 2.75)), maglevBodyMat);
-    carBody.position.set(cx, 1.32, 0);
-    const carStripe = new THREE.Mesh(
-      track(new THREE.BoxGeometry(10.9, 0.36, 2.8)),
-      maglevCobaltMat
-    );
-    carStripe.position.set(cx, 0.72, 0);
-    const carGlass = new THREE.Mesh(
-      track(new THREE.BoxGeometry(9.6, 0.98, 2.82)),
-      maglevWindowMat
-    );
-    carGlass.position.set(cx, 1.65, 0);
-    maglevTrainGroup.add(carBody, carStripe, carGlass);
-
-    // Tapered aerodynamic bullet nose cones on front & rear cars
-    if (idx === 0 || idx === 2) {
-      const sign = idx === 2 ? 1 : -1;
-      const nose = new THREE.Mesh(
-        track(new THREE.CylinderGeometry(0.45, 1.32, 3.6, 12)),
-        maglevBodyMat
-      );
-      nose.rotation.z = -sign * Math.PI * 0.5;
-      nose.scale.set(0.88, 1, 1.02);
-      nose.position.set(cx + sign * 7.1, 1.25, 0);
-      maglevTrainGroup.add(nose);
-    }
-  });
-  const maglevHeadBar = new THREE.Mesh(
-    track(new THREE.BoxGeometry(0.18, 0.24, 1.65)),
-    track(
-      new THREE.MeshStandardMaterial({
-        color: 0xffffff,
-        emissive: 0xe0f2fe,
-        emissiveIntensity: 2.8,
-      })
-    )
-  );
-  maglevHeadBar.position.set(19.95, 1.15, 0);
-  const maglevTailBar = new THREE.Mesh(
-    track(new THREE.BoxGeometry(0.18, 0.22, 1.65)),
-    track(
-      new THREE.MeshStandardMaterial({
-        color: 0xef4444,
-        emissive: 0xef4444,
-        emissiveIntensity: 2.2,
-      })
-    )
-  );
-  maglevTailBar.position.set(-19.95, 1.15, 0);
-  maglevTrainGroup.add(maglevHeadBar, maglevTailBar);
-  maglevGroup.add(maglevTrainGroup);
-  group.add(maglevGroup);
-
   // ===========================================================================
-  // 5C. HIGH-TECH NEXUS PARAMETRIC OVAL ATRIUM LANDMARK, AUTONOMOUS SKY-TRANSIT
-  // eVTOL AIR-TAXIS & VOLUMETRIC ATMOSPHERIC SUN-SHAFTS
+  // 5C. ARCHITECTURAL NEXUS WATERFRONT PAVILION & VOLUMETRIC ATMOSPHERIC SUN-SHAFTS
+  // (Clean car-free & rail-free scenic skyline — zero moving trains, cars, or air-taxis!)
   // ===========================================================================
 
   // 1) Iconic Sculpted Parametric "Nexus" Torus/Oval Waterfront Pavilion (x=34.5, z=70.5)
@@ -1674,7 +1815,7 @@ export function buildArchitecturalCity(
   nexusDeck.position.y = 1.48;
   nexusDeck.receiveShadow = quality.shadowsEnabled;
 
-  // Sculpted Brushed-Titanium Parametric Torus Shell (catches vivid HDR sky reflections!)
+  // Sculpted Brushed-Titanium Parametric Torus Shell
   const nexusOuterShell = new THREE.Mesh(
     track(new THREE.TorusGeometry(8.2, 1.85, 24, 56)),
     skybridgeFrameMat
@@ -1683,7 +1824,7 @@ export function buildArchitecturalCity(
   nexusOuterShell.position.y = 11.4;
   nexusOuterShell.castShadow = quality.shadowsEnabled;
 
-  // Inner Curved Low-Iron Sapphire Atrium Glazing Ring
+  // Inner Curved Low-Iron Atrium Glazing Ring
   const nexusInnerGlass = new THREE.Mesh(
     track(new THREE.TorusGeometry(6.75, 0.92, 18, 48)),
     skybridgeGlassMat
@@ -1691,7 +1832,7 @@ export function buildArchitecturalCity(
   nexusInnerGlass.scale.set(1.16, 1.24, 0.92);
   nexusInnerGlass.position.y = 11.4;
 
-  // Recessed Cobalt Architectural Light Halo along the Nexus Inner Rim
+  // Recessed Architectural Light Halo along the Nexus Inner Rim
   const nexusHaloRing = new THREE.Mesh(
     track(new THREE.TorusGeometry(6.35, 0.14, 12, 48)),
     archLedMat
@@ -1722,48 +1863,7 @@ export function buildArchitecturalCity(
   );
   group.add(nexusGroup);
 
-  // 2) Autonomous Sky-Transit eVTOL Air-Taxis gliding along high-altitude skyline corridors
-  interface AirTaxiTrack {
-    centerX: number;
-    centerZ: number;
-    radiusX: number;
-    radiusZ: number;
-    altitude: number;
-    speed: number;
-    phase: number;
-    bobAmp: number;
-  }
-  const airTaxiTracks: AirTaxiTrack[] = [
-    { centerX: 0, centerZ: 118, radiusX: 54, radiusZ: 34, altitude: 41, speed: 0.17, phase: 0.4, bobAmp: 0.7 },
-    { centerX: -12, centerZ: 96, radiusX: 68, radiusZ: 28, altitude: 52, speed: -0.14, phase: 2.1, bobAmp: 0.9 },
-    { centerX: 16, centerZ: 132, radiusX: 74, radiusZ: 42, altitude: 62, speed: 0.12, phase: 4.0, bobAmp: 1.1 },
-    { centerX: 0, centerZ: 68, radiusX: 84, radiusZ: 24, altitude: 36, speed: -0.16, phase: 5.2, bobAmp: 0.65 },
-    { centerX: -22, centerZ: 142, radiusX: 60, radiusZ: 36, altitude: 70, speed: 0.13, phase: 1.2, bobAmp: 1.0 },
-    { centerX: 20, centerZ: 105, radiusX: 78, radiusZ: 32, altitude: 47, speed: -0.15, phase: 3.5, bobAmp: 0.8 },
-  ];
-  const airTaxiCount = airTaxiTracks.length;
-
-  const evtolHullGeo = track(new THREE.CapsuleGeometry(0.55, 2.3, 8, 14));
-  evtolHullGeo.rotateX(Math.PI / 2);
-  evtolHullGeo.scale(1.25, 0.72, 1.0);
-  const evtolCanopyGeo = track(new THREE.SphereGeometry(0.54, 12, 10));
-  evtolCanopyGeo.scale(1.12, 0.56, 1.75);
-  evtolCanopyGeo.translate(0, 0.24, 0.22);
-  const evtolWingGeo = track(new THREE.BoxGeometry(4.2, 0.12, 0.82));
-  evtolWingGeo.translate(0, 0.05, -0.15);
-  const evtolPodRingGeo = track(new THREE.TorusGeometry(0.42, 0.075, 8, 18));
-  evtolPodRingGeo.rotateX(Math.PI / 2);
-
-  const evtolBodyInst = new THREE.InstancedMesh(evtolHullGeo, maglevBodyMat, airTaxiCount);
-  const evtolCanopyInst = new THREE.InstancedMesh(evtolCanopyGeo, maglevWindowMat, airTaxiCount);
-  const evtolWingInst = new THREE.InstancedMesh(evtolWingGeo, skybridgeFrameMat, airTaxiCount);
-  const evtolThrusterInst = new THREE.InstancedMesh(evtolPodRingGeo, archLedMat, airTaxiCount * 2);
-  [evtolBodyInst, evtolCanopyInst, evtolWingInst, evtolThrusterInst].forEach((m) => {
-    m.frustumCulled = false;
-  });
-  group.add(evtolBodyInst, evtolCanopyInst, evtolWingInst, evtolThrusterInst);
-
-  // 3) Subtle Volumetric Atmospheric Sun-Shafts / Light Beams cutting through the Downtown Canyon
+  // 2) Subtle Volumetric Atmospheric Sun-Shafts / Light Beams cutting through the Downtown Canyon
   // (Zero modelMatrix in fragment shader; pure UV soft-beam falloff with AdditiveBlending!)
   const sunShaftUniforms = {
     uTime: { value: 0 },
@@ -1792,10 +1892,10 @@ export function buildArchitecturalCity(
           horiz = pow(max(0.0, horiz), 2.4);
           float vert = smoothstep(0.0, 0.34, vUv.y) * smoothstep(1.0, 0.22, vUv.y);
           float shimmer = 0.88 + 0.12 * sin(vUv.x * 9.0 + uTime * 0.45);
-          vec3 dayBeam = vec3(1.0, 0.95, 0.84);
-          vec3 nightBeam = vec3(0.32, 0.66, 1.0);
+          vec3 dayBeam = vec3(1.0, 0.96, 0.86);
+          vec3 nightBeam = vec3(1.0, 0.56, 0.24);
           vec3 col = mix(dayBeam, nightBeam, uIsDark);
-          float alpha = horiz * vert * shimmer * mix(0.082, 0.055, uIsDark);
+          float alpha = horiz * vert * shimmer * mix(0.082, 0.088, uIsDark);
           gl_FragColor = vec4(col, alpha);
         }
       `,
@@ -2079,9 +2179,9 @@ export function buildArchitecturalCity(
   const lampHeadGeo = track(new THREE.BoxGeometry(0.58, 0.13, 0.24));
   const streetLightsMat = track(
     new THREE.MeshStandardMaterial({
-      color: initialDarkMode ? 0xe0f2fe : 0xf1f5f9,
-      emissive: initialDarkMode ? 0xbae6fd : 0x000000,
-      emissiveIntensity: initialDarkMode ? 2.2 : 0.0,
+      color: initialDarkMode ? 0xffe4a0 : 0xf1f5f9,
+      emissive: initialDarkMode ? 0xffae38 : 0x000000,
+      emissiveIntensity: initialDarkMode ? 2.65 : 0.0,
       roughness: 0.14,
       metalness: 0.12,
     })
@@ -2091,10 +2191,11 @@ export function buildArchitecturalCity(
   const lightPoolMat = track(
     new THREE.MeshBasicMaterial({
       map: lightPoolTex,
+      color: initialDarkMode ? 0xffb84d : 0xffffff,
       transparent: true,
       depthWrite: false,
       blending: THREE.AdditiveBlending,
-      opacity: initialDarkMode ? 0.54 : 0.0,
+      opacity: initialDarkMode ? 0.62 : 0.0,
     })
   );
 
@@ -2105,11 +2206,11 @@ export function buildArchitecturalCity(
     lampPositions.push([-9.1, z, 1]);
     lampPositions.push([9.1, z, -1]);
   }
-  // Riverside Promenade Embankment Lamps
-  for (let rx = -72; rx <= 72; rx += 18) {
-    if (Math.abs(rx) < 15) continue;
-    lampPositions.push([rx, 42.4, 0]);
-    lampPositions.push([rx, 65.6, 0]);
+  // Dense Golden Riverside Promenade Embankment Lamps lining BOTH banks (matching reference sunset photo!)
+  for (let rx = -108; rx <= 108; rx += 12) {
+    if (Math.abs(rx) < 14) continue;
+    lampPositions.push([rx, 42.2, 0]);
+    lampPositions.push([rx, 65.8, 0]);
   }
   // Central Fountain Park Crescent Lanterns (placed along R=11.9 inner curb, cleanly clear of camera R=16.0!)
   for (let a = 0; a < 8; a++) {
@@ -2218,13 +2319,16 @@ export function buildArchitecturalCity(
     treeSlots.push([-12.6, z, 0.96 + ((z * 7) % 5) * 0.06]);
     treeSlots.push([12.6, z, 0.96 + ((z * 3) % 5) * 0.06]);
   }
-  // 4) Riverside promenade trees
-  [-56, -34, -20, 20, 34, 56].forEach((rx, idx) => {
-    treeSlots.push([rx, 39.2, 1.0 + (idx % 3) * 0.1]);
-    treeSlots.push([rx, 69.2, 1.0 + ((idx + 1) % 3) * 0.1]);
-  });
+  // 4) Dense Lush Emerald Riverside Parkland Trees lining BOTH river embankments (matching reference photos!)
+  for (let rx = -112; rx <= 112; rx += 11) {
+    if (Math.abs(rx) < 15) continue;
+    const sc1 = 1.06 + ((Math.abs(rx) * 3) % 5) * 0.08;
+    const sc2 = 1.02 + ((Math.abs(rx) * 5) % 5) * 0.08;
+    treeSlots.push([rx, 37.8, sc1]);
+    treeSlots.push([rx + 4.5, 70.4, sc2]);
+  }
 
-  const treeCount = Math.min(quality.treeCount, treeSlots.length);
+  const treeCount = Math.min(Math.max(quality.treeCount + 28, 120), treeSlots.length);
   const trunksInst = new THREE.InstancedMesh(treeSkeletonGeo, trunkMat, treeCount);
   const canopyInst = new THREE.InstancedMesh(botanicalCrownGeo, canopyMat, treeCount);
 
@@ -2234,9 +2338,9 @@ export function buildArchitecturalCity(
   canopyInst.customDepthMaterial = canopyDepthMat;
 
   const paintTrees = (dark: boolean) => {
-    // Muted, authentic British oak, plane & silver-birch foliage tints (never cartoon neon-green!)
-    const dayLeafTints = [0x6e7f55, 0x5c6e46, 0x7a8559, 0x526441, 0x67754d];
-    const nightLeafTints = [0x202d22, 0x1a261d, 0x243125, 0x17211a, 0x1d291f];
+    // Vibrant sunlit emerald-green riverside foliage in Light Mode; rich warm twilight foliage in Sunset Mode
+    const dayLeafTints = [0x50a92d, 0x64bc38, 0x3e9122, 0x74c642, 0x489e28];
+    const nightLeafTints = [0x22301d, 0x2c3821, 0x1b2819, 0x2f3b22, 0x242e1b];
     for (let i = 0; i < treeCount; i++) {
       const palette = dark ? nightLeafTints : dayLeafTints;
       _tempColor.setHex(palette[i % palette.length]);
@@ -2262,291 +2366,38 @@ export function buildArchitecturalCity(
   group.add(trunksInst, canopyInst);
 
   // ===========================================================================
-  // 9. ULTRA-REALISTIC AERODYNAMIC LUXURY EV CARS, SUVS & SLEEK ELECTRIC CITY COACHES
+  // 9. CAR-FREE LANDSCAPED ARCHITECTURAL BOULEVARD MEDIANS & SCULPTURAL BOLLARDS
+  // (Zero moving cars, buses, trains, or traffic — serene luxury European riverside promenade!)
   // ===========================================================================
-  const carBodyGeo = track(createSculptedCarBodyGeometry());
-  const carGlassGeo = track(createSculptedCarGlassGeometry());
-  const carAeroSkirtGeo = track(new THREE.BoxGeometry(1.78, 0.14, 4.38));
-  const carGrilleGeo = track(new THREE.BoxGeometry(1.18, 0.22, 0.12));
-  const carMirrorGeo = track(new THREE.BoxGeometry(0.24, 0.11, 0.16));
-  const carWheelGeo = track(new THREE.CylinderGeometry(0.35, 0.35, 0.28, 20));
-  carWheelGeo.rotateZ(Math.PI / 2);
-  const carRimGeo = track(new THREE.CylinderGeometry(0.23, 0.23, 0.3, 14));
-  carRimGeo.rotateZ(Math.PI / 2);
-  const carHubGeo = track(new THREE.CylinderGeometry(0.11, 0.11, 0.315, 10));
-  carHubGeo.rotateZ(Math.PI / 2);
-  // Sleek full-width modern EV LED headlight DRL bar & continuous crimson taillight bar
-  const carHeadBarGeo = track(new THREE.BoxGeometry(1.56, 0.085, 0.08));
-  const carTailBarGeo = track(new THREE.BoxGeometry(1.62, 0.09, 0.08));
-  const carShadowGeo = track(new THREE.PlaneGeometry(2.65, 5.25));
-  carShadowGeo.rotateX(-Math.PI / 2);
-  const carBeamGeo = track(new THREE.PlaneGeometry(3.6, 8.2));
-  carBeamGeo.rotateX(-Math.PI / 2);
-
-  // Sleek Aerodynamic Panoramic-Glass Futuristic Electric City Coach
-  const busBodyGeo = track(createAerodynamicCoachBodyGeometry());
-  const busWinGeo = track(createAerodynamicCoachGlassGeometry());
-  const busStripeGeo = track(new THREE.BoxGeometry(2.44, 0.26, 8.8));
-  busStripeGeo.translate(0, 0.92, -0.04);
-  const busHeadBarGeo = track(new THREE.BoxGeometry(2.02, 0.12, 0.12));
-  busHeadBarGeo.translate(0, 0.94, 4.54);
-  const busTailBarGeo = track(new THREE.BoxGeometry(2.04, 0.12, 0.12));
-  busTailBarGeo.translate(0, 1.02, -4.55);
-  const busWheelGeo = track(new THREE.CylinderGeometry(0.48, 0.48, 0.34, 18));
-  busWheelGeo.rotateZ(Math.PI / 2);
-
-  const carPaintMat = track(
-    new THREE.MeshPhysicalMaterial({
-      color: 0xffffff,
-      roughness: 0.1,
-      metalness: 0.85,
-      clearcoat: 1.0,
-      clearcoatRoughness: 0.02,
-      reflectivity: 1.0,
-      envMapIntensity: 2.38,
-    })
-  );
-  const busCoachMat = track(
-    new THREE.MeshPhysicalMaterial({
-      color: 0xe6eff8,
-      roughness: 0.14,
-      metalness: 0.6,
-      clearcoat: 1.0,
-      clearcoatRoughness: 0.04,
-      envMapIntensity: 2.15,
-    })
-  );
-  const busAccentMat = track(
-    new THREE.MeshPhysicalMaterial({
-      color: 0x1d4ed8,
-      roughness: 0.18,
-      metalness: 0.68,
-      clearcoat: 0.96,
-      envMapIntensity: 2.05,
-    })
-  );
-  const carGlassMat = track(
-    new THREE.MeshPhysicalMaterial({
-      color: 0x0b1628,
-      roughness: 0.02,
-      metalness: 0.38,
-      clearcoat: 1.0,
-      clearcoatRoughness: 0.015,
-      reflectivity: 1.0,
-      envMapIntensity: 2.42,
-    })
-  );
-  const grilleMat = track(
-    new THREE.MeshStandardMaterial({ color: 0x121822, roughness: 0.24, metalness: 0.9 })
-  );
-  const tireMat = track(
-    new THREE.MeshStandardMaterial({ color: 0x14171c, roughness: 0.9, metalness: 0.04 })
-  );
-  const rimMat = track(
-    new THREE.MeshPhysicalMaterial({
-      color: 0xe2e8f0,
-      roughness: 0.12,
-      metalness: 0.96,
-      clearcoat: 0.8,
-      envMapIntensity: 1.85,
-    })
-  );
-  const brakeHubMat = track(
-    new THREE.MeshStandardMaterial({ color: 0x1e3a8a, roughness: 0.28, metalness: 0.78 })
-  );
-  const carHeadMat = track(
-    new THREE.MeshStandardMaterial({
-      color: 0xf8fcff,
-      emissive: 0xdff2ff,
-      emissiveIntensity: initialDarkMode ? 2.9 : 0.42,
-      roughness: 0.06,
-    })
-  );
-  const carTailMat = track(
-    new THREE.MeshStandardMaterial({
-      color: 0xdc2626,
-      emissive: 0xef4444,
-      emissiveIntensity: initialDarkMode ? 2.4 : 0.35,
-      roughness: 0.12,
-    })
-  );
-  const carShadowMat = track(
-    new THREE.MeshBasicMaterial({
-      map: shadowTex,
-      transparent: true,
-      depthWrite: false,
-      opacity: initialDarkMode ? 0.58 : 0.4,
-    })
-  );
-  const carBeamMat = track(
-    new THREE.MeshBasicMaterial({
-      map: headlightBeamTex,
-      transparent: true,
-      depthWrite: false,
-      blending: THREE.AdditiveBlending,
-      opacity: initialDarkMode ? 0.54 : 0.0,
-    })
-  );
-
-  // Modern Luxury EV Metallic Paint Palette (Pearl Glacier, Deep Sapphire, Liquid Titanium, Obsidian, Electric Cobalt, Slate)
-  const realCarPaints = [
-    0xf1f5f9, 0x1e3a6d, 0x94a3b8, 0x111827, 0x2563eb, 0x475569, 0xe2e8f0, 0x0f294a,
-  ];
-
-  const carTracks: VehicleTrack[] = [];
-  const crossLaneZs = [27, 86, 126];
-  for (let i = 0; i < quality.vehicleCount; i++) {
-    const paintHex = realCarPaints[i % realCarPaints.length];
-    const kind = i % 3 === 0 ? 'suv' : 'sedan';
-    if (i % 2 === 0) {
-      // Main Royal Boulevard Cars (drive smoothly across the Tied-Arch River Bridge!)
-      const dir = i % 4 === 0 ? 1 : -1;
-      carTracks.push({
-        axis: 'z',
-        laneOffset: dir === 1 ? -3.4 : 3.4,
-        yElevation: 0.16,
-        minCoord: 20,
-        startPos: 22 + ((i * 23) % 148),
-        span: 158,
-        speed: 9.2 + (i % 4) * 2.1,
-        dir,
-        paintHex,
-        kind,
-      });
-    } else {
-      // East-West Cross-Avenue Cars (all clear of river canal!)
-      const dir = i % 4 === 1 ? 1 : -1;
-      const zLane = crossLaneZs[i % crossLaneZs.length] + (dir === 1 ? -2.4 : 2.4);
-      carTracks.push({
-        axis: 'x',
-        laneOffset: zLane,
-        yElevation: 0.14,
-        minCoord: -115,
-        startPos: -110 + ((i * 31) % 220),
-        span: 230,
-        speed: 9.8 + (i % 4) * 2.0,
-        dir,
-        paintHex,
-        kind,
-      });
-    }
-  }
-
-  // Parked luxury EVs neatly along boulevard bays (outside bridge)
-  [
-    [-6.25, 34, 1, 0xf1f5f9],
-    [6.25, 76, -1, 0x1e3a6d],
-    [-6.25, 102, 1, 0x94a3b8],
-    [6.25, 114, -1, 0x111827],
-  ].forEach(([px, pz, dir, paintHex], idx) => {
-    carTracks.push({
-      axis: 'z',
-      laneOffset: px,
-      yElevation: 0.16,
-      minCoord: pz,
-      startPos: pz,
-      span: 1,
-      speed: 0,
-      dir: dir as 1 | -1,
-      paintHex,
-      kind: idx % 2 === 0 ? 'suv' : 'sedan',
-      isParked: true,
-    });
+  const medianPositionsZ = [78, 96, 114, 134, 152];
+  medianPositionsZ.forEach((mz) => {
+    const planterCurb = new THREE.Mesh(
+      track(new THREE.BoxGeometry(2.1, 0.42, 11.5)),
+      stoneCurbMat
+    );
+    planterCurb.position.set(0, 0.24, mz);
+    planterCurb.receiveShadow = quality.shadowsEnabled;
+    const planterHedge = new THREE.Mesh(
+      track(new THREE.BoxGeometry(1.55, 0.55, 10.6)),
+      skyGardenMat
+    );
+    planterHedge.position.set(0, 0.56, mz);
+    const bollardNorth = new THREE.Mesh(
+      track(new THREE.CylinderGeometry(0.14, 0.16, 0.95, 10)),
+      poleMat
+    );
+    bollardNorth.position.set(0, 0.52, mz + 6.35);
+    const bollardGlowN = new THREE.Mesh(
+      track(new THREE.CylinderGeometry(0.145, 0.145, 0.16, 10)),
+      streetLightsMat
+    );
+    bollardGlowN.position.set(0, 0.88, mz + 6.35);
+    const bollardSouth = bollardNorth.clone();
+    bollardSouth.position.set(0, 0.52, mz - 6.35);
+    const bollardGlowS = bollardGlowN.clone();
+    bollardGlowS.position.set(0, 0.88, mz - 6.35);
+    group.add(planterCurb, planterHedge, bollardNorth, bollardGlowN, bollardSouth, bollardGlowS);
   });
-
-  // 2 Sleek Aerodynamic Futuristic Panoramic-Glass Electric City Coaches
-  const busTracks: VehicleTrack[] = [
-    {
-      axis: 'z',
-      laneOffset: -3.55,
-      yElevation: 0.16,
-      minCoord: 22,
-      startPos: 86,
-      span: 150,
-      speed: 6.8,
-      dir: 1,
-      paintHex: 0x1d4ed8,
-      kind: 'bus',
-    },
-    {
-      axis: 'z',
-      laneOffset: 3.55,
-      yElevation: 0.16,
-      minCoord: 22,
-      startPos: 128,
-      span: 150,
-      speed: 6.4,
-      dir: -1,
-      paintHex: 0x1d4ed8,
-      kind: 'bus',
-    },
-  ];
-  const busBodyInst = new THREE.InstancedMesh(busBodyGeo, busCoachMat, busTracks.length);
-  const busWinInst = new THREE.InstancedMesh(busWinGeo, carGlassMat, busTracks.length);
-  const busStripeInst = new THREE.InstancedMesh(busStripeGeo, busAccentMat, busTracks.length);
-  const busHeadInst = new THREE.InstancedMesh(busHeadBarGeo, carHeadMat, busTracks.length);
-  const busTailInst = new THREE.InstancedMesh(busTailBarGeo, carTailMat, busTracks.length);
-  const busWheelsInst = new THREE.InstancedMesh(busWheelGeo, tireMat, busTracks.length * 4);
-  busBodyInst.castShadow = quality.shadowsEnabled;
-  [busBodyInst, busWinInst, busStripeInst, busHeadInst, busTailInst, busWheelsInst].forEach((m) => {
-    m.frustumCulled = false;
-  });
-  group.add(busBodyInst, busWinInst, busStripeInst, busHeadInst, busTailInst, busWheelsInst);
-
-  const carCount = carTracks.length;
-  const carsBodyInst = new THREE.InstancedMesh(carBodyGeo, carPaintMat, carCount);
-  const carsGlassInst = new THREE.InstancedMesh(carGlassGeo, carGlassMat, carCount);
-  const carsSkirtInst = new THREE.InstancedMesh(carAeroSkirtGeo, grilleMat, carCount);
-  const carsGrilleInst = new THREE.InstancedMesh(carGrilleGeo, grilleMat, carCount);
-  const carsMirrorsInst = new THREE.InstancedMesh(carMirrorGeo, carPaintMat, carCount * 2);
-  const carsWheelsInst = new THREE.InstancedMesh(carWheelGeo, tireMat, carCount * 4);
-  const carsRimsInst = new THREE.InstancedMesh(carRimGeo, rimMat, carCount * 4);
-  const carsHubsInst = new THREE.InstancedMesh(carHubGeo, brakeHubMat, carCount * 4);
-  const carsHeadInst = new THREE.InstancedMesh(carHeadBarGeo, carHeadMat, carCount);
-  const carsTailInst = new THREE.InstancedMesh(carTailBarGeo, carTailMat, carCount);
-  const carsShadowInst = new THREE.InstancedMesh(carShadowGeo, carShadowMat, carCount);
-  const carsBeamInst = new THREE.InstancedMesh(carBeamGeo, carBeamMat, carCount);
-
-  carsBodyInst.castShadow = quality.shadowsEnabled;
-
-  for (let i = 0; i < carCount; i++) {
-    _tempColor.setHex(carTracks[i].paintHex);
-    carsBodyInst.setColorAt(i, _tempColor);
-    carsMirrorsInst.setColorAt(i * 2, _tempColor);
-    carsMirrorsInst.setColorAt(i * 2 + 1, _tempColor);
-  }
-  if (carsBodyInst.instanceColor) carsBodyInst.instanceColor.needsUpdate = true;
-  if (carsMirrorsInst.instanceColor) carsMirrorsInst.instanceColor.needsUpdate = true;
-  [
-    carsBodyInst,
-    carsGlassInst,
-    carsSkirtInst,
-    carsGrilleInst,
-    carsMirrorsInst,
-    carsWheelsInst,
-    carsRimsInst,
-    carsHubsInst,
-    carsHeadInst,
-    carsTailInst,
-    carsShadowInst,
-    carsBeamInst,
-  ].forEach((m) => {
-    m.frustumCulled = false;
-  });
-  group.add(
-    carsBodyInst,
-    carsGlassInst,
-    carsSkirtInst,
-    carsGrilleInst,
-    carsMirrorsInst,
-    carsWheelsInst,
-    carsRimsInst,
-    carsHubsInst,
-    carsHeadInst,
-    carsTailInst,
-    carsShadowInst,
-    carsBeamInst
-  );
 
   // Grounding Contact Shadow under Central Fountain
   const centerShadow = new THREE.Mesh(
@@ -2564,30 +2415,9 @@ export function buildArchitecturalCity(
   centerShadow.position.set(0, 0.37, -7.5);
   group.add(centerShadow);
 
-  const wheelOffsets: [number, number][] = [
-    [-0.9, 1.38],
-    [0.9, 1.38],
-    [-0.9, -1.36],
-    [0.9, -1.36],
-  ];
-  const busWheelOffsets: [number, number][] = [
-    [-1.12, 2.75],
-    [1.12, 2.75],
-    [-1.12, -2.75],
-    [1.12, -2.75],
-  ];
-  const mirrorXOffsets = [-0.98, 0.98];
-
   let isCurrentlyDark = initialDarkMode;
 
-  // Helper: Gentle elevation rise as vehicles cross over the River Bridge deck (z = 38..70)
-  const bridgeElevationAtZ = (z: number) => {
-    const d = Math.abs(z - 54);
-    if (d >= 18) return 0;
-    return 0.72 * Math.pow(Math.cos((d / 18) * (Math.PI / 2)), 1.5);
-  };
-
-  // Zero-GC Per-Frame Living Futuristic City Update
+  // Zero-GC Per-Frame Living Architectural City Update (Water Ripples, Fountain Jets & Sky Beacons — Zero Vehicles!)
   const updateCity = (elapsedSeconds: number, _dt: number) => {
     waterUniforms.uTime.value = elapsedSeconds;
     sunShaftUniforms.uTime.value = elapsedSeconds;
@@ -2600,205 +2430,6 @@ export function buildArchitecturalCity(
     for (let j = 0; j < fountainJets.length; j++) {
       fountainJets[j].scale.y = jetPulse;
     }
-
-    // Smoothly glide the Elevated Maglev Express Train back and forth across the futuristic skyline!
-    const maglevCycle = ((elapsedSeconds * 26.0) % 280) - 140;
-    maglevTrainGroup.position.x = maglevCycle;
-
-    // Update Autonomous Sky-Transit eVTOL Air-Taxis gliding along elevated skyline corridors
-    for (let a = 0; a < airTaxiCount; a++) {
-      const tr = airTaxiTracks[a];
-      const ang = tr.phase + elapsedSeconds * tr.speed;
-      const ax = tr.centerX + Math.cos(ang) * tr.radiusX;
-      const az = tr.centerZ + Math.sin(ang) * tr.radiusZ;
-      const ay = tr.altitude + Math.sin(elapsedSeconds * 1.15 + tr.phase) * tr.bobAmp;
-      const vx = -Math.sin(ang) * tr.radiusX * tr.speed;
-      const vz = Math.cos(ang) * tr.radiusZ * tr.speed;
-      const yaw = Math.atan2(vx, vz);
-      const bank = tr.speed > 0 ? -0.14 : 0.14;
-      const cosY = Math.cos(yaw);
-      const sinY = Math.sin(yaw);
-
-      _vDummy.position.set(ax, ay, az);
-      _vDummy.rotation.set(0, yaw, bank, 'YXZ');
-      _vDummy.scale.set(1, 1, 1);
-      _vDummy.updateMatrix();
-      evtolBodyInst.setMatrixAt(a, _vDummy.matrix);
-      evtolCanopyInst.setMatrixAt(a, _vDummy.matrix);
-      evtolWingInst.setMatrixAt(a, _vDummy.matrix);
-
-      // Left & Right glowing ducted thruster pods on the wingtips
-      for (let side = 0; side < 2; side++) {
-        const sx = side === 0 ? -2.05 : 2.05;
-        _wDummy.position.set(ax + sx * cosY, ay + 0.05 + sx * Math.sin(bank), az - sx * sinY);
-        _wDummy.rotation.set(0, yaw, bank, 'YXZ');
-        _wDummy.scale.set(1, 1, 1);
-        _wDummy.updateMatrix();
-        evtolThrusterInst.setMatrixAt(a * 2 + side, _wDummy.matrix);
-      }
-    }
-    evtolBodyInst.instanceMatrix.needsUpdate = true;
-    evtolCanopyInst.instanceMatrix.needsUpdate = true;
-    evtolWingInst.instanceMatrix.needsUpdate = true;
-    evtolThrusterInst.instanceMatrix.needsUpdate = true;
-
-    // Update Sleek Futuristic Panoramic-Glass Electric City Coaches
-    for (let i = 0; i < busTracks.length; i++) {
-      const bt = busTracks[i];
-      const raw =
-        (((bt.startPos - bt.minCoord + elapsedSeconds * bt.speed * bt.dir) % bt.span) + bt.span) %
-        bt.span;
-      const pz = bt.minCoord + raw;
-      const py = bt.yElevation + bridgeElevationAtZ(pz);
-      const yaw = bt.dir === 1 ? 0 : Math.PI;
-      const cosY = Math.cos(yaw);
-      const sinY = Math.sin(yaw);
-
-      _vDummy.position.set(bt.laneOffset, py, pz);
-      _vDummy.rotation.set(0, yaw, 0);
-      _vDummy.scale.set(1, 1, 1);
-      _vDummy.updateMatrix();
-      busBodyInst.setMatrixAt(i, _vDummy.matrix);
-      busWinInst.setMatrixAt(i, _vDummy.matrix);
-      busStripeInst.setMatrixAt(i, _vDummy.matrix);
-      busHeadInst.setMatrixAt(i, _vDummy.matrix);
-      busTailInst.setMatrixAt(i, _vDummy.matrix);
-
-      const bSpin = (elapsedSeconds * bt.speed) / 0.48;
-      for (let w = 0; w < 4; w++) {
-        const [lx, lz] = busWheelOffsets[w];
-        _wDummy.position.set(bt.laneOffset + lx * cosY + lz * sinY, py + 0.48, pz - lx * sinY + lz * cosY);
-        _wDummy.rotation.set(bSpin, yaw, 0, 'YXZ');
-        _wDummy.scale.set(1, 1, 1);
-        _wDummy.updateMatrix();
-        busWheelsInst.setMatrixAt(i * 4 + w, _wDummy.matrix);
-      }
-    }
-    busBodyInst.instanceMatrix.needsUpdate = true;
-    busWinInst.instanceMatrix.needsUpdate = true;
-    busStripeInst.instanceMatrix.needsUpdate = true;
-    busHeadInst.instanceMatrix.needsUpdate = true;
-    busTailInst.instanceMatrix.needsUpdate = true;
-    busWheelsInst.instanceMatrix.needsUpdate = true;
-
-    // Update all Ultra-Realistic Sculpted Luxury EV Sedans & SUVs
-    for (let i = 0; i < carCount; i++) {
-      const tr = carTracks[i];
-      let px = 0;
-      let pz = 0;
-      let yaw = 0;
-      let py = tr.yElevation;
-
-      if (tr.isParked) {
-        px = tr.laneOffset;
-        pz = tr.startPos;
-        yaw = tr.dir === 1 ? 0 : Math.PI;
-      } else if (tr.axis === 'z') {
-        const raw =
-          (((tr.startPos - tr.minCoord + elapsedSeconds * tr.speed * tr.dir) % tr.span) + tr.span) %
-          tr.span;
-        px = tr.laneOffset;
-        pz = tr.minCoord + raw;
-        py = tr.yElevation + bridgeElevationAtZ(pz);
-        yaw = tr.dir === 1 ? 0 : Math.PI;
-      } else {
-        const raw =
-          (((tr.startPos - tr.minCoord + elapsedSeconds * tr.speed * tr.dir) % tr.span) + tr.span) %
-          tr.span;
-        px = tr.minCoord + raw;
-        pz = tr.laneOffset;
-        yaw = tr.dir === 1 ? Math.PI / 2 : -Math.PI / 2;
-      }
-
-      const cosY = Math.cos(yaw);
-      const sinY = Math.sin(yaw);
-      const suvScaleY = tr.kind === 'suv' ? 1.15 : 1.0;
-
-      _vDummy.position.set(px, py, pz);
-      _vDummy.rotation.set(0, yaw, 0);
-      _vDummy.scale.set(1, suvScaleY, 1);
-      _vDummy.updateMatrix();
-      carsBodyInst.setMatrixAt(i, _vDummy.matrix);
-      carsGlassInst.setMatrixAt(i, _vDummy.matrix);
-
-      // Lower dark metallic aero front splitter & rear diffuser skirt
-      _vDummy.position.set(px, py + 0.25, pz);
-      _vDummy.scale.set(1, 1, 1);
-      _vDummy.updateMatrix();
-      carsSkirtInst.setMatrixAt(i, _vDummy.matrix);
-
-      // Front aero intake grille
-      _vDummy.position.set(px + 2.21 * sinY, py + 0.44 * suvScaleY, pz + 2.21 * cosY);
-      _vDummy.updateMatrix();
-      carsGrilleInst.setMatrixAt(i, _vDummy.matrix);
-
-      // Full-width cool-white LED DRL headlight bar
-      _vDummy.position.set(px + 2.2 * sinY, py + 0.61 * suvScaleY, pz + 2.2 * cosY);
-      _vDummy.updateMatrix();
-      carsHeadInst.setMatrixAt(i, _vDummy.matrix);
-
-      // Full-width continuous crimson LED rear taillight bar
-      _vDummy.position.set(px - 2.18 * sinY, py + 0.68 * suvScaleY, pz - 2.18 * cosY);
-      _vDummy.updateMatrix();
-      carsTailInst.setMatrixAt(i, _vDummy.matrix);
-
-      // Side-view aerodynamic mirrors (left & right)
-      for (let m = 0; m < 2; m++) {
-        const mx = mirrorXOffsets[m];
-        _wDummy.position.set(
-          px + mx * cosY + 0.54 * sinY,
-          py + 0.94 * suvScaleY,
-          pz - mx * sinY + 0.54 * cosY
-        );
-        _wDummy.rotation.set(0, yaw, 0);
-        _wDummy.scale.set(1, 1, 1);
-        _wDummy.updateMatrix();
-        carsMirrorsInst.setMatrixAt(i * 2 + m, _wDummy.matrix);
-      }
-
-      _vDummy.position.set(px, py + 0.03, pz);
-      _vDummy.updateMatrix();
-      carsShadowInst.setMatrixAt(i, _vDummy.matrix);
-
-      if (!tr.isParked) {
-        _vDummy.position.set(px + 5.9 * sinY, py + 0.06, pz + 5.9 * cosY);
-        _vDummy.rotation.set(0, yaw, 0);
-        _vDummy.scale.set(1, 1, 1);
-        _vDummy.updateMatrix();
-      } else {
-        _vDummy.position.set(px, -50, pz);
-        _vDummy.scale.setScalar(0.001);
-        _vDummy.updateMatrix();
-      }
-      carsBeamInst.setMatrixAt(i, _vDummy.matrix);
-
-      const wheelSpin = tr.isParked ? 0 : (elapsedSeconds * tr.speed) / 0.35;
-      for (let w = 0; w < 4; w++) {
-        const [lx, lz] = wheelOffsets[w];
-        const wx = px + lx * cosY + lz * sinY;
-        const wz = pz - lx * sinY + lz * cosY;
-        _wDummy.position.set(wx, py + 0.35, wz);
-        _wDummy.rotation.set(wheelSpin, yaw, 0, 'YXZ');
-        _wDummy.scale.set(1, 1, 1);
-        _wDummy.updateMatrix();
-        carsWheelsInst.setMatrixAt(i * 4 + w, _wDummy.matrix);
-        carsRimsInst.setMatrixAt(i * 4 + w, _wDummy.matrix);
-        carsHubsInst.setMatrixAt(i * 4 + w, _wDummy.matrix);
-      }
-    }
-
-    carsBodyInst.instanceMatrix.needsUpdate = true;
-    carsGlassInst.instanceMatrix.needsUpdate = true;
-    carsSkirtInst.instanceMatrix.needsUpdate = true;
-    carsGrilleInst.instanceMatrix.needsUpdate = true;
-    carsMirrorsInst.instanceMatrix.needsUpdate = true;
-    carsWheelsInst.instanceMatrix.needsUpdate = true;
-    carsRimsInst.instanceMatrix.needsUpdate = true;
-    carsHubsInst.instanceMatrix.needsUpdate = true;
-    carsHeadInst.instanceMatrix.needsUpdate = true;
-    carsTailInst.instanceMatrix.needsUpdate = true;
-    carsShadowInst.instanceMatrix.needsUpdate = true;
-    carsBeamInst.instanceMatrix.needsUpdate = true;
   };
   updateCity(0, 0.016);
 
@@ -2813,43 +2444,53 @@ export function buildArchitecturalCity(
     parkGrassMat.map = isDark ? parkGrassPbr.darkMap : parkGrassPbr.lightMap;
     parkGrassMat.needsUpdate = true;
 
-    hillMat.color.setHex(isDark ? 0x101622 : 0x62745e);
-    urbanPadMat.color.setHex(isDark ? 0x191e27 : 0xc9cdd2);
-    stoneCurbMat.color.setHex(isDark ? 0x414855 : 0xe4dfd5);
+    hillMat.color.setHex(isDark ? 0x26213e : 0x5c8459);
+    urbanPadMat.color.setHex(isDark ? 0x1c1c28 : 0xc9cdd2);
+    stoneCurbMat.color.setHex(isDark ? 0x454354 : 0xe8e2d8);
     benchWoodMat.color.setHex(isDark ? 0x6e4a2d : 0xa67346);
 
     plazaMat.map = isDark ? plazaPbr.darkMap : plazaPbr.lightMap;
     plazaMat.roughness = isDark ? 0.72 : 0.84;
     plazaMat.needsUpdate = true;
 
-    crescentRoadMat.color.setHex(isDark ? 0x222730 : 0x525760);
+    crescentRoadMat.color.setHex(isDark ? 0x232431 : 0x525760);
     crescentRoadMat.roughness = isDark ? 0.62 : 0.86;
     crescentRoadMat.metalness = isDark ? 0.12 : 0.03;
 
-    sidewalkMat.color.setHex(isDark ? 0x2b313c : 0xdcd9d1);
-    bridgeSteelMat.color.setHex(isDark ? 0x263142 : 0x3b4d63);
-    podiumMat.color.setHex(isDark ? 0x162238 : 0xd6e1ee);
-    rooftopMat.color.setHex(isDark ? 0x1a2740 : 0x8ea3ba);
-    homeRoofMat.color.setHex(isDark ? 0x1a2538 : 0x334155);
-    homeTrimMat.color.setHex(isDark ? 0x26344a : 0xeef3f8);
-    storefrontAwningMat.color.setHex(isDark ? 0x1a2436 : 0x29374b);
-    fountainBasaltMat.color.setHex(isDark ? 0x162030 : 0x2d3848);
-    fountainHaloMat.color.setHex(isDark ? 0xbae6fd : 0x7dd3fc);
+    sidewalkMat.color.setHex(isDark ? 0x2d2e3d : 0xdcd9d1);
+    bridgeSteelMat.color.setHex(isDark ? 0x2b3242 : 0x52657a);
+    bridgeArchLightMat.color.setHex(isDark ? 0xffe49e : 0xeef3f8);
+    bridgeArchLightMat.emissive.setHex(isDark ? 0xffb84d : 0x000000);
+    bridgeArchLightMat.emissiveIntensity = isDark ? 2.35 : 0.0;
+    boatHullMat.color.setHex(isDark ? 0x1e2536 : 0x29394f);
+    boatCabinMat.color.setHex(isDark ? 0xd9dde6 : 0xf7f9fc);
+    boatWindowMat.color.setHex(isDark ? 0xffd580 : 0x2d4e70);
+    boatWindowMat.emissive.setHex(isDark ? 0xffa838 : 0x000000);
+    boatWindowMat.emissiveIntensity = isDark ? 1.55 : 0.0;
+    podiumMat.color.setHex(isDark ? 0x1d2236 : 0xd6e1ee);
+    rooftopMat.color.setHex(isDark ? 0x22273a : 0x8ea3ba);
+    homeRoofMat.color.setHex(isDark ? 0x1d2336 : 0x334155);
+    homeTrimMat.color.setHex(isDark ? 0x2d3246 : 0xeef3f8);
+    storefrontAwningMat.color.setHex(isDark ? 0x1e2234 : 0x29374b);
+    fountainBasaltMat.color.setHex(isDark ? 0x181d2e : 0x2d3848);
+    fountainHaloMat.color.setHex(isDark ? 0xffd580 : 0x7dd3fc);
+    fountainHaloMat.emissive.setHex(isDark ? 0xffa73b : 0x38bdf8);
     fountainHaloMat.emissiveIntensity = isDark ? 2.15 : 0.2;
-    waterfrontGlassMat.color.setHex(isDark ? 0x6ba8e5 : 0xcce6ff);
-    poleMat.color.setHex(isDark ? 0x262c36 : 0x3b424c);
+    waterfrontGlassMat.color.setHex(isDark ? 0x9ab4d6 : 0xcce6ff);
+    poleMat.color.setHex(isDark ? 0x262836 : 0x3b424c);
     crosswalkMat.color.setHex(isDark ? 0xb8c4d4 : 0xf6f8fb);
-    skybridgeFrameMat.color.setHex(isDark ? 0x1d2b44 : 0xd5e2f0);
-    skybridgeGlassMat.color.setHex(isDark ? 0x2a66a8 : 0x5ca6e6);
-    archLedMat.color.setHex(isDark ? 0xbae6fd : 0xcbdcf0);
-    archLedMat.emissiveIntensity = isDark ? 2.15 : 0.14;
-    maglevWindowMat.emissiveIntensity = isDark ? 0.55 : 0.06;
+    skybridgeFrameMat.color.setHex(isDark ? 0x25283d : 0xd5e2f0);
+    skybridgeGlassMat.color.setHex(isDark ? 0x5c4d78 : 0x5ca6e6);
+    archLedMat.color.setHex(isDark ? 0xffe29a : 0xcbdcf0);
+    archLedMat.emissive.setHex(isDark ? 0xffa838 : 0x38bdf8);
+    archLedMat.emissiveIntensity = isDark ? 2.2 : 0.12;
+    skyGardenMat.color.setHex(isDark ? 0x264424 : 0x52a634);
 
     terraceWallMats.forEach((tw) => {
       tw.mat.color.setHex(isDark ? tw.night : tw.day);
     });
 
-    waterMat.color.setHex(isDark ? 0x0b1f34 : 0x1e4d6b);
+    waterMat.color.setHex(isDark ? 0x1a1c36 : 0x2a7bc8);
 
     roadMat.map = isDark ? roadPbr.darkMap : roadPbr.lightMap;
     roadMat.roughnessMap = isDark ? roadPbr.darkRoughnessMap : roadPbr.lightRoughnessMap;
@@ -2857,13 +2498,27 @@ export function buildArchitecturalCity(
     roadMat.needsUpdate = true;
 
     towerMat.map = isDark ? skyPbr.darkMap : skyPbr.lightMap;
-    towerMat.emissive.setHex(isDark ? 0xdff2ff : 0x000000);
+    towerMat.emissive.setHex(isDark ? 0xffcf7a : 0x000000);
     towerMat.emissiveMap = isDark ? skyPbr.darkEmissiveMap : null;
-    towerMat.emissiveIntensity = isDark ? 1.02 : 0.0;
-    towerMat.roughness = isDark ? 0.31 : 0.17;
-    towerMat.metalness = isDark ? 0.68 : 0.74;
-    towerMat.envMapIntensity = isDark ? 2.18 : 2.58;
+    towerMat.emissiveIntensity = isDark ? 1.32 : 0.0;
+    towerMat.roughness = isDark ? 0.32 : 0.2;
+    towerMat.metalness = isDark ? 0.28 : 0.34;
     towerMat.needsUpdate = true;
+
+    limestoneTowerMat.map = isDark ? limestoneTowerPbr.darkMap : limestoneTowerPbr.lightMap;
+    limestoneTowerMat.emissive.setHex(isDark ? 0xffc66e : 0x000000);
+    limestoneTowerMat.emissiveMap = isDark ? limestoneTowerPbr.darkEmissiveMap : null;
+    limestoneTowerMat.emissiveIntensity = isDark ? 1.25 : 0.0;
+    limestoneTowerMat.roughness = isDark ? 0.56 : 0.52;
+    limestoneTowerMat.metalness = isDark ? 0.16 : 0.12;
+    limestoneTowerMat.needsUpdate = true;
+
+    bronzeGlassTowerMat.color.setHex(isDark ? 0xd8c3b0 : 0xc2d0de);
+    bronzeGlassTowerMat.map = isDark ? skyPbr.darkMap : skyPbr.lightMap;
+    bronzeGlassTowerMat.emissive.setHex(isDark ? 0xffbb5c : 0x000000);
+    bronzeGlassTowerMat.emissiveMap = isDark ? skyPbr.darkEmissiveMap : null;
+    bronzeGlassTowerMat.emissiveIntensity = isDark ? 1.38 : 0.0;
+    bronzeGlassTowerMat.needsUpdate = true;
 
     aviationBeaconMat.emissiveIntensity = isDark ? 2.4 : 0.0;
 
@@ -2875,6 +2530,27 @@ export function buildArchitecturalCity(
     }
     if (towersMesh.instanceColor) towersMesh.instanceColor.needsUpdate = true;
     if (setbacksMesh.instanceColor) setbacksMesh.instanceColor.needsUpdate = true;
+
+    for (let i = 0; i < stoneDecoSlots.length; i++) {
+      const s = stoneDecoSlots[i];
+      _tempColor.setHex(isDark ? s.nightFacadeHex : s.dayFacadeHex);
+      stoneDecoMesh.setColorAt(i, _tempColor);
+    }
+    if (stoneDecoMesh.instanceColor) stoneDecoMesh.instanceColor.needsUpdate = true;
+
+    for (let i = 0; i < curvedSlots.length; i++) {
+      const s = curvedSlots[i];
+      _tempColor.setHex(isDark ? s.nightFacadeHex : s.dayFacadeHex);
+      curvedTowersMesh.setColorAt(i, _tempColor);
+    }
+    if (curvedTowersMesh.instanceColor) curvedTowersMesh.instanceColor.needsUpdate = true;
+
+    for (let i = 0; i < terracedSlots.length; i++) {
+      const s = terracedSlots[i];
+      _tempColor.setHex(isDark ? s.nightFacadeHex : s.dayFacadeHex);
+      terracedTowersMesh.setColorAt(i, _tempColor);
+    }
+    if (terracedTowersMesh.instanceColor) terracedTowersMesh.instanceColor.needsUpdate = true;
 
     for (let i = 0; i < diagSlots.length; i++) {
       const s = diagSlots[i];
@@ -2905,23 +2581,19 @@ export function buildArchitecturalCity(
     if (subBodies.instanceColor) subBodies.instanceColor.needsUpdate = true;
 
     homeWinMat.map = isDark ? winTex.nightMap : winTex.dayMap;
-    homeWinMat.emissive.setHex(isDark ? 0xffe5bd : 0x000000);
+    homeWinMat.emissive.setHex(isDark ? 0xffd27a : 0x000000);
     homeWinMat.emissiveMap = isDark ? winTex.nightEmissiveMap : null;
-    homeWinMat.emissiveIntensity = isDark ? 0.94 : 0.0;
+    homeWinMat.emissiveIntensity = isDark ? 1.12 : 0.0;
     homeWinMat.needsUpdate = true;
 
-    streetLightsMat.color.setHex(isDark ? 0xe0f2fe : 0xf1f5f9);
-    streetLightsMat.emissive.setHex(isDark ? 0xbae6fd : 0x000000);
-    streetLightsMat.emissiveIntensity = isDark ? 2.2 : 0.0;
-    lightPoolMat.opacity = isDark ? 0.56 : 0.0;
+    streetLightsMat.color.setHex(isDark ? 0xffe4a0 : 0xf1f5f9);
+    streetLightsMat.emissive.setHex(isDark ? 0xffae38 : 0x000000);
+    streetLightsMat.emissiveIntensity = isDark ? 2.65 : 0.0;
+    lightPoolMat.color.setHex(isDark ? 0xffb84d : 0xffffff);
+    lightPoolMat.opacity = isDark ? 0.62 : 0.0;
 
     sigRedMat.emissiveIntensity = isDark ? 1.65 : 0.65;
     sigGreenMat.emissiveIntensity = isDark ? 1.65 : 0.65;
-
-    carHeadMat.emissiveIntensity = isDark ? 2.9 : 0.42;
-    carTailMat.emissiveIntensity = isDark ? 2.4 : 0.35;
-    carShadowMat.opacity = isDark ? 0.58 : 0.4;
-    carBeamMat.opacity = isDark ? 0.54 : 0.0;
 
     (centerShadow.material as THREE.MeshBasicMaterial).opacity = isDark ? 0.45 : 0.26;
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import { ArrowUpRight } from 'lucide-react';
 import { CityScrollExperience } from '../components/city3d/CityScrollExperience.tsx';
 import { CapabilitiesSection } from '../components/CapabilitiesSection.tsx';
@@ -7,8 +7,9 @@ import { WhyUsSection } from '../components/WhyUsSection.tsx';
 import { ProcessSection } from '../components/ProcessSection.tsx';
 import { FAQAccordion } from '../components/FAQAccordion.tsx';
 import { FinalCTA } from '../components/FinalCTA.tsx';
-import { CyberBreakout } from '../components/CyberBreakout.tsx';
 import { SectionHeading } from '../components/SectionHeading.tsx';
+
+const CyberBreakout = lazy(() => import('../components/CyberBreakout.tsx').then((m) => ({ default: m.CyberBreakout })));
 import { FAQS } from '../data/faqs.ts';
 import { useTheme } from '../context/ThemeContext.tsx';
 import { SEOHead } from '../components/SEOHead.tsx';
@@ -193,7 +194,9 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
       <ProcessSection />
 
       {/* ===================== CYBER BREAKOUT ARCADE SECTION ===================== */}
-      <CyberBreakout />
+      <Suspense fallback={<div className="py-24" />}>
+        <CyberBreakout />
+      </Suspense>
 
       {/* ===================== FAQ PREVIEW SECTION ===================== */}
       <section className={`relative py-24 md:py-32 border-t transition-colors ${

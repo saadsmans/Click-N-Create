@@ -60,19 +60,19 @@ function createPhotorealCumulusTexture(): THREE.CanvasTexture {
     for (let x = 0; x < size; x++) {
       const nx = (x / size) * 2 - 1;
       // Wide billowy cumulus silhouette (gently flattened base, heaped cauliflower upper lobes)
-      const ellipR = Math.hypot(nx * 0.92, (ny + 0.08) * 1.15);
-      const radialFalloff = Math.max(0, 1.0 - Math.pow(ellipR, 1.58));
+      const ellipR = Math.hypot(nx * 0.9, (ny + 0.08) * 1.16);
+      const radialFalloff = Math.max(0, 1.0 - Math.pow(ellipR, 1.56));
 
       const n1 = fbm(nx * 2.75 + 4.2, ny * 2.75 + 1.9);
       const n2 = fbm(nx * 6.2 - 1.3, ny * 6.2 + 7.4);
       const density = Math.max(
         0,
-        Math.min(1, radialFalloff * 1.34 + (n1 - 0.48) * 0.76 + (n2 - 0.5) * 0.28)
+        Math.min(1, radialFalloff * 1.36 + (n1 - 0.48) * 0.78 + (n2 - 0.5) * 0.28)
       );
-      const alpha = Math.pow(Math.max(0, Math.min(1, (density - 0.13) / 0.72)), 1.28);
+      const alpha = Math.pow(Math.max(0, Math.min(1, (density - 0.12) / 0.72)), 1.24);
 
-      // Vertical self-shadowing: crisp sunlit upper billow vs cool atmospheric shadowed base
-      const topLight = Math.max(0, Math.min(1, 0.62 - ny * 0.45 + (n1 - 0.45) * 0.38));
+      // Vertical self-shadowing: crisp sunlit upper billow vs atmospheric shadowed base
+      const topLight = Math.max(0, Math.min(1, 0.62 - ny * 0.46 + (n1 - 0.45) * 0.38));
       const idx = (y * size + x) * 4;
       data[idx] = Math.round(topLight * 255);
       data[idx + 1] = Math.round(n1 * 255);
@@ -91,10 +91,10 @@ function createPhotorealCumulusTexture(): THREE.CanvasTexture {
 }
 
 /**
- * Builds an ultra-deep 4-strata Photorealistic Volumetric Cumulus Cloud Sea (y = 124..322)
- * soaring high above the Futuristic Blue-Glass Metropolis.
- * At scroll = 0%, the camera starts high ABOVE the sunlit/moonlit upper cloud ocean (y = 315),
- * plunges deeply through 4 parting volumetric cumulus & cirrus canyons across scroll 0% -> 24%,
+ * Builds an ultra-deep 5-strata Photorealistic Volumetric Cumulus Cloud Sea (y = 128..388)
+ * soaring high above the Sunlit Azure / Golden-Hour Sunset Riverside Metropolis.
+ * At scroll = 0%, the camera starts high ABOVE the stratospheric cloud sea (y = 392),
+ * plunges deeply through 5 parting volumetric cumulus canyons across scroll 0% -> 24%,
  * and breaks cleanly beneath the cloud base into a sweeping collision-free Whole-City Panorama.
  */
 export function buildCloudDescentDeck(initialDarkMode = false): CloudDeckBuildResult {
@@ -109,17 +109,20 @@ export function buildCloudDescentDeck(initialDarkMode = false): CloudDeckBuildRe
 
   const cloudTex = track(createPhotorealCumulusTexture());
 
-  // Custom GLSL ShaderMaterial with luminous platinum-sunlit tops, sapphire-slate undersides,
-  // multi-altitude scattering, and buttery camera-proximity soft dissolve (zero hard clipping!)
+  // Custom GLSL ShaderMaterial:
+  // - Light Mode: Crisp bright white sunlit cumulus tops & soft azure-cerulean undersides (matching daytime reference)
+  // - Dark/Sunset Mode: Dramatic backlit deep violet-plum cloud silhouettes with glowing fiery coral-apricot-amber sunset rims (matching sunset reference)
   const cloudUniforms = {
     uMap: { value: cloudTex },
     uTime: { value: 0 },
     uIsDark: { value: initialDarkMode ? 1.0 : 0.0 },
     uGlobalFade: { value: 1.0 },
-    uSunColor: { value: new THREE.Color(0xfafcff) },
-    uShadowColor: { value: new THREE.Color(0x84a8cf) },
-    uNightTopColor: { value: new THREE.Color(0x365078) },
-    uNightShadowColor: { value: new THREE.Color(0x0b162a) },
+    uSunColor: { value: new THREE.Color(0xffffff) },
+    uShadowColor: { value: new THREE.Color(0x88bef2) },
+    uSunsetRimColor: { value: new THREE.Color(0xff8e42) },
+    uSunsetGlowColor: { value: new THREE.Color(0xff6230) },
+    uSunsetBodyColor: { value: new THREE.Color(0x4b355c) },
+    uSunsetShadowColor: { value: new THREE.Color(0x231a38) },
   };
 
   const cloudMat = track(
@@ -145,8 +148,10 @@ export function buildCloudDescentDeck(initialDarkMode = false): CloudDeckBuildRe
         uniform float uGlobalFade;
         uniform vec3 uSunColor;
         uniform vec3 uShadowColor;
-        uniform vec3 uNightTopColor;
-        uniform vec3 uNightShadowColor;
+        uniform vec3 uSunsetRimColor;
+        uniform vec3 uSunsetGlowColor;
+        uniform vec3 uSunsetBodyColor;
+        uniform vec3 uSunsetShadowColor;
 
         varying vec2 vUv;
         varying float vCamDist;
@@ -160,28 +165,31 @@ export function buildCloudDescentDeck(initialDarkMode = false): CloudDeckBuildRe
           float topLit = tex.r;
           float nDetail = tex.g;
 
-          // Altitude illumination gradient: upper stratospheric cloud sea catches brilliant sun/moonlight
-          float altBoost = smoothstep(125.0, 310.0, vWorldY);
+          // Altitude gradient: upper stratospheric clouds catch bright open sky light
+          float altBoost = smoothstep(130.0, 380.0, vWorldY);
 
-          // Photographic sunlit platinum-white cumulus vs moonlit sapphire-silver night clouds
-          vec3 dayCol = mix(uShadowColor, uSunColor, smoothstep(0.14, 0.84, topLit));
-          dayCol += vec3(0.06, 0.07, 0.09) * altBoost;
-          // Crisp silver-lining atmospheric forward scattering along thin sunlit cloud rims
-          float edgeRim = (1.0 - alpha) * smoothstep(0.28, 0.9, topLit) * 0.25;
-          dayCol += vec3(0.95, 0.98, 1.0) * edgeRim;
+          // LIGHT MODE: Pure sunlit Mediterranean cumulus (crisp white tops, airy azure shadows)
+          vec3 dayCol = mix(uShadowColor, uSunColor, smoothstep(0.14, 0.80, topLit));
+          dayCol += vec3(0.05, 0.06, 0.07) * altBoost;
+          float dayEdgeRim = (1.0 - alpha) * smoothstep(0.24, 0.88, topLit) * 0.28;
+          dayCol += vec3(1.0, 1.0, 1.0) * dayEdgeRim;
 
-          vec3 nightCol = mix(uNightShadowColor, uNightTopColor, smoothstep(0.14, 0.88, topLit));
-          nightCol += vec3(0.16, 0.28, 0.46) * (1.0 - alpha) * 0.22;
-          // Luminous cool sapphire-cyan metropolitan bounce lighting on lower cloud bellies at night
-          float bellyBounce = (1.0 - topLit) * smoothstep(215.0, 125.0, vWorldY);
-          nightCol += vec3(0.11, 0.26, 0.48) * bellyBounce * 0.56;
+          // DARK / SUNSET MODE: Dramatic backlit plum-indigo clouds with blazing coral-amber underside & rim fire!
+          float bellyLit = 1.0 - smoothstep(0.15, 0.78, topLit);
+          vec3 sunsetCol = mix(uSunsetBodyColor, uSunsetShadowColor, smoothstep(0.22, 0.86, topLit));
+          // Fiery glowing apricot-orange rim around thin backlit cloud edges
+          float sunsetEdge = (1.0 - alpha) * (0.42 + bellyLit * 0.58);
+          sunsetCol += uSunsetRimColor * sunsetEdge * 1.15;
+          // Warm coral-gold sunset light illuminating cloud undersides from the low setting sun
+          float lowAltitudeGlow = smoothstep(370.0, 135.0, vWorldY);
+          sunsetCol += mix(uSunsetGlowColor, uSunsetRimColor, nDetail) * bellyLit * (0.42 + lowAltitudeGlow * 0.44);
 
-          vec3 col = mix(dayCol, nightCol, uIsDark);
-          col *= (0.93 + nDetail * 0.11);
+          vec3 col = mix(dayCol, sunsetCol, uIsDark);
+          col *= (0.94 + nDetail * 0.11);
 
           // Silky-smooth proximity dissolve as the camera plunges deep through each cumulus stratum
-          float nearFade = smoothstep(10.0, 48.0, vCamDist);
-          float farFade = 1.0 - smoothstep(460.0, 860.0, vCamDist);
+          float nearFade = smoothstep(12.0, 52.0, vCamDist);
+          float farFade = 1.0 - smoothstep(520.0, 960.0, vCamDist);
 
           float outAlpha = alpha * nearFade * farFade * uGlobalFade * 0.92;
           if (outAlpha < 0.005) discard;
@@ -194,12 +202,12 @@ export function buildCloudDescentDeck(initialDarkMode = false): CloudDeckBuildRe
     })
   );
 
-  // Camera-locked volumetric passing-cloud mist veil that peaks as you plunge deep through the thick mid-deck (t = 0.05..0.19)
+  // Camera-locked volumetric passing-cloud mist veil peaking smoothly during the deep cloud dive (t = 0.04..0.20)
   const mistUniforms = {
     uMap: { value: cloudTex },
     uTime: { value: 0 },
     uOpacity: { value: 0.0 },
-    uColor: { value: new THREE.Color(initialDarkMode ? 0x101f38 : 0xedf4fc) },
+    uColor: { value: new THREE.Color(initialDarkMode ? 0x3b2640 : 0xeef7ff) },
   };
   const mistMat = track(
     new THREE.ShaderMaterial({
@@ -223,8 +231,8 @@ export function buildCloudDescentDeck(initialDarkMode = false): CloudDeckBuildRe
           vec2 uv2 = (vUv - 0.5) * 0.86 + 0.5 - vec2(uTime * 0.005, 0.006);
           float c1 = texture2D(uMap, clamp(uv1, 0.01, 0.99)).a;
           float c2 = texture2D(uMap, clamp(uv2, 0.01, 0.99)).a;
-          // Organic parting opening in the center so the futuristic skyline dramatically emerges beneath!
-          float centerClear = smoothstep(0.06, 0.6, length(vUv - 0.5));
+          // Organic parting opening in the center so the riverside metropolis dramatically emerges beneath!
+          float centerClear = smoothstep(0.06, 0.62, length(vUv - 0.5));
           float wisp = clamp((c1 * 0.65 + c2 * 0.58) * (0.45 + centerClear * 0.55), 0.0, 1.0);
           float a = wisp * uOpacity;
           if (a < 0.005) discard;
@@ -252,7 +260,7 @@ export function buildCloudDescentDeck(initialDarkMode = false): CloudDeckBuildRe
     driftSpeed: number;
     phase: number;
     partSign: number; // -1 left, +1 right, 0 ambient horizon
-    strata: 'stratosphere' | 'upper' | 'mid' | 'lower' | 'horizon';
+    strata: 'exosphere' | 'stratosphere' | 'upper' | 'mid' | 'lower' | 'horizon';
   }
 
   const cloudSprites: CloudSpriteRef[] = [];
@@ -264,26 +272,59 @@ export function buildCloudDescentDeck(initialDarkMode = false): CloudDeckBuildRe
     return (seed - 1) / 2147483646;
   };
 
-  // STRATA 0 (High Above-Clouds Ocean: y = 258..316, sprawling right below & flanking the y = 315 starting lens!)
+  // STRATA 0A (High Above-Clouds Canopy: y = 324..384 — directly beneath & flanking the y = 392 starting camera!)
+  const exosphereConfigs: [number, number, number, number, number][] = [
+    [-76, 368, 336, 178, 76],
+    [80, 370, 332, 182, 78],
+    [-30, 354, 322, 146, 62],
+    [34, 356, 318, 148, 62],
+    [0, 344, 312, 152, 58],
+    [-124, 358, 298, 192, 82],
+    [128, 360, 294, 194, 82],
+    [-58, 336, 290, 148, 62],
+    [62, 338, 286, 150, 62],
+    [-18, 326, 276, 134, 56],
+    [22, 328, 272, 134, 56],
+  ];
+
+  exosphereConfigs.forEach(([x, y, z, w, h], idx) => {
+    const m = new THREE.Mesh(planeGeo, cloudMat);
+    m.position.set(x, y, z);
+    m.scale.set(w, h, 1);
+    m.renderOrder = 52 + idx;
+    group.add(m);
+    cloudSprites.push({
+      mesh: m,
+      baseX: x,
+      baseY: y,
+      baseZ: z,
+      driftSpeed: 0.24 + rand() * 0.32,
+      phase: rand() * Math.PI * 2,
+      partSign: x < -6 ? -1 : x > 6 ? 1 : idx % 2 === 0 ? -1 : 1,
+      strata: 'exosphere',
+    });
+  });
+
+  // STRATA 0B (Stratosphere Cloud Ocean: y = 262..318)
   const stratosphereConfigs: [number, number, number, number, number][] = [
-    [-68, 296, 286, 156, 68],
-    [72, 298, 282, 160, 70],
-    [-28, 282, 272, 128, 56],
-    [32, 284, 268, 130, 56],
-    [0, 272, 264, 138, 52],
-    [-112, 286, 250, 174, 76],
-    [116, 288, 248, 176, 76],
-    [-54, 268, 240, 134, 58],
-    [58, 270, 238, 136, 58],
-    [-16, 260, 226, 118, 50],
-    [18, 262, 224, 118, 50],
+    [-68, 304, 292, 162, 70],
+    [72, 306, 288, 166, 72],
+    [-28, 288, 278, 132, 58],
+    [32, 290, 274, 134, 58],
+    [0, 278, 268, 142, 54],
+    [-116, 292, 256, 180, 78],
+    [120, 294, 252, 182, 78],
+    [-54, 272, 246, 138, 60],
+    [58, 274, 242, 140, 60],
+    [-16, 264, 232, 122, 52],
+    [18, 266, 228, 122, 52],
   ];
 
   stratosphereConfigs.forEach(([x, y, z, w, h], idx) => {
     const m = new THREE.Mesh(planeGeo, cloudMat);
     m.position.set(x, y, z);
     m.scale.set(w, h, 1);
-    m.renderOrder = 44 + idx;
+    m.renderOrder = 42 + idx;
     group.add(m);
     cloudSprites.push({
       mesh: m,
@@ -297,19 +338,19 @@ export function buildCloudDescentDeck(initialDarkMode = false): CloudDeckBuildRe
     });
   });
 
-  // STRATA 1 (Upper Cloud Canyon Tops: y = 204..256)
+  // STRATA 1 (Upper Cloud Canyon Tops: y = 208..258)
   const upperCorridorConfigs: [number, number, number, number, number][] = [
-    [-62, 246, 262, 140, 62],
-    [66, 248, 258, 144, 62],
-    [-26, 234, 248, 114, 52],
-    [30, 236, 246, 116, 52],
-    [-92, 226, 236, 152, 66],
-    [96, 228, 234, 154, 66],
-    [-40, 218, 228, 112, 50],
-    [44, 216, 224, 114, 50],
-    [0, 210, 214, 110, 46],
-    [-76, 206, 204, 138, 60],
-    [80, 208, 202, 140, 60],
+    [-62, 250, 266, 144, 62],
+    [66, 252, 262, 148, 64],
+    [-26, 238, 252, 118, 52],
+    [30, 240, 248, 120, 52],
+    [-94, 230, 240, 156, 68],
+    [98, 232, 236, 158, 68],
+    [-40, 220, 230, 114, 50],
+    [44, 218, 226, 116, 50],
+    [0, 212, 216, 112, 46],
+    [-78, 208, 206, 140, 60],
+    [82, 210, 204, 142, 60],
   ];
 
   upperCorridorConfigs.forEach(([x, y, z, w, h], idx) => {
@@ -330,18 +371,18 @@ export function buildCloudDescentDeck(initialDarkMode = false): CloudDeckBuildRe
     });
   });
 
-  // STRATA 2 (Thick Mid-Deck Cloud Canyon: y = 158..202 — parts wide left & right as you descend!)
+  // STRATA 2 (Thick Mid-Deck Cloud Canyon: y = 160..204 — parts wide left & right as you descend!)
   const midCorridorConfigs: [number, number, number, number, number][] = [
-    [-54, 194, 232, 128, 56],
-    [58, 196, 228, 130, 56],
-    [-20, 184, 222, 102, 48],
-    [26, 186, 218, 104, 48],
-    [-82, 178, 208, 136, 58],
-    [86, 176, 204, 138, 58],
-    [-34, 168, 198, 98, 46],
-    [38, 166, 194, 100, 46],
-    [-64, 160, 182, 122, 54],
-    [68, 158, 178, 124, 54],
+    [-54, 196, 234, 130, 56],
+    [58, 198, 230, 132, 56],
+    [-20, 186, 224, 104, 48],
+    [26, 188, 220, 106, 48],
+    [-82, 180, 210, 138, 58],
+    [86, 178, 206, 140, 58],
+    [-34, 170, 200, 100, 46],
+    [38, 168, 196, 102, 46],
+    [-64, 162, 184, 124, 54],
+    [68, 160, 180, 126, 54],
   ];
 
   midCorridorConfigs.forEach(([x, y, z, w, h], idx) => {
@@ -362,16 +403,16 @@ export function buildCloudDescentDeck(initialDarkMode = false): CloudDeckBuildRe
     });
   });
 
-  // STRATA 3 (Lower Cloud Base: y = 126..156 — unveils the collision-free Whole-City Panorama!)
+  // STRATA 3 (Lower Cloud Base: y = 130..158 — unveils the collision-free Whole-City Panorama!)
   const lowerCorridorConfigs: [number, number, number, number, number][] = [
-    [-84, 150, 192, 128, 52],
-    [88, 148, 188, 130, 52],
-    [-42, 142, 178, 98, 42],
-    [46, 140, 174, 100, 42],
-    [-104, 134, 150, 142, 56],
-    [108, 132, 146, 144, 56],
-    [-62, 128, 132, 106, 44],
-    [66, 126, 128, 108, 44],
+    [-84, 152, 194, 130, 52],
+    [88, 150, 190, 132, 52],
+    [-42, 144, 180, 100, 42],
+    [46, 142, 176, 102, 42],
+    [-106, 136, 152, 144, 56],
+    [110, 134, 148, 146, 56],
+    [-62, 130, 134, 108, 44],
+    [66, 128, 130, 110, 44],
   ];
 
   lowerCorridorConfigs.forEach(([x, y, z, w, h], idx) => {
@@ -392,15 +433,15 @@ export function buildCloudDescentDeck(initialDarkMode = false): CloudDeckBuildRe
     });
   });
 
-  // Vast High-Altitude 360deg Horizon Cloud Sea Ring (64 sweeping banks spanning y = 122..295!)
-  for (let i = 0; i < 64; i++) {
-    const ang = (i / 64) * Math.PI * 2 + (rand() - 0.5) * 0.11;
-    const rad = 185 + rand() * 235;
+  // Vast High-Altitude 360deg Horizon Cloud Sea Ring (76 sweeping banks spanning y = 126..345!)
+  for (let i = 0; i < 76; i++) {
+    const ang = (i / 76) * Math.PI * 2 + (rand() - 0.5) * 0.1;
+    const rad = 195 + rand() * 265;
     const x = Math.sin(ang) * rad;
     const z = 45 + Math.cos(ang) * rad;
-    const y = 122 + rand() * 172;
-    const w = 135 + rand() * 125;
-    const h = 48 + rand() * 42;
+    const y = 126 + rand() * 218;
+    const w = 140 + rand() * 135;
+    const h = 46 + rand() * 44;
 
     const m = new THREE.Mesh(planeGeo, cloudMat);
     m.position.set(x, y, z);
@@ -428,19 +469,19 @@ export function buildCloudDescentDeck(initialDarkMode = false): CloudDeckBuildRe
     cloudUniforms.uTime.value = elapsedSeconds;
     mistUniforms.uTime.value = elapsedSeconds;
 
-    // Clouds stay crisp overhead even at street level, gently softening down in the residential crescent
+    // Clouds stay crisp and photogenic overhead (matching the dramatic clouds above the skyline in both photos!)
     const deckVisibility = THREE.MathUtils.lerp(
       1.0,
-      0.56,
-      THREE.MathUtils.smoothstep(scrollT, 0.36, 0.62)
+      0.72,
+      THREE.MathUtils.smoothstep(scrollT, 0.38, 0.65)
     );
     cloudUniforms.uGlobalFade.value = deckVisibility;
 
-    // Deep volumetric passing-cloud mist veil peaks cleanly across t = 0.05..0.18 during the cloud dive,
-    // then clears crisply by t = 0.23 to unveil the sweeping panoramic metropolis!
+    // Deep volumetric passing-cloud mist veil peaks cleanly across t = 0.04..0.19 during the cloud dive,
+    // then clears crisply by t = 0.24 to unveil the sweeping panoramic riverside metropolis!
     const mistStrength =
       scrollT < 0.24
-        ? Math.sin(THREE.MathUtils.clamp((scrollT - 0.01) / 0.23, 0, 1) * Math.PI) * 0.58
+        ? Math.sin(THREE.MathUtils.clamp((scrollT - 0.01) / 0.23, 0, 1) * Math.PI) * 0.52
         : 0.0;
     mistUniforms.uOpacity.value = mistStrength;
     mistGroup.visible = mistStrength > 0.008;
@@ -450,24 +491,27 @@ export function buildCloudDescentDeck(initialDarkMode = false): CloudDeckBuildRe
     }
 
     // Dynamic corridor parting so clouds dramatically open a wide cinematic viewport as you descend!
-    const partStrat = THREE.MathUtils.smoothstep(scrollT, 0.01, 0.12) * 34.0;
-    const partUpper = THREE.MathUtils.smoothstep(scrollT, 0.04, 0.16) * 38.0;
-    const partMid = THREE.MathUtils.smoothstep(scrollT, 0.08, 0.21) * 44.0;
-    const partLower = THREE.MathUtils.smoothstep(scrollT, 0.14, 0.26) * 36.0;
+    const partExo = THREE.MathUtils.smoothstep(scrollT, 0.0, 0.09) * 38.0;
+    const partStrat = THREE.MathUtils.smoothstep(scrollT, 0.03, 0.13) * 40.0;
+    const partUpper = THREE.MathUtils.smoothstep(scrollT, 0.06, 0.17) * 44.0;
+    const partMid = THREE.MathUtils.smoothstep(scrollT, 0.10, 0.22) * 46.0;
+    const partLower = THREE.MathUtils.smoothstep(scrollT, 0.15, 0.26) * 38.0;
 
     for (let i = 0; i < cloudSprites.length; i++) {
       const c = cloudSprites[i];
       const driftX = Math.sin(elapsedSeconds * 0.03 * c.driftSpeed + c.phase) * 12.0;
       const partOffset =
-        c.strata === 'stratosphere'
-          ? c.partSign * partStrat
-          : c.strata === 'upper'
-            ? c.partSign * partUpper
-            : c.strata === 'mid'
-              ? c.partSign * partMid
-              : c.strata === 'lower'
-                ? c.partSign * partLower
-                : 0;
+        c.strata === 'exosphere'
+          ? c.partSign * partExo
+          : c.strata === 'stratosphere'
+            ? c.partSign * partStrat
+            : c.strata === 'upper'
+              ? c.partSign * partUpper
+              : c.strata === 'mid'
+                ? c.partSign * partMid
+                : c.strata === 'lower'
+                  ? c.partSign * partLower
+                  : 0;
       c.mesh.position.set(c.baseX + driftX + partOffset, c.baseY, c.baseZ);
       c.mesh.quaternion.copy(cameraQuat);
     }
@@ -475,7 +519,7 @@ export function buildCloudDescentDeck(initialDarkMode = false): CloudDeckBuildRe
 
   const setTheme = (isDark: boolean) => {
     cloudUniforms.uIsDark.value = isDark ? 1.0 : 0.0;
-    mistUniforms.uColor.value.setHex(isDark ? 0x101f38 : 0xedf4fc);
+    mistUniforms.uColor.value.setHex(isDark ? 0x3b2640 : 0xeef7ff);
   };
 
   return {

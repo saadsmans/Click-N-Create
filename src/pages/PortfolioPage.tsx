@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, Suspense } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   Download,
@@ -23,10 +23,15 @@ import {
 } from 'lucide-react';
 import { SAAD_PORTFOLIO } from '../data/portfolio.ts';
 import { ClickNCreateLogo } from '../components/ClickNCreateLogo.tsx';
-import { generateCvPdf } from '../utils/cvPdfGenerator.ts';
 import { useTheme } from '../context/ThemeContext.tsx';
 import { SITE_CONFIG } from '../data/site.ts';
 import { SEOHead } from '../components/SEOHead.tsx';
+
+const InteractivePortfolioAvatar3D = React.lazy(() =>
+  import('../components/InteractivePortfolioAvatar3D.tsx').then((m) => ({
+    default: m.InteractivePortfolioAvatar3D,
+  }))
+);
 
 interface PortfolioPageProps {
   onNavigate: (path: string) => void;
@@ -378,6 +383,7 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
   const handleDownloadPdf = async () => {
     setDownloading(true);
     try {
+      const { generateCvPdf } = await import('../utils/cvPdfGenerator.ts');
       await generateCvPdf();
     } catch (e) {
       console.error('PDF generation error', e);
@@ -442,8 +448,8 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
           <div className="absolute bottom-0 left-1/4 w-80 h-80 rounded-full blur-[130px] pointer-events-none bg-[#1D4ED8]/8" />
 
           <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-            {/* Left Content Column */}
-            <div className="lg:col-span-8 space-y-6">
+            {/* Hero Profile Content */}
+            <div className="lg:col-span-12 space-y-6">
               <div>
                 <div
                   className={`inline-flex items-center gap-2 px-3.5 py-1 rounded-md border text-xs font-mono uppercase tracking-wider mb-3 ${
@@ -561,38 +567,6 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
               </div>
             </div>
 
-            {/* Right Column: Permanent Official Avatar */}
-            <div className="lg:col-span-4 flex flex-col items-center justify-center">
-              <div className="relative group">
-                {/* Ambient glow */}
-                <div className="absolute -inset-2 rounded-full bg-gradient-to-r from-[#2563EB] via-[#38BDF8] to-[#BAE6FD] opacity-40 blur-xl group-hover:opacity-65 transition-opacity duration-500" />
-
-                {/* Permanent Circular Avatar Frame */}
-                <div className={`relative w-44 h-44 sm:w-52 sm:h-52 md:w-56 md:h-56 rounded-full overflow-hidden border-4 shadow-2xl ${
-                  isDark ? 'border-[#38BDF8]/75 bg-[#0C1222]' : 'border-white bg-[#F3F6FA]'
-                }`}>
-                  <img
-                    src="/assets/aistudio/profile_photo_under_1mb-1_26da4b57.jpg"
-                    alt="Saad M — Official Portrait"
-                    className="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-500"
-                  />
-                </div>
-
-                {/* Status Badge */}
-                <div className={`absolute -bottom-2 left-1/2 -translate-x-1/2 px-3.5 py-1 rounded-md border shadow-lg flex items-center gap-2 whitespace-nowrap text-xs font-mono font-bold ${
-                  isDark
-                    ? 'border-emerald-500/40 bg-[#0C1222]/95 text-emerald-400'
-                    : 'border-emerald-600/35 bg-white text-emerald-700'
-                }`}>
-                  <span className="w-2 h-2 rounded-full bg-emerald-500" />
-                  <span>Available For Work</span>
-                </div>
-              </div>
-
-              <div className="mt-4 text-center">
-                <span className={`text-xs font-mono ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>Verified Web Developer</span>
-              </div>
-            </div>
           </div>
         </div>
 
@@ -1274,6 +1248,32 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
         </div>
       </div>
 
+      {/* ===================== STICKY BOTTOM-RIGHT 3D AVATAR ===================== */}
+      {!showCvModal && (
+        <div className="fixed bottom-3 right-3 sm:bottom-5 sm:right-6 z-40 flex flex-col items-center pointer-events-none select-none">
+          <Suspense fallback={null}>
+            <InteractivePortfolioAvatar3D isDark={isDark} />
+          </Suspense>
+          <div
+            className={`-mt-3 relative z-10 px-3 py-1 rounded-md border shadow-lg flex items-center gap-1.5 whitespace-nowrap text-[11px] font-mono font-bold ${
+              isDark
+                ? 'border-emerald-500/40 bg-[#0C1222]/95 text-emerald-400'
+                : 'border-emerald-600/35 bg-white/95 text-emerald-700'
+            }`}
+          >
+            <span className="w-2 h-2 rounded-full bg-emerald-500" />
+            <span>Available For Work</span>
+          </div>
+          <span
+            className={`mt-1 text-[10px] font-mono ${
+              isDark ? 'text-[#94A3B8]' : 'text-[#475569]'
+            }`}
+          >
+            Verified Web Developer
+          </span>
+        </div>
+      )}
+
       {/* ===================== FULL AUTHENTIC DIGITAL CV RESUME MODAL (FULL WHITE ONLY) ===================== */}
       <AnimatePresence>
         {showCvModal && (
@@ -1358,6 +1358,8 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
                     <img
                       src={SAAD_PORTFOLIO.cvAvatarImage}
                       alt="Saad M — Official CV Avatar"
+                      loading="lazy"
+                      decoding="async"
                       className="w-full h-full object-cover object-top"
                     />
                   </div>
@@ -1525,7 +1527,7 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
                           Click N Create – clickncreate.co.uk
                         </div>
                         <div className="text-[10px] text-[#1E40AF] font-mono font-bold">
-                          Lead Web Developer &amp; Founder (2024 – Present)
+                          Lead Web Developer &amp; Founder (2025 – Present)
                         </div>
                         <ul className="space-y-1 text-[10.5px] text-zinc-700 list-disc pl-4 pt-0.5">
                           <li>Designed and developed freelance web development website using WordPress, PHP, and modern CSS/React.</li>

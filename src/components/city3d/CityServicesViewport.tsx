@@ -5,13 +5,14 @@ import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 import { OutputPass } from 'three/examples/jsm/postprocessing/OutputPass.js';
 import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
-import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 import gsap from 'gsap';
 import { ServiceItem } from '../../data/services.ts';
 import { buildCloudDescentDeck, CloudDeckBuildResult } from './cloudDeckBuilder.ts';
 import { buildArchitecturalCity, CityBuildResult } from './cityBuilder.ts';
 import { buildServiceHouses, HousesBuildResult } from './serviceHousesBuilder.ts';
-import { detectQualityProfile, ExplorationPhase } from './types.ts';
+import { detectQualityProfile, ExplorationPhase, HOUSE_TOUR_PROGRESS } from './types.ts';
+
+export { HOUSE_TOUR_PROGRESS };
 
 interface CityServicesViewportProps {
   services: ServiceItem[];
@@ -41,10 +42,10 @@ const _hLook = new THREE.Vector3();
 const _pointerNdc = new THREE.Vector2();
 const _raycaster = new THREE.Raycaster();
 const _bgColor = new THREE.Color();
-const _cloudDayColor = new THREE.Color(0xe3eef9);
-const _cloudNightColor = new THREE.Color(0x0b1528);
-const _cityDayColor = new THREE.Color(0xcde0f5);
-const _cityNightColor = new THREE.Color(0x060b18);
+const _cloudDayColor = new THREE.Color(0x6eb9fa);
+const _cloudNightColor = new THREE.Color(0x3a2648);
+const _cityDayColor = new THREE.Color(0x9bd2fc);
+const _cityNightColor = new THREE.Color(0x281e3b);
 
 /**
  * Cinema-Grade Optical Clarity & Filmic Finishing Shader:
@@ -57,7 +58,7 @@ const OpticalClarityShader = {
   uniforms: {
     tDiffuse: { value: null },
     uResolution: { value: new THREE.Vector2(1920, 1080) },
-    uSharpness: { value: 0.34 },
+    uSharpness: { value: 0.38 },
     uDarkMode: { value: 1.0 },
   },
   vertexShader: /* glsl */ `
@@ -104,22 +105,21 @@ const OpticalClarityShader = {
       vec3 sCurve = sharp * sharp * (3.0 - 2.0 * sharp);
       vec3 graded = mix(sharp, sCurve, 0.15);
 
-      // Subtle architectural cinema split-tone (crisp sapphire shadows, clean luminous highlights)
+      // Subtle architectural cinema split-tone (crisp daylight azure vs golden-hour twilight warmth)
       float luma = dot(graded, vec3(0.2126, 0.7152, 0.0722));
-      vec3 shadowTint = mix(vec3(0.97, 0.99, 1.03), vec3(0.95, 0.98, 1.04), uDarkMode);
-      vec3 highTint   = mix(vec3(1.02, 1.005, 0.985), vec3(0.98, 1.01, 1.04), uDarkMode);
+      vec3 shadowTint = mix(vec3(0.97, 0.99, 1.03), vec3(0.97, 0.94, 1.04), uDarkMode);
+      vec3 highTint   = mix(vec3(1.02, 1.005, 0.985), vec3(1.04, 0.99, 0.94), uDarkMode);
       graded *= mix(shadowTint, highTint, smoothstep(0.18, 0.85, luma));
 
-      // Gentle optical cinema lens vignette + sub-LSB dither to keep HDR sky gradients silky-smooth
-      float vig = 1.0 - r2 * mix(0.16, 0.22, uDarkMode);
+      // Gentle optical cinema lens vignette + sub-LSB dither to keep sky gradients silky-smooth
+      float vig = 1.0 - r2 * mix(0.14, 0.22, uDarkMode);
       vec3 outCol = graded * vig + ditherNoise(vUv * uResolution) * (1.0 / 255.0);
       gl_FragColor = vec4(clamp(outCol, 0.0, 1.0), 1.0);
     }
   `,
 };
 
-/** Exact scroll progress centers for each of the 6 Service Houses on the Turn-by-Turn Guided Tour */
-export const HOUSE_TOUR_PROGRESS: number[] = [0.6, 0.66, 0.72, 0.78, 0.84, 0.9];
+// HOUSE_TOUR_PROGRESS imported and re-exported from ./types.ts above
 
 interface CameraKeyframe {
   t: number; // normalized scroll t in [0, 1]
@@ -128,42 +128,43 @@ interface CameraKeyframe {
 }
 
 const CITY_KEYFRAMES: CameraKeyframe[] = [
-  // 0.00 -> Start high & deep ABOVE the 4-strata stratospheric volumetric cloud ocean!
-  { t: 0.0, pos: new THREE.Vector3(0, 315, 315), look: new THREE.Vector3(0, 26, 48) },
-  // 0.08 -> Diving deep into the sunlit/moonlit upper cloud canyons
-  { t: 0.08, pos: new THREE.Vector3(16, 238, 278), look: new THREE.Vector3(0, 24, 52) },
-  // 0.16 -> Plunging through the thick parting mid-deck volumetric cumulus chasm
-  { t: 0.16, pos: new THREE.Vector3(38, 174, 246), look: new THREE.Vector3(0, 22, 48) },
-  // 0.24 -> Breaking beneath the cloud base into a sweeping Whole-City Panoramic Overlook (100% clear of all skyscrapers!)
-  { t: 0.24, pos: new THREE.Vector3(74, 134, 228), look: new THREE.Vector3(0, 24, 54) },
-  // 0.32 -> Wide helicopter panoramic arc completely in front of the skyline perimeter (z >= 210 vs max tower z = 175 -> ZERO collision!)
-  { t: 0.32, pos: new THREE.Vector3(-62, 108, 212), look: new THREE.Vector3(0, 22, 58) },
-  // 0.38 -> Aligning dead-center into the open Sapphire Boulevard sky canyon above Gateway 1
+  // 0.00 -> Start ultra-high & deep ABOVE the 5-strata volumetric cloud ocean!
+  { t: 0.0, pos: new THREE.Vector3(0, 392, 365), look: new THREE.Vector3(0, 26, 48) },
+  // 0.07 -> Diving deep through the luminous upper cloud canyons
+  { t: 0.07, pos: new THREE.Vector3(18, 302, 318), look: new THREE.Vector3(0, 25, 52) },
+  // 0.15 -> Plunging through the thick parting mid-deck volumetric cumulus chasm
+  { t: 0.15, pos: new THREE.Vector3(44, 214, 268), look: new THREE.Vector3(0, 22, 50) },
+  // 0.23 -> Breaking cleanly beneath the cloud base into a sweeping Whole-City Riverside Overlook (100% clear of all skyscrapers!)
+  { t: 0.23, pos: new THREE.Vector3(86, 128, 228), look: new THREE.Vector3(-8, 24, 56) },
+  // 0.32 -> Wide helicopter panoramic arc completely outside the skyline perimeter (z >= 212 vs max tower z = 175 -> ZERO collision!)
+  // Frames the stepped supertall spire cluster, lush green riverbanks, reflective river & illuminated multi-arch bridges!
+  { t: 0.32, pos: new THREE.Vector3(-68, 96, 214), look: new THREE.Vector3(-4, 22, 58) },
+  // 0.38 -> Aligning dead-center into the open downtown sky corridor above Gateway 1
   { t: 0.38, pos: new THREE.Vector3(0, 66, 178), look: new THREE.Vector3(0, 24, 72) },
   // 0.42 -> Sweeping cleanly UNDER Gateway 1 Skybridge (bridge bottom y=43.2) down the center corridor
   { t: 0.42, pos: new THREE.Vector3(0, 32, 146), look: new THREE.Vector3(0, 14, 70) },
-  // 0.46 -> Sweeping cleanly UNDER Gateway 2 Skybridge (y=30.2) & descending cleanly UNDER the Maglev Viaduct (z=94, y=15.0)
-  { t: 0.46, pos: new THREE.Vector3(0, 11.5, 110), look: new THREE.Vector3(0, 7.5, 58) },
-  // 0.49 -> Street-level boulevard drive right alongside luxury EVs & panoramic electric coaches
-  { t: 0.49, pos: new THREE.Vector3(-1.6, 3.9, 82), look: new THREE.Vector3(0, 3.6, 40) },
-  // 0.53 -> Gliding across the illuminated Tied-Arch Steel River Bridge over rippling water
-  { t: 0.53, pos: new THREE.Vector3(0.6, 4.7, 54), look: new THREE.Vector3(0, 3.6, 4) },
-  // 0.565 -> Entering the Grand Residential Crescent Park past the central infinity water sculpture
-  { t: 0.565, pos: new THREE.Vector3(-6.8, 5.4, 14.0), look: new THREE.Vector3(-21.0, 4.0, -16.0) },
-  // 0.60 -> TURN-BY-TURN STOP 1: House 01 (E-Commerce Development · Cantilevered Travertine & Glass Pavilion)
-  { t: 0.6, pos: new THREE.Vector3(-14.2, 5.2, -13.2), look: new THREE.Vector3(-32.0, 4.1, -20.4) },
-  // 0.66 -> TURN-BY-TURN STOP 2: House 02 (Web Development · 3-Level Sculpted Obsidian Basalt Atelier)
-  { t: 0.66, pos: new THREE.Vector3(-10.0, 5.4, -19.0), look: new THREE.Vector3(-22.6, 4.5, -33.5) },
-  // 0.72 -> TURN-BY-TURN STOP 3: House 03 (Branding & Design · Curved-Canopy Pearl Limestone & Teak Villa)
-  { t: 0.72, pos: new THREE.Vector3(-3.7, 5.2, -22.4), look: new THREE.Vector3(-8.35, 4.1, -41.0) },
-  // 0.78 -> TURN-BY-TURN STOP 4: House 04 (Digital Marketing · Grand Double-Height Titanium & Glass Manor)
-  { t: 0.78, pos: new THREE.Vector3(3.7, 5.3, -22.4), look: new THREE.Vector3(8.35, 4.4, -41.0) },
-  // 0.84 -> TURN-BY-TURN STOP 5: House 05 (Web App Development · Interlocking Slate & Glass Cube Residence)
-  { t: 0.84, pos: new THREE.Vector3(10.0, 5.3, -19.0), look: new THREE.Vector3(22.6, 4.4, -33.5) },
-  // 0.90 -> TURN-BY-TURN STOP 6: House 06 (Hosting & Maintenance · Butterfly-Roof Architectural Glass & Walnut Studio)
-  { t: 0.9, pos: new THREE.Vector3(14.2, 5.2, -13.2), look: new THREE.Vector3(32.0, 4.1, -20.4) },
-  // 1.00 -> Grand Finale Crescent Panorama overlooking all 6 Ultra-Luxury Modern Residences & Futuristic Blue Skyline
-  { t: 1.0, pos: new THREE.Vector3(0, 12.6, 23.0), look: new THREE.Vector3(0, 4.5, -28.0) },
+  // 0.46 -> Sweeping cleanly UNDER Gateway 2 Skybridge (y=30.2) down the open downtown sky corridor
+  { t: 0.46, pos: new THREE.Vector3(0, 12.2, 110), look: new THREE.Vector3(0, 7.2, 58) },
+  // 0.49 -> Serene car-free landscaped waterfront boulevard lined with stone planters, emerald hedges & lamps
+  { t: 0.49, pos: new THREE.Vector3(0, 4.6, 82), look: new THREE.Vector3(0, 4.0, 40) },
+  // 0.53 -> Gliding across the illuminated Multi-Arch Stone & Steel River Bridge over mirror-reflective water
+  { t: 0.53, pos: new THREE.Vector3(0.6, 4.9, 54), look: new THREE.Vector3(0, 3.8, 4) },
+  // 0.565 -> Entering the Grand Residential Crescent Park with wide panoramic framing
+  { t: 0.565, pos: new THREE.Vector3(-4.5, 8.2, 16.5), look: new THREE.Vector3(-26.0, 4.2, -18.0) },
+  // 0.60 -> TURN-BY-TURN STOP 1: House 01 (E-Commerce Solutions · 26.8m spacious architectural framing)
+  { t: 0.6, pos: new THREE.Vector3(-7.15, 7.2, -10.37), look: new THREE.Vector3(-32.0, 4.3, -20.4) },
+  // 0.66 -> TURN-BY-TURN STOP 2: House 02 (Web Development · 26.8m spacious architectural framing)
+  { t: 0.66, pos: new THREE.Vector3(-5.01, 7.4, -13.28), look: new THREE.Vector3(-22.6, 4.5, -33.5) },
+  // 0.72 -> TURN-BY-TURN STOP 3: House 03 (Branding & Design · 26.8m spacious architectural framing)
+  { t: 0.72, pos: new THREE.Vector3(-1.88, 7.3, -14.99), look: new THREE.Vector3(-8.35, 4.2, -41.0) },
+  // 0.78 -> TURN-BY-TURN STOP 4: House 04 (Digital Marketing · 26.8m spacious architectural framing)
+  { t: 0.78, pos: new THREE.Vector3(1.88, 7.3, -14.99), look: new THREE.Vector3(8.35, 4.5, -41.0) },
+  // 0.84 -> TURN-BY-TURN STOP 5: House 05 (Web Application Development · 26.8m spacious architectural framing)
+  { t: 0.84, pos: new THREE.Vector3(5.01, 7.4, -13.28), look: new THREE.Vector3(22.6, 4.5, -33.5) },
+  // 0.90 -> TURN-BY-TURN STOP 6: House 06 (Hosting & Maintenance · 26.8m spacious architectural framing)
+  { t: 0.9, pos: new THREE.Vector3(7.15, 7.2, -10.37), look: new THREE.Vector3(32.0, 4.3, -20.4) },
+  // 1.00 -> Grand Finale Crescent Panorama overlooking all 6 Ultra-Luxury Modern Residences & Riverside Metropolis
+  { t: 1.0, pos: new THREE.Vector3(0, 16.0, 31.0), look: new THREE.Vector3(0, 4.5, -26.0) },
 ];
 
 /**
@@ -261,7 +262,7 @@ export const CityServicesViewport: React.FC<CityServicesViewportProps> = ({
     plazaFillLight: THREE.PointLight;
     bloomPass: UnrealBloomPass | null;
     clarityPass: ShaderPass | null;
-    skyDomeMat: THREE.ShaderMaterial;
+    skyBackdropUniforms: { uIsDark: { value: number } };
     cloudDeckResult: CloudDeckBuildResult;
     cityResult: CityBuildResult;
     housesResult: HousesBuildResult;
@@ -316,103 +317,94 @@ export const CityServicesViewport: React.FC<CityServicesViewportProps> = ({
     renderer.setSize(initW, initH);
     renderer.shadowMap.enabled = quality.shadowsEnabled;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    if (quality.shadowsEnabled) {
+      renderer.shadowMap.autoUpdate = false;
+      renderer.shadowMap.needsUpdate = true;
+    }
     renderer.domElement.style.display = 'block';
     renderer.domElement.style.width = '100%';
     renderer.domElement.style.height = '100%';
     container.appendChild(renderer.domElement);
 
-    // 2. Photorealistic Scene starting high ABOVE the 4-strata volumetric cloud ocean
+    // 2. Clean Scene starting ultra-high ABOVE the 5-strata volumetric cloud ocean (No HDR environment map)
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(initDark ? 0x091326 : 0xdcebfa);
-    scene.fog = new THREE.Fog(initDark ? 0x060c1a : 0xcde0f5, 290, 980);
+    scene.background = new THREE.Color(initDark ? 0x281e3b : 0x7ac0fa);
+    scene.fog = new THREE.Fog(initDark ? 0x2a1f3d : 0xa5d5fc, 340, 1180);
 
-    // Clean Studio PBR Reflection Map (RoomEnvironment via PMREM) so architectural glass, titanium fins & obsidian EVs render with crisp physical specular sheen
-    const pmremGen = new THREE.PMREMGenerator(renderer);
-    const roomEnv = new RoomEnvironment();
-    const envTarget = pmremGen.fromScene(roomEnv, 0.04);
-    scene.environment = envTarget.texture;
-    scene.environmentIntensity = initDark ? 0.9 : 1.18;
-    roomEnv.dispose();
-    pmremGen.dispose();
+    const camera = new THREE.PerspectiveCamera(44, initW / initH, 0.25, 1620);
+    camera.position.set(0, 392, 365);
 
-    // Crisp Atmospheric Sky Gradient Dome (Day Rayleigh Azure + Sun Halo / Night Midnight Sapphire + Crisp Starfield)
-    const skyDomeGeo = new THREE.SphereGeometry(1080, 32, 24);
-    const skyDomeUniforms = {
-      uTime: { value: 0 },
+    // Lightweight Atmospheric Sky Gradient Backdrop (Pure visual sky gradient & setting sun disc — NO HDR envMap!)
+    const skyBackdropUniforms = {
       uIsDark: { value: initDark ? 1.0 : 0.0 },
     };
-    const skyDomeMat = new THREE.ShaderMaterial({
-      uniforms: skyDomeUniforms,
+    const skyBackdropGeo = new THREE.SphereGeometry(1320, 32, 20);
+    const skyBackdropMat = new THREE.ShaderMaterial({
+      uniforms: skyBackdropUniforms,
       side: THREE.BackSide,
       depthWrite: false,
       fog: false,
       vertexShader: /* glsl */ `
-        varying vec3 vDir;
+        varying vec3 vWorldDir;
         void main() {
-          vDir = normalize(position);
-          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+          vec4 wp = modelMatrix * vec4(position, 1.0);
+          vWorldDir = normalize(position);
+          gl_Position = projectionMatrix * viewMatrix * wp;
         }
       `,
       fragmentShader: /* glsl */ `
-        uniform float uTime;
         uniform float uIsDark;
-        varying vec3 vDir;
-
-        float hash31(vec3 p) {
-          p = fract(p * 0.1031);
-          p += dot(p, p.yzx + 33.33);
-          return fract((p.x + p.y) * p.z);
-        }
+        varying vec3 vWorldDir;
 
         void main() {
-          vec3 d = normalize(vDir);
-          float h = clamp(d.y, -0.2, 1.0);
-          float up = smoothstep(-0.04, 0.68, h);
+          vec3 dir = normalize(vWorldDir);
+          float h = clamp(dir.y, -0.15, 1.0);
+          float elev = clamp(dir.y, 0.0, 1.0);
 
-          // Photographic Day Sky: crisp alpine azure zenith blending into luminous platinum-mist horizon
-          vec3 dayHorizon = vec3(0.84, 0.91, 0.98);
-          vec3 dayMid     = vec3(0.42, 0.67, 0.93);
-          vec3 dayZenith  = vec3(0.14, 0.37, 0.72);
-          vec3 dayCol = mix(dayHorizon, dayMid, smoothstep(-0.02, 0.28, h));
-          dayCol = mix(dayCol, dayZenith, smoothstep(0.24, 0.86, h));
-          vec3 sunDir = normalize(vec3(0.54, 0.44, 0.42));
-          float sunAmt = max(0.0, dot(d, sunDir));
-          dayCol += vec3(1.0, 0.96, 0.88) * pow(sunAmt, 14.0) * 0.32;
-          dayCol += vec3(1.0, 0.98, 0.92) * pow(sunAmt, 240.0) * 0.75;
+          // LIGHT MODE: Crisp bright azure sky matching reference daytime photo!
+          vec3 dayHorizon = vec3(0.78, 0.90, 1.0);
+          vec3 dayMid     = vec3(0.38, 0.71, 0.98);
+          vec3 dayZenith  = vec3(0.16, 0.50, 0.91);
+          vec3 daySky = mix(dayHorizon, dayMid, smoothstep(0.0, 0.28, elev));
+          daySky = mix(daySky, dayZenith, smoothstep(0.24, 0.78, elev));
+          vec3 daySunDir = normalize(vec3(0.45, 0.48, -0.75));
+          float daySunAmt = max(0.0, dot(dir, daySunDir));
+          daySky += vec3(1.0, 0.98, 0.92) * pow(daySunAmt, 24.0) * 0.28;
 
-          // Photographic Night Sky: deep stratospheric sapphire zenith + subtle metropolitan horizon glow + crisp high stars
-          vec3 nightHorizon = vec3(0.065, 0.125, 0.245);
-          vec3 nightMid     = vec3(0.025, 0.055, 0.125);
-          vec3 nightZenith  = vec3(0.008, 0.018, 0.048);
-          vec3 nightCol = mix(nightHorizon, nightMid, smoothstep(-0.02, 0.25, h));
-          nightCol = mix(nightCol, nightZenith, smoothstep(0.22, 0.85, h));
+          // DARK / SUNSET MODE: Exact golden-hour twilight gradient from the user's sunset photo!
+          // Blazing apricot-orange horizon -> coral-rose -> dusty plum -> deep violet-indigo zenith
+          vec3 sunHorizon = vec3(1.0, 0.49, 0.16);
+          vec3 sunCoral   = vec3(0.86, 0.34, 0.27);
+          vec3 sunPlum    = vec3(0.39, 0.25, 0.43);
+          vec3 sunZenith  = vec3(0.12, 0.11, 0.24);
 
-          // Crisp subtle starfield visible above the horizon in dark mode
-          if (uIsDark > 0.01 && h > 0.06) {
-            vec3 grid = floor(d * 220.0);
-            float rnd = hash31(grid);
-            if (rnd > 0.9965) {
-              float twinkle = 0.65 + 0.35 * sin(uTime * (1.8 + fract(rnd * 97.0) * 2.5) + rnd * 120.0);
-              float starBright = smoothstep(0.9965, 0.9999, rnd) * twinkle * smoothstep(0.06, 0.32, h);
-              nightCol += vec3(0.76, 0.88, 1.0) * starBright * 0.95;
-            }
-          }
+          vec3 sunsetSky = mix(sunHorizon, sunCoral, smoothstep(0.0, 0.14, elev));
+          sunsetSky = mix(sunsetSky, sunPlum, smoothstep(0.12, 0.34, elev));
+          sunsetSky = mix(sunsetSky, sunZenith, smoothstep(0.30, 0.76, elev));
 
-          vec3 col = mix(dayCol, nightCol, uIsDark);
-          // Smooth nadir blend beneath horizon so looking down never exposes a seam
-          col = mix(mix(vec3(0.76, 0.86, 0.96), vec3(0.04, 0.08, 0.16), uIsDark), col, smoothstep(-0.18, 0.02, h));
-          gl_FragColor = vec4(col, 1.0);
+          // Low glowing golden setting sun disc right above the distant skyline horizon!
+          vec3 sunsetSunDir = normalize(vec3(0.18, 0.068, -0.98));
+          float sunDot = max(0.0, dot(dir, sunsetSunDir));
+          float sunDisc = smoothstep(0.99915, 0.99968, sunDot);
+          float sunHalo = pow(sunDot, 18.0) * 0.62 + pow(sunDot, 5.0) * 0.26;
+          sunsetSky += vec3(1.0, 0.62, 0.22) * sunHalo;
+          sunsetSky = mix(sunsetSky, vec3(1.0, 0.96, 0.72), sunDisc);
+
+          // Soft below-horizon atmospheric fade
+          vec3 belowCol = mix(vec3(0.72, 0.85, 0.98), vec3(0.16, 0.13, 0.26), uIsDark);
+          vec3 skyCol = mix(daySky, sunsetSky, uIsDark);
+          skyCol = mix(belowCol, skyCol, smoothstep(-0.12, 0.02, h));
+
+          gl_FragColor = vec4(skyCol, 1.0);
         }
       `,
     });
-    const skyDome = new THREE.Mesh(skyDomeGeo, skyDomeMat);
-    skyDome.renderOrder = -10;
-    scene.add(skyDome);
+    const skyBackdropMesh = new THREE.Mesh(skyBackdropGeo, skyBackdropMat);
+    skyBackdropMesh.frustumCulled = false;
+    skyBackdropMesh.renderOrder = -10;
+    scene.add(skyBackdropMesh);
 
-    const camera = new THREE.PerspectiveCamera(44, initW / initH, 0.25, 1380);
-    camera.position.set(0, 315, 315);
-
-    // 3. Build Volumetric Cumulus Cloud Descent Deck + Photorealistic Metropolis + 6 Bespoke Service Houses
+    // 3. Build Volumetric Cumulus Cloud Descent Deck + Photorealistic Riverside Metropolis + 6 Bespoke Service Houses
     const maxAniso = renderer.capabilities.getMaxAnisotropy();
 
     const cloudDeckResult = buildCloudDescentDeck(initDark);
@@ -421,18 +413,18 @@ export const CityServicesViewport: React.FC<CityServicesViewportProps> = ({
     const cityResult = buildArchitecturalCity(quality, maxAniso, initDark);
     scene.add(cityResult.group);
 
-    // 4. Photorealistic ArchViz Lighting Rig (Crisp Angled Sun + Azure Sky Bounce vs Silvery Sapphire Moonlight)
+    // 4. Balanced Architectural Direct Lighting Rig (Bright Sunlit Day vs Golden-Hour Sunset Twilight)
     const hemiLight = new THREE.HemisphereLight(
-      initDark ? 0x86b2ec : 0xdcf0ff,
-      initDark ? 0x131d33 : 0x5c6d63,
-      initDark ? 0.88 : 1.15
+      initDark ? 0x78568c : 0xa6d8ff,
+      initDark ? 0x2c1b28 : 0x5c804e,
+      initDark ? 1.24 : 1.56
     );
     scene.add(hemiLight);
 
-    const keyLightOffset = new THREE.Vector3(68, 54, 52);
+    const keyLightOffset = new THREE.Vector3(68, initDark ? 34 : 58, initDark ? -64 : 52);
     const keyLight = new THREE.DirectionalLight(
-      initDark ? 0xcce0f8 : 0xfff6e8,
-      initDark ? 1.54 : 3.28
+      initDark ? 0xff9b52 : 0xfff8ec,
+      initDark ? 2.55 : 3.55
     );
     keyLight.position.copy(keyLightOffset);
     keyLight.target.position.set(0, 0, 0);
@@ -455,13 +447,13 @@ export const CityServicesViewport: React.FC<CityServicesViewportProps> = ({
     scene.add(keyLight);
 
     const rimLight = new THREE.DirectionalLight(
-      initDark ? 0x7dd3fc : 0xb8dcf8,
-      initDark ? 0.74 : 0.78
+      initDark ? 0xff703d : 0x90ccff,
+      initDark ? 1.05 : 0.84
     );
-    rimLight.position.set(-52, 40, -56);
+    rimLight.position.set(-54, 38, -60);
     scene.add(rimLight);
 
-    const plazaFillLight = new THREE.PointLight(0x93c5fd, initDark ? 2.6 : 0.0, 56, 1.45);
+    const plazaFillLight = new THREE.PointLight(0xffbe5c, initDark ? 2.8 : 0.0, 58, 1.45);
     plazaFillLight.position.set(0, 7.5, -7.5);
     scene.add(plazaFillLight);
 
@@ -478,7 +470,7 @@ export const CityServicesViewport: React.FC<CityServicesViewportProps> = ({
     if (!isSoftwareGl && quality.tier !== 'mobile') {
       const isWebGL2 = renderer.capabilities.isWebGL2;
       const pr = renderer.getPixelRatio();
-      const maxSamples = Math.min(8, renderer.capabilities.maxSamples || 4);
+      const maxSamples = Math.min(4, renderer.capabilities.maxSamples || 4);
       msaaRenderTarget = new THREE.WebGLRenderTarget(
         Math.max(1, Math.floor(initW * pr)),
         Math.max(1, Math.floor(initH * pr)),
@@ -495,7 +487,7 @@ export const CityServicesViewport: React.FC<CityServicesViewportProps> = ({
       const renderPass = new RenderPass(scene, camera);
       composer.addPass(renderPass);
 
-      // True HDR Selective Specular Bloom: in Day mode threshold 1.28 blooms ONLY true sunlit HDR glints off glass & cars!
+      // True HDR Selective Specular Bloom: in Day mode threshold 1.28 blooms ONLY true sunlit HDR glints off glass & water!
       bloomPass = new UnrealBloomPass(
         new THREE.Vector2(initW, initH),
         initDark ? 0.28 : 0.14,
@@ -525,12 +517,12 @@ export const CityServicesViewport: React.FC<CityServicesViewportProps> = ({
       plazaFillLight,
       bloomPass,
       clarityPass,
-      skyDomeMat,
+      skyBackdropUniforms,
       cloudDeckResult,
       cityResult,
       housesResult,
-      baseKeyIntensity: initDark ? 1.54 : 3.28,
-      baseHemiIntensity: initDark ? 0.88 : 1.15,
+      baseKeyIntensity: initDark ? 2.55 : 3.55,
+      baseHemiIntensity: initDark ? 1.24 : 1.56,
     };
 
     if (!isSoftwareGl) {
@@ -655,6 +647,37 @@ export const CityServicesViewport: React.FC<CityServicesViewportProps> = ({
     let dampedParallaxY = 0;
     let dampedBank = 0;
     let prevCamX = _camPos.x;
+    let lastShadowFocusX = Number.NaN;
+    let lastShadowFocusZ = Number.NaN;
+    let isViewportVisible = true;
+    let isPageVisible = typeof document !== 'undefined' ? document.visibilityState === 'visible' : true;
+
+    const resumeLoopIfActive = () => {
+      if (disposed || !isViewportVisible || !isPageVisible) return;
+      cancelAnimationFrame(frameId);
+      clearTimeout(frameId);
+      prevTime = performance.now();
+      frameId = requestAnimationFrame(tick);
+    };
+
+    const viewportObserver = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        const nextVisible = Boolean(entry && entry.isIntersecting);
+        if (nextVisible !== isViewportVisible) {
+          isViewportVisible = nextVisible;
+          if (nextVisible) resumeLoopIfActive();
+        }
+      },
+      { threshold: 0.01 }
+    );
+    viewportObserver.observe(container);
+
+    const handleVisibilityChange = () => {
+      isPageVisible = document.visibilityState === 'visible';
+      if (isPageVisible) resumeLoopIfActive();
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
 
     function afterDraw(cb: () => void) {
       if (disposed) return;
@@ -682,7 +705,7 @@ export const CityServicesViewport: React.FC<CityServicesViewportProps> = ({
     }
 
     function tick() {
-      if (disposed) return;
+      if (disposed || !isViewportVisible || !isPageVisible) return;
       const now = performance.now();
       const dt = Math.min(0.05, Math.max(0.001, (now - prevTime) / 1000));
       const elapsed = (now - startTime) / 1000;
@@ -710,13 +733,15 @@ export const CityServicesViewport: React.FC<CityServicesViewportProps> = ({
       }
 
       // Cinematic Focal-Length Choreography:
-      // Wide dramatic 50deg aerial panorama -> sweeping 46deg canyon dive -> crisp 40.5deg architectural telephoto on 6 Houses!
+      // Wide dramatic 50deg aerial panorama -> spacious 48deg architectural wide lens on 6 Houses -> 54deg interior room lens!
       const aerialWide = t < 0.54 ? Math.sin((t / 0.54) * Math.PI) * 5.8 + (1.0 - skyExit) * 3.4 : 0;
-      const houseTelephoto =
-        t > 0.56 && t < 0.96 ? Math.sin(((t - 0.56) / 0.4) * Math.PI) * -3.5 : 0;
-      const desiredFov = seq.blend > 0.5 ? 44 : 44 + aerialWide + houseTelephoto;
+      const houseWide =
+        t > 0.54 ? THREE.MathUtils.smoothstep(t, 0.54, 0.6) * 4.0 : 0;
+      const baseInteriorTargetFov = camera.aspect < 0.85 ? 64.0 : 54.5;
+      const interiorFov = THREE.MathUtils.lerp(46.5, baseInteriorTargetFov, seq.approachT);
+      const desiredFov = THREE.MathUtils.lerp(44 + aerialWide + houseWide, interiorFov, seq.blend);
       if (Math.abs(camera.fov - desiredFov) > 0.04) {
-        camera.fov = THREE.MathUtils.damp(camera.fov, desiredFov, 4.6, dt);
+        camera.fov = THREE.MathUtils.damp(camera.fov, desiredFov, 4.8, dt);
         camera.updateProjectionMatrix();
       }
 
@@ -725,9 +750,9 @@ export const CityServicesViewport: React.FC<CityServicesViewportProps> = ({
       _targetPos.x += Math.sin(elapsed * 0.65) * breatheAmp;
       _targetPos.y += Math.cos(elapsed * 0.85) * breatheAmp * 0.65;
 
-      const parallaxAmp = seq.blend > 0.5 ? 0.3 : THREE.MathUtils.lerp(1.65, 0.72, t);
+      const parallaxAmp = seq.blend > 0.5 ? 0.62 : THREE.MathUtils.lerp(1.65, 0.72, t);
       _targetPos.x += dampedParallaxX * parallaxAmp;
-      _targetPos.y += dampedParallaxY * (parallaxAmp * 0.25);
+      _targetPos.y += dampedParallaxY * (parallaxAmp * 0.28);
 
       // Smoothly glide from tour view -> front steps -> open doorway threshold when user opens a house
       if (
@@ -788,17 +813,22 @@ export const CityServicesViewport: React.FC<CityServicesViewportProps> = ({
         callbacksRef.current.onTourHouseChange?.(nearestHouse);
       }
 
-      // Dynamic camera-focus shadow frustum for razor-sharp shadows across the entire city & expanded 6-house crescent!
+      // Dynamic camera-focus shadow frustum updated only when focus shifts or a house door animates
       if (quality.shadowsEnabled) {
         const focusZ = Math.round(THREE.MathUtils.clamp(_camTarget.z, -44, 115) * 0.5) * 2;
         const focusX = Math.round(THREE.MathUtils.clamp(_camTarget.x, -36, 36) * 0.5) * 2;
-        keyLight.target.position.set(focusX, 0, focusZ);
-        keyLight.position.set(
-          focusX + keyLightOffset.x,
-          keyLightOffset.y,
-          focusZ + keyLightOffset.z
-        );
-        keyLight.target.updateMatrixWorld();
+        if (focusX !== lastShadowFocusX || focusZ !== lastShadowFocusZ || seq.blend > 0.005) {
+          lastShadowFocusX = focusX;
+          lastShadowFocusZ = focusZ;
+          keyLight.target.position.set(focusX, 0, focusZ);
+          keyLight.position.set(
+            focusX + keyLightOffset.x,
+            keyLightOffset.y,
+            focusZ + keyLightOffset.z
+          );
+          keyLight.target.updateMatrixWorld();
+          renderer.shadowMap.needsUpdate = true;
+        }
       }
 
       // Synchronize ambient & directional light dimming when focused on an open house door
@@ -817,6 +847,7 @@ export const CityServicesViewport: React.FC<CityServicesViewportProps> = ({
       const hoverIdx =
         hoveredRef.current !== null ? hoveredRef.current : externalHoveredRef.current;
 
+      const placedMobileLabelsX: number[] = [];
       housesResult.houses.forEach((house, idx) => {
         const isSelected = activeIdx === idx;
         const isHovered = hoverIdx === idx;
@@ -845,7 +876,7 @@ export const CityServicesViewport: React.FC<CityServicesViewportProps> = ({
           dt
         );
 
-        // Project crisp architectural rooftop markers during the 6-house tour & neighborhood panorama
+        // Project crisp compact architectural rooftop markers during the 6-house tour & neighborhood panorama
         const labelEl = labelElementsRef.current[idx];
         if (labelEl) {
           const showLabels = t > 0.54 && seq.blend < 0.25;
@@ -856,15 +887,47 @@ export const CityServicesViewport: React.FC<CityServicesViewportProps> = ({
             _projVec.set(...house.labelAnchorLocal).applyMatrix4(house.root.matrixWorld);
             _projVec.project(camera);
             if (_projVec.z < 1 && _projVec.z > -1) {
-              const sx = (_projVec.x * 0.5 + 0.5) * width;
+              const isCompactViewport = width < 640;
+              const marginX = isCompactViewport ? 64 : 76;
+              const rawSx = (_projVec.x * 0.5 + 0.5) * width;
               const sy = (-_projVec.y * 0.5 + 0.5) * height;
-              const inBounds = sx > 44 && sx < width - 44 && sy > 70 && sy < height - 120;
-              labelEl.style.transform = `translate3d(${sx}px, ${sy}px, 0) translate(-50%, -100%)`;
-              const emphasis =
-                tourHouseRef.current === null || isTourFocus || isHovered ? 1.0 : 0.94;
+              const inBounds =
+                rawSx > 8 && rawSx < width - 8 && sy > 70 && sy < height - 115;
+              const sx = THREE.MathUtils.clamp(rawSx, marginX, width - marginX);
+
+              // On narrow mobile screens, prevent adjacent rooftop labels from colliding horizontally
+              const isNeighborDuringMobileTour =
+                isCompactViewport &&
+                tourHouseRef.current !== null &&
+                !isTourFocus &&
+                !isHovered;
+
+              let overlapsPrev = false;
+              if (isCompactViewport && inBounds && !isNeighborDuringMobileTour && !isTourFocus && !isHovered) {
+                for (let p = 0; p < placedMobileLabelsX.length; p++) {
+                  if (Math.abs(sx - placedMobileLabelsX[p]) < 126) {
+                    overlapsPrev = true;
+                    break;
+                  }
+                }
+              }
+
+              const hiddenOnMobile = isNeighborDuringMobileTour || overlapsPrev;
+              if (inBounds && !hiddenOnMobile && isCompactViewport) {
+                placedMobileLabelsX.push(sx);
+              }
+
+              const scaleStr = hiddenOnMobile ? ' scale(0.86)' : '';
+              labelEl.style.transform = `translate3d(${sx}px, ${sy}px, 0) translate(-50%, -100%)${scaleStr}`;
+              const emphasis = hiddenOnMobile
+                ? 0.0
+                : tourHouseRef.current === null || isTourFocus || isHovered
+                  ? 1.0
+                  : 0.9;
               const labelFade = THREE.MathUtils.smoothstep(t, 0.535, 0.565);
-              labelEl.style.opacity = inBounds ? String(labelFade * emphasis) : '0';
-              labelEl.style.pointerEvents = inBounds ? 'auto' : 'none';
+              const finalOpacity = inBounds ? labelFade * emphasis : 0;
+              labelEl.style.opacity = String(finalOpacity);
+              labelEl.style.pointerEvents = finalOpacity > 0.2 ? 'auto' : 'none';
             } else {
               labelEl.style.opacity = '0';
               labelEl.style.pointerEvents = 'none';
@@ -881,11 +944,10 @@ export const CityServicesViewport: React.FC<CityServicesViewportProps> = ({
         camera.rotateZ(dampedBank);
       }
 
-      // Keep Atmospheric Sky Gradient Dome centered on the camera at all altitudes
-      skyDomeUniforms.uTime.value = elapsed;
-      skyDome.position.copy(_camPos);
+      // Keep sky backdrop centered on camera so horizon never parallax-shifts
+      skyBackdropMesh.position.copy(camera.position);
 
-      // Update photorealistic volumetric cumulus clouds & passing cloud-base mist
+      // Update volumetric cumulus clouds & passing cloud-base mist
       cloudDeckResult.update(elapsed, t, camera.position, camera.quaternion);
 
       if (composer) {
@@ -908,6 +970,8 @@ export const CityServicesViewport: React.FC<CityServicesViewportProps> = ({
       sceneThemeControlRef.current = null;
       cancelAnimationFrame(frameId);
       clearTimeout(frameId);
+      viewportObserver.disconnect();
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
       window.removeEventListener('resize', handleResize);
       renderer.domElement.removeEventListener('pointermove', handlePointerMove);
       renderer.domElement.removeEventListener('pointerdown', handlePointerDown);
@@ -915,12 +979,11 @@ export const CityServicesViewport: React.FC<CityServicesViewportProps> = ({
       renderer.domElement.removeEventListener('webglcontextlost', handleContextLost);
       renderer.domElement.removeEventListener('webglcontextrestored', handleContextRestored);
 
+      skyBackdropGeo.dispose();
+      skyBackdropMat.dispose();
       cloudDeckResult.dispose();
       cityResult.dispose();
       housesResult.dispose();
-      skyDomeGeo.dispose();
-      skyDomeMat.dispose();
-      envTarget.dispose();
       if (composer) composer.dispose();
       if (msaaRenderTarget) msaaRenderTarget.dispose();
       renderer.dispose();
@@ -930,31 +993,31 @@ export const CityServicesViewport: React.FC<CityServicesViewportProps> = ({
     };
   }, [services.length]);
 
-  // Instant Realistic Day <-> Night Theme Switcher (Studio PBR Reflections + Atmospheric Sky + Volumetric Clouds + High-Tech City)
+  // Instant Bright Azure Day <-> Golden-Hour Sunset Twilight Theme Switcher
   useEffect(() => {
     const ctrl = sceneThemeControlRef.current;
     if (!ctrl) return;
 
-    ctrl.renderer.toneMappingExposure = isDarkMode ? 1.12 : 1.05;
-    ctrl.scene.environmentIntensity = isDarkMode ? 0.9 : 1.18;
-    ctrl.skyDomeMat.uniforms.uIsDark.value = isDarkMode ? 1.0 : 0.0;
+    ctrl.renderer.toneMappingExposure = isDarkMode ? 1.12 : 1.06;
+    ctrl.skyBackdropUniforms.uIsDark.value = isDarkMode ? 1.0 : 0.0;
 
-    ctrl.hemiLight.color.setHex(isDarkMode ? 0x86b2ec : 0xdcf0ff);
-    ctrl.hemiLight.groundColor.setHex(isDarkMode ? 0x131d33 : 0x5c6d63);
-    ctrl.baseHemiIntensity = isDarkMode ? 0.88 : 1.15;
+    ctrl.hemiLight.color.setHex(isDarkMode ? 0x78568c : 0xa6d8ff);
+    ctrl.hemiLight.groundColor.setHex(isDarkMode ? 0x2c1b28 : 0x5c804e);
+    ctrl.baseHemiIntensity = isDarkMode ? 1.24 : 1.56;
 
-    ctrl.keyLight.color.setHex(isDarkMode ? 0xcce0f8 : 0xfff6e8);
-    ctrl.baseKeyIntensity = isDarkMode ? 1.54 : 3.28;
+    ctrl.keyLight.color.setHex(isDarkMode ? 0xff9b52 : 0xfff8ec);
+    ctrl.baseKeyIntensity = isDarkMode ? 2.55 : 3.55;
 
-    ctrl.rimLight.color.setHex(isDarkMode ? 0x7dd3fc : 0xb8dcf8);
-    ctrl.rimLight.intensity = isDarkMode ? 0.74 : 0.78;
+    ctrl.rimLight.color.setHex(isDarkMode ? 0xff703d : 0x90ccff);
+    ctrl.rimLight.intensity = isDarkMode ? 1.05 : 0.84;
 
-    ctrl.plazaFillLight.intensity = isDarkMode ? 2.6 : 0.0;
+    ctrl.plazaFillLight.color.setHex(0xffbe5c);
+    ctrl.plazaFillLight.intensity = isDarkMode ? 2.8 : 0.0;
 
     if (ctrl.bloomPass) {
-      ctrl.bloomPass.strength = isDarkMode ? 0.3 : 0.14;
-      ctrl.bloomPass.radius = isDarkMode ? 0.28 : 0.28;
-      ctrl.bloomPass.threshold = isDarkMode ? 0.92 : 1.28;
+      ctrl.bloomPass.strength = isDarkMode ? 0.34 : 0.14;
+      ctrl.bloomPass.radius = isDarkMode ? 0.32 : 0.28;
+      ctrl.bloomPass.threshold = isDarkMode ? 0.88 : 1.28;
     }
 
     if (ctrl.clarityPass) {
@@ -987,11 +1050,11 @@ export const CityServicesViewport: React.FC<CityServicesViewportProps> = ({
             callbacksRef.current.onPhaseChange('aerial_scroll');
           },
         });
-        tl.to(seq, { approachT: 0, duration: 0.6, ease: 'power2.inOut' }, 0);
-        tl.to(prevHouse.doorPivot.rotation, { y: 0, duration: 0.55, ease: 'power2.inOut' }, 0.22);
-        tl.to(prevHouse.portalLight, { intensity: 0, duration: 0.45 }, 0.2);
-        tl.to(prevHouse.portalGlowMat, { opacity: 0.14, duration: 0.45 }, 0.2);
-        tl.to(seq, { blend: 0, dimFactor: 1, duration: 0.85, ease: 'power2.inOut' }, 0.48);
+        tl.to(seq, { approachT: 0, duration: 0.62, ease: 'power2.inOut' }, 0);
+        tl.to(prevHouse.doorPivot.rotation, { y: 0, duration: 0.55, ease: 'power2.inOut' }, 0.24);
+        tl.to(prevHouse.portalLight, { intensity: 1.15, duration: 0.45 }, 0.2);
+        tl.to(prevHouse.portalGlowMat, { opacity: 0.42, duration: 0.45 }, 0.2);
+        tl.to(seq, { blend: 0, dimFactor: 1, duration: 0.82, ease: 'power2.inOut' }, 0.48);
         activeTimelineRef.current = tl;
       } else {
         callbacksRef.current.onPhaseChange('aerial_scroll');
@@ -1005,8 +1068,8 @@ export const CityServicesViewport: React.FC<CityServicesViewportProps> = ({
     houses.forEach((h, i) => {
       if (i !== selectedIndex && Math.abs(h.doorPivot.rotation.y) > 0.02) {
         gsap.to(h.doorPivot.rotation, { y: 0, duration: 0.4, ease: 'power2.out' });
-        gsap.to(h.portalLight, { intensity: 0, duration: 0.35 });
-        gsap.to(h.portalGlowMat, { opacity: 0.14, duration: 0.35 });
+        gsap.to(h.portalLight, { intensity: 1.15, duration: 0.35 });
+        gsap.to(h.portalGlowMat, { opacity: 0.42, duration: 0.35 });
       }
     });
 
@@ -1018,22 +1081,26 @@ export const CityServicesViewport: React.FC<CityServicesViewportProps> = ({
     if (switchingBetweenHouses) {
       tl.call(() => callbacksRef.current.onPhaseChange('approaching_door'));
       tl.set(seq, { approachT: 0 });
-      tl.to(seq, { blend: 1, dimFactor: 0.65, duration: 0.65, ease: 'power2.out' });
+      tl.to(seq, { blend: 1, dimFactor: 0.78, duration: 0.68, ease: 'power2.out' });
       tl.call(() => callbacksRef.current.onPhaseChange('opening_door'));
-      tl.to(targetHouse.doorPivot.rotation, { y: -1.85, duration: 0.72, ease: 'power2.out' });
-      tl.to(targetHouse.portalLight, { intensity: 3.4, duration: 0.6 }, '<');
-      tl.to(targetHouse.portalGlowMat, { opacity: 0.85, duration: 0.6 }, '<');
-      tl.to(seq, { approachT: 1, duration: 0.78, ease: 'power2.inOut' }, '-=0.32');
+      tl.to(targetHouse.doorPivot.rotation, { y: -1.96, duration: 0.72, ease: 'power2.out' });
+      tl.to(targetHouse.portalLight, { intensity: 7.4, duration: 0.65 }, '<');
+      tl.to(targetHouse.portalGlowMat, { opacity: 0.95, duration: 0.65 }, '<');
+      tl.to(seq, { approachT: 1, duration: 0.9, ease: 'power2.inOut' }, '-=0.35');
+      // Brief unobstructed showcase inside the palatial luxury 3D interior before opening service details
+      tl.to({}, { duration: 0.95 });
       tl.call(() => callbacksRef.current.onPhaseChange('inside_house'));
     } else {
       callbacksRef.current.onPhaseChange('approaching_door');
       seq.approachT = 0;
-      tl.to(seq, { blend: 1, dimFactor: 0.65, duration: 0.88, ease: 'power2.out' });
+      tl.to(seq, { blend: 1, dimFactor: 0.78, duration: 0.86, ease: 'power2.out' });
       tl.call(() => callbacksRef.current.onPhaseChange('opening_door'));
-      tl.to(targetHouse.doorPivot.rotation, { y: -1.85, duration: 0.75, ease: 'power2.out' });
-      tl.to(targetHouse.portalLight, { intensity: 3.4, duration: 0.6 }, '<');
-      tl.to(targetHouse.portalGlowMat, { opacity: 0.85, duration: 0.6 }, '<');
-      tl.to(seq, { approachT: 1, duration: 0.82, ease: 'power2.inOut' }, '-=0.35');
+      tl.to(targetHouse.doorPivot.rotation, { y: -1.96, duration: 0.74, ease: 'power2.out' });
+      tl.to(targetHouse.portalLight, { intensity: 7.4, duration: 0.65 }, '<');
+      tl.to(targetHouse.portalGlowMat, { opacity: 0.95, duration: 0.65 }, '<');
+      tl.to(seq, { approachT: 1, duration: 0.94, ease: 'power2.inOut' }, '-=0.36');
+      // Brief unobstructed showcase inside the palatial luxury 3D interior before opening service details
+      tl.to({}, { duration: 1.0 });
       tl.call(() => callbacksRef.current.onPhaseChange('inside_house'));
     }
 
@@ -1044,21 +1111,25 @@ export const CityServicesViewport: React.FC<CityServicesViewportProps> = ({
     return (
       <div
         className={`absolute inset-0 flex flex-col items-center justify-center p-6 text-center ${
-          isDarkMode ? 'bg-[#060913]' : 'bg-[#F3F6FA]'
+          isDarkMode ? 'bg-[#0B0D18]' : 'bg-[#F4F8FC]'
         }`}
       >
         <div className="max-w-xl space-y-3">
-          <p className="font-mono text-xs uppercase tracking-[0.2em] text-[#38BDF8]">
+          <p
+            className={`font-mono text-xs uppercase tracking-[0.2em] ${
+              isDarkMode ? 'text-[#F59E0B]' : 'text-[#1D6FD8]'
+            }`}
+          >
             Click N Create · United Kingdom · Modern Architectural Services District
           </p>
           <h2
             className={`font-display text-2xl sm:text-4xl font-bold ${
-              isDarkMode ? 'text-[#F1F5F9]' : 'text-[#0F172A]'
+              isDarkMode ? 'text-[#FAF6F0]' : 'text-[#0F172A]'
             }`}
           >
             Explore Our 6 Digital Service Studios
           </h2>
-          <p className={`text-sm ${isDarkMode ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>
+          <p className={`text-sm ${isDarkMode ? 'text-[#C2BACF]' : 'text-[#475569]'}`}>
             Select any house below to open its door and explore complete deliverables, transparent £35/hr pricing, and project workflows.
           </p>
         </div>

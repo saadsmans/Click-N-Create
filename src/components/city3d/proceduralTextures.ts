@@ -170,7 +170,7 @@ export function createSkyscraperPbrSet(anisotropy = 8): SkyscraperPbrSet {
     ['#EAF5FF', '#A7CBEB'],
   ];
 
-  // Photorealistic futuristic modern architectural blue-glass curtain-wall tones (Dubai / Singapore / Canary Wharf blue-sapphire glazing)
+  // Photorealistic futuristic modern architectural blue-glass curtain-wall tones
   const realisticDayGlass = [
     ['#3A7EC9', '#1E4C88'],
     ['#5499DE', '#285EA0'],
@@ -1866,5 +1866,716 @@ export function createServiceEmblemTexture(
 
   return finalizeColorTexture(new THREE.CanvasTexture(canvas), anisotropy);
 }
+
+/**
+ * Second Architectural Skyscraper Facade PBR Suite (1024x1024):
+ * Warm Honed Limestone / Travertine Stone Piers + Recessed Bronze-Tinted Windows
+ * Gives the redesigned city genuine architectural diversity alongside glass curtain-wall towers!
+ */
+export function createLimestoneTowerPbrSet(anisotropy = 8): SkyscraperPbrSet {
+  const size = 1024;
+  const cols = 8;
+  const rows = 18;
+  const cellW = size / cols;
+  const cellH = size / rows;
+  const pierW = 24;
+  const spandrelH = 14;
+
+  const darkCanvas = document.createElement('canvas');
+  darkCanvas.width = size;
+  darkCanvas.height = size;
+  const dCtx = darkCanvas.getContext('2d')!;
+
+  const emissiveCanvas = document.createElement('canvas');
+  emissiveCanvas.width = size;
+  emissiveCanvas.height = size;
+  const eCtx = emissiveCanvas.getContext('2d')!;
+
+  const lightCanvas = document.createElement('canvas');
+  lightCanvas.width = size;
+  lightCanvas.height = size;
+  const lCtx = lightCanvas.getContext('2d')!;
+
+  const mapSize = 512;
+  const heightCanvas = document.createElement('canvas');
+  heightCanvas.width = mapSize;
+  heightCanvas.height = mapSize;
+  const hCtx = heightCanvas.getContext('2d')!;
+
+  const roughCanvas = document.createElement('canvas');
+  roughCanvas.width = mapSize;
+  roughCanvas.height = mapSize;
+  const rCtx = roughCanvas.getContext('2d')!;
+
+  // Warm sculpted architectural stone base
+  lCtx.fillStyle = '#E6DDD0';
+  lCtx.fillRect(0, 0, size, size);
+  dCtx.fillStyle = '#2B2538';
+  dCtx.fillRect(0, 0, size, size);
+  eCtx.fillStyle = '#000000';
+  eCtx.fillRect(0, 0, size, size);
+  hCtx.fillStyle = '#F0F0F0';
+  hCtx.fillRect(0, 0, mapSize, mapSize);
+  rCtx.fillStyle = '#C8C8C8';
+  rCtx.fillRect(0, 0, mapSize, mapSize);
+
+  // Subtle horizontal stone ashlar courses
+  lCtx.fillStyle = 'rgba(130, 114, 96, 0.14)';
+  dCtx.fillStyle = 'rgba(14, 10, 22, 0.25)';
+  for (let y = 0; y < size; y += 28) {
+    lCtx.fillRect(0, y, size, 2);
+    dCtx.fillRect(0, y, size, 2);
+  }
+
+  let seed = 8821;
+  const rand = () => {
+    seed = (seed * 16807) % 2147483647;
+    return (seed - 1) / 2147483646;
+  };
+  const sc = mapSize / size;
+
+  for (let r = 0; r < rows; r++) {
+    const isCorniceBand = r === 0 || r === 6 || r === 12;
+    for (let c = 0; c < cols; c++) {
+      const x = Math.round(c * cellW + pierW * 0.5);
+      const y = Math.round(r * cellH + spandrelH * 0.5);
+      const w = Math.round(cellW - pierW);
+      const h = Math.round(cellH - spandrelH);
+
+      const mx = Math.round(x * sc);
+      const my = Math.round(y * sc);
+      const mw = Math.max(2, Math.round(w * sc));
+      const mh = Math.max(2, Math.round(h * sc));
+
+      if (isCorniceBand) {
+        // Horizontal architectural bronze/stone cornice molding
+        lCtx.fillStyle = '#CFC2B0';
+        lCtx.fillRect(c * cellW, y, cellW, h);
+        dCtx.fillStyle = '#3C324A';
+        dCtx.fillRect(c * cellW, y, cellW, h);
+        // Recessed warm cornice accent slot in dark sunset mode
+        if (r === 0) {
+          dCtx.fillStyle = '#FFC864';
+          dCtx.fillRect(x, y + Math.round(h * 0.4), w, 4);
+          eCtx.fillStyle = '#FFB648';
+          eCtx.fillRect(x, y + Math.round(h * 0.4), w, 4);
+        }
+        continue;
+      }
+
+      // Deeply recessed window cavity in height & mirror-smooth glass in roughness
+      hCtx.fillStyle = '#181818';
+      hCtx.fillRect(mx, my, mw, mh);
+      rCtx.fillStyle = '#0C0C0C';
+      rCtx.fillRect(mx, my, mw, mh);
+
+      // Daytime: crisp bronze-framed dark architectural glass catching azure sky reflections
+      const dayGrad = lCtx.createLinearGradient(x, y, x + w, y + h);
+      dayGrad.addColorStop(0, '#36587C');
+      dayGrad.addColorStop(0.45, '#1D334D');
+      dayGrad.addColorStop(1, '#5882A8');
+      lCtx.fillStyle = dayGrad;
+      lCtx.fillRect(x, y, w, h);
+
+      // Bronze central mullion bar
+      lCtx.fillStyle = '#5C4B3B';
+      lCtx.fillRect(x + Math.round(w * 0.48), y, 4, h);
+      lCtx.strokeStyle = '#6E5D4C';
+      lCtx.lineWidth = 3;
+      lCtx.strokeRect(x + 1, y + 1, w - 2, h - 2);
+
+      // Night/Sunset: warm golden architectural interior glow
+      const lit = rand() > 0.34;
+      if (lit) {
+        const warmGrad = dCtx.createLinearGradient(x, y, x, y + h);
+        warmGrad.addColorStop(0, '#FFEAB8');
+        warmGrad.addColorStop(0.6, '#FFBA5A');
+        warmGrad.addColorStop(1, '#C47032');
+        dCtx.fillStyle = warmGrad;
+        dCtx.fillRect(x, y, w, h);
+        eCtx.fillStyle = warmGrad;
+        eCtx.fillRect(x + 2, y + 2, w - 4, h - 4);
+      } else {
+        dCtx.fillStyle = '#131829';
+        dCtx.fillRect(x, y, w, h);
+      }
+      dCtx.fillStyle = '#1D1828';
+      dCtx.fillRect(x + Math.round(w * 0.48), y, 4, h);
+      eCtx.fillStyle = '#000000';
+      eCtx.fillRect(x + Math.round(w * 0.48), y, 4, h);
+    }
+  }
+
+  const darkMap = finalizeColorTexture(new THREE.CanvasTexture(darkCanvas), anisotropy);
+  const darkEmissiveMap = finalizeColorTexture(new THREE.CanvasTexture(emissiveCanvas), anisotropy);
+  const lightMap = finalizeColorTexture(new THREE.CanvasTexture(lightCanvas), anisotropy);
+  const normalMap = heightCanvasToNormalTexture(heightCanvas, 2.8, anisotropy);
+  const roughnessMap = finalizeDataTexture(
+    new THREE.CanvasTexture(roughCanvas),
+    anisotropy
+  ) as THREE.CanvasTexture;
+
+  return {
+    darkMap,
+    darkEmissiveMap,
+    lightMap,
+    normalMap,
+    roughnessMap,
+    dispose: () => {
+      darkMap.dispose();
+      darkEmissiveMap.dispose();
+      lightMap.dispose();
+      normalMap.dispose();
+      roughnessMap.dispose();
+    },
+  };
+}
+
+export interface HerringboneFloorPbrSet {
+  map: THREE.CanvasTexture;
+  normalMap: THREE.DataTexture;
+  roughnessMap: THREE.CanvasTexture;
+  dispose: () => void;
+}
+
+/**
+ * High-Craft Architectural Herringbone Oak Parquet Flooring PBR Set (512x512 tiled)
+ * for the bespoke walk-in 3D Service House Interiors!
+ */
+export function createHerringboneFloorPbrSet(anisotropy = 8): HerringboneFloorPbrSet {
+  const size = 512;
+  const colorCanvas = document.createElement('canvas');
+  colorCanvas.width = size;
+  colorCanvas.height = size;
+  const cCtx = colorCanvas.getContext('2d')!;
+
+  const heightCanvas = document.createElement('canvas');
+  heightCanvas.width = size;
+  heightCanvas.height = size;
+  const hCtx = heightCanvas.getContext('2d')!;
+
+  const roughCanvas = document.createElement('canvas');
+  roughCanvas.width = size;
+  roughCanvas.height = size;
+  const rCtx = roughCanvas.getContext('2d')!;
+
+  cCtx.fillStyle = '#8A6340';
+  cCtx.fillRect(0, 0, size, size);
+  hCtx.fillStyle = '#C8C8C8';
+  hCtx.fillRect(0, 0, size, size);
+  rCtx.fillStyle = '#585858';
+  rCtx.fillRect(0, 0, size, size);
+
+  const tones = ['#A37B54', '#926B46', '#B18860', '#845F3E', '#9C744E'];
+  const step = 32;
+  let idx = 0;
+
+  for (let row = -2; row < size / step + 4; row++) {
+    for (let col = -2; col < size / step + 4; col++) {
+      const x = col * step;
+      const y = row * step;
+      const horiz = (row + col) % 2 === 0;
+      const pw = horiz ? step * 2 : step;
+      const ph = horiz ? step : step * 2;
+      cCtx.fillStyle = tones[idx % tones.length];
+      cCtx.fillRect(x + 1, y + 1, pw - 2, ph - 2);
+
+      // Subtle wood-grain streaks
+      cCtx.fillStyle = 'rgba(60, 38, 20, 0.08)';
+      if (horiz) {
+        cCtx.fillRect(x + 2, y + 8, pw - 4, 2);
+        cCtx.fillRect(x + 2, y + 20, pw - 4, 1);
+      } else {
+        cCtx.fillRect(x + 8, y + 2, 2, ph - 4);
+        cCtx.fillRect(x + 20, y + 2, 1, ph - 4);
+      }
+
+      // Plank seams in height & roughness
+      hCtx.strokeStyle = '#383838';
+      hCtx.lineWidth = 2;
+      hCtx.strokeRect(x, y, pw, ph);
+
+      rCtx.fillStyle = idx % 2 === 0 ? '#505050' : '#646464';
+      rCtx.fillRect(x + 1, y + 1, pw - 2, ph - 2);
+      idx++;
+    }
+  }
+
+  const map = finalizeColorTexture(new THREE.CanvasTexture(colorCanvas), anisotropy, 3, 3);
+  const normalMap = heightCanvasToNormalTexture(heightCanvas, 1.4, anisotropy, 3, 3);
+  const roughnessMap = finalizeDataTexture(
+    new THREE.CanvasTexture(roughCanvas),
+    anisotropy,
+    3,
+    3
+  ) as THREE.CanvasTexture;
+
+  return {
+    map,
+    normalMap,
+    roughnessMap,
+    dispose: () => {
+      map.dispose();
+      normalMap.dispose();
+      roughnessMap.dispose();
+    },
+  };
+}
+
+/**
+ * Generates a crisp 1024x512 bespoke Architectural Feature-Wall Studio Display Texture
+ * customized for each of the 6 Service House interiors!
+ */
+export function createStudioInteriorDisplayTexture(
+  serviceIndex: number,
+  serviceTitle: string,
+  serviceTagline: string,
+  anisotropy = 8
+): THREE.CanvasTexture {
+  const w = 1024;
+  const h = 512;
+  const canvas = document.createElement('canvas');
+  canvas.width = w;
+  canvas.height = h;
+  const ctx = canvas.getContext('2d')!;
+
+  const themes = [
+    { bg1: '#0F172A', bg2: '#1E293B', accent: '#F59E0B', sub: '#38BDF8', label: 'DIGITAL COMMERCE SHOWROOM' },
+    { bg1: '#0B1120', bg2: '#172554', accent: '#38BDF8', sub: '#F59E0B', label: 'FULL-STACK WEB ATELIER' },
+    { bg1: '#18141E', bg2: '#2C1F33', accent: '#FB923C', sub: '#FDE68A', label: 'BRAND IDENTITY STUDIO' },
+    { bg1: '#0D1926', bg2: '#143344', accent: '#34D399', sub: '#FBBF24', label: 'GROWTH & SEO COMMAND' },
+    { bg1: '#111322', bg2: '#1F2442', accent: '#818CF8', sub: '#38BDF8', label: 'INTERACTIVE APP LAB' },
+    { bg1: '#0A161E', bg2: '#142938', accent: '#2DD4BF', sub: '#F59E0B', label: 'CLOUD & UPTIME SANCTUARY' },
+  ];
+  const th = themes[serviceIndex % themes.length];
+
+  const bg = ctx.createLinearGradient(0, 0, w, h);
+  bg.addColorStop(0, th.bg1);
+  bg.addColorStop(1, th.bg2);
+  ctx.fillStyle = bg;
+  ctx.fillRect(0, 0, w, h);
+
+  // Subtle architectural grid lines
+  ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+  ctx.lineWidth = 1;
+  for (let gx = 48; gx < w; gx += 48) {
+    ctx.beginPath();
+    ctx.moveTo(gx, 0);
+    ctx.lineTo(gx, h);
+    ctx.stroke();
+  }
+  for (let gy = 48; gy < h; gy += 48) {
+    ctx.beginPath();
+    ctx.moveTo(0, gy);
+    ctx.lineTo(w, gy);
+    ctx.stroke();
+  }
+
+  // Soft studio spotlight glow behind graphic
+  const rad = ctx.createRadialGradient(w * 0.72, h * 0.48, 20, w * 0.72, h * 0.48, 300);
+  rad.addColorStop(0, th.accent + '44');
+  rad.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = rad;
+  ctx.fillRect(0, 0, w, h);
+
+  // Left Editorial Title Column
+  ctx.fillStyle = th.accent;
+  ctx.font = '700 20px "JetBrains Mono", monospace';
+  ctx.fillText(`0${serviceIndex + 1} · ${th.label}`, 64, 96);
+
+  ctx.fillStyle = '#FFFFFF';
+  ctx.font = '800 48px "Plus Jakarta Sans", sans-serif';
+  ctx.fillText(serviceTitle, 64, 168, 520);
+
+  ctx.fillStyle = 'rgba(226,232,240,0.82)';
+  ctx.font = '500 22px "Plus Jakarta Sans", sans-serif';
+  ctx.fillText(serviceTagline, 64, 218, 520);
+
+  // Accent underline bar
+  ctx.fillStyle = th.accent;
+  ctx.fillRect(64, 248, 120, 5);
+
+  // Crisp studio metrics / tags along bottom left
+  const pills = ['CUSTOM BUILT', 'UK STUDIO', 'HIGH PERFORMANCE'];
+  pills.forEach((p, idx) => {
+    const px = 64 + idx * 172;
+    ctx.fillStyle = 'rgba(255,255,255,0.08)';
+    ctx.fillRect(px, 388, 156, 44);
+    ctx.strokeStyle = th.accent + '88';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(px, 388, 156, 44);
+    ctx.fillStyle = '#F8FAFC';
+    ctx.font = '700 13px "JetBrains Mono", monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText(p, px + 78, 415);
+    ctx.textAlign = 'left';
+  });
+
+  // Right-Side Custom Bespoke Visual Artwork per Service
+  ctx.save();
+  ctx.translate(640, 82);
+  ctx.fillStyle = 'rgba(255,255,255,0.05)';
+  ctx.fillRect(0, 0, 320, 350);
+  ctx.strokeStyle = 'rgba(255,255,255,0.16)';
+  ctx.lineWidth = 2;
+  ctx.strokeRect(0, 0, 320, 350);
+
+  if (serviceIndex === 0) {
+    // E-Commerce Product Grid Cards
+    for (let r = 0; r < 2; r++) {
+      for (let c = 0; c < 2; c++) {
+        const cx = 24 + c * 144;
+        const cy = 32 + r * 150;
+        ctx.fillStyle = 'rgba(255,255,255,0.1)';
+        ctx.fillRect(cx, cy, 128, 130);
+        ctx.fillStyle = (r + c) % 2 === 0 ? th.accent : th.sub;
+        ctx.fillRect(cx + 12, cy + 12, 104, 68);
+        ctx.fillStyle = '#FFFFFF';
+        ctx.fillRect(cx + 12, cy + 92, 74, 8);
+        ctx.fillStyle = th.accent;
+        ctx.fillRect(cx + 12, cy + 108, 46, 10);
+      }
+    }
+  } else if (serviceIndex === 1) {
+    // Clean Code & Component Architecture Lines
+    const widths = [180, 240, 140, 210, 120, 250, 190, 160, 220];
+    widths.forEach((lw, i) => {
+      ctx.fillStyle = i % 3 === 0 ? th.accent : i % 2 === 0 ? th.sub : 'rgba(255,255,255,0.42)';
+      ctx.fillRect(28 + (i % 3) * 18, 34 + i * 32, lw, 12);
+    });
+  } else if (serviceIndex === 2) {
+    // Brand Design Swatches & Golden-Ratio Circles
+    const swatches = ['#F59E0B', '#FB923C', '#1D6FD8', '#FAF6F0'];
+    swatches.forEach((sw, i) => {
+      ctx.fillStyle = sw;
+      ctx.fillRect(26 + i * 68, 252, 56, 68);
+    });
+    ctx.strokeStyle = th.accent;
+    ctx.lineWidth = 4;
+    ctx.beginPath();
+    ctx.arc(160, 128, 76, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.strokeStyle = th.sub;
+    ctx.beginPath();
+    ctx.arc(160, 128, 44, 0, Math.PI * 2);
+    ctx.stroke();
+  } else if (serviceIndex === 3) {
+    // Rising Growth Curve & Bar Chart
+    const bars = [70, 110, 145, 190, 235, 280];
+    bars.forEach((bh, i) => {
+      ctx.fillStyle = i === 5 ? th.accent : 'rgba(52,211,153,0.45)';
+      ctx.fillRect(28 + i * 45, 310 - bh, 30, bh);
+    });
+    ctx.strokeStyle = th.sub;
+    ctx.lineWidth = 5;
+    ctx.beginPath();
+    ctx.moveTo(42, 240);
+    ctx.lineTo(132, 165);
+    ctx.lineTo(222, 110);
+    ctx.lineTo(268, 32);
+    ctx.stroke();
+  } else if (serviceIndex === 4) {
+    // Connected Modular App Nodes
+    const nodes: [number, number][] = [
+      [160, 72],
+      [76, 178],
+      [244, 178],
+      [160, 284],
+    ];
+    ctx.strokeStyle = th.sub;
+    ctx.lineWidth = 3;
+    nodes.forEach(([nx, ny], i) => {
+      const [mx, my] = nodes[(i + 1) % nodes.length];
+      ctx.beginPath();
+      ctx.moveTo(nx, ny);
+      ctx.lineTo(mx, my);
+      ctx.stroke();
+    });
+    nodes.forEach(([nx, ny], i) => {
+      ctx.fillStyle = i % 2 === 0 ? th.accent : th.sub;
+      ctx.beginPath();
+      ctx.arc(nx, ny, 28, 0, Math.PI * 2);
+      ctx.fill();
+    });
+  } else {
+    // 99.99% Uptime Status Racks
+    for (let i = 0; i < 6; i++) {
+      ctx.fillStyle = 'rgba(255,255,255,0.09)';
+      ctx.fillRect(24, 28 + i * 50, 272, 36);
+      ctx.fillStyle = th.accent;
+      ctx.fillRect(36, 40 + i * 50, 12, 12);
+      ctx.fillStyle = 'rgba(255,255,255,0.65)';
+      ctx.fillRect(62, 42 + i * 50, 160 + (i % 3) * 24, 8);
+    }
+  }
+  ctx.restore();
+
+  // Outer sleek frame border
+  ctx.strokeStyle = th.accent;
+  ctx.lineWidth = 6;
+  ctx.strokeRect(3, 3, w - 6, h - 6);
+
+  return finalizeColorTexture(new THREE.CanvasTexture(canvas), anisotropy);
+}
+
+/**
+ * High-Craft Bookmatched Calacatta Oro Marble PBR Set (512x512)
+ * Creamy warm alabaster stone with sweeping smoky-graphite and warm gold mineral veining.
+ */
+export function createCalacattaMarblePbrSet(anisotropy = 8): {
+  map: THREE.CanvasTexture;
+  normalMap: THREE.DataTexture;
+  roughnessMap: THREE.CanvasTexture;
+  dispose: () => void;
+} {
+  const size = 512;
+  const cCanvas = document.createElement('canvas');
+  cCanvas.width = size;
+  cCanvas.height = size;
+  const cCtx = cCanvas.getContext('2d')!;
+
+  const hCanvas = document.createElement('canvas');
+  hCanvas.width = size;
+  hCanvas.height = size;
+  const hCtx = hCanvas.getContext('2d')!;
+
+  const rCanvas = document.createElement('canvas');
+  rCanvas.width = size;
+  rCanvas.height = size;
+  const rCtx = rCanvas.getContext('2d')!;
+
+  // Creamy warm alabaster stone field
+  const baseGrad = cCtx.createLinearGradient(0, 0, size, size);
+  baseGrad.addColorStop(0, '#F7F3EB');
+  baseGrad.addColorStop(0.5, '#EFEAE0');
+  baseGrad.addColorStop(1, '#F5F0E6');
+  cCtx.fillStyle = baseGrad;
+  cCtx.fillRect(0, 0, size, size);
+
+  hCtx.fillStyle = '#D8D8D8';
+  hCtx.fillRect(0, 0, size, size);
+  rCtx.fillStyle = '#323232'; // Glossy honed polish
+  rCtx.fillRect(0, 0, size, size);
+
+  let seed = 9241;
+  const rand = () => {
+    seed = (seed * 16807) % 2147483647;
+    return (seed - 1) / 2147483646;
+  };
+
+  // Soft cloudy mineral undertones
+  for (let i = 0; i < 28; i++) {
+    const px = rand() * size;
+    const py = rand() * size;
+    const rad = 40 + rand() * 90;
+    const g = cCtx.createRadialGradient(px, py, 4, px, py, rad);
+    g.addColorStop(0, 'rgba(182, 174, 162, 0.14)');
+    g.addColorStop(1, 'rgba(247, 243, 235, 0)');
+    cCtx.fillStyle = g;
+    cCtx.beginPath();
+    cCtx.arc(px, py, rad, 0, Math.PI * 2);
+    cCtx.fill();
+  }
+
+  // Organic sweeping primary charcoal-slate veins & secondary champagne-gold veins
+  const drawVein = (startX: number, startY: number, isGold: boolean, width: number) => {
+    let x = startX;
+    let y = startY;
+    cCtx.strokeStyle = isGold ? 'rgba(196, 152, 82, 0.42)' : 'rgba(96, 98, 108, 0.34)';
+    cCtx.lineWidth = width;
+    cCtx.lineCap = 'round';
+    cCtx.beginPath();
+    cCtx.moveTo(x, y);
+
+    hCtx.strokeStyle = '#BDBDBD';
+    hCtx.lineWidth = width;
+    hCtx.beginPath();
+    hCtx.moveTo(x, y);
+
+    rCtx.strokeStyle = '#565656';
+    rCtx.lineWidth = width;
+    rCtx.beginPath();
+    rCtx.moveTo(x, y);
+
+    for (let step = 0; step < 18; step++) {
+      x += 26 + (rand() - 0.3) * 26;
+      y += (rand() - 0.45) * 44;
+      cCtx.lineTo(x, y);
+      hCtx.lineTo(x, y);
+      rCtx.lineTo(x, y);
+    }
+    cCtx.stroke();
+    hCtx.stroke();
+    rCtx.stroke();
+  };
+
+  for (let v = 0; v < 9; v++) {
+    drawVein(-30, rand() * size, v % 3 === 0, v % 2 === 0 ? 3.2 : 1.5);
+  }
+
+  // Bookmatched slab seam joint subtly centered
+  cCtx.strokeStyle = 'rgba(140, 132, 120, 0.22)';
+  cCtx.lineWidth = 2;
+  cCtx.strokeRect(1, 1, size - 2, size - 2);
+
+  const map = finalizeColorTexture(new THREE.CanvasTexture(cCanvas), anisotropy, 1, 1);
+  const normalMap = heightCanvasToNormalTexture(hCanvas, 0.65, anisotropy, 1, 1);
+  const roughnessMap = finalizeDataTexture(
+    new THREE.CanvasTexture(rCanvas),
+    anisotropy,
+    1,
+    1
+  ) as THREE.CanvasTexture;
+
+  return {
+    map,
+    normalMap,
+    roughnessMap,
+    dispose: () => {
+      map.dispose();
+      normalMap.dispose();
+      roughnessMap.dispose();
+    },
+  };
+}
+
+/**
+ * Tailored Silk & Cashmere-Wool Luxury Area Rug Texture (512x512)
+ */
+export function createLuxuryAreaRugTexture(
+  accentCss = '#C89B4B',
+  anisotropy = 8
+): THREE.CanvasTexture {
+  const size = 512;
+  const canvas = document.createElement('canvas');
+  canvas.width = size;
+  canvas.height = size;
+  const ctx = canvas.getContext('2d')!;
+
+  // Warm ivory cashmere base
+  ctx.fillStyle = '#EAE2D6';
+  ctx.fillRect(0, 0, size, size);
+
+  let seed = 3371;
+  const rand = () => {
+    seed = (seed * 16807) % 2147483647;
+    return (seed - 1) / 2147483646;
+  };
+
+  // Fine tactile textile boucle-silk weave grain
+  for (let y = 0; y < size; y += 3) {
+    ctx.fillStyle = y % 6 === 0 ? 'rgba(120, 108, 92, 0.055)' : 'rgba(255, 252, 246, 0.14)';
+    ctx.fillRect(0, y, size, 1.5);
+  }
+  for (let i = 0; i < 4200; i++) {
+    ctx.fillStyle = rand() > 0.5 ? 'rgba(140, 126, 108, 0.06)' : 'rgba(255, 255, 255, 0.08)';
+    ctx.fillRect(Math.floor(rand() * size), Math.floor(rand() * size), 2, 2);
+  }
+
+  // Outer charcoal architectural border + brushed-gold inner Greek-key / geometric hairline trim
+  ctx.strokeStyle = '#312E2B';
+  ctx.lineWidth = 14;
+  ctx.strokeRect(22, 22, size - 44, size - 44);
+
+  ctx.strokeStyle = accentCss;
+  ctx.lineWidth = 4;
+  ctx.strokeRect(42, 42, size - 84, size - 84);
+
+  ctx.strokeStyle = 'rgba(72, 65, 58, 0.24)';
+  ctx.lineWidth = 2;
+  ctx.strokeRect(56, 56, size - 112, size - 112);
+
+  // Subtle modernist concentric geometric centerpiece medallion
+  ctx.strokeStyle = 'rgba(49, 46, 43, 0.16)';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.arc(size / 2, size / 2, 118, 0, Math.PI * 2);
+  ctx.stroke();
+  ctx.strokeStyle = accentCss + '66';
+  ctx.beginPath();
+  ctx.arc(size / 2, size / 2, 92, 0, Math.PI * 2);
+  ctx.stroke();
+
+  return finalizeColorTexture(new THREE.CanvasTexture(canvas), anisotropy, 1, 1);
+}
+
+/**
+ * Framed Minimalist Contemporary Gallery Canvas Artwork Texture (512x512)
+ */
+export function createGalleryArtTexture(
+  serviceIndex: number,
+  sideIndex: number,
+  anisotropy = 8
+): THREE.CanvasTexture {
+  const size = 512;
+  const canvas = document.createElement('canvas');
+  canvas.width = size;
+  canvas.height = size;
+  const ctx = canvas.getContext('2d')!;
+
+  // Linen gallery passe-partout mat border
+  ctx.fillStyle = '#F5F0E6';
+  ctx.fillRect(0, 0, size, size);
+
+  // Recessed inner art paper canvas
+  const pad = 48;
+  const inner = size - pad * 2;
+  ctx.fillStyle = sideIndex === 0 ? '#1C222E' : '#EAE2D3';
+  ctx.fillRect(pad, pad, inner, inner);
+
+  const accents = ['#D4A24C', '#38BDF8', '#C86D4A', '#34D399', '#818CF8', '#2DD4BF'];
+  const gold = accents[serviceIndex % accents.length];
+
+  if (sideIndex === 0) {
+    // Sculptural Gold-Leaf Horizon Sun & Architectural Arch over Obsidian Canvas
+    const glow = ctx.createRadialGradient(size / 2, size * 0.44, 14, size / 2, size * 0.44, 150);
+    glow.addColorStop(0, gold);
+    glow.addColorStop(0.55, gold + '55');
+    glow.addColorStop(1, 'rgba(28,34,46,0)');
+    ctx.fillStyle = glow;
+    ctx.beginPath();
+    ctx.arc(size / 2, size * 0.44, 148, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.fillStyle = gold;
+    ctx.beginPath();
+    ctx.arc(size / 2, size * 0.42, 64, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.fillStyle = '#E8DFD1';
+    ctx.fillRect(pad + 54, size * 0.62, inner - 108, 10);
+    ctx.fillStyle = 'rgba(255,255,255,0.22)';
+    ctx.fillRect(pad + 92, size * 0.68, inner - 184, 5);
+  } else {
+    // Bauhaus Travertine & Terracotta Overlapping Relief Arches
+    ctx.fillStyle = '#C26D48';
+    ctx.beginPath();
+    ctx.arc(size * 0.44, size * 0.54, 104, Math.PI, 0, false);
+    ctx.lineTo(size * 0.44 + 104, size - pad - 44);
+    ctx.lineTo(size * 0.44 - 104, size - pad - 44);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.strokeStyle = '#1E2430';
+    ctx.lineWidth = 6;
+    ctx.beginPath();
+    ctx.arc(size * 0.58, size * 0.42, 74, 0, Math.PI * 2);
+    ctx.stroke();
+
+    ctx.fillStyle = gold;
+    ctx.beginPath();
+    ctx.arc(size * 0.58, size * 0.42, 24, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  // Subtle shadow edge around passe-partout cutout
+  ctx.strokeStyle = 'rgba(20, 20, 20, 0.25)';
+  ctx.lineWidth = 3;
+  ctx.strokeRect(pad, pad, inner, inner);
+
+  return finalizeColorTexture(new THREE.CanvasTexture(canvas), anisotropy, 1, 1);
+}
+
+
 
 

@@ -134,44 +134,9 @@ export const AnalyticsTracker: React.FC<AnalyticsTrackerProps> = ({ currentPath 
     const referrer = typeof document !== 'undefined' && document.referrer ? document.referrer : 'Direct Visit';
     const localTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 
-    // 1. Send Page View Log
-    fetch('/api/analytics/track', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        path: currentPath,
-        country,
-        countryCode,
-        city,
-        device,
-        browser,
-        os,
-        screen: screenRes,
-        referrer,
-        source,
-        localTime,
-        sessionId,
-      }),
-    }).catch(() => {});
-
-    // 2. Immediate Initial Heartbeat to register active presence instantly
-    fetch('/api/analytics/heartbeat', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        sessionId,
-        path: currentPath,
-        country,
-        countryCode,
-        city,
-        device,
-        dwellTimeSeconds: 1,
-      }),
-    }).catch(() => {});
-
-    // 3. Fast 6s Heartbeat to maintain real-time live presence radar
-    const interval = setInterval(() => {
-      const dwell = Math.floor((Date.now() - sessionStartTime.current) / 1000);
+    let intervalId: number | null = null;
+    const sendHeartbeat = (dwell: number) => {
+      if (typeof document !== 'undefined' && document.visibilityState !== 'visible') return;
       fetch('/api/analytics/heartbeat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -185,9 +150,43 @@ export const AnalyticsTracker: React.FC<AnalyticsTrackerProps> = ({ currentPath 
           dwellTimeSeconds: dwell,
         }),
       }).catch(() => {});
-    }, 6000);
+    };
 
-    return () => clearInterval(interval);
+    const startTimer = window.setTimeout(() => {
+      // 1. Send Page View Log after first paint settles
+      fetch('/api/analytics/track', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          path: currentPath,
+          country,
+          countryCode,
+          city,
+          device,
+          browser,
+          os,
+          screen: screenRes,
+          referrer,
+          source,
+          localTime,
+          sessionId,
+        }),
+      }).catch(() => {});
+
+      // 2. Initial presence heartbeat
+      sendHeartbeat(1);
+
+      // 3. Visibility-aware 15s heartbeat
+      intervalId = window.setInterval(() => {
+        const dwell = Math.floor((Date.now() - sessionStartTime.current) / 1000);
+        sendHeartbeat(dwell);
+      }, 15000);
+    }, 650);
+
+    return () => {
+      window.clearTimeout(startTimer);
+      if (intervalId !== null) window.clearInterval(intervalId);
+    };
   }, [currentPath]);
 
   return null;

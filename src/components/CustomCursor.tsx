@@ -20,6 +20,9 @@ export const CustomCursor: React.FC = () => {
   const auraX = useSpring(mouseX, auraSpringConfig);
   const auraY = useSpring(mouseY, auraSpringConfig);
 
+  const isVisibleRef = React.useRef(false);
+  const isHoveredRef = React.useRef(false);
+
   useEffect(() => {
     if (window.matchMedia('(pointer: coarse)').matches) {
       setIsTouchDevice(true);
@@ -29,17 +32,34 @@ export const CustomCursor: React.FC = () => {
     const handleMouseMove = (e: MouseEvent) => {
       mouseX.set(e.clientX);
       mouseY.set(e.clientY);
-      if (!isVisible) setIsVisible(true);
+      if (!isVisibleRef.current) {
+        isVisibleRef.current = true;
+        setIsVisible(true);
+      }
     };
 
-    const handleMouseLeave = () => setIsVisible(false);
-    const handleMouseEnter = () => setIsVisible(true);
+    const handleMouseLeave = () => {
+      if (isVisibleRef.current) {
+        isVisibleRef.current = false;
+        setIsVisible(false);
+      }
+    };
+
+    const handleMouseEnter = () => {
+      if (!isVisibleRef.current) {
+        isVisibleRef.current = true;
+        setIsVisible(true);
+      }
+    };
 
     const handleElementHover = (e: MouseEvent) => {
       const target = e.target as HTMLElement | null;
       if (!target) return;
-      const clickable = target.closest('a, button, input, textarea, select, [role="button"], .interactive-hover');
-      setIsHovered(!!clickable);
+      const nextHovered = !!target.closest('a, button, input, textarea, select, [role="button"], .interactive-hover');
+      if (nextHovered !== isHoveredRef.current) {
+        isHoveredRef.current = nextHovered;
+        setIsHovered(nextHovered);
+      }
     };
 
     window.addEventListener('mousemove', handleMouseMove, { passive: true });
@@ -53,7 +73,7 @@ export const CustomCursor: React.FC = () => {
       document.removeEventListener('mouseleave', handleMouseLeave);
       document.removeEventListener('mouseenter', handleMouseEnter);
     };
-  }, [isVisible, mouseX, mouseY]);
+  }, [mouseX, mouseY]);
 
   if (isTouchDevice || !isVisible) return null;
 

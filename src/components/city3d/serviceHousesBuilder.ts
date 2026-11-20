@@ -13,6 +13,11 @@ import {
   createResidentialWindowTextures,
   createContactShadowTexture,
   createBotanicalLeafClusterTexture,
+  createHerringboneFloorPbrSet,
+  createStudioInteriorDisplayTexture,
+  createCalacattaMarblePbrSet,
+  createLuxuryAreaRugTexture,
+  createGalleryArtTexture,
   applyGroundAO,
 } from './proceduralTextures.ts';
 
@@ -138,9 +143,130 @@ export function buildServiceHouses(
   const claddingPbr = track(createArchitecturalCladdingPbr(maxAnisotropy));
   const grassPbr = track(createNaturalGrassPbrSet(maxAnisotropy, 3, 3));
   const woodPbr = track(createWoodGrainPbrSet(maxAnisotropy));
+  const herringbonePbr = track(createHerringboneFloorPbrSet(maxAnisotropy));
+  const marblePbr = track(createCalacattaMarblePbrSet(maxAnisotropy));
   const winTex = track(createResidentialWindowTextures(maxAnisotropy));
   const shadowTex = track(createContactShadowTexture());
   const leafClusterTex = track(createBotanicalLeafClusterTexture(maxAnisotropy));
+
+  // Palatial Luxury Interior Shared PBR Materials
+  const interiorFloorMat = track(
+    new THREE.MeshStandardMaterial({
+      color: 0xffffff,
+      map: herringbonePbr.map,
+      normalMap: herringbonePbr.normalMap,
+      normalScale: new THREE.Vector2(0.45, 0.45),
+      roughnessMap: herringbonePbr.roughnessMap,
+      roughness: 0.34,
+      metalness: 0.05,
+    })
+  );
+  const calacattaMarbleMat = track(
+    new THREE.MeshPhysicalMaterial({
+      color: 0xffffff,
+      map: marblePbr.map,
+      normalMap: marblePbr.normalMap,
+      normalScale: new THREE.Vector2(0.28, 0.28),
+      roughnessMap: marblePbr.roughnessMap,
+      roughness: 0.16,
+      metalness: 0.04,
+      clearcoat: 0.85,
+      clearcoatRoughness: 0.08,
+    })
+  );
+  const interiorWallMat = track(
+    new THREE.MeshStandardMaterial({
+      color: 0xf4efe6,
+      roughness: 0.86,
+      metalness: 0.02,
+    })
+  );
+  const interiorWainscotMat = track(
+    new THREE.MeshStandardMaterial({
+      color: 0xe9e1d4,
+      roughness: 0.72,
+      metalness: 0.03,
+    })
+  );
+  const interiorCeilingMat = track(
+    new THREE.MeshStandardMaterial({
+      color: 0xfbf8f3,
+      roughness: 0.88,
+      metalness: 0.0,
+    })
+  );
+  const brassMat = track(
+    new THREE.MeshPhysicalMaterial({
+      color: 0xdcb05c,
+      roughness: 0.18,
+      metalness: 0.94,
+      clearcoat: 0.8,
+      anisotropy: 0.75,
+    })
+  );
+  const alabasterGlowMat = track(
+    new THREE.MeshStandardMaterial({
+      color: 0xfff8eb,
+      emissive: 0xffd596,
+      emissiveIntensity: 1.55,
+      roughness: 0.28,
+    })
+  );
+  const fireplaceEmberMat = track(
+    new THREE.MeshStandardMaterial({
+      color: 0xff9f40,
+      emissive: 0xff7b1c,
+      emissiveIntensity: 2.4,
+      roughness: 0.2,
+    })
+  );
+  const creamBoucleMat = track(
+    new THREE.MeshPhysicalMaterial({
+      color: 0xf6f0e7,
+      roughness: 0.92,
+      metalness: 0.0,
+      sheen: 0.72,
+      sheenRoughness: 0.78,
+      sheenColor: new THREE.Color(0xfff9f0),
+    })
+  );
+  const leatherCharcoalMat = track(
+    new THREE.MeshPhysicalMaterial({
+      color: 0x1e2430,
+      roughness: 0.44,
+      metalness: 0.06,
+      sheen: 0.35,
+      sheenColor: new THREE.Color(0x475569),
+    })
+  );
+  const cognacLeatherMat = track(
+    new THREE.MeshPhysicalMaterial({
+      color: 0x8f4d2c,
+      roughness: 0.42,
+      metalness: 0.06,
+      sheen: 0.45,
+      sheenColor: new THREE.Color(0xd99b6c),
+    })
+  );
+  const warmTerracottaMat = track(
+    new THREE.MeshPhysicalMaterial({
+      color: 0xc26d48,
+      roughness: 0.82,
+      metalness: 0.02,
+      sheen: 0.68,
+      sheenColor: new THREE.Color(0xffb48a),
+    })
+  );
+  const interiorGlassTableMat = track(
+    new THREE.MeshPhysicalMaterial({
+      color: 0xc7ddf2,
+      roughness: 0.04,
+      metalness: 0.16,
+      transparent: true,
+      opacity: 0.48,
+      clearcoat: 1.0,
+    })
+  );
 
   // Shared High-Craft Architectural Materials
   const travertineMat = track(
@@ -455,17 +581,556 @@ export function buildServiceHouses(
     stepLed.position.set(0, 0.28, 4.74);
     houseRoot.add(stepBase, stepTop, stepLed);
 
-    // Deep Illuminated Architectural Foyer Backing behind Pivot Door
+    // =========================================================================
+    // 2B. PALATIAL WALK-IN 3D LUXURY PENTHOUSE & ATELIER INTERIOR (Revealed When Door Opens!)
+    // Herringbone oak parquet with Calacatta Oro marble border, silk woven rug,
+    // coffered cove ceiling, multi-ring brass & alabaster chandelier, bookmatched marble
+    // fireplace wall, fluted walnut & brass ribs, gallery canvases & bespoke designer suites!
+    // =========================================================================
     const portalGlowMat = track(
       new THREE.MeshBasicMaterial({
-        color: initialDarkMode ? 0xffefd6 : 0xffffff,
+        color: 0xffefd2,
         transparent: true,
-        opacity: 0.18,
+        opacity: 0.32,
       })
     );
-    const foyerGlow = new THREE.Mesh(track(new THREE.PlaneGeometry(2.05, 2.75)), portalGlowMat);
-    foyerGlow.position.set(0, 1.84, 3.84);
-    houseRoot.add(foyerGlow);
+    const interiorGroup = new THREE.Group();
+    interiorGroup.name = `house-interior-${idx}`;
+
+    // Satin-Lacquered Herringbone Oak Parquet Floor + Honed Calacatta Marble Border Inlay
+    const intFloor = new THREE.Mesh(track(new THREE.PlaneGeometry(5.6, 7.1)), interiorFloorMat);
+    intFloor.rotation.x = -Math.PI / 2;
+    intFloor.position.set(0, 0.47, 0.45);
+    intFloor.receiveShadow = quality.shadowsEnabled;
+
+    // Marble floor perimeter trim strips framing the herringbone field
+    [-2.58, 2.58].forEach((bx) => {
+      const mStrip = new THREE.Mesh(track(new THREE.BoxGeometry(0.32, 0.014, 6.9)), calacattaMarbleMat);
+      mStrip.position.set(bx, 0.476, 0.45);
+      interiorGroup.add(mStrip);
+    });
+    const backMarbleBorder = new THREE.Mesh(
+      track(new THREE.BoxGeometry(5.5, 0.014, 0.34)),
+      calacattaMarbleMat
+    );
+    backMarbleBorder.position.set(0, 0.476, -2.84);
+    interiorGroup.add(backMarbleBorder);
+
+    // Tailored Woven Cashmere & Silk Area Rug with Service-Matched Brass/Charcoal Border
+    const rugTex = track(createLuxuryAreaRugTexture(pal.accentCss, maxAnisotropy));
+    const houseRugMat = track(
+      new THREE.MeshPhysicalMaterial({
+        map: rugTex,
+        roughness: 0.94,
+        metalness: 0.0,
+        sheen: 0.42,
+        sheenColor: new THREE.Color(0xf7efe4),
+      })
+    );
+    const intRug = new THREE.Mesh(track(new THREE.BoxGeometry(3.85, 0.028, 4.15)), houseRugMat);
+    intRug.position.set(0, 0.486, -0.35);
+    interiorGroup.add(intFloor, intRug);
+
+    // Architectural Limewash Side Walls, Back Wall & Recessed Coffered Tray Ceiling
+    const backWall = new THREE.Mesh(track(new THREE.BoxGeometry(5.65, 3.12, 0.14)), interiorWallMat);
+    backWall.position.set(0, 2.02, -3.02);
+    const leftIntWall = new THREE.Mesh(track(new THREE.BoxGeometry(0.14, 3.12, 7.1)), interiorWallMat);
+    leftIntWall.position.set(-2.78, 2.02, 0.45);
+    const rightIntWall = new THREE.Mesh(track(new THREE.BoxGeometry(0.14, 3.12, 7.1)), interiorWallMat);
+    rightIntWall.position.set(2.78, 2.02, 0.45);
+
+    // Lower Coffered Ceiling Rim + Elevated Illuminated Central Vault Tray
+    const ceilingOuter = new THREE.Mesh(track(new THREE.PlaneGeometry(5.6, 7.1)), interiorCeilingMat);
+    ceilingOuter.rotation.x = Math.PI / 2;
+    ceilingOuter.position.set(0, 3.52, 0.45);
+    const ceilingTrayRim = new THREE.Mesh(
+      track(new THREE.BoxGeometry(4.25, 0.12, 5.25)),
+      interiorWainscotMat
+    );
+    ceilingTrayRim.position.set(0, 3.49, -0.15);
+
+    // Front Interior Framing Jambs flanking the 2.48m Doorway Opening
+    [-2.02, 2.02].forEach((fx) => {
+      const jambWall = new THREE.Mesh(track(new THREE.BoxGeometry(1.56, 3.12, 0.2)), interiorWallMat);
+      jambWall.position.set(fx, 2.02, 3.88);
+      interiorGroup.add(jambWall);
+    });
+    const headerWall = new THREE.Mesh(track(new THREE.BoxGeometry(2.6, 0.36, 0.2)), interiorWallMat);
+    headerWall.position.set(0, 3.4, 3.88);
+
+    // Honed Calacatta Marble Baseboard Skirting + Wainscoting Chair Rail along Side Walls
+    const backBase = new THREE.Mesh(track(new THREE.BoxGeometry(5.55, 0.18, 0.06)), calacattaMarbleMat);
+    backBase.position.set(0, 0.56, -2.93);
+    [-2.69, 2.69].forEach((wx) => {
+      const sBase = new THREE.Mesh(track(new THREE.BoxGeometry(0.06, 0.18, 6.9)), calacattaMarbleMat);
+      sBase.position.set(wx, 0.56, 0.45);
+      const wainscot = new THREE.Mesh(track(new THREE.BoxGeometry(0.04, 0.85, 6.8)), interiorWainscotMat);
+      wainscot.position.set(wx, 1.04, 0.45);
+      const chairRail = new THREE.Mesh(track(new THREE.BoxGeometry(0.07, 0.055, 6.85)), brassMat);
+      chairRail.position.set(wx, 1.48, 0.45);
+      interiorGroup.add(sBase, wainscot, chairRail);
+    });
+
+    // Bookmatched Calacatta Oro Marble Centerpiece Feature Wall + Brushed-Brass Perimeter Framing
+    const marbleFeatureSlab = new THREE.Mesh(
+      track(new THREE.BoxGeometry(3.48, 2.88, 0.08)),
+      calacattaMarbleMat
+    );
+    marbleFeatureSlab.position.set(0, 2.02, -2.94);
+    const marbleBrassTrimL = new THREE.Mesh(track(new THREE.BoxGeometry(0.04, 2.9, 0.1)), brassMat);
+    marbleBrassTrimL.position.set(-1.75, 2.02, -2.93);
+    const marbleBrassTrimR = marbleBrassTrimL.clone();
+    marbleBrassTrimR.position.x = 1.75;
+
+    // Fluted Vertical Walnut & Brushed-Brass Inlay Architectural Panelling flanking Marble Feature Wall
+    for (let sx = -2.6; sx <= 2.6; sx += 0.16) {
+      if (Math.abs(sx) < 1.82) continue;
+      const isBrassInlay = Math.round(Math.abs(sx) * 10) % 3 === 0;
+      const rib = new THREE.Mesh(
+        track(new THREE.BoxGeometry(isBrassInlay ? 0.025 : 0.08, 2.86, isBrassInlay ? 0.095 : 0.08)),
+        isBrassInlay ? brassMat : teakWoodMat
+      );
+      rib.position.set(sx, 2.02, -2.92);
+      interiorGroup.add(rib);
+    }
+
+    // Recessed Continuous Warm Golden Architectural Cove Ceiling Perimeter
+    const coveBack = new THREE.Mesh(track(new THREE.BoxGeometry(4.15, 0.05, 0.1)), portalGlowMat);
+    coveBack.position.set(0, 3.43, -2.74);
+    const coveFront = coveBack.clone();
+    coveFront.position.z = 2.44;
+    const coveLeft = new THREE.Mesh(track(new THREE.BoxGeometry(0.1, 0.05, 5.2)), portalGlowMat);
+    coveLeft.position.set(-2.08, 3.43, -0.15);
+    const coveRight = coveLeft.clone();
+    coveRight.position.x = 2.08;
+
+    // Grand Multi-Tier Brushed-Brass & Frosted-Alabaster Globe Studio Chandelier
+    const chandCanopy = new THREE.Mesh(track(new THREE.CylinderGeometry(0.24, 0.24, 0.05, 24)), brassMat);
+    chandCanopy.position.set(0, 3.43, -0.35);
+    const chandStem = new THREE.Mesh(track(new THREE.CylinderGeometry(0.02, 0.02, 0.56, 10)), brassMat);
+    chandStem.position.set(0, 3.16, -0.35);
+    const chandOuterRing = new THREE.Mesh(track(new THREE.TorusGeometry(0.84, 0.028, 12, 42)), brassMat);
+    chandOuterRing.rotation.x = Math.PI / 2;
+    chandOuterRing.position.set(0, 2.88, -0.35);
+    const chandInnerRing = new THREE.Mesh(track(new THREE.TorusGeometry(0.46, 0.022, 10, 32)), brassMat);
+    chandInnerRing.rotation.x = Math.PI / 2;
+    chandInnerRing.position.set(0, 2.98, -0.35);
+    const chandGlowRing = new THREE.Mesh(
+      track(new THREE.TorusGeometry(0.82, 0.018, 8, 42)),
+      portalGlowMat
+    );
+    chandGlowRing.rotation.x = Math.PI / 2;
+    chandGlowRing.position.set(0, 2.85, -0.35);
+    interiorGroup.add(
+      backWall,
+      leftIntWall,
+      rightIntWall,
+      ceilingOuter,
+      ceilingTrayRim,
+      headerWall,
+      backBase,
+      marbleFeatureSlab,
+      marbleBrassTrimL,
+      marbleBrassTrimR,
+      coveBack,
+      coveFront,
+      coveLeft,
+      coveRight,
+      chandCanopy,
+      chandStem,
+      chandOuterRing,
+      chandInnerRing,
+      chandGlowRing
+    );
+
+    // 8 Suspended Luminous Frosted-Alabaster Glass Light Globes around the Brass Chandelier!
+    const globeGeo = track(new THREE.SphereGeometry(0.082, 12, 10));
+    const globeCapGeo = track(new THREE.CylinderGeometry(0.032, 0.038, 0.05, 10));
+    for (let g = 0; g < 8; g++) {
+      const ang = (g / 8) * Math.PI * 2;
+      const gx = Math.cos(ang) * 0.84;
+      const gz = -0.35 + Math.sin(ang) * 0.84;
+      const globe = new THREE.Mesh(globeGeo, alabasterGlowMat);
+      globe.position.set(gx, 2.79, gz);
+      const cap = new THREE.Mesh(globeCapGeo, brassMat);
+      cap.position.set(gx, 2.88, gz);
+      interiorGroup.add(globe, cap);
+    }
+
+    // Custom Illuminated Architectural Studio Feature-Wall Display + Linear Marble Fireplace Hearth!
+    const displayTex = track(
+      createStudioInteriorDisplayTexture(idx, service.title, service.tagline, maxAnisotropy)
+    );
+    const displayScreenMat = track(
+      new THREE.MeshStandardMaterial({
+        map: displayTex,
+        emissive: 0xffffff,
+        emissiveMap: displayTex,
+        emissiveIntensity: 0.78,
+        roughness: 0.16,
+        metalness: 0.08,
+      })
+    );
+    const screenFrame = new THREE.Mesh(
+      track(new THREE.BoxGeometry(3.04, 1.48, 0.08)),
+      brassMat
+    );
+    screenFrame.position.set(0, 2.28, -2.87);
+    const screenBezel = new THREE.Mesh(
+      track(new THREE.BoxGeometry(2.96, 1.4, 0.09)),
+      brushedTitaniumMat
+    );
+    screenBezel.position.set(0, 2.28, -2.865);
+    const screenFace = new THREE.Mesh(track(new THREE.PlaneGeometry(2.86, 1.32)), displayScreenMat);
+    screenFace.position.set(0, 2.28, -2.815);
+
+    // Floating Honed Calacatta Marble & Walnut Hearth Credenza + Linear Illuminated Ember Fireplace!
+    const hearthBody = new THREE.Mesh(track(new THREE.BoxGeometry(3.32, 0.56, 0.58)), calacattaMarbleMat);
+    hearthBody.position.set(0, 0.88, -2.63);
+    const hearthTop = new THREE.Mesh(track(new THREE.BoxGeometry(3.42, 0.06, 0.64)), calacattaMarbleMat);
+    hearthTop.position.set(0, 1.19, -2.63);
+    const hearthBrassTrim = new THREE.Mesh(track(new THREE.BoxGeometry(3.44, 0.025, 0.65)), brassMat);
+    hearthBrassTrim.position.set(0, 1.155, -2.63);
+    const fireSlot = new THREE.Mesh(track(new THREE.BoxGeometry(1.72, 0.24, 0.14)), obsidianBasaltMat);
+    fireSlot.position.set(0, 0.9, -2.38);
+    const fireEmberStrip = new THREE.Mesh(
+      track(new THREE.BoxGeometry(1.56, 0.08, 0.08)),
+      fireplaceEmberMat
+    );
+    fireEmberStrip.position.set(0, 0.85, -2.35);
+    const fireGlassFront = new THREE.Mesh(
+      track(new THREE.BoxGeometry(1.66, 0.2, 0.02)),
+      interiorGlassTableMat
+    );
+    fireGlassFront.position.set(0, 0.9, -2.31);
+
+    // Sculpted Ceramic & Brass Architectural Decor Vessels resting on the Hearth Mantel
+    const vesselLeft = new THREE.Mesh(
+      track(new THREE.CylinderGeometry(0.08, 0.13, 0.28, 16)),
+      brassMat
+    );
+    vesselLeft.position.set(-1.35, 1.36, -2.56);
+    const vesselSphere = new THREE.Mesh(track(new THREE.SphereGeometry(0.11, 14, 12)), creamBoucleMat);
+    vesselSphere.position.set(1.32, 1.32, -2.56);
+    interiorGroup.add(
+      screenFrame,
+      screenBezel,
+      screenFace,
+      hearthBody,
+      hearthTop,
+      hearthBrassTrim,
+      fireSlot,
+      fireEmberStrip,
+      fireGlassFront,
+      vesselLeft,
+      vesselSphere
+    );
+
+    // Curated Museum Gallery Side-Wall Canvases + Brass Picture Lights + Alabaster Wall Sconces
+    [-2.68, 2.68].forEach((wx, sideIdx) => {
+      const sign = sideIdx === 0 ? 1 : -1;
+      const artTex = track(createGalleryArtTexture(idx, sideIdx, maxAnisotropy));
+      const artCanvasMat = track(
+        new THREE.MeshStandardMaterial({
+          map: artTex,
+          roughness: 0.45,
+          metalness: 0.02,
+        })
+      );
+      const artFrame = new THREE.Mesh(track(new THREE.BoxGeometry(0.055, 1.24, 1.56)), brassMat);
+      artFrame.position.set(wx + sign * 0.028, 2.22, -0.35);
+      const artCanvas = new THREE.Mesh(track(new THREE.BoxGeometry(0.03, 1.12, 1.44)), artCanvasMat);
+      artCanvas.position.set(wx + sign * 0.048, 2.22, -0.35);
+      const artLightBar = new THREE.Mesh(track(new THREE.BoxGeometry(0.14, 0.035, 0.84)), brassMat);
+      artLightBar.position.set(wx + sign * 0.11, 2.94, -0.35);
+      const artLightGlow = new THREE.Mesh(
+        track(new THREE.BoxGeometry(0.04, 0.025, 0.78)),
+        alabasterGlowMat
+      );
+      artLightGlow.position.set(wx + sign * 0.14, 2.915, -0.35);
+      interiorGroup.add(artFrame, artCanvas, artLightBar, artLightGlow);
+
+      // Flanking Vertical Fluted Alabaster & Brass Wall Sconces along both Side Walls
+      [-1.75, 1.05].forEach((sz) => {
+        const scMount = new THREE.Mesh(track(new THREE.BoxGeometry(0.04, 0.28, 0.1)), brassMat);
+        scMount.position.set(wx + sign * 0.03, 2.15, sz);
+        const scTube = new THREE.Mesh(
+          track(new THREE.CylinderGeometry(0.038, 0.038, 0.56, 12)),
+          alabasterGlowMat
+        );
+        scTube.position.set(wx + sign * 0.075, 2.15, sz);
+        interiorGroup.add(scMount, scTube);
+      });
+    });
+
+    // Twin Sculpted Architectural Indoor Olive Trees in Fluted Travertine Urns (Back Corners)
+    [-2.25, 2.25].forEach((ux, ui) => {
+      const urn = new THREE.Mesh(
+        track(new THREE.CylinderGeometry(0.28, 0.19, 0.52, 16)),
+        calacattaMarbleMat
+      );
+      urn.position.set(ux, 0.73, -2.42);
+      const urnRing = new THREE.Mesh(track(new THREE.TorusGeometry(0.27, 0.02, 8, 24)), brassMat);
+      urnRing.rotation.x = Math.PI / 2;
+      urnRing.position.set(ux, 0.98, -2.42);
+      const stem = new THREE.Mesh(
+        track(new THREE.CylinderGeometry(0.028, 0.048, 1.05, 8)),
+        teakWoodMat
+      );
+      stem.position.set(ux, 1.38, -2.42);
+      stem.rotation.z = ui === 0 ? -0.08 : 0.08;
+      interiorGroup.add(urn, urnRing, stem);
+
+      // Layered Botanical Foliage Cards (no blocky dodecahedron blobs!)
+      [0, Math.PI * 0.45, Math.PI * 0.9].forEach((rot, ci) => {
+        const card = new THREE.Mesh(track(new THREE.PlaneGeometry(0.95, 0.95)), foliageCardMat);
+        card.position.set(ux + (ci - 1) * 0.05, 2.02 + ci * 0.08, -2.42);
+        card.rotation.y = rot;
+        card.rotation.x = 0.12;
+        interiorGroup.add(card);
+      });
+    });
+
+    // Helper: Tailored Curved Upholstered Luxury Lounge Chair (Beveled Seat + Curved Back + Brass Frame)
+    const addLuxuryChair = (
+      cx: number,
+      cz: number,
+      rotY: number,
+      fabricMat: THREE.Material
+    ) => {
+      const ch = new THREE.Group();
+      ch.position.set(cx, 0.49, cz);
+      ch.rotation.y = rotY;
+      // 4 tapered brushed-brass stiletto legs
+      [
+        [-0.26, -0.24],
+        [0.26, -0.24],
+        [-0.26, 0.24],
+        [0.26, 0.24],
+      ].forEach(([lx, lz]) => {
+        const leg = new THREE.Mesh(track(new THREE.CylinderGeometry(0.022, 0.014, 0.34, 8)), brassMat);
+        leg.position.set(lx, 0.17, lz);
+        ch.add(leg);
+      });
+      const brassPlinth = new THREE.Mesh(track(new THREE.BoxGeometry(0.62, 0.035, 0.58)), brassMat);
+      brassPlinth.position.set(0, 0.35, 0);
+      const seatCushion = new THREE.Mesh(track(new THREE.BoxGeometry(0.64, 0.16, 0.6)), fabricMat);
+      seatCushion.position.set(0, 0.45, 0.02);
+      const backWrap = new THREE.Mesh(
+        track(new THREE.CylinderGeometry(0.34, 0.34, 0.46, 16, 1, false, Math.PI * 0.72, Math.PI * 1.56)),
+        fabricMat
+      );
+      backWrap.position.set(0, 0.68, -0.04);
+      ch.add(brassPlinth, seatCushion, backWrap);
+      interiorGroup.add(ch);
+    };
+
+    // Helper: Sculptural Fluted Calacatta Marble & Brass Coffee Table + Art Books & Ceramic Bowl
+    const addLuxuryCoffeeTable = (tx: number, tz: number, radius = 0.72) => {
+      const tbl = new THREE.Group();
+      tbl.position.set(tx, 0.49, tz);
+      const ped = new THREE.Mesh(
+        track(new THREE.CylinderGeometry(radius * 0.42, radius * 0.48, 0.34, 24)),
+        calacattaMarbleMat
+      );
+      ped.position.set(0, 0.17, 0);
+      const pedBrass = new THREE.Mesh(
+        track(new THREE.TorusGeometry(radius * 0.46, 0.018, 8, 28)),
+        brassMat
+      );
+      pedBrass.rotation.x = Math.PI / 2;
+      pedBrass.position.set(0, 0.03, 0);
+      const top = new THREE.Mesh(
+        track(new THREE.CylinderGeometry(radius, radius * 0.96, 0.055, 32)),
+        calacattaMarbleMat
+      );
+      top.position.set(0, 0.37, 0);
+      const topRim = new THREE.Mesh(track(new THREE.TorusGeometry(radius, 0.014, 8, 32)), brassMat);
+      topRim.rotation.x = Math.PI / 2;
+      topRim.position.set(0, 0.395, 0);
+      // Stacked Architectural Coffee Table Monographs + Brass Centerpiece Vessel
+      const book1 = new THREE.Mesh(track(new THREE.BoxGeometry(0.32, 0.038, 0.24)), obsidianBasaltMat);
+      book1.position.set(-0.18, 0.415, 0.08);
+      book1.rotation.y = 0.22;
+      const book2 = new THREE.Mesh(track(new THREE.BoxGeometry(0.28, 0.032, 0.21)), creamBoucleMat);
+      book2.position.set(-0.17, 0.45, 0.08);
+      book2.rotation.y = 0.12;
+      const vase = new THREE.Mesh(track(new THREE.SphereGeometry(0.085, 14, 12)), brassMat);
+      vase.scale.set(1, 1.35, 1);
+      vase.position.set(0.22, 0.49, -0.1);
+      tbl.add(ped, pedBrass, top, topRim, book1, book2, vase);
+      interiorGroup.add(tbl);
+    };
+
+    // Service-Specific Bespoke Luxury Designer Suites Inside Each House!
+    if (idx === 0) {
+      // HOUSE 01 (E-Commerce Solutions): Flagship Mayfair Boutique Salon with Marble Counter & Illuminated Crystal Vitrines
+      const counterBase = new THREE.Mesh(track(new THREE.BoxGeometry(2.2, 0.88, 0.78)), calacattaMarbleMat);
+      counterBase.position.set(0, 0.93, -0.55);
+      const brassReveal = new THREE.Mesh(track(new THREE.BoxGeometry(2.22, 0.05, 0.8)), brassMat);
+      brassReveal.position.set(0, 0.52, -0.55);
+      const counterTop = new THREE.Mesh(track(new THREE.BoxGeometry(2.3, 0.06, 0.86)), calacattaMarbleMat);
+      counterTop.position.set(0, 1.39, -0.55);
+      const topBrass = new THREE.Mesh(track(new THREE.BoxGeometry(2.32, 0.025, 0.88)), brassMat);
+      topBrass.position.set(0, 1.43, -0.55);
+      interiorGroup.add(counterBase, brassReveal, counterTop, topBrass);
+
+      // Twin Illuminated Museum Crystal Display Vitrines with Brass Frames & Sculptural Luxury Artifacts
+      [-1.75, 1.75].forEach((px) => {
+        const ped = new THREE.Mesh(track(new THREE.BoxGeometry(0.72, 0.88, 0.72)), obsidianBasaltMat);
+        ped.position.set(px, 0.93, -0.35);
+        const pedBrass = new THREE.Mesh(track(new THREE.BoxGeometry(0.74, 0.03, 0.74)), brassMat);
+        pedBrass.position.set(px, 1.38, -0.35);
+        const vitrine = new THREE.Mesh(track(new THREE.BoxGeometry(0.64, 0.68, 0.64)), interiorGlassTableMat);
+        vitrine.position.set(px, 1.74, -0.35);
+        const riser = new THREE.Mesh(track(new THREE.CylinderGeometry(0.18, 0.2, 0.14, 16)), creamBoucleMat);
+        riser.position.set(px, 1.46, -0.35);
+        const artifact = new THREE.Mesh(track(new THREE.OctahedronGeometry(0.17, 1)), brassMat);
+        artifact.position.set(px, 1.74, -0.35);
+        interiorGroup.add(ped, pedBrass, vitrine, riser, artifact);
+      });
+      // Twin Tufted Cream Boucle Hospitality Poufs for VIP Clients
+      [-0.65, 0.65].forEach((bx) => {
+        const poufBase = new THREE.Mesh(track(new THREE.CylinderGeometry(0.32, 0.3, 0.06, 20)), brassMat);
+        poufBase.position.set(bx, 0.52, 0.45);
+        const poufTop = new THREE.Mesh(track(new THREE.CylinderGeometry(0.33, 0.32, 0.34, 20)), creamBoucleMat);
+        poufTop.position.set(bx, 0.72, 0.45);
+        interiorGroup.add(poufBase, poufTop);
+      });
+    } else if (idx === 1) {
+      // HOUSE 02 (Web Development): Partner's Walnut & Calacatta Marble Atelier + Dual Studio Displays
+      const deskTop = new THREE.Mesh(track(new THREE.BoxGeometry(2.45, 0.075, 0.96)), teakWoodMat);
+      deskTop.position.set(0, 1.24, -0.5);
+      const deskMarbleInlay = new THREE.Mesh(track(new THREE.BoxGeometry(2.38, 0.025, 0.88)), calacattaMarbleMat);
+      deskMarbleInlay.position.set(0, 1.28, -0.5);
+      [-0.88, 0.88].forEach((lx) => {
+        const ped = new THREE.Mesh(track(new THREE.CylinderGeometry(0.14, 0.18, 0.74, 16)), calacattaMarbleMat);
+        ped.position.set(lx, 0.86, -0.5);
+        const pedRing = new THREE.Mesh(track(new THREE.TorusGeometry(0.16, 0.015, 8, 20)), brassMat);
+        pedRing.rotation.x = Math.PI / 2;
+        pedRing.position.set(lx, 0.52, -0.5);
+        interiorGroup.add(ped, pedRing);
+      });
+      // Dual Sleek Studio Displays + Brass Architect's Lamp
+      [-0.46, 0.46].forEach((mx, mi) => {
+        const stand = new THREE.Mesh(track(new THREE.BoxGeometry(0.05, 0.22, 0.05)), brassMat);
+        stand.position.set(mx, 1.4, -0.62);
+        const mon = new THREE.Mesh(track(new THREE.BoxGeometry(0.86, 0.46, 0.035)), brushedTitaniumMat);
+        mon.position.set(mx, 1.58, -0.59);
+        mon.rotation.y = mi === 0 ? 0.14 : -0.14;
+        const glow = new THREE.Mesh(track(new THREE.PlaneGeometry(0.8, 0.4)), displayScreenMat);
+        glow.position.set(mx, 1.58, -0.57);
+        glow.rotation.y = mi === 0 ? 0.14 : -0.14;
+        interiorGroup.add(stand, mon, glow);
+      });
+      const lampBase = new THREE.Mesh(track(new THREE.CylinderGeometry(0.11, 0.13, 0.04, 14)), brassMat);
+      lampBase.position.set(-1.02, 1.31, -0.38);
+      const lampStem = new THREE.Mesh(track(new THREE.CylinderGeometry(0.014, 0.014, 0.42, 8)), brassMat);
+      lampStem.position.set(-1.02, 1.52, -0.38);
+      const lampDome = new THREE.Mesh(track(new THREE.ConeGeometry(0.16, 0.13, 16)), brassMat);
+      lampDome.position.set(-0.98, 1.72, -0.36);
+      interiorGroup.add(deskTop, deskMarbleInlay, lampBase, lampStem, lampDome);
+      addLuxuryChair(0, 0.35, Math.PI, cognacLeatherMat);
+      addLuxuryChair(-1.45, 0.55, 0.55, creamBoucleMat);
+    } else if (idx === 2) {
+      // HOUSE 03 (Branding & Design): Bespoke Mayfair Plush Boucle Curved Sofa Salon & Travertine Coffee Table
+      const sofaPlinth = new THREE.Mesh(track(new THREE.BoxGeometry(2.42, 0.1, 0.92)), teakWoodMat);
+      sofaPlinth.position.set(-0.35, 0.56, -0.98);
+      const sofaSeat = new THREE.Mesh(track(new THREE.BoxGeometry(2.38, 0.24, 0.86)), creamBoucleMat);
+      sofaSeat.position.set(-0.35, 0.72, -0.96);
+      const sofaBack = new THREE.Mesh(track(new THREE.BoxGeometry(2.42, 0.54, 0.22)), creamBoucleMat);
+      sofaBack.position.set(-0.35, 1.04, -1.29);
+      [-1.44, 0.74].forEach((ax) => {
+        const arm = new THREE.Mesh(track(new THREE.BoxGeometry(0.22, 0.42, 0.86)), creamBoucleMat);
+        arm.position.set(ax, 0.94, -0.96);
+        interiorGroup.add(arm);
+      });
+      // Contrasting Silk Terracotta & Brass-Toned Throw Pillows
+      [-1.08, -0.35, 0.38].forEach((px, pi) => {
+        const pil = new THREE.Mesh(
+          track(new THREE.BoxGeometry(0.36, 0.32, 0.12)),
+          pi === 1 ? brassMat : warmTerracottaMat
+        );
+        pil.position.set(px, 0.96, -1.12);
+        pil.rotation.x = -0.22;
+        pil.rotation.z = (pi - 1) * 0.08;
+        interiorGroup.add(pil);
+      });
+      interiorGroup.add(sofaPlinth, sofaSeat, sofaBack);
+      addLuxuryCoffeeTable(-0.32, 0.12, 0.68);
+      addLuxuryChair(1.52, -0.18, -0.58, warmTerracottaMat);
+    } else if (idx === 3) {
+      // HOUSE 04 (Digital Marketing & SEO): Smoked-Glass & Brass Executive Boardroom Suite
+      const confTop = new THREE.Mesh(track(new THREE.BoxGeometry(2.55, 0.065, 1.3)), interiorGlassTableMat);
+      confTop.position.set(0, 1.24, -0.25);
+      const confBrassRim = new THREE.Mesh(track(new THREE.BoxGeometry(2.58, 0.03, 1.33)), brassMat);
+      confBrassRim.position.set(0, 1.21, -0.25);
+      [-0.72, 0.72].forEach((px) => {
+        const ped = new THREE.Mesh(track(new THREE.CylinderGeometry(0.22, 0.26, 0.72, 20)), calacattaMarbleMat);
+        ped.position.set(px, 0.85, -0.25);
+        interiorGroup.add(ped);
+      });
+      // Centerpiece Brass Hospitality Tray & Glass Carafe
+      const tray = new THREE.Mesh(track(new THREE.CylinderGeometry(0.24, 0.22, 0.025, 20)), brassMat);
+      tray.position.set(0, 1.285, -0.25);
+      const carafe = new THREE.Mesh(track(new THREE.CylinderGeometry(0.045, 0.075, 0.24, 14)), interiorGlassTableMat);
+      carafe.position.set(0, 1.41, -0.25);
+      interiorGroup.add(confTop, confBrassRim, tray, carafe);
+      addLuxuryChair(-0.75, 0.62, Math.PI, leatherCharcoalMat);
+      addLuxuryChair(0.75, 0.62, Math.PI, leatherCharcoalMat);
+      addLuxuryChair(-0.75, -1.12, 0, leatherCharcoalMat);
+      addLuxuryChair(0.75, -1.12, 0, leatherCharcoalMat);
+    } else if (idx === 4) {
+      // HOUSE 05 (Web Application Development): Calacatta Waterfall Interactive Design Bar & Stools
+      const island = new THREE.Mesh(track(new THREE.BoxGeometry(2.5, 0.82, 1.05)), calacattaMarbleMat);
+      island.position.set(0, 0.9, -0.35);
+      const brassToe = new THREE.Mesh(track(new THREE.BoxGeometry(2.52, 0.06, 1.07)), brassMat);
+      brassToe.position.set(0, 0.51, -0.35);
+      interiorGroup.add(island, brassToe);
+      [-0.68, 0.68].forEach((tx) => {
+        const easel = new THREE.Mesh(track(new THREE.BoxGeometry(0.32, 0.08, 0.22)), brassMat);
+        easel.position.set(tx, 1.35, -0.35);
+        const tablet = new THREE.Mesh(track(new THREE.BoxGeometry(0.66, 0.44, 0.035)), displayScreenMat);
+        tablet.position.set(tx, 1.5, -0.35);
+        tablet.rotation.x = -0.45;
+        // Boucle Bar Stool with Brass Footrest Ring
+        const stStem = new THREE.Mesh(track(new THREE.CylinderGeometry(0.035, 0.05, 0.6, 10)), brassMat);
+        stStem.position.set(tx, 0.79, 0.58);
+        const stRing = new THREE.Mesh(track(new THREE.TorusGeometry(0.18, 0.014, 8, 24)), brassMat);
+        stRing.rotation.x = Math.PI / 2;
+        stRing.position.set(tx, 0.68, 0.58);
+        const stSeat = new THREE.Mesh(track(new THREE.CylinderGeometry(0.24, 0.22, 0.14, 18)), creamBoucleMat);
+        stSeat.position.set(tx, 1.12, 0.58);
+        interiorGroup.add(easel, tablet, stStem, stRing, stSeat);
+      });
+    } else {
+      // HOUSE 06 (Hosting & Maintenance): Glass & Brass Private Vault Racks + Marble Command Lounge
+      [-2.02, 2.02].forEach((rx) => {
+        const rack = new THREE.Mesh(track(new THREE.BoxGeometry(0.84, 2.28, 0.76)), obsidianBasaltMat);
+        rack.position.set(rx, 1.62, -1.25);
+        const brassTrim = new THREE.Mesh(track(new THREE.BoxGeometry(0.86, 2.3, 0.03)), brassMat);
+        brassTrim.position.set(rx, 1.62, -0.87);
+        const rackGlass = new THREE.Mesh(track(new THREE.BoxGeometry(0.74, 2.14, 0.04)), interiorGlassTableMat);
+        rackGlass.position.set(rx, 1.62, -0.85);
+        interiorGroup.add(rack, brassTrim, rackGlass);
+        for (let b = 0; b < 5; b++) {
+          const led = new THREE.Mesh(
+            track(new THREE.BoxGeometry(0.56, 0.04, 0.04)),
+            b % 2 === 0 ? poolEdgeGlowMat : alabasterGlowMat
+          );
+          led.position.set(rx, 0.94 + b * 0.36, -0.86);
+          interiorGroup.add(led);
+        }
+      });
+      const cmdDesk = new THREE.Mesh(track(new THREE.BoxGeometry(2.05, 0.08, 0.84)), calacattaMarbleMat);
+      cmdDesk.position.set(0, 1.24, -0.25);
+      const cmdBase = new THREE.Mesh(track(new THREE.BoxGeometry(1.45, 0.72, 0.52)), teakWoodMat);
+      cmdBase.position.set(0, 0.85, -0.25);
+      interiorGroup.add(cmdDesk, cmdBase);
+      addLuxuryChair(0, 0.55, Math.PI, leatherCharcoalMat);
+    }
+
+    houseRoot.add(interiorGroup);
 
     // Brushed-Titanium Deep Portal Frame + Vertical Glass Sidelight
     const doorFrameTop = new THREE.Mesh(
@@ -766,14 +1431,14 @@ export function buildServiceHouses(
       plinth.position.set(0, 0.21, -0.35);
       plinth.receiveShadow = quality.shadowsEnabled;
 
-      // Ground-floor dark basalt structural wings flanking the entry portal
-      const gfLeft = new THREE.Mesh(track(new THREE.BoxGeometry(4.1, 3.1, 8.2)), obsidianBasaltMat);
-      gfLeft.position.set(-3.35, 1.96, -0.15);
+      // Ground-floor dark basalt structural wings flanking the wide walk-in studio interior cavity
+      const gfLeft = new THREE.Mesh(track(new THREE.BoxGeometry(2.6, 3.1, 8.2)), obsidianBasaltMat);
+      gfLeft.position.set(-4.12, 1.96, -0.15);
       gfLeft.castShadow = quality.shadowsEnabled;
       gfLeft.receiveShadow = quality.shadowsEnabled;
 
-      const gfRight = new THREE.Mesh(track(new THREE.BoxGeometry(4.1, 3.1, 8.2)), obsidianBasaltMat);
-      gfRight.position.set(3.35, 1.96, -0.15);
+      const gfRight = new THREE.Mesh(track(new THREE.BoxGeometry(2.6, 3.1, 8.2)), obsidianBasaltMat);
+      gfRight.position.set(4.12, 1.96, -0.15);
       gfRight.castShadow = quality.shadowsEnabled;
       gfRight.receiveShadow = quality.shadowsEnabled;
 
@@ -856,14 +1521,14 @@ export function buildServiceHouses(
       const plinth = new THREE.Mesh(track(new THREE.BoxGeometry(11.6, 0.44, 9.2)), travertineMat);
       plinth.position.set(0, 0.22, -0.35);
 
-      // Ground Floor Obsidian Basalt Base
-      const gfLeft = new THREE.Mesh(track(new THREE.BoxGeometry(3.9, 3.15, 8.4)), wallMat);
-      gfLeft.position.set(-3.3, 1.98, -0.2);
+      // Ground Floor Obsidian Basalt Base flanking the open walk-in studio interior
+      const gfLeft = new THREE.Mesh(track(new THREE.BoxGeometry(2.6, 3.15, 8.4)), wallMat);
+      gfLeft.position.set(-4.12, 1.98, -0.2);
       gfLeft.castShadow = quality.shadowsEnabled;
       gfLeft.receiveShadow = quality.shadowsEnabled;
 
-      const gfRight = new THREE.Mesh(track(new THREE.BoxGeometry(4.2, 3.15, 8.4)), wallMat);
-      gfRight.position.set(3.45, 1.98, -0.2);
+      const gfRight = new THREE.Mesh(track(new THREE.BoxGeometry(2.6, 3.15, 8.4)), wallMat);
+      gfRight.position.set(4.12, 1.98, -0.2);
       gfRight.castShadow = quality.shadowsEnabled;
       gfRight.receiveShadow = quality.shadowsEnabled;
 
@@ -945,15 +1610,15 @@ export function buildServiceHouses(
       const plinth = new THREE.Mesh(track(new THREE.BoxGeometry(12.2, 0.42, 9.6)), travertineMat);
       plinth.position.set(0, 0.21, -0.2);
 
-      // Recessed Ground Floor Pearl Limestone & Teak Wings
-      const gfLeft = new THREE.Mesh(track(new THREE.BoxGeometry(4.2, 3.05, 8.4)), wallMat);
-      gfLeft.position.set(-3.45, 1.94, -0.2);
+      // Recessed Ground Floor Pearl Limestone & Teak Wings flanking the open studio interior
+      const gfLeft = new THREE.Mesh(track(new THREE.BoxGeometry(2.65, 3.05, 8.4)), wallMat);
+      gfLeft.position.set(-4.18, 1.94, -0.2);
       gfLeft.castShadow = quality.shadowsEnabled;
       gfLeft.receiveShadow = quality.shadowsEnabled;
 
       // Projecting Right Courtyard Gallery Pavilion clad in Warm Architectural Teak!
-      const teakGallery = new THREE.Mesh(track(new THREE.BoxGeometry(4.1, 3.15, 10.2)), teakWoodMat);
-      teakGallery.position.set(3.75, 1.98, 0.7);
+      const teakGallery = new THREE.Mesh(track(new THREE.BoxGeometry(2.9, 3.15, 10.2)), teakWoodMat);
+      teakGallery.position.set(4.32, 1.98, 0.7);
       teakGallery.castShadow = quality.shadowsEnabled;
       teakGallery.receiveShadow = quality.shadowsEnabled;
 
@@ -1033,26 +1698,26 @@ export function buildServiceHouses(
       plinth.position.set(0, 0.24, -0.35);
       plinth.receiveShadow = quality.shadowsEnabled;
 
-      // Twin Symmetrical Flanking Quartz-Limestone Wings
-      [-4.1, 4.1].forEach((wx) => {
-        const wing = new THREE.Mesh(track(new THREE.BoxGeometry(4.0, 6.35, 8.6)), wallMat);
+      // Twin Symmetrical Flanking Quartz-Limestone Wings cleanly flanking the walk-in studio atrium
+      [-4.55, 4.55].forEach((wx) => {
+        const wing = new THREE.Mesh(track(new THREE.BoxGeometry(3.2, 6.35, 8.6)), wallMat);
         wing.position.set(wx, 3.62, -0.3);
         wing.castShadow = quality.shadowsEnabled;
         wing.receiveShadow = quality.shadowsEnabled;
         houseRoot.add(wing);
 
         // Sleek Mid-Level Horizontal Titanium Band
-        const band = new THREE.Mesh(track(new THREE.BoxGeometry(4.22, 0.2, 8.85)), brushedTitaniumMat);
+        const band = new THREE.Mesh(track(new THREE.BoxGeometry(3.42, 0.2, 8.85)), brushedTitaniumMat);
         band.position.set(wx, 3.62, -0.3);
         houseRoot.add(band);
       });
 
-      // Central Soaring Double-Height Glass Atrium Core rising above the flanking wings!
+      // Central Soaring Upper Atrium Core rising cleanly ABOVE the open ground-floor studio interior!
       const centralCore = new THREE.Mesh(
-        track(new THREE.BoxGeometry(4.6, 7.65, 8.8)),
+        track(new THREE.BoxGeometry(5.8, 4.5, 8.8)),
         obsidianBasaltMat
       );
-      centralCore.position.set(0, 4.3, -0.2);
+      centralCore.position.set(0, 5.88, -0.2);
       centralCore.castShadow = quality.shadowsEnabled;
       houseRoot.add(centralCore);
 
@@ -1126,9 +1791,9 @@ export function buildServiceHouses(
       const plinth = new THREE.Mesh(track(new THREE.BoxGeometry(11.4, 0.44, 9.0)), travertineMat);
       plinth.position.set(0, 0.22, -0.25);
 
-      // Ground Floor Dark Basalt Cubes flanking Entry
-      [-3.35, 3.35].forEach((lx) => {
-        const gf = new THREE.Mesh(track(new THREE.BoxGeometry(4.1, 3.05, 8.4)), obsidianBasaltMat);
+      // Ground Floor Dark Basalt Cubes cleanly flanking the open studio interior
+      [-4.12, 4.12].forEach((lx) => {
+        const gf = new THREE.Mesh(track(new THREE.BoxGeometry(2.6, 3.05, 8.4)), obsidianBasaltMat);
         gf.position.set(lx, 1.96, -0.2);
         gf.castShadow = quality.shadowsEnabled;
         gf.receiveShadow = quality.shadowsEnabled;
@@ -1225,15 +1890,21 @@ export function buildServiceHouses(
       const plinth = new THREE.Mesh(track(new THREE.BoxGeometry(12.0, 0.44, 9.4)), travertineMat);
       plinth.position.set(0, 0.22, -0.2);
 
-      // Left Glacier-White Concrete Studio Volume
-      const leftVolume = new THREE.Mesh(track(new THREE.BoxGeometry(7.2, 5.85, 8.4)), wallMat);
-      leftVolume.position.set(-1.95, 3.35, -0.2);
+      // Left Glacier-White Concrete Ground Wing + Upper Span (keeps central walk-in studio cavity 100% open!)
+      const leftGroundWing = new THREE.Mesh(track(new THREE.BoxGeometry(2.7, 3.15, 8.4)), wallMat);
+      leftGroundWing.position.set(-4.2, 2.0, -0.2);
+      leftGroundWing.castShadow = quality.shadowsEnabled;
+      leftGroundWing.receiveShadow = quality.shadowsEnabled;
+      houseRoot.add(leftGroundWing);
+
+      const leftVolume = new THREE.Mesh(track(new THREE.BoxGeometry(7.2, 2.75, 8.4)), wallMat);
+      leftVolume.position.set(-1.95, 4.92, -0.2);
       leftVolume.castShadow = quality.shadowsEnabled;
       leftVolume.receiveShadow = quality.shadowsEnabled;
 
       // Projecting Right Double-Height Horizontal Walnut Architectural Studio Wing!
-      const walnutWing = new THREE.Mesh(track(new THREE.BoxGeometry(4.6, 6.25, 9.6)), teakWoodMat);
-      walnutWing.position.set(3.55, 3.55, 0.45);
+      const walnutWing = new THREE.Mesh(track(new THREE.BoxGeometry(3.0, 6.25, 9.6)), teakWoodMat);
+      walnutWing.position.set(4.35, 3.55, 0.45);
       walnutWing.castShadow = quality.shadowsEnabled;
       walnutWing.receiveShadow = quality.shadowsEnabled;
 
@@ -1315,13 +1986,14 @@ export function buildServiceHouses(
       roofPeakY = 9.75;
     }
 
-    // Warm Architectural Porch Downlight & Luminous Interior Threshold Light
+    // Warm Architectural Porch Downlight & Interior Studio Chandelier Ceiling Light
     const porchLight = new THREE.PointLight(0xffe0ad, initialDarkMode ? 2.35 : 0.22, 16, 1.55);
     porchLight.position.set(0, 3.05, 5.15);
     houseRoot.add(porchLight);
 
-    const portalLight = new THREE.PointLight(0xffeed1, 0.0, 15, 1.45);
-    portalLight.position.set(0, 1.9, 3.2);
+    // Positioned inside the furnished 3D studio room right beneath the brass ring chandelier!
+    const portalLight = new THREE.PointLight(0xfff0d4, 1.15, 16, 1.35);
+    portalLight.position.set(0, 2.85, 0.15);
     houseRoot.add(portalLight);
 
     // Dedicated Raycast Hitbox covering entire modern luxury villa footprint
@@ -1355,10 +2027,11 @@ export function buildServiceHouses(
       hitbox,
       labelAnchorLocal: [0, roofPeakY + 0.55, 0.6],
       // Generous, spacious architectural establishing framing when clicking/approaching a house
-      outsideCameraLocal: [0, 3.75, 16.6],
-      outsideLookAtLocal: [0, 3.25, 2.2],
-      doorwayCameraLocal: [0, 2.05, 6.4],
-      doorwayLookAtLocal: [0, 1.9, 1.6],
+      outsideCameraLocal: [0, 4.9, 22.8],
+      outsideLookAtLocal: [0, 3.55, 1.8],
+      // Glides right through the open pivot doorway into the palatial luxury 3D penthouse studio interior!
+      doorwayCameraLocal: [0, 1.96, 2.75],
+      doorwayLookAtLocal: [0, 1.72, -2.75],
     });
   });
 

@@ -10,40 +10,40 @@
 
 @layer base {
   :root {
-    --bg-main: #F3F6FA;
+    --bg-main: #F4F8FC;
     --bg-secondary: #FFFFFF;
     --card-bg: #FFFFFF;
-    --card-bg-subtle: #E6EEF8;
+    --card-bg-subtle: #E6F0FA;
     --text-main: #0F172A;
     --text-muted: #475569;
     --border-main: rgba(15, 23, 42, 0.12);
     --border-subtle: rgba(15, 23, 42, 0.06);
-    --border-hover: var(--accent-cyan, #1D4ED8);
-    --accent-cyan: #1D4ED8;
+    --border-hover: var(--accent-cyan, #1D6FD8);
+    --accent-cyan: #1D6FD8;
     --accent-purple: #0284C7;
-    --accent-gradient: linear-gradient(135deg, #2563EB 0%, #0EA5E9 55%, #1E3A8A 100%);
-    --cyber-cyan: #1D4ED8;
+    --accent-gradient: linear-gradient(135deg, #1D6FD8 0%, #0EA5E9 55%, #1E40AF 100%);
+    --cyber-cyan: #1D6FD8;
     --cyber-purple: #0284C7;
-    --glow-color: rgba(37, 99, 235, 0.24);
+    --glow-color: rgba(29, 111, 216, 0.24);
     --border-radius: 16px;
   }
 
   :root.dark {
-    --bg-main: #060913;
-    --bg-secondary: #0C1222;
-    --card-bg: #0C1222;
-    --card-bg-subtle: #131D33;
-    --text-main: #F1F5F9;
-    --text-muted: #94A3B8;
-    --border-main: rgba(56, 189, 248, 0.22);
-    --border-subtle: rgba(241, 245, 249, 0.06);
-    --border-hover: var(--accent-cyan, #38BDF8);
-    --accent-cyan: #38BDF8;
-    --accent-purple: #60A5FA;
-    --accent-gradient: linear-gradient(135deg, #7DD3FC 0%, #38BDF8 45%, #2563EB 100%);
-    --cyber-cyan: #38BDF8;
-    --cyber-purple: #60A5FA;
-    --glow-color: rgba(56, 189, 248, 0.32);
+    --bg-main: #0B0D18;
+    --bg-secondary: #131627;
+    --card-bg: #131627;
+    --card-bg-subtle: #1B1F35;
+    --text-main: #FAF6F0;
+    --text-muted: #B8B2C8;
+    --border-main: rgba(245, 158, 11, 0.24);
+    --border-subtle: rgba(250, 246, 240, 0.07);
+    --border-hover: var(--accent-cyan, #F59E0B);
+    --accent-cyan: #F59E0B;
+    --accent-purple: #FB923C;
+    --accent-gradient: linear-gradient(135deg, #FDE68A 0%, #F59E0B 48%, #EA580C 100%);
+    --cyber-cyan: #F59E0B;
+    --cyber-purple: #FB923C;
+    --glow-color: rgba(245, 158, 11, 0.34);
     --border-radius: 16px;
   }
 
@@ -183,4 +183,32 @@
 
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(148, 163, 184, 0.5);
+}
+
+/* Instant tap/click responsiveness across desktop & mobile (zero 300ms delay) */
+a,
+button,
+[role="button"],
+input[type="submit"],
+input[type="button"],
+select {
+  touch-action: manipulation;
+}
+
+button:not(:disabled):active,
+[role="button"]:active {
+  transform: scale(0.98);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

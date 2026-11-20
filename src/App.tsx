@@ -3,8 +3,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { HelmetProvider } from 'react-helmet-async';
+import { motion } from 'motion/react';
 import { ThemeProvider } from './context/ThemeContext.tsx';
 import { CustomizationProvider } from './context/CustomizationContext.tsx';
 import { ScrollProgress } from './components/ScrollProgress.tsx';
@@ -12,40 +13,44 @@ import { CustomCursor } from './components/CustomCursor.tsx';
 import { Navbar } from './components/Navbar.tsx';
 import { Footer } from './components/Footer.tsx';
 import { CookieConsent } from './components/CookieConsent.tsx';
-import { RealtimePresence } from './components/realtime/RealtimePresence.tsx';
 import { AnalyticsTracker } from './components/AnalyticsTracker.tsx';
 import { LivePreviewBar } from './components/LivePreviewBar.tsx';
-import { ThemeStudioModal } from './components/ThemeStudioModal.tsx';
 
+// Eager initial landing page; code-split secondary routes & heavy modals for instant first paint
 import { HomePage } from './pages/HomePage.tsx';
-import { ServicesPage } from './pages/ServicesPage.tsx';
-import { ServiceDetailPage } from './pages/ServiceDetailPage.tsx';
-import { AboutPage } from './pages/AboutPage.tsx';
-import { PortfolioPage } from './pages/PortfolioPage.tsx';
-import { PricingPage } from './pages/PricingPage.tsx';
-import { ProcessPage } from './pages/ProcessPage.tsx';
-import { FAQPage } from './pages/FAQPage.tsx';
-import { ContactPage } from './pages/ContactPage.tsx';
-import { EstimatorPage } from './pages/EstimatorPage.tsx';
-import { StandardsPage } from './pages/StandardsPage.tsx';
-import { PrivacyPolicyPage } from './pages/PrivacyPolicyPage.tsx';
-import { TermsPage } from './pages/TermsPage.tsx';
-import { AdminPage } from './pages/AdminPage.tsx';
-import { NotFoundPage } from './pages/NotFoundPage.tsx';
-import { useVisitorTracker } from './hooks/useVisitorTracker.ts';
+
+const ServicesPage = lazy(() => import('./pages/ServicesPage.tsx').then((m) => ({ default: m.ServicesPage })));
+const ServiceDetailPage = lazy(() => import('./pages/ServiceDetailPage.tsx').then((m) => ({ default: m.ServiceDetailPage })));
+const AboutPage = lazy(() => import('./pages/AboutPage.tsx').then((m) => ({ default: m.AboutPage })));
+const PortfolioPage = lazy(() => import('./pages/PortfolioPage.tsx').then((m) => ({ default: m.PortfolioPage })));
+const PricingPage = lazy(() => import('./pages/PricingPage.tsx').then((m) => ({ default: m.PricingPage })));
+const ProcessPage = lazy(() => import('./pages/ProcessPage.tsx').then((m) => ({ default: m.ProcessPage })));
+const FAQPage = lazy(() => import('./pages/FAQPage.tsx').then((m) => ({ default: m.FAQPage })));
+const ContactPage = lazy(() => import('./pages/ContactPage.tsx').then((m) => ({ default: m.ContactPage })));
+const EstimatorPage = lazy(() => import('./pages/EstimatorPage.tsx').then((m) => ({ default: m.EstimatorPage })));
+const StandardsPage = lazy(() => import('./pages/StandardsPage.tsx').then((m) => ({ default: m.StandardsPage })));
+const PrivacyPolicyPage = lazy(() => import('./pages/PrivacyPolicyPage.tsx').then((m) => ({ default: m.PrivacyPolicyPage })));
+const TermsPage = lazy(() => import('./pages/TermsPage.tsx').then((m) => ({ default: m.TermsPage })));
+const AdminPage = lazy(() => import('./pages/AdminPage.tsx').then((m) => ({ default: m.AdminPage })));
+const NotFoundPage = lazy(() => import('./pages/NotFoundPage.tsx').then((m) => ({ default: m.NotFoundPage })));
+const ThemeStudioModal = lazy(() => import('./components/ThemeStudioModal.tsx').then((m) => ({ default: m.ThemeStudioModal })));
 
 function normalizePath(rawPath: string): string {
   if (!rawPath) return '/';
   let cleaned = rawPath.trim();
-  // Remove hash/search if passed as full pathname
   if (cleaned.includes('?')) cleaned = cleaned.split('?')[0];
   if (cleaned.includes('#') && !cleaned.startsWith('/#')) cleaned = cleaned.split('#')[0];
-  // Remove trailing slash unless root
   if (cleaned.length > 1 && cleaned.endsWith('/')) {
     cleaned = cleaned.slice(0, -1);
   }
   return cleaned.toLowerCase() || '/';
 }
+
+const PageChunkFallback: React.FC = () => (
+  <div className="min-h-[65vh] w-full flex items-center justify-center pt-28">
+    <div className="w-7 h-7 rounded-full border-2 border-[#38BDF8]/30 border-t-[#38BDF8] animate-spin" />
+  </div>
+);
 
 function AppContent() {
   const [isThemeStudioOpen, setIsThemeStudioOpen] = useState(false);
@@ -56,8 +61,27 @@ function AppContent() {
     return '/';
   });
 
-  // Advanced real-time visitor telemetry tracking
-  useVisitorTracker(currentPath);
+  // Idle-prefetch primary navigation chunks so route transitions feel instant
+  useEffect(() => {
+    const prefetchCoreRoutes = () => {
+      import('./pages/PortfolioPage.tsx').catch(() => {});
+      import('./pages/ServicesPage.tsx').catch(() => {});
+      import('./pages/EstimatorPage.tsx').catch(() => {});
+      import('./pages/AboutPage.tsx').catch(() => {});
+    };
+
+    const w = window as unknown as {
+      requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => number;
+      cancelIdleCallback?: (id: number) => void;
+    };
+
+    if (typeof w.requestIdleCallback === 'function') {
+      const id = w.requestIdleCallback(prefetchCoreRoutes, { timeout: 2200 });
+      return () => w.cancelIdleCallback?.(id);
+    }
+    const timer = window.setTimeout(prefetchCoreRoutes, 1500);
+    return () => window.clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     const handlePopState = () => {
@@ -90,7 +114,7 @@ function AppContent() {
         setTimeout(() => {
           const el = document.getElementById(targetId);
           el?.scrollIntoView({ behavior: 'smooth' });
-        }, 100);
+        }, 80);
       } else {
         const el = document.getElementById(targetId);
         el?.scrollIntoView({ behavior: 'smooth' });
@@ -102,7 +126,7 @@ function AppContent() {
     if (normalizedTarget !== currentPath) {
       window.history.pushState({}, '', path);
       setCurrentPath(normalizedTarget);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      window.scrollTo({ top: 0, behavior: 'auto' });
     } else {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -176,14 +200,11 @@ function AppContent() {
       {/* Scroll Progress Indicator */}
       <ScrollProgress />
 
-      {/* Global Real-Time Visitor Analytics Tracker */}
+      {/* Consolidated Real-Time Visitor Analytics Tracker */}
       <AnalyticsTracker currentPath={currentPath} />
 
       {/* Desktop Custom Cursor */}
       <CustomCursor />
-
-      {/* Architecture readiness for future realtime */}
-      <RealtimePresence enabled={false} />
 
       {/* Floating Interactive Live Theme Preview Controller */}
       <LivePreviewBar
@@ -199,19 +220,33 @@ function AppContent() {
         onOpenThemeStudio={() => setIsThemeStudioOpen(true)}
       />
 
-      {/* Main Page Viewport */}
+      {/* Main Page Viewport with Crisp GPU-Composited Page Transitions */}
       <main className="flex-1 w-full max-w-full overflow-x-clip relative">
-        {renderCurrentPage()}
+        <Suspense fallback={<PageChunkFallback />}>
+          <motion.div
+            key={currentPath}
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
+            className="w-full"
+          >
+            {renderCurrentPage()}
+          </motion.div>
+        </Suspense>
       </main>
 
       {/* Footer */}
       <Footer onNavigate={handleNavigate} />
 
-      {/* WordPress & Shopify Grade 100 Themes & 115 Fonts Studio Modal */}
-      <ThemeStudioModal
-        isOpen={isThemeStudioOpen}
-        onClose={() => setIsThemeStudioOpen(false)}
-      />
+      {/* WordPress & Shopify Grade 100 Themes & 115 Fonts Studio Modal (loaded only when opened) */}
+      {isThemeStudioOpen && (
+        <Suspense fallback={null}>
+          <ThemeStudioModal
+            isOpen={isThemeStudioOpen}
+            onClose={() => setIsThemeStudioOpen(false)}
+          />
+        </Suspense>
+      )}
 
       {/* GDPR / UK DPA Cookie Consent Banner */}
       <CookieConsent />

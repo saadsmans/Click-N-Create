@@ -6897,6 +6897,64 @@
           "dwellSeconds": 1
         }
       ]
+    },
+    {
+      "id": "log_1795180186785_yvp0",
+      "sessionId": "sess_1795019052802_oq3nx",
+      "path": "/admin",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "tablet",
+      "browser": "Chrome",
+      "os": "Windows",
+      "screen": "998x550",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Organic Search",
+      "localTime": "06:39:46 PM",
+      "timestamp": "2026-11-20T13:09:46.786Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-11-18T16:24:14.823Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/admin",
+          "timestamp": "2026-11-20T13:09:46.785Z",
+          "dwellSeconds": 1
+        }
+      ]
+    },
+    {
+      "id": "log_1795180186796_l7re",
+      "sessionId": "sess_1795019052802_oq3nx",
+      "path": "/admin",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "desktop",
+      "browser": "Google Chrome",
+      "os": "Windows",
+      "screen": "1536x864",
+      "referrer": "https://aistudio.google.com/",
+      "source": "Google Search",
+      "localTime": "06:39 PM",
+      "timestamp": "2026-11-20T13:09:46.796Z",
+      "dwellTimeSeconds": 1,
+      "pageHistory": [
+        {
+          "path": "/",
+          "timestamp": "2026-11-18T16:24:14.823Z",
+          "dwellSeconds": 1
+        },
+        {
+          "path": "/admin",
+          "timestamp": "2026-11-20T13:09:46.796Z",
+          "dwellSeconds": 1
+        }
+      ]
     }
   ],
   "activeSessions": {
@@ -7492,7 +7550,7 @@
     },
     "sess_1795019052802_oq3nx": {
       "sessionId": "sess_1795019052802_oq3nx",
-      "path": "/",
+      "path": "/admin",
       "country": "India",
       "countryCode": "IN",
       "city": "Mumbai",
@@ -7500,12 +7558,30 @@
       "browser": "Google Chrome",
       "os": "Windows",
       "source": "Google Search",
-      "lastSeen": 1795020606843,
+      "lastSeen": 1795180306787,
       "startedAt": "2026-11-18T16:24:14.823Z",
+      "pageHistory": [
+        "/",
+        "/admin"
+      ],
+      "totalDwellSeconds": 120
+    },
+    "sess_1795176707278_75me3": {
+      "sessionId": "sess_1795176707278_75me3",
+      "path": "/",
+      "country": "India",
+      "countryCode": "IN",
+      "city": "Mumbai",
+      "device": "mobile",
+      "browser": "Browser Client",
+      "os": "Desktop / Mobile",
+      "source": "Direct Traffic",
+      "lastSeen": 1795180005179,
+      "startedAt": "2026-11-20T13:06:45.179Z",
       "pageHistory": [
         "/"
       ],
-      "totalDwellSeconds": 816
+      "totalDwellSeconds": 17
     }
   },
   "auditLogs": [
@@ -7556,6 +7632,16 @@
     }
   ],
   "activeUserSessions": [
+    {
+      "id": "sess_1795180190717",
+      "email": "mansurisaad28012@gmail.com",
+      "device": "Desktop / Authorized Workstation",
+      "browser": "Secure Admin Session",
+      "os": "Admin Environment",
+      "ip": "127.0.0.1 (Direct)",
+      "lastActive": "2026-11-20T13:09:50.717Z",
+      "token": "saad_adm_1795180190717_g7mxqpsn"
+    },
     {
       "id": "sess_1791381011665",
       "email": "admin@clickncreate.co.uk",
