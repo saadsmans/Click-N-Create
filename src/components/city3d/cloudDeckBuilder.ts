@@ -9,15 +9,17 @@ export interface CloudDeckBuildResult {
     cameraQuat: THREE.Quaternion
   ) => void;
   setTheme: (isDark: boolean) => void;
+  setThemeFactor: (darkT: number) => void;
   dispose: () => void;
 }
 
 /**
- * Generates a high-resolution 512x512 photorealistic volumetric cumulus cloud puff sprite
- * using multi-octave procedural FBM noise with sunlit cauliflower tops & softly shadowed undersides.
+ * Generates a high-resolution photorealistic volumetric cumulus cloud puff sprite
+ * (1024x1024 on desktop/tablet highRes, 512x512 on mobile) using 5-octave FBM noise
+ * with sunlit cauliflower tops & softly shadowed undersides.
  */
-function createPhotorealCumulusTexture(): THREE.CanvasTexture {
-  const size = 512;
+function createPhotorealCumulusTexture(highRes = true): THREE.CanvasTexture {
+  const size = highRes ? 1024 : 512;
   const canvas = document.createElement('canvas');
   canvas.width = size;
   canvas.height = size;
@@ -97,7 +99,10 @@ function createPhotorealCumulusTexture(): THREE.CanvasTexture {
  * plunges deeply through 5 parting volumetric cumulus canyons across scroll 0% -> 24%,
  * and breaks cleanly beneath the cloud base into a sweeping collision-free Whole-City Panorama.
  */
-export function buildCloudDescentDeck(initialDarkMode = false): CloudDeckBuildResult {
+export function buildCloudDescentDeck(
+  initialDarkMode = false,
+  highRes = true
+): CloudDeckBuildResult {
   const group = new THREE.Group();
   group.name = 'photorealistic-deep-volumetric-cloud-deck';
 
@@ -107,22 +112,22 @@ export function buildCloudDescentDeck(initialDarkMode = false): CloudDeckBuildRe
     return item;
   };
 
-  const cloudTex = track(createPhotorealCumulusTexture());
+  const cloudTex = track(createPhotorealCumulusTexture(highRes));
 
   // Custom GLSL ShaderMaterial:
-  // - Light Mode: Crisp bright white sunlit cumulus tops & soft azure-cerulean undersides (matching daytime reference)
-  // - Dark/Sunset Mode: Dramatic backlit deep violet-plum cloud silhouettes with glowing fiery coral-apricot-amber sunset rims (matching sunset reference)
+  // - Light Mode: Crisp warm-ivory cumulus tops with soft natural slate-taupe undersides (zero cyan wash)
+  // - Dark Mode: Cinematic deep midnight-navy clouds with silver-slate moonlight rim & warm amber city up-glow
   const cloudUniforms = {
     uMap: { value: cloudTex },
     uTime: { value: 0 },
     uIsDark: { value: initialDarkMode ? 1.0 : 0.0 },
     uGlobalFade: { value: 1.0 },
-    uSunColor: { value: new THREE.Color(0xffffff) },
-    uShadowColor: { value: new THREE.Color(0x88bef2) },
-    uSunsetRimColor: { value: new THREE.Color(0xff8e42) },
-    uSunsetGlowColor: { value: new THREE.Color(0xff6230) },
-    uSunsetBodyColor: { value: new THREE.Color(0x4b355c) },
-    uSunsetShadowColor: { value: new THREE.Color(0x231a38) },
+    uSunColor: { value: new THREE.Color(0xfcf7eb) },
+    uShadowColor: { value: new THREE.Color(0x7c8fa6) },
+    uNightRimColor: { value: new THREE.Color(0x6d8bb5) },
+    uNightGlowColor: { value: new THREE.Color(0xe69c4a) },
+    uNightBodyColor: { value: new THREE.Color(0x131d34) },
+    uNightShadowColor: { value: new THREE.Color(0x080f1f) },
   };
 
   const cloudMat = track(
@@ -148,10 +153,10 @@ export function buildCloudDescentDeck(initialDarkMode = false): CloudDeckBuildRe
         uniform float uGlobalFade;
         uniform vec3 uSunColor;
         uniform vec3 uShadowColor;
-        uniform vec3 uSunsetRimColor;
-        uniform vec3 uSunsetGlowColor;
-        uniform vec3 uSunsetBodyColor;
-        uniform vec3 uSunsetShadowColor;
+        uniform vec3 uNightRimColor;
+        uniform vec3 uNightGlowColor;
+        uniform vec3 uNightBodyColor;
+        uniform vec3 uNightShadowColor;
 
         varying vec2 vUv;
         varying float vCamDist;
@@ -168,30 +173,27 @@ export function buildCloudDescentDeck(initialDarkMode = false): CloudDeckBuildRe
           // Altitude gradient: upper stratospheric clouds catch bright open sky light
           float altBoost = smoothstep(130.0, 380.0, vWorldY);
 
-          // LIGHT MODE: Pure sunlit Mediterranean cumulus (crisp white tops, airy azure shadows)
-          vec3 dayCol = mix(uShadowColor, uSunColor, smoothstep(0.14, 0.80, topLit));
-          dayCol += vec3(0.05, 0.06, 0.07) * altBoost;
-          float dayEdgeRim = (1.0 - alpha) * smoothstep(0.24, 0.88, topLit) * 0.28;
-          dayCol += vec3(1.0, 1.0, 1.0) * dayEdgeRim;
+          // LIGHT MODE: Warm ivory cumulus tops with natural slate-taupe shadows
+          vec3 dayCol = mix(uShadowColor, uSunColor, smoothstep(0.14, 0.78, topLit));
+          dayCol += vec3(0.04, 0.035, 0.025) * altBoost;
+          float dayEdgeRim = (1.0 - alpha) * smoothstep(0.24, 0.88, topLit) * 0.22;
+          dayCol += vec3(0.99, 0.97, 0.92) * dayEdgeRim;
 
-          // DARK / SUNSET MODE: Dramatic backlit plum-indigo clouds with blazing coral-amber underside & rim fire!
-          float bellyLit = 1.0 - smoothstep(0.15, 0.78, topLit);
-          vec3 sunsetCol = mix(uSunsetBodyColor, uSunsetShadowColor, smoothstep(0.22, 0.86, topLit));
-          // Fiery glowing apricot-orange rim around thin backlit cloud edges
-          float sunsetEdge = (1.0 - alpha) * (0.42 + bellyLit * 0.58);
-          sunsetCol += uSunsetRimColor * sunsetEdge * 1.15;
-          // Warm coral-gold sunset light illuminating cloud undersides from the low setting sun
-          float lowAltitudeGlow = smoothstep(370.0, 135.0, vWorldY);
-          sunsetCol += mix(uSunsetGlowColor, uSunsetRimColor, nDetail) * bellyLit * (0.42 + lowAltitudeGlow * 0.44);
+          // DARK MODE: Deep midnight navy clouds with silver moonlight rim & warm amber skyline up-glow
+          float bellyLit = 1.0 - smoothstep(0.18, 0.80, topLit);
+          vec3 nightCol = mix(uNightShadowColor, uNightBodyColor, smoothstep(0.18, 0.82, topLit));
+          float nightEdge = (1.0 - alpha) * (0.28 + topLit * 0.44);
+          nightCol += uNightRimColor * nightEdge * 0.42;
+          float lowAltitudeGlow = smoothstep(350.0, 130.0, vWorldY);
+          nightCol += uNightGlowColor * bellyLit * lowAltitudeGlow * (0.24 + nDetail * 0.22);
 
-          vec3 col = mix(dayCol, sunsetCol, uIsDark);
+          vec3 col = mix(dayCol, nightCol, uIsDark);
           col *= (0.94 + nDetail * 0.11);
 
-          // Silky-smooth proximity dissolve as the camera plunges deep through each cumulus stratum
           float nearFade = smoothstep(12.0, 52.0, vCamDist);
           float farFade = 1.0 - smoothstep(520.0, 960.0, vCamDist);
 
-          float outAlpha = alpha * nearFade * farFade * uGlobalFade * 0.92;
+          float outAlpha = alpha * nearFade * farFade * uGlobalFade * 0.9;
           if (outAlpha < 0.005) discard;
           gl_FragColor = vec4(col, outAlpha);
         }
@@ -207,7 +209,7 @@ export function buildCloudDescentDeck(initialDarkMode = false): CloudDeckBuildRe
     uMap: { value: cloudTex },
     uTime: { value: 0 },
     uOpacity: { value: 0.0 },
-    uColor: { value: new THREE.Color(initialDarkMode ? 0x3b2640 : 0xeef7ff) },
+    uColor: { value: new THREE.Color(initialDarkMode ? 0x0c1426 : 0xe4dfd4) },
   };
   const mistMat = track(
     new THREE.ShaderMaterial({
@@ -517,15 +519,24 @@ export function buildCloudDescentDeck(initialDarkMode = false): CloudDeckBuildRe
     }
   };
 
+  const _dayMistColor = new THREE.Color(0xe4dfd4);
+  const _nightMistColor = new THREE.Color(0x0c1426);
+
+  const setThemeFactor = (darkT: number) => {
+    const t = THREE.MathUtils.clamp(darkT, 0, 1);
+    cloudUniforms.uIsDark.value = t;
+    mistUniforms.uColor.value.copy(_dayMistColor).lerp(_nightMistColor, t);
+  };
+
   const setTheme = (isDark: boolean) => {
-    cloudUniforms.uIsDark.value = isDark ? 1.0 : 0.0;
-    mistUniforms.uColor.value.setHex(isDark ? 0x3b2640 : 0xeef7ff);
+    setThemeFactor(isDark ? 1.0 : 0.0);
   };
 
   return {
     group,
     update,
     setTheme,
+    setThemeFactor,
     dispose: () => {
       disposables.forEach((d) => d.dispose());
     },

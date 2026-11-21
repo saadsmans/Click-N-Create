@@ -10,6 +10,7 @@ import { ServiceItem } from '../../data/services.ts';
 import { buildCloudDescentDeck, CloudDeckBuildResult } from './cloudDeckBuilder.ts';
 import { buildArchitecturalCity, CityBuildResult } from './cityBuilder.ts';
 import { buildServiceHouses, HousesBuildResult } from './serviceHousesBuilder.ts';
+import { createArchVizEnvironmentTexture } from './proceduralTextures.ts';
 import { detectQualityProfile, ExplorationPhase, HOUSE_TOUR_PROGRESS } from './types.ts';
 
 export { HOUSE_TOUR_PROGRESS };
@@ -42,10 +43,20 @@ const _hLook = new THREE.Vector3();
 const _pointerNdc = new THREE.Vector2();
 const _raycaster = new THREE.Raycaster();
 const _bgColor = new THREE.Color();
-const _cloudDayColor = new THREE.Color(0x6eb9fa);
-const _cloudNightColor = new THREE.Color(0x3a2648);
-const _cityDayColor = new THREE.Color(0x9bd2fc);
-const _cityNightColor = new THREE.Color(0x281e3b);
+const _cloudDayColor = new THREE.Color(0xc5d0dc);
+const _cloudNightColor = new THREE.Color(0x080f20);
+const _cityDayColor = new THREE.Color(0xddd6c8);
+const _cityNightColor = new THREE.Color(0x0c1528);
+const _curCloudColor = new THREE.Color();
+const _curCityColor = new THREE.Color();
+const _dayHemiSky = new THREE.Color(0xa8c6de);
+const _nightHemiSky = new THREE.Color(0x2b4570);
+const _dayHemiGround = new THREE.Color(0x454a36);
+const _nightHemiGround = new THREE.Color(0x131822);
+const _dayKeyColor = new THREE.Color(0xfff0d4);
+const _nightKeyColor = new THREE.Color(0x7699cc);
+const _dayRimColor = new THREE.Color(0xeddcc0);
+const _nightRimColor = new THREE.Color(0xf0a64c);
 
 /**
  * Cinema-Grade Optical Clarity & Filmic Finishing Shader:
@@ -58,7 +69,7 @@ const OpticalClarityShader = {
   uniforms: {
     tDiffuse: { value: null },
     uResolution: { value: new THREE.Vector2(1920, 1080) },
-    uSharpness: { value: 0.38 },
+    uSharpness: { value: 0.24 },
     uDarkMode: { value: 1.0 },
   },
   vertexShader: /* glsl */ `
@@ -105,14 +116,14 @@ const OpticalClarityShader = {
       vec3 sCurve = sharp * sharp * (3.0 - 2.0 * sharp);
       vec3 graded = mix(sharp, sCurve, 0.15);
 
-      // Subtle architectural cinema split-tone (crisp daylight azure vs golden-hour twilight warmth)
+      // Refined neo-luxury architectural split-tone (crisp neutral-warm ivory daylight vs midnight navy + warm bronze/amber night)
       float luma = dot(graded, vec3(0.2126, 0.7152, 0.0722));
-      vec3 shadowTint = mix(vec3(0.97, 0.99, 1.03), vec3(0.97, 0.94, 1.04), uDarkMode);
-      vec3 highTint   = mix(vec3(1.02, 1.005, 0.985), vec3(1.04, 0.99, 0.94), uDarkMode);
-      graded *= mix(shadowTint, highTint, smoothstep(0.18, 0.85, luma));
+      vec3 shadowTint = mix(vec3(0.96, 0.98, 1.02), vec3(0.93, 0.96, 1.03), uDarkMode);
+      vec3 highTint   = mix(vec3(1.02, 1.005, 0.98), vec3(1.05, 0.99, 0.91), uDarkMode);
+      graded *= mix(shadowTint, highTint, smoothstep(0.16, 0.84, luma));
 
       // Gentle optical cinema lens vignette + sub-LSB dither to keep sky gradients silky-smooth
-      float vig = 1.0 - r2 * mix(0.14, 0.22, uDarkMode);
+      float vig = 1.0 - r2 * mix(0.14, 0.2, uDarkMode);
       vec3 outCol = graded * vig + ditherNoise(vUv * uResolution) * (1.0 / 255.0);
       gl_FragColor = vec4(clamp(outCol, 0.0, 1.0), 1.0);
     }
@@ -252,12 +263,17 @@ export const CityServicesViewport: React.FC<CityServicesViewportProps> = ({
 
   const houseRefsStore = useRef<HousesBuildResult['houses']>([]);
   const activeTimelineRef = useRef<gsap.core.Timeline | null>(null);
+  const themeBlendRef = useRef({ t: isDarkMode ? 1 : 0 });
+  const themeTweenRef = useRef<gsap.core.Tween | null>(null);
 
   const sceneThemeControlRef = useRef<{
     scene: THREE.Scene;
     renderer: THREE.WebGLRenderer;
+    dayEnvRT: THREE.WebGLRenderTarget;
+    nightEnvRT: THREE.WebGLRenderTarget;
     hemiLight: THREE.HemisphereLight;
     keyLight: THREE.DirectionalLight;
+    keyLightOffset: THREE.Vector3;
     rimLight: THREE.DirectionalLight;
     plazaFillLight: THREE.PointLight;
     bloomPass: UnrealBloomPass | null;
@@ -268,6 +284,7 @@ export const CityServicesViewport: React.FC<CityServicesViewportProps> = ({
     housesResult: HousesBuildResult;
     baseKeyIntensity: number;
     baseHemiIntensity: number;
+    forceShadowRefresh: () => void;
   } | null>(null);
 
   useEffect(() => {
@@ -312,7 +329,7 @@ export const CityServicesViewport: React.FC<CityServicesViewportProps> = ({
 
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.toneMapping = THREE.AgXToneMapping;
-    renderer.toneMappingExposure = initDark ? 1.12 : 1.05;
+    renderer.toneMappingExposure = initDark ? 1.04 : 0.92;
     renderer.setPixelRatio(quality.pixelRatio);
     renderer.setSize(initW, initH);
     renderer.shadowMap.enabled = quality.shadowsEnabled;
@@ -326,15 +343,29 @@ export const CityServicesViewport: React.FC<CityServicesViewportProps> = ({
     renderer.domElement.style.height = '100%';
     container.appendChild(renderer.domElement);
 
-    // 2. Clean Scene starting ultra-high ABOVE the 5-strata volumetric cloud ocean (No HDR environment map)
+    // 2. Scene + Procedural ArchViz PMREM Image-Based Lighting (zero external HDR network fetches)
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(initDark ? 0x281e3b : 0x7ac0fa);
-    scene.fog = new THREE.Fog(initDark ? 0x2a1f3d : 0xa5d5fc, 340, 1180);
+    scene.background = new THREE.Color(initDark ? 0x0c1528 : 0xddd6c8);
+    scene.fog = new THREE.Fog(initDark ? 0x0c1528 : 0xddd6c8, 360, 1220);
+
+    const highRes = quality.tier === 'desktop' || quality.tier === 'tablet';
+    const pmremGenerator = new THREE.PMREMGenerator(renderer);
+    pmremGenerator.compileEquirectangularShader();
+
+    const dayEnvSrc = createArchVizEnvironmentTexture(false, highRes);
+    const nightEnvSrc = createArchVizEnvironmentTexture(true, highRes);
+    const dayEnvRT = pmremGenerator.fromEquirectangular(dayEnvSrc);
+    const nightEnvRT = pmremGenerator.fromEquirectangular(nightEnvSrc);
+    dayEnvSrc.dispose();
+    nightEnvSrc.dispose();
+
+    scene.environment = initDark ? nightEnvRT.texture : dayEnvRT.texture;
+    scene.environmentIntensity = initDark ? 0.72 : 0.85;
 
     const camera = new THREE.PerspectiveCamera(44, initW / initH, 0.25, 1620);
     camera.position.set(0, 392, 365);
 
-    // Lightweight Atmospheric Sky Gradient Backdrop (Pure visual sky gradient & setting sun disc — NO HDR envMap!)
+    // Atmospheric Sky Gradient Backdrop Sphere
     const skyBackdropUniforms = {
       uIsDark: { value: initDark ? 1.0 : 0.0 },
     };
@@ -361,38 +392,38 @@ export const CityServicesViewport: React.FC<CityServicesViewportProps> = ({
           float h = clamp(dir.y, -0.15, 1.0);
           float elev = clamp(dir.y, 0.0, 1.0);
 
-          // LIGHT MODE: Crisp bright azure sky matching reference daytime photo!
-          vec3 dayHorizon = vec3(0.78, 0.90, 1.0);
-          vec3 dayMid     = vec3(0.38, 0.71, 0.98);
-          vec3 dayZenith  = vec3(0.16, 0.50, 0.91);
+          // LIGHT MODE: Natural refined cerulean zenith -> clear architectural sky -> warm ivory-sandstone horizon haze
+          vec3 dayHorizon = vec3(0.86, 0.82, 0.74);
+          vec3 dayMid     = vec3(0.42, 0.62, 0.80);
+          vec3 dayZenith  = vec3(0.14, 0.32, 0.56);
           vec3 daySky = mix(dayHorizon, dayMid, smoothstep(0.0, 0.28, elev));
-          daySky = mix(daySky, dayZenith, smoothstep(0.24, 0.78, elev));
+          daySky = mix(daySky, dayZenith, smoothstep(0.22, 0.78, elev));
           vec3 daySunDir = normalize(vec3(0.45, 0.48, -0.75));
           float daySunAmt = max(0.0, dot(dir, daySunDir));
-          daySky += vec3(1.0, 0.98, 0.92) * pow(daySunAmt, 24.0) * 0.28;
+          daySky += vec3(1.0, 0.94, 0.82) * pow(daySunAmt, 24.0) * 0.24;
 
-          // DARK / SUNSET MODE: Exact golden-hour twilight gradient from the user's sunset photo!
-          // Blazing apricot-orange horizon -> coral-rose -> dusty plum -> deep violet-indigo zenith
-          vec3 sunHorizon = vec3(1.0, 0.49, 0.16);
-          vec3 sunCoral   = vec3(0.86, 0.34, 0.27);
-          vec3 sunPlum    = vec3(0.39, 0.25, 0.43);
-          vec3 sunZenith  = vec3(0.12, 0.11, 0.24);
+          // DARK MODE: Deep midnight navy zenith -> dusk indigo mid -> warm amber-lit skyline horizon
+          vec3 nightHorizon = vec3(0.078, 0.118, 0.215);
+          vec3 nightMid     = vec3(0.038, 0.070, 0.148);
+          vec3 nightZenith  = vec3(0.014, 0.026, 0.062);
+          vec3 nightSky = mix(nightHorizon, nightMid, smoothstep(0.0, 0.24, elev));
+          nightSky = mix(nightSky, nightZenith, smoothstep(0.22, 0.74, elev));
 
-          vec3 sunsetSky = mix(sunHorizon, sunCoral, smoothstep(0.0, 0.14, elev));
-          sunsetSky = mix(sunsetSky, sunPlum, smoothstep(0.12, 0.34, elev));
-          sunsetSky = mix(sunsetSky, sunZenith, smoothstep(0.30, 0.76, elev));
+          // Warm amber/champagne skyline atmospheric bounce along the lower horizon
+          float cityBand = exp(-elev * 14.0);
+          nightSky += vec3(0.90, 0.58, 0.26) * cityBand * 0.14;
 
-          // Low glowing golden setting sun disc right above the distant skyline horizon!
-          vec3 sunsetSunDir = normalize(vec3(0.18, 0.068, -0.98));
-          float sunDot = max(0.0, dot(dir, sunsetSunDir));
-          float sunDisc = smoothstep(0.99915, 0.99968, sunDot);
-          float sunHalo = pow(sunDot, 18.0) * 0.62 + pow(sunDot, 5.0) * 0.26;
-          sunsetSky += vec3(1.0, 0.62, 0.22) * sunHalo;
-          sunsetSky = mix(sunsetSky, vec3(1.0, 0.96, 0.72), sunDisc);
+          // Crisp moonlight disc & subtle cool atmospheric halo
+          vec3 moonDir = normalize(vec3(0.22, 0.18, -0.95));
+          float moonDot = max(0.0, dot(dir, moonDir));
+          float moonDisc = smoothstep(0.99935, 0.99972, moonDot);
+          float moonHalo = pow(moonDot, 28.0) * 0.30 + pow(moonDot, 7.0) * 0.11;
+          nightSky += vec3(0.62, 0.78, 0.96) * moonHalo;
+          nightSky = mix(nightSky, vec3(0.96, 0.97, 1.0), moonDisc);
 
           // Soft below-horizon atmospheric fade
-          vec3 belowCol = mix(vec3(0.72, 0.85, 0.98), vec3(0.16, 0.13, 0.26), uIsDark);
-          vec3 skyCol = mix(daySky, sunsetSky, uIsDark);
+          vec3 belowCol = mix(vec3(0.76, 0.72, 0.65), vec3(0.03, 0.06, 0.14), uIsDark);
+          vec3 skyCol = mix(daySky, nightSky, uIsDark);
           skyCol = mix(belowCol, skyCol, smoothstep(-0.12, 0.02, h));
 
           gl_FragColor = vec4(skyCol, 1.0);
@@ -407,24 +438,24 @@ export const CityServicesViewport: React.FC<CityServicesViewportProps> = ({
     // 3. Build Volumetric Cumulus Cloud Descent Deck + Photorealistic Riverside Metropolis + 6 Bespoke Service Houses
     const maxAniso = renderer.capabilities.getMaxAnisotropy();
 
-    const cloudDeckResult = buildCloudDescentDeck(initDark);
+    const cloudDeckResult = buildCloudDescentDeck(initDark, highRes);
     scene.add(cloudDeckResult.group);
 
     const cityResult = buildArchitecturalCity(quality, maxAniso, initDark);
     scene.add(cityResult.group);
 
-    // 4. Balanced Architectural Direct Lighting Rig (Bright Sunlit Day vs Golden-Hour Sunset Twilight)
+    // 4. Balanced Architectural Direct Lighting Rig (Crisp Natural Sunlit Day vs Deep Navy + Warm Amber Night)
     const hemiLight = new THREE.HemisphereLight(
-      initDark ? 0x78568c : 0xa6d8ff,
-      initDark ? 0x2c1b28 : 0x5c804e,
-      initDark ? 1.24 : 1.56
+      initDark ? 0x2b4570 : 0xa8c6de,
+      initDark ? 0x131822 : 0x454a36,
+      initDark ? 0.92 : 0.95
     );
     scene.add(hemiLight);
 
-    const keyLightOffset = new THREE.Vector3(68, initDark ? 34 : 58, initDark ? -64 : 52);
+    const keyLightOffset = new THREE.Vector3(68, initDark ? 42 : 58, initDark ? -64 : 52);
     const keyLight = new THREE.DirectionalLight(
-      initDark ? 0xff9b52 : 0xfff8ec,
-      initDark ? 2.55 : 3.55
+      initDark ? 0x7699cc : 0xfff0d4,
+      initDark ? 1.45 : 2.25
     );
     keyLight.position.copy(keyLightOffset);
     keyLight.target.position.set(0, 0, 0);
@@ -434,26 +465,26 @@ export const CityServicesViewport: React.FC<CityServicesViewportProps> = ({
       const shadowRes = Math.min(4096, quality.shadowMapSize);
       keyLight.shadow.mapSize.set(shadowRes, shadowRes);
       keyLight.shadow.camera.near = 10;
-      keyLight.shadow.camera.far = 250;
-      const d = 48;
+      keyLight.shadow.camera.far = 260;
+      const d = 56;
       keyLight.shadow.camera.left = -d;
       keyLight.shadow.camera.right = d;
       keyLight.shadow.camera.top = d;
       keyLight.shadow.camera.bottom = -d;
-      keyLight.shadow.bias = -0.00025;
-      keyLight.shadow.normalBias = 0.018;
-      keyLight.shadow.radius = 2.0;
+      keyLight.shadow.bias = -0.00022;
+      keyLight.shadow.normalBias = 0.016;
+      keyLight.shadow.radius = 1.8;
     }
     scene.add(keyLight);
 
     const rimLight = new THREE.DirectionalLight(
-      initDark ? 0xff703d : 0x90ccff,
-      initDark ? 1.05 : 0.84
+      initDark ? 0xf0a64c : 0xeddcc0,
+      initDark ? 0.98 : 0.55
     );
     rimLight.position.set(-54, 38, -60);
     scene.add(rimLight);
 
-    const plazaFillLight = new THREE.PointLight(0xffbe5c, initDark ? 2.8 : 0.0, 58, 1.45);
+    const plazaFillLight = new THREE.PointLight(0xffbe63, initDark ? 2.75 : 0.0, 62, 1.4);
     plazaFillLight.position.set(0, 7.5, -7.5);
     scene.add(plazaFillLight);
 
@@ -487,12 +518,12 @@ export const CityServicesViewport: React.FC<CityServicesViewportProps> = ({
       const renderPass = new RenderPass(scene, camera);
       composer.addPass(renderPass);
 
-      // True HDR Selective Specular Bloom: in Day mode threshold 1.28 blooms ONLY true sunlit HDR glints off glass & water!
+      // True HDR Selective Specular Bloom: tight thresholds prevent washout in Day or glowing glare in Night
       bloomPass = new UnrealBloomPass(
         new THREE.Vector2(initW, initH),
-        initDark ? 0.28 : 0.14,
-        initDark ? 0.26 : 0.28,
-        initDark ? 0.95 : 1.28
+        initDark ? 0.22 : 0.08,
+        initDark ? 0.28 : 0.22,
+        initDark ? 1.02 : 1.45
       );
       composer.addPass(bloomPass);
 
@@ -511,8 +542,11 @@ export const CityServicesViewport: React.FC<CityServicesViewportProps> = ({
     sceneThemeControlRef.current = {
       scene,
       renderer,
+      dayEnvRT,
+      nightEnvRT,
       hemiLight,
       keyLight,
+      keyLightOffset,
       rimLight,
       plazaFillLight,
       bloomPass,
@@ -521,8 +555,12 @@ export const CityServicesViewport: React.FC<CityServicesViewportProps> = ({
       cloudDeckResult,
       cityResult,
       housesResult,
-      baseKeyIntensity: initDark ? 2.55 : 3.55,
-      baseHemiIntensity: initDark ? 1.24 : 1.56,
+      baseKeyIntensity: initDark ? 1.45 : 2.25,
+      baseHemiIntensity: initDark ? 0.92 : 0.95,
+      forceShadowRefresh: () => {
+        lastShadowFocusX = Number.NaN;
+        lastShadowFocusZ = Number.NaN;
+      },
     };
 
     if (!isSoftwareGl) {
@@ -545,6 +583,20 @@ export const CityServicesViewport: React.FC<CityServicesViewportProps> = ({
       const ny = -((e.clientY - rect.top) / rect.height) * 2 + 1;
       pointerX = nx;
       pointerY = ny;
+
+      const isMobileOrTouch =
+        e.pointerType !== 'mouse' ||
+        width < 768 ||
+        window.matchMedia('(hover: none), (pointer: coarse)').matches;
+
+      if (isMobileOrTouch) {
+        if (hoveredRef.current !== null) {
+          hoveredRef.current = null;
+          callbacksRef.current.onHoverHouse(null);
+          renderer.domElement.style.cursor = 'auto';
+        }
+        return;
+      }
 
       const now = performance.now();
       if (
@@ -717,16 +769,17 @@ export const CityServicesViewport: React.FC<CityServicesViewportProps> = ({
       const t = THREE.MathUtils.clamp(scrollProgressRef.current, 0, 1);
       const seq = sequenceStateRef.current;
       const darkNow = isDarkRef.current;
+      const darkT = themeBlendRef.current.t;
 
       // Continuous Cloud Descent -> High-Tech Metropolis -> River Bridge -> Spacious 6-House Tour!
       sampleCityTrajectory(t, _targetPos, _targetLook);
 
       const skyExit = THREE.MathUtils.smoothstep(t, 0.06, 0.25);
 
-      // Smooth atmospheric fog blend as camera descends deep from above the clouds into the whole-city panorama (0.06 -> 0.25)
-      _bgColor
-        .copy(darkNow ? _cloudNightColor : _cloudDayColor)
-        .lerp(darkNow ? _cityNightColor : _cityDayColor, skyExit);
+      // Smooth atmospheric fog blend synchronized seamlessly across Day <-> Sunset transitions
+      _curCloudColor.copy(_cloudDayColor).lerp(_cloudNightColor, darkT);
+      _curCityColor.copy(_cityDayColor).lerp(_cityNightColor, darkT);
+      _bgColor.copy(_curCloudColor).lerp(_curCityColor, skyExit);
       scene.background = _bgColor;
       if (scene.fog) {
         scene.fog.color.copy(_bgColor);
@@ -844,8 +897,12 @@ export const CityServicesViewport: React.FC<CityServicesViewportProps> = ({
       );
 
       const activeIdx = selectedRef.current;
-      const hoverIdx =
-        hoveredRef.current !== null ? hoveredRef.current : externalHoveredRef.current;
+      const isMobileViewport = width < 768;
+      const hoverIdx = isMobileViewport
+        ? null
+        : hoveredRef.current !== null
+          ? hoveredRef.current
+          : externalHoveredRef.current;
 
       const placedMobileLabelsX: number[] = [];
       housesResult.houses.forEach((house, idx) => {
@@ -979,8 +1036,16 @@ export const CityServicesViewport: React.FC<CityServicesViewportProps> = ({
       renderer.domElement.removeEventListener('webglcontextlost', handleContextLost);
       renderer.domElement.removeEventListener('webglcontextrestored', handleContextRestored);
 
+      if (themeTweenRef.current) {
+        themeTweenRef.current.kill();
+        themeTweenRef.current = null;
+      }
       skyBackdropGeo.dispose();
       skyBackdropMat.dispose();
+      dayEnvRT.dispose();
+      nightEnvRT.dispose();
+      pmremGenerator.dispose();
+      scene.environment = null;
       cloudDeckResult.dispose();
       cityResult.dispose();
       housesResult.dispose();
@@ -993,40 +1058,71 @@ export const CityServicesViewport: React.FC<CityServicesViewportProps> = ({
     };
   }, [services.length]);
 
-  // Instant Bright Azure Day <-> Golden-Hour Sunset Twilight Theme Switcher
+  // Smooth Animated Bright Azure Day <-> Golden-Hour Sunset Twilight Theme Switcher (0.62s)
   useEffect(() => {
     const ctrl = sceneThemeControlRef.current;
     if (!ctrl) return;
 
-    ctrl.renderer.toneMappingExposure = isDarkMode ? 1.12 : 1.06;
-    ctrl.skyBackdropUniforms.uIsDark.value = isDarkMode ? 1.0 : 0.0;
-
-    ctrl.hemiLight.color.setHex(isDarkMode ? 0x78568c : 0xa6d8ff);
-    ctrl.hemiLight.groundColor.setHex(isDarkMode ? 0x2c1b28 : 0x5c804e);
-    ctrl.baseHemiIntensity = isDarkMode ? 1.24 : 1.56;
-
-    ctrl.keyLight.color.setHex(isDarkMode ? 0xff9b52 : 0xfff8ec);
-    ctrl.baseKeyIntensity = isDarkMode ? 2.55 : 3.55;
-
-    ctrl.rimLight.color.setHex(isDarkMode ? 0xff703d : 0x90ccff);
-    ctrl.rimLight.intensity = isDarkMode ? 1.05 : 0.84;
-
-    ctrl.plazaFillLight.color.setHex(0xffbe5c);
-    ctrl.plazaFillLight.intensity = isDarkMode ? 2.8 : 0.0;
-
-    if (ctrl.bloomPass) {
-      ctrl.bloomPass.strength = isDarkMode ? 0.34 : 0.14;
-      ctrl.bloomPass.radius = isDarkMode ? 0.32 : 0.28;
-      ctrl.bloomPass.threshold = isDarkMode ? 0.88 : 1.28;
-    }
-
-    if (ctrl.clarityPass) {
-      ctrl.clarityPass.uniforms.uDarkMode.value = isDarkMode ? 1.0 : 0.0;
-    }
-
-    ctrl.cloudDeckResult.setTheme(isDarkMode);
+    // Swap baked texture maps & PMREM environment crisply without flickering
+    ctrl.scene.environment = isDarkMode ? ctrl.nightEnvRT.texture : ctrl.dayEnvRT.texture;
     ctrl.cityResult.applyTheme(isDarkMode);
     ctrl.housesResult.applyTheme(isDarkMode);
+
+    if (themeTweenRef.current) {
+      themeTweenRef.current.kill();
+      themeTweenRef.current = null;
+    }
+
+    const applyContinuousTheme = (darkT: number) => {
+      ctrl.renderer.toneMappingExposure = THREE.MathUtils.lerp(0.92, 1.04, darkT);
+      ctrl.scene.environmentIntensity = THREE.MathUtils.lerp(0.85, 0.72, darkT);
+      ctrl.skyBackdropUniforms.uIsDark.value = darkT;
+
+      ctrl.hemiLight.color.copy(_dayHemiSky).lerp(_nightHemiSky, darkT);
+      ctrl.hemiLight.groundColor.copy(_dayHemiGround).lerp(_nightHemiGround, darkT);
+      ctrl.baseHemiIntensity = THREE.MathUtils.lerp(0.95, 0.92, darkT);
+
+      ctrl.keyLight.color.copy(_dayKeyColor).lerp(_nightKeyColor, darkT);
+      ctrl.baseKeyIntensity = THREE.MathUtils.lerp(2.25, 1.45, darkT);
+      ctrl.keyLightOffset.set(
+        68,
+        THREE.MathUtils.lerp(58, 42, darkT),
+        THREE.MathUtils.lerp(52, -64, darkT)
+      );
+      ctrl.forceShadowRefresh();
+
+      ctrl.rimLight.color.copy(_dayRimColor).lerp(_nightRimColor, darkT);
+      ctrl.rimLight.intensity = THREE.MathUtils.lerp(0.55, 0.98, darkT);
+
+      ctrl.plazaFillLight.color.setHex(0xffbe63);
+      ctrl.plazaFillLight.intensity = THREE.MathUtils.lerp(0.0, 2.75, darkT);
+
+      if (ctrl.bloomPass) {
+        ctrl.bloomPass.strength = THREE.MathUtils.lerp(0.08, 0.22, darkT);
+        ctrl.bloomPass.radius = THREE.MathUtils.lerp(0.22, 0.28, darkT);
+        ctrl.bloomPass.threshold = THREE.MathUtils.lerp(1.45, 1.02, darkT);
+      }
+
+      if (ctrl.clarityPass) {
+        ctrl.clarityPass.uniforms.uDarkMode.value = darkT;
+      }
+
+      ctrl.cloudDeckResult.setThemeFactor(darkT);
+      ctrl.cityResult.setThemeMix(darkT);
+    };
+
+    const targetT = isDarkMode ? 1 : 0;
+    themeTweenRef.current = gsap.to(themeBlendRef.current, {
+      t: targetT,
+      duration: 0.62,
+      ease: 'power2.inOut',
+      onUpdate: () => applyContinuousTheme(themeBlendRef.current.t),
+      onComplete: () => {
+        themeBlendRef.current.t = targetT;
+        applyContinuousTheme(targetT);
+        themeTweenRef.current = null;
+      },
+    });
   }, [isDarkMode]);
 
   // Orchestrate House Selection -> Approach Front Steps -> Swing Wooden Door Open -> Luminous Push-In -> Reveal Motion Service Data!
@@ -1111,7 +1207,7 @@ export const CityServicesViewport: React.FC<CityServicesViewportProps> = ({
     return (
       <div
         className={`absolute inset-0 flex flex-col items-center justify-center p-6 text-center ${
-          isDarkMode ? 'bg-[#0B0D18]' : 'bg-[#F4F8FC]'
+          isDarkMode ? 'bg-[#080F20]' : 'bg-[#EDE4D4]'
         }`}
       >
         <div className="max-w-xl space-y-3">

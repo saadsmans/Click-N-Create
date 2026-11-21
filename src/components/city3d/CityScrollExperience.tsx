@@ -93,10 +93,19 @@ export const CityScrollExperience: React.FC<CityScrollExperienceProps> = ({ onNa
   const hoverClearTimerRef = useRef<number | null>(null);
   const isPointerInCardRef = useRef(false);
 
+  const canHoverHouses = () =>
+    typeof window !== 'undefined' &&
+    window.innerWidth >= 768 &&
+    !window.matchMedia('(hover: none), (pointer: coarse)').matches;
+
   const handleHoverHouse = (idx: number | null) => {
     if (hoverClearTimerRef.current !== null) {
       window.clearTimeout(hoverClearTimerRef.current);
       hoverClearTimerRef.current = null;
+    }
+    if (idx !== null && !canHoverHouses()) {
+      setHoveredHouseIdx(null);
+      return;
     }
     if (idx !== null) {
       setHoveredHouseIdx(idx);
@@ -111,7 +120,14 @@ export const CityScrollExperience: React.FC<CityScrollExperienceProps> = ({ onNa
   };
 
   useEffect(() => {
+    const onResize = () => {
+      if (!canHoverHouses()) {
+        setHoveredHouseIdx(null);
+      }
+    };
+    window.addEventListener('resize', onResize, { passive: true });
     return () => {
+      window.removeEventListener('resize', onResize);
       if (hoverClearTimerRef.current !== null) {
         window.clearTimeout(hoverClearTimerRef.current);
       }
@@ -186,15 +202,15 @@ export const CityScrollExperience: React.FC<CityScrollExperienceProps> = ({ onNa
       id="services"
       ref={wrapperRef}
       className={`relative w-full h-[800vh] sm:h-[900vh] ${
-        isDark ? 'bg-[#0B0D18]' : 'bg-[#9BD2FC]'
+        isDark ? 'bg-[#080F20]' : 'bg-[#DDD6C8]'
       }`}
     >
       {/* Sticky Full-Screen Photorealistic 3D Deep Cloud Descent -> Whole City -> Boulevard -> 6 Houses Stage */}
       <div
         className={`sticky top-0 h-[100dvh] w-full overflow-hidden ${
           isDark
-            ? 'bg-gradient-to-b from-[#1E1C3D] via-[#63406E] to-[#FF7D29]'
-            : 'bg-gradient-to-b from-[#6EB9FA] via-[#9BD2FC] to-[#CFE8FF]'
+            ? 'bg-gradient-to-b from-[#060C1A] via-[#0B162C] to-[#1A1614]'
+            : 'bg-gradient-to-b from-[#3E6A96] via-[#89A5BD] to-[#DDD6C8]'
         }`}
       >
         <Suspense fallback={null}>
@@ -218,10 +234,10 @@ export const CityScrollExperience: React.FC<CityScrollExperienceProps> = ({ onNa
           style={{
             background: showHeroOverlay
               ? isDark
-                ? 'radial-gradient(circle at 50% 45%, rgba(11,13,24,0.38) 0%, rgba(11,13,24,0.74) 100%)'
-                : 'radial-gradient(circle at 50% 44%, rgba(244,248,252,0.76) 0%, rgba(207,232,255,0.44) 62%, rgba(155,210,252,0.18) 100%)'
+                ? 'radial-gradient(circle at 50% 45%, rgba(8,15,32,0.38) 0%, rgba(8,15,32,0.74) 100%)'
+                : 'radial-gradient(circle at 50% 44%, rgba(244,238,228,0.72) 0%, rgba(221,214,200,0.42) 62%, rgba(168,192,212,0.16) 100%)'
               : isDark
-              ? 'linear-gradient(to bottom, rgba(11,13,24,0.18) 0%, rgba(11,13,24,0) 16%, rgba(11,13,24,0) 86%, rgba(11,13,24,0.28) 100%)'
+              ? 'linear-gradient(to bottom, rgba(8,15,32,0.18) 0%, rgba(8,15,32,0) 16%, rgba(8,15,32,0) 86%, rgba(8,15,32,0.28) 100%)'
               : 'none',
           }}
         />
@@ -686,8 +702,8 @@ export const CityScrollExperience: React.FC<CityScrollExperienceProps> = ({ onNa
                         key={srv.id}
                         type="button"
                         onClick={() => handleSelectHouse(idx)}
-                        onMouseEnter={() => setHoveredHouseIdx(idx)}
-                        onMouseLeave={() => setHoveredHouseIdx(null)}
+                        onMouseEnter={() => handleHoverHouse(idx)}
+                        onMouseLeave={() => handleHoverHouse(null)}
                         style={{
                           borderColor:
                             isTourFocus || isHov
@@ -754,7 +770,7 @@ export const CityScrollExperience: React.FC<CityScrollExperienceProps> = ({ onNa
             </div>
           )}
 
-        {/* BOTTOM-LEFT SERVICE HOVER CARD (Appears when hovering any 3D house or rooftop marker) */}
+        {/* BOTTOM-LEFT SERVICE HOVER CARD (Desktop only — disabled on mobile view) */}
         {hoveredHouseIdx !== null && selectedHouseIdx === null && (
           <div
             onMouseEnter={() => {
@@ -768,7 +784,7 @@ export const CityScrollExperience: React.FC<CityScrollExperienceProps> = ({ onNa
               isPointerInCardRef.current = false;
               handleHoverHouse(null);
             }}
-            className="absolute bottom-5 left-5 z-40 max-w-[350px] w-[calc(100vw-2.5rem)] pointer-events-auto transition-all duration-150"
+            className="hidden md:block absolute bottom-5 left-5 z-40 max-w-[350px] w-[calc(100vw-2.5rem)] pointer-events-auto transition-all duration-150"
           >
             {(() => {
               const hovSrv = mergedServices[hoveredHouseIdx];

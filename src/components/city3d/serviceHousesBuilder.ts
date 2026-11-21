@@ -18,6 +18,7 @@ import {
   createCalacattaMarblePbrSet,
   createLuxuryAreaRugTexture,
   createGalleryArtTexture,
+  createHousePlaqueTexture,
   applyGroundAO,
 } from './proceduralTextures.ts';
 
@@ -120,6 +121,92 @@ function createCurvedRibbonCanopyGeometry(
 }
 
 /**
+ * Sculpts a chamfered octagonal architectural pavilion volume (replaces basic box wings with sleek beveled corners).
+ */
+function createChamferedVolumeGeometry(
+  width: number,
+  height: number,
+  depth: number,
+  chamfer = 0.42
+): THREE.ExtrudeGeometry {
+  const hw = width / 2;
+  const hd = depth / 2;
+  const c = Math.min(chamfer, hw * 0.45, hd * 0.45);
+  const shape = new THREE.Shape();
+  shape.moveTo(-hw + c, -hd);
+  shape.lineTo(hw - c, -hd);
+  shape.lineTo(hw, -hd + c);
+  shape.lineTo(hw, hd - c);
+  shape.lineTo(hw - c, hd);
+  shape.lineTo(-hw + c, hd);
+  shape.lineTo(-hw, hd - c);
+  shape.lineTo(-hw, -hd + c);
+  shape.closePath();
+
+  const geo = new THREE.ExtrudeGeometry(shape, {
+    depth: height,
+    bevelEnabled: true,
+    bevelThickness: 0.05,
+    bevelSize: 0.04,
+    bevelSegments: 2,
+  });
+  geo.rotateX(-Math.PI / 2);
+  geo.translate(0, -height / 2, 0);
+  geo.computeVertexNormals();
+  return geo;
+}
+
+/**
+ * Builds a layered multi-petal floral rosette for courtyard planters.
+ */
+function createCourtyardRosetteGeometry(): THREE.BufferGeometry {
+  const group: THREE.BufferGeometry[] = [];
+  for (let i = 0; i < 5; i++) {
+    const a = (i / 5) * Math.PI * 2;
+    const g = new THREE.CylinderGeometry(0.09, 0.03, 0.035, 6);
+    g.scale(1.2, 1.0, 0.78);
+    g.rotateX(0.32);
+    g.rotateY(a);
+    g.translate(Math.cos(a) * 0.07, 0.015, Math.sin(a) * 0.07);
+    group.push(g);
+  }
+  // Merge manually via simple Box/Cylinder or return single shaped BufferGeometry
+  const base = group[0];
+  const totalVerts = group.reduce((sum, g) => sum + g.getAttribute('position').count, 0);
+  const posArr = new Float32Array(totalVerts * 3);
+  const normArr = new Float32Array(totalVerts * 3);
+  const idxArr: number[] = [];
+  let vOff = 0;
+  group.forEach((g) => {
+    const p = g.getAttribute('position');
+    const n = g.getAttribute('normal');
+    for (let i = 0; i < p.count; i++) {
+      posArr[(vOff + i) * 3] = p.getX(i);
+      posArr[(vOff + i) * 3 + 1] = p.getY(i);
+      posArr[(vOff + i) * 3 + 2] = p.getZ(i);
+      normArr[(vOff + i) * 3] = n.getX(i);
+      normArr[(vOff + i) * 3 + 1] = n.getY(i);
+      normArr[(vOff + i) * 3 + 2] = n.getZ(i);
+    }
+    const gi = g.getIndex();
+    if (gi) {
+      for (let i = 0; i < gi.count; i++) {
+        idxArr.push(gi.getX(i) + vOff);
+      }
+    }
+    vOff += p.count;
+    if (g !== base) g.dispose();
+  });
+  base.dispose();
+  const out = new THREE.BufferGeometry();
+  out.setAttribute('position', new THREE.BufferAttribute(posArr, 3));
+  out.setAttribute('normal', new THREE.BufferAttribute(normArr, 3));
+  out.setIndex(idxArr);
+  out.computeVertexNormals();
+  return out;
+}
+
+/**
  * Builds 6 Distinct Ultra-Luxury Contemporary / Futuristic Architectural Residences & Designer Pavilions
  * arranged in a grand landscaped crescent overlooking the shimmering river and sapphire-glass metropolis.
  */
@@ -139,15 +226,16 @@ export function buildServiceHouses(
     return item;
   };
 
-  // High-Resolution Procedural ArchViz PBR Material Suites
-  const claddingPbr = track(createArchitecturalCladdingPbr(maxAnisotropy));
-  const grassPbr = track(createNaturalGrassPbrSet(maxAnisotropy, 3, 3));
-  const woodPbr = track(createWoodGrainPbrSet(maxAnisotropy));
-  const herringbonePbr = track(createHerringboneFloorPbrSet(maxAnisotropy));
-  const marblePbr = track(createCalacattaMarblePbrSet(maxAnisotropy));
-  const winTex = track(createResidentialWindowTextures(maxAnisotropy));
+  // High-Resolution Procedural ArchViz PBR Material Suites (2K/1K tier on desktop/tablet)
+  const highRes = quality.tier === 'desktop' || quality.tier === 'tablet';
+  const claddingPbr = track(createArchitecturalCladdingPbr(maxAnisotropy, highRes));
+  const grassPbr = track(createNaturalGrassPbrSet(maxAnisotropy, 3, 3, highRes));
+  const woodPbr = track(createWoodGrainPbrSet(maxAnisotropy, highRes));
+  const herringbonePbr = track(createHerringboneFloorPbrSet(maxAnisotropy, highRes));
+  const marblePbr = track(createCalacattaMarblePbrSet(maxAnisotropy, highRes));
+  const winTex = track(createResidentialWindowTextures(maxAnisotropy, highRes));
   const shadowTex = track(createContactShadowTexture());
-  const leafClusterTex = track(createBotanicalLeafClusterTexture(maxAnisotropy));
+  const leafClusterTex = track(createBotanicalLeafClusterTexture(maxAnisotropy, highRes));
 
   // Palatial Luxury Interior Shared PBR Materials
   const interiorFloorMat = track(
@@ -172,6 +260,7 @@ export function buildServiceHouses(
       metalness: 0.04,
       clearcoat: 0.85,
       clearcoatRoughness: 0.08,
+      envMapIntensity: 1.15,
     })
   );
   const interiorWallMat = track(
@@ -202,6 +291,7 @@ export function buildServiceHouses(
       metalness: 0.94,
       clearcoat: 0.8,
       anisotropy: 0.75,
+      envMapIntensity: 1.9,
     })
   );
   const alabasterGlowMat = track(
@@ -268,116 +358,142 @@ export function buildServiceHouses(
     })
   );
 
-  // Shared High-Craft Architectural Materials
+  // Shared High-Craft Architectural Materials (Sandstone, Dark Graphite, Terracotta, Patinated Bronze, Champagne Metallic & Deep Emerald)
   const travertineMat = track(
     new THREE.MeshStandardMaterial({
-      color: initialDarkMode ? 0x3b4659 : 0xf2f0eb,
+      color: initialDarkMode ? 0x282d38 : 0xe8decb,
       map: claddingPbr.map,
       normalMap: claddingPbr.normalMap,
       normalScale: new THREE.Vector2(0.32, 0.32),
       roughnessMap: claddingPbr.roughnessMap,
-      roughness: 0.62,
-      metalness: 0.06,
+      roughness: 0.6,
+      metalness: 0.05,
     })
   );
   applyGroundAO(travertineMat, 2.2, 0.22);
 
   const obsidianBasaltMat = track(
     new THREE.MeshStandardMaterial({
-      color: initialDarkMode ? 0x161f2e : 0x2a3342,
+      color: initialDarkMode ? 0x0e131d : 0x1c2129,
       map: claddingPbr.map,
       normalMap: claddingPbr.normalMap,
       normalScale: new THREE.Vector2(0.4, 0.4),
       roughnessMap: claddingPbr.roughnessMap,
-      roughness: 0.56,
+      roughness: 0.54,
       metalness: 0.22,
     })
   );
   applyGroundAO(obsidianBasaltMat, 2.4, 0.24);
 
+  const terracottaMat = track(
+    new THREE.MeshStandardMaterial({
+      color: initialDarkMode ? 0x7a422b : 0xb86b4b,
+      map: claddingPbr.map,
+      normalMap: claddingPbr.normalMap,
+      normalScale: new THREE.Vector2(0.35, 0.35),
+      roughnessMap: claddingPbr.roughnessMap,
+      roughness: 0.7,
+      metalness: 0.04,
+    })
+  );
+  applyGroundAO(terracottaMat, 2.0, 0.22);
+
   const brushedTitaniumMat = track(
     new THREE.MeshPhysicalMaterial({
-      color: initialDarkMode ? 0x202c40 : 0x324156,
-      roughness: 0.22,
-      metalness: 0.88,
-      clearcoat: 0.65,
+      color: initialDarkMode ? 0x141a24 : 0x222730,
+      roughness: 0.24,
+      metalness: 0.86,
+      clearcoat: 0.6,
       clearcoatRoughness: 0.12,
-      envMapIntensity: 1.75,
+      envMapIntensity: 1.68,
+    })
+  );
+
+  const bronzeMat = track(
+    new THREE.MeshPhysicalMaterial({
+      color: initialDarkMode ? 0x6e4c2c : 0x8c6239,
+      roughness: 0.25,
+      metalness: 0.84,
+      clearcoat: 0.55,
+      clearcoatRoughness: 0.14,
+      envMapIntensity: 1.7,
     })
   );
 
   const silverSteelMat = track(
     new THREE.MeshPhysicalMaterial({
-      color: 0xdbe6f3,
-      roughness: 0.16,
-      metalness: 0.94,
-      clearcoat: 0.85,
-      envMapIntensity: 1.85,
+      color: 0xd4ba8b,
+      roughness: 0.18,
+      metalness: 0.9,
+      clearcoat: 0.78,
+      envMapIntensity: 1.8,
     })
   );
 
   const teakWoodMat = track(
     new THREE.MeshStandardMaterial({
-      color: initialDarkMode ? 0x6b472b : 0xb37c4c,
+      color: initialDarkMode ? 0x5c3e26 : 0x8c5a34,
       map: woodPbr.map,
       normalMap: woodPbr.normalMap,
       normalScale: new THREE.Vector2(0.55, 0.55),
       roughnessMap: woodPbr.roughnessMap,
-      roughness: 0.56,
+      roughness: 0.54,
       metalness: 0.06,
     })
   );
 
   const archGlassRailMat = track(
     new THREE.MeshPhysicalMaterial({
-      color: initialDarkMode ? 0x6ba8e5 : 0xcce6ff,
-      roughness: 0.04,
-      metalness: 0.18,
+      color: initialDarkMode ? 0x142e28 : 0x1e4a3d,
+      roughness: 0.05,
+      metalness: 0.22,
       transparent: true,
-      opacity: 0.42,
+      opacity: 0.52,
       clearcoat: 1.0,
       clearcoatRoughness: 0.03,
-      envMapIntensity: 1.9,
+      envMapIntensity: 1.85,
     })
   );
 
   const reflectionPoolMat = track(
     new THREE.MeshPhysicalMaterial({
-      color: initialDarkMode ? 0x0b223d : 0x1b5c8a,
-      roughness: 0.03,
-      metalness: 0.16,
+      color: initialDarkMode ? 0x071224 : 0x123a34,
+      roughness: 0.04,
+      metalness: 0.18,
       clearcoat: 1.0,
-      clearcoatRoughness: 0.02,
+      clearcoatRoughness: 0.03,
       reflectivity: 1.0,
-      envMapIntensity: 2.1,
+      envMapIntensity: 2.0,
     })
   );
 
   const poolEdgeGlowMat = track(
     new THREE.MeshStandardMaterial({
-      color: initialDarkMode ? 0xbae6fd : 0x93c5fd,
-      emissive: 0x38bdf8,
-      emissiveIntensity: initialDarkMode ? 1.85 : 0.12,
+      color: initialDarkMode ? 0xf4cf84 : 0xd4ba8b,
+      emissive: initialDarkMode ? 0xe8a84a : 0x000000,
+      emissiveIntensity: initialDarkMode ? 1.45 : 0.0,
       roughness: 0.18,
+      metalness: 0.65,
     })
   );
 
-  // Recessed warm-white architectural soffit & step linear LED strips (luxury ArchViz warmth against sapphire glass!)
+  // Recessed warm amber soffit & step linear LED strips (clean champagne bronze in daylight, warm amber glow at night)
   const archWarmLedMat = track(
     new THREE.MeshStandardMaterial({
-      color: initialDarkMode ? 0xfff8ea : 0xe2e8f0,
-      emissive: 0xffe4b5,
-      emissiveIntensity: initialDarkMode ? 2.15 : 0.0,
-      roughness: 0.15,
+      color: initialDarkMode ? 0xfce7b2 : 0xd4ba8b,
+      emissive: 0xe8a84a,
+      emissiveIntensity: initialDarkMode ? 1.85 : 0.0,
+      roughness: 0.18,
+      metalness: 0.55,
     })
   );
 
-  // Crisp recessed interior room backing material (gives real 3D depth behind floor-to-ceiling curtain-wall glass)
+  // Crisp recessed interior room backing material (warm amber lounge glow at night behind emerald/bronze glass)
   const interiorRoomMat = track(
     new THREE.MeshStandardMaterial({
-      color: initialDarkMode ? 0xffe8c2 : 0x263448,
-      emissive: initialDarkMode ? 0xffd79e : 0x000000,
-      emissiveIntensity: initialDarkMode ? 0.55 : 0.0,
+      color: initialDarkMode ? 0xfce2b0 : 0x1b242e,
+      emissive: initialDarkMode ? 0xf6c978 : 0x000000,
+      emissiveIntensity: initialDarkMode ? 0.62 : 0.0,
       roughness: 0.85,
       metalness: 0.02,
     })
@@ -390,22 +506,22 @@ export function buildServiceHouses(
       normalMap: grassPbr.normalMap,
       normalScale: new THREE.Vector2(0.44, 0.44),
       roughnessMap: grassPbr.roughnessMap,
-      roughness: 0.92,
+      roughness: 0.9,
       metalness: 0.02,
     })
   );
 
   const pebbleBedMat = track(
     new THREE.MeshStandardMaterial({
-      color: initialDarkMode ? 0x1d2534 : 0x8e99a8,
-      roughness: 0.94,
+      color: initialDarkMode ? 0x161a22 : 0x5c5b56,
+      roughness: 0.9,
       metalness: 0.04,
     })
   );
 
   const foliageCardMat = track(
     new THREE.MeshStandardMaterial({
-      color: initialDarkMode ? 0x1f3428 : 0x4f6846,
+      color: initialDarkMode ? 0x16281c : 0x56643c,
       map: leafClusterTex,
       alphaTest: 0.4,
       side: THREE.DoubleSide,
@@ -416,11 +532,29 @@ export function buildServiceHouses(
 
   const ornamentalGrassMat = track(
     new THREE.MeshStandardMaterial({
-      color: initialDarkMode ? 0x1c3124 : 0x496141,
+      color: initialDarkMode ? 0x13241a : 0x1f4e37,
       roughness: 0.88,
       metalness: 0.02,
     })
   );
+
+  const skyTerraceGardenMat = track(
+    new THREE.MeshStandardMaterial({
+      color: initialDarkMode ? 0x182b1e : 0x465a34,
+      roughness: 0.88,
+      metalness: 0.02,
+    })
+  );
+
+  const courtyardBloomMat = track(
+    new THREE.MeshStandardMaterial({
+      color: initialDarkMode ? 0xb86b4b : 0xc97352,
+      roughness: 0.68,
+      metalness: 0.04,
+    })
+  );
+
+  const courtyardRosetteGeo = track(createCourtyardRosetteGeometry());
 
   const contactMat = track(
     new THREE.MeshBasicMaterial({
@@ -433,6 +567,11 @@ export function buildServiceHouses(
 
   const houses: HouseInstanceRef[] = [];
   const hitboxes: THREE.Mesh[] = [];
+  const plaqueThemeEntries: {
+    mat: THREE.MeshStandardMaterial;
+    dayTex: THREE.CanvasTexture;
+    nightTex: THREE.CanvasTexture;
+  }[] = [];
 
   services.slice(0, HOUSE_PLACEMENTS.length).forEach((service, idx) => {
     const placement = HOUSE_PLACEMENTS[idx];
@@ -461,20 +600,20 @@ export function buildServiceHouses(
     applyGroundAO(wallMat, 2.8, 0.24);
     wallMaterials.push(wallMat);
 
-    // High-Reflectance Architectural Floor-to-Ceiling Sapphire Curtain-Wall Glazing
+    // High-Reflectance Architectural Floor-to-Ceiling Sapphire & Turquoise Curtain-Wall Glazing
     const winGlassMat = track(
       new THREE.MeshPhysicalMaterial({
         color: 0xffffff,
         map: initialDarkMode ? winTex.nightMap : winTex.dayMap,
-        emissive: initialDarkMode ? 0xffe6bd : 0x000000,
+        emissive: initialDarkMode ? 0xf6c978 : 0x000000,
         emissiveMap: initialDarkMode ? winTex.nightEmissiveMap : null,
-        emissiveIntensity: initialDarkMode ? 0.92 : 0.0,
+        emissiveIntensity: initialDarkMode ? 0.88 : 0.0,
         roughness: 0.04,
-        metalness: 0.22,
+        metalness: 0.24,
         clearcoat: 1.0,
         clearcoatRoughness: 0.02,
         reflectivity: 1.0,
-        envMapIntensity: 1.95,
+        envMapIntensity: 2.05,
       })
     );
     windowMaterials.push(winGlassMat);
@@ -525,6 +664,80 @@ export function buildServiceHouses(
       pierLed.position.set(gx, 0.64, 9.05);
       houseRoot.add(pier, pierLed);
     });
+
+    // Architectural Brushed-Titanium & Brass Service Plaque mounted beside the Entry Gate!
+    const dayPlaqueTex = track(
+      createHousePlaqueTexture(
+        String(idx + 1),
+        service.title,
+        service.tagline,
+        pal.accentCss,
+        maxAnisotropy,
+        false
+      )
+    );
+    const nightPlaqueTex = track(
+      createHousePlaqueTexture(
+        String(idx + 1),
+        service.title,
+        service.tagline,
+        pal.accentCss,
+        maxAnisotropy,
+        true
+      )
+    );
+    const plaqueMat = track(
+      new THREE.MeshStandardMaterial({
+        map: initialDarkMode ? nightPlaqueTex : dayPlaqueTex,
+        emissive: initialDarkMode ? 0xffffff : 0x000000,
+        emissiveMap: initialDarkMode ? nightPlaqueTex : null,
+        emissiveIntensity: initialDarkMode ? 0.52 : 0.0,
+        roughness: 0.24,
+        metalness: 0.14,
+      })
+    );
+    plaqueThemeEntries.push({ mat: plaqueMat, dayTex: dayPlaqueTex, nightTex: nightPlaqueTex });
+    const plaqueAssembly = new THREE.Group();
+    plaqueAssembly.position.set(-2.45, 0.88, 9.31);
+    plaqueAssembly.rotation.x = -0.14;
+    const plaqueBacking = new THREE.Mesh(
+      track(new THREE.BoxGeometry(1.18, 0.42, 0.05)),
+      brushedTitaniumMat
+    );
+    const plaqueBezel = new THREE.Mesh(track(new THREE.BoxGeometry(1.22, 0.45, 0.03)), brassMat);
+    plaqueBezel.position.z = -0.015;
+    const plaqueFace = new THREE.Mesh(track(new THREE.PlaneGeometry(1.1, 0.365)), plaqueMat);
+    plaqueFace.position.z = 0.028;
+    plaqueAssembly.add(plaqueBacking, plaqueBezel, plaqueFace);
+    houseRoot.add(plaqueAssembly);
+
+    // Distance-Adaptive Close-Up Architectural Trim LOD (<95m camera range reveals brass collars & carved garden plinths)
+    const closeDetailGroup = new THREE.Group();
+    [-2.45, 2.45].forEach((gx) => {
+      const cap = new THREE.Mesh(track(new THREE.BoxGeometry(0.52, 0.08, 0.52)), travertineMat);
+      cap.position.set(gx, 1.23, 9.05);
+      const collar = new THREE.Mesh(track(new THREE.BoxGeometry(0.47, 0.03, 0.47)), brassMat);
+      collar.position.set(gx, 1.18, 9.05);
+      closeDetailGroup.add(cap, collar);
+    });
+    [
+      [-6.05, 0.24, 8.2, 0.85, 0.42],
+      [-5.35, 0.2, 8.5, 0.62, 0.34],
+      [6.05, 0.24, 8.2, 0.85, 0.42],
+      [5.35, 0.2, 8.45, 0.62, 0.34],
+    ].forEach(([rx, ry, rz, rW, rH], bi) => {
+      const carvedPlinth = new THREE.Mesh(
+        track(createChamferedVolumeGeometry(rW, rH, rW * 0.85, 0.14)),
+        bi % 2 === 0 ? obsidianBasaltMat : travertineMat
+      );
+      carvedPlinth.position.set(rx, ry, rz);
+      carvedPlinth.rotation.y = bi * 0.6;
+      closeDetailGroup.add(carvedPlinth);
+    });
+    const detailLod = new THREE.LOD();
+    detailLod.addLevel(closeDetailGroup, 0);
+    detailLod.addLevel(new THREE.Group(), 95);
+    houseRoot.add(detailLod);
 
     // Floating Large-Format Travertine Stepping Pavers with subtle under-glow linear LEDs!
     const paverBed = new THREE.Mesh(track(new THREE.BoxGeometry(3.2, 0.08, 4.9)), pebbleBedMat);
@@ -617,7 +830,7 @@ export function buildServiceHouses(
     interiorGroup.add(backMarbleBorder);
 
     // Tailored Woven Cashmere & Silk Area Rug with Service-Matched Brass/Charcoal Border
-    const rugTex = track(createLuxuryAreaRugTexture(pal.accentCss, maxAnisotropy));
+    const rugTex = track(createLuxuryAreaRugTexture(pal.accentCss, maxAnisotropy, highRes));
     const houseRugMat = track(
       new THREE.MeshPhysicalMaterial({
         map: rugTex,
@@ -829,7 +1042,7 @@ export function buildServiceHouses(
     // Curated Museum Gallery Side-Wall Canvases + Brass Picture Lights + Alabaster Wall Sconces
     [-2.68, 2.68].forEach((wx, sideIdx) => {
       const sign = sideIdx === 0 ? 1 : -1;
-      const artTex = track(createGalleryArtTexture(idx, sideIdx, maxAnisotropy));
+      const artTex = track(createGalleryArtTexture(idx, sideIdx, maxAnisotropy, highRes));
       const artCanvasMat = track(
         new THREE.MeshStandardMaterial({
           map: artTex,
@@ -1132,24 +1345,24 @@ export function buildServiceHouses(
 
     houseRoot.add(interiorGroup);
 
-    // Brushed-Titanium Deep Portal Frame + Vertical Glass Sidelight
+    // Bronze & Champagne-Gold Deep Portal Frame + Vertical Glass Sidelight
     const doorFrameTop = new THREE.Mesh(
       track(new THREE.BoxGeometry(2.65, 0.18, 0.42)),
-      brushedTitaniumMat
+      bronzeMat
     );
     doorFrameTop.position.set(0, 3.24, 4.02);
     const doorFrameLeft = new THREE.Mesh(
       track(new THREE.BoxGeometry(0.16, 2.86, 0.42)),
-      brushedTitaniumMat
+      bronzeMat
     );
     doorFrameLeft.position.set(-1.24, 1.85, 4.02);
     const doorFrameRight = new THREE.Mesh(
       track(new THREE.BoxGeometry(0.16, 2.86, 0.42)),
-      brushedTitaniumMat
+      bronzeMat
     );
     doorFrameRight.position.set(1.24, 1.85, 4.02);
 
-    // Narrow vertical floor-to-ceiling frosted/lit architectural sidelight glass beside the pivot door
+    // Narrow vertical floor-to-ceiling sapphire/gold sidelight glass beside the pivot door
     const sideLightGlass = new THREE.Mesh(
       track(new THREE.BoxGeometry(0.32, 2.72, 0.08)),
       winGlassMat
@@ -1157,7 +1370,7 @@ export function buildServiceHouses(
     sideLightGlass.position.set(1.0, 1.84, 3.98);
     const sideLightDivider = new THREE.Mesh(
       track(new THREE.BoxGeometry(0.08, 2.76, 0.18)),
-      brushedTitaniumMat
+      brassMat
     );
     sideLightDivider.position.set(0.81, 1.84, 4.0);
     houseRoot.add(doorFrameTop, doorFrameLeft, doorFrameRight, sideLightGlass, sideLightDivider);
@@ -1262,13 +1475,13 @@ export function buildServiceHouses(
       rBar.position.set(w / 2 + ft / 2, 0, 0.02);
       bay.add(topBar, botBar, lBar, rBar);
 
-      // Vertical Structural Aluminum Mullions
+      // Vertical Structural Bronze Mullions
       const mCount = opts?.mullions ?? (w > 3.2 ? 2 : 1);
       for (let m = 1; m <= mCount; m++) {
         const mx = -w / 2 + (w * m) / (mCount + 1);
         const mullion = new THREE.Mesh(
           track(new THREE.BoxGeometry(0.055, h, 0.12)),
-          brushedTitaniumMat
+          bronzeMat
         );
         mullion.position.set(mx, 0, 0.04);
         bay.add(mullion);
@@ -1277,7 +1490,7 @@ export function buildServiceHouses(
       if (opts?.transom) {
         const transom = new THREE.Mesh(
           track(new THREE.BoxGeometry(w, 0.055, 0.12)),
-          brushedTitaniumMat
+          brassMat
         );
         transom.position.set(0, h * 0.22, 0.04);
         bay.add(transom);
@@ -1332,31 +1545,38 @@ export function buildServiceHouses(
       houseRoot.add(railGrp);
     };
 
-    /** Adds a shallow mirror-reflective architectural water court with illuminated underwater edge trim */
+    /** Adds a shallow mirror-reflective architectural water court with brass weir overflow & underwater LED trim */
     const addReflectionPool = (x: number, z: number, w: number, d: number) => {
       const rim = new THREE.Mesh(track(new THREE.BoxGeometry(w + 0.32, 0.24, d + 0.32)), obsidianBasaltMat);
       rim.position.set(x, 0.2, z);
       rim.receiveShadow = quality.shadowsEnabled;
+      const weirRim = new THREE.Mesh(track(new THREE.BoxGeometry(w + 0.12, 0.04, d + 0.12)), brassMat);
+      weirRim.position.set(x, 0.31, z);
       const water = new THREE.Mesh(track(new THREE.BoxGeometry(w, 0.18, d)), reflectionPoolMat);
       water.position.set(x, 0.25, z);
       const edgeLed = new THREE.Mesh(track(new THREE.BoxGeometry(w - 0.08, 0.03, 0.05)), poolEdgeGlowMat);
       edgeLed.position.set(x, 0.29, z + d / 2 - 0.04);
-      houseRoot.add(rim, water, edgeLed);
+      houseRoot.add(rim, weirRim, water, edgeLed);
     };
 
-    /** Adds a refined sculptural multi-stem ornamental olive/birch tree inside an architectural stone planter */
+    /** Adds a refined sculptural multi-stem ornamental olive/birch tree inside a collared stone planter with THREE.LOD */
     const addSculpturalTree = (x: number, z: number, heightScale = 1.0) => {
       const grp = new THREE.Group();
       grp.position.set(x, 0.14, z);
 
-      // Sleek honed concrete planter trough
+      // Sleek honed concrete planter trough + travertine coping collar
       const planter = new THREE.Mesh(
         track(new THREE.BoxGeometry(1.18, 0.56, 1.18)),
         obsidianBasaltMat
       );
       planter.position.y = 0.28;
       planter.castShadow = quality.shadowsEnabled;
-      grp.add(planter);
+      const planterCap = new THREE.Mesh(
+        track(new THREE.BoxGeometry(1.26, 0.07, 1.26)),
+        travertineMat
+      );
+      planterCap.position.y = 0.57;
+      grp.add(planter, planterCap);
 
       // Multi-stem architectural silver-birch / olive trunk cluster
       const stems: [number, number, number, number][] = [
@@ -1366,7 +1586,7 @@ export function buildServiceHouses(
       ];
       stems.forEach(([ox, oz, tilt, len]) => {
         const stem = new THREE.Mesh(
-          track(new THREE.CylinderGeometry(0.038, 0.062, len * heightScale, 7)),
+          track(new THREE.CylinderGeometry(0.038, 0.062, len * heightScale, 8)),
           teakWoodMat
         );
         stem.position.set(ox, 0.45 + (len * heightScale) * 0.5, oz);
@@ -1375,31 +1595,55 @@ export function buildServiceHouses(
         grp.add(stem);
       });
 
-      // Layered botanical leaf cards (authentic architectural greenery, never blocky spheres!)
-      const leafSpecs: [number, number, number, number, number][] = [
-        [0, 2.25 * heightScale, 0, 1.85 * heightScale, 0.2],
-        [0, 2.25 * heightScale, 0, 1.85 * heightScale, Math.PI * 0.52],
-        [0.25, 1.9 * heightScale, 0.18, 1.45 * heightScale, 1.05],
-        [-0.24, 1.95 * heightScale, -0.16, 1.45 * heightScale, -0.95],
+      const lod = new THREE.LOD();
+      const nearFoliage = new THREE.Group();
+      const farFoliage = new THREE.Group();
+
+      const leafSpecs: [number, number, number, number, number, number][] = [
+        [0, 2.25 * heightScale, 0, 1.85 * heightScale, 0.2, 0.14],
+        [0, 2.25 * heightScale, 0, 1.85 * heightScale, Math.PI * 0.52, -0.12],
+        [0.25, 1.9 * heightScale, 0.18, 1.45 * heightScale, 1.05, 0.16],
+        [-0.24, 1.95 * heightScale, -0.16, 1.45 * heightScale, -0.95, 0.14],
       ];
-      leafSpecs.forEach(([lx, ly, lz, sz, ry]) => {
+      leafSpecs.forEach(([lx, ly, lz, sz, ry, rx]) => {
+        const planeGeo = track(new THREE.PlaneGeometry(sz, sz));
+        const nearCard = new THREE.Mesh(planeGeo, foliageCardMat);
+        nearCard.position.set(lx, ly, lz);
+        nearCard.rotation.set(rx, ry, 0);
+        nearFoliage.add(nearCard);
+
+        const farCard = nearCard.clone();
+        farFoliage.add(farCard);
+      });
+
+      // Extra intermediate overlapping bough cards for rich close-up foliage density (< 75m)
+      const extraLeafSpecs: [number, number, number, number, number, number][] = [
+        [0.14, 2.48 * heightScale, -0.22, 1.55 * heightScale, 2.1, -0.18],
+        [-0.22, 2.42 * heightScale, 0.2, 1.55 * heightScale, -2.0, 0.18],
+        [0.0, 2.65 * heightScale, 0.0, 1.65 * heightScale, 0.78, Math.PI * 0.38],
+        [0.0, 2.15 * heightScale, 0.0, 1.75 * heightScale, -0.45, Math.PI * 0.42],
+      ];
+      extraLeafSpecs.forEach(([lx, ly, lz, sz, ry, rx]) => {
         const card = new THREE.Mesh(track(new THREE.PlaneGeometry(sz, sz)), foliageCardMat);
         card.position.set(lx, ly, lz);
-        card.rotation.y = ry;
-        card.rotation.x = 0.14;
-        grp.add(card);
+        card.rotation.set(rx, ry, 0);
+        nearFoliage.add(card);
       });
+
+      lod.addLevel(nearFoliage, 0);
+      lod.addLevel(farFoliage, 75);
+      grp.add(lod);
 
       houseRoot.add(grp);
     };
 
-    /** Adds a sleek modern linear stone planter bed with architectural ornamental grasses */
+    /** Adds a sleek modern linear stone planter bed with architectural ornamental grasses & multi-petal rosette blooms */
     const addLinearPlanter = (x: number, z: number, w: number, d = 0.72) => {
       const box = new THREE.Mesh(track(new THREE.BoxGeometry(w, 0.48, d)), obsidianBasaltMat);
       box.position.set(x, 0.36, z);
       box.castShadow = quality.shadowsEnabled;
       box.receiveShadow = quality.shadowsEnabled;
-      const trim = new THREE.Mesh(track(new THREE.BoxGeometry(w + 0.06, 0.06, d + 0.06)), travertineMat);
+      const trim = new THREE.Mesh(track(new THREE.BoxGeometry(w + 0.06, 0.06, d + 0.06)), bronzeMat);
       trim.position.set(x, 0.62, z);
       houseRoot.add(box, trim);
 
@@ -1412,72 +1656,118 @@ export function buildServiceHouses(
         );
         tuft.position.set(tx, 0.82, z);
         tuft.scale.set(1.1, 0.85, 0.85);
-        houseRoot.add(tuft);
+        const flowerRosette = new THREE.Mesh(courtyardRosetteGeo, courtyardBloomMat);
+        flowerRosette.position.set(tx + (t % 2 === 0 ? 0.14 : -0.14), 0.74, z + 0.18);
+        flowerRosette.rotation.set(0.32, t * 1.1, 0);
+        flowerRosette.scale.setScalar(1.25);
+        houseRoot.add(tuft, flowerRosette);
+      }
+    };
+
+    /** Adds a lush Singapore/Dubai elevated sky-garden planter terrace on roof decks and cantilevered ledges */
+    const addPlantedRoofGarden = (x: number, y: number, z: number, w: number, d: number) => {
+      const tray = new THREE.Mesh(track(new THREE.BoxGeometry(w + 0.16, 0.14, d + 0.16)), bronzeMat);
+      tray.position.set(x, y, z);
+      const turf = new THREE.Mesh(track(new THREE.BoxGeometry(w, 0.18, d)), skyTerraceGardenMat);
+      turf.position.set(x, y + 0.08, z);
+      turf.receiveShadow = quality.shadowsEnabled;
+      houseRoot.add(tray, turf);
+
+      const shrubCols = Math.max(2, Math.floor(w / 1.45));
+      for (let s = 0; s < shrubCols; s++) {
+        const sx = x - w * 0.36 + (shrubCols === 1 ? 0 : (w * 0.72 * s) / (shrubCols - 1));
+        const mound = new THREE.Mesh(
+          track(new THREE.CylinderGeometry(0.36, 0.44, 0.32, 7)),
+          s % 2 === 0 ? ornamentalGrassMat : skyTerraceGardenMat
+        );
+        mound.position.set(sx, y + 0.28, z);
+        houseRoot.add(mound);
       }
     };
 
     let roofPeakY = 8.4;
 
     // =========================================================================
-    // 4. SIX GENUINELY DISTINCT ULTRA-LUXURY CONTEMPORARY ARCHITECTURAL DESIGNS
+    // 4. SIX GENUINELY DISTINCT SINGAPORE / DUBAI NEO-LUXURY ARCHITECTURAL VILLAS
     // =========================================================================
     if (placement.styleVariant === 'modern_gable') {
       // -----------------------------------------------------------------------
-      // HOUSE 01 (Web Development): CANTILEVERED GLACIER TRAVERTINE & COBALT-GLASS PAVILION
-      // Dramatic floating upper gallery cantilevered 2.2 units forward with teak soffit,
-      // recessed LED channels, vertical walnut louver wing & dual front reflection pools!
+      // HOUSE 01 (Web Development): CANTILEVERED SANDSTONE, ANGLED PILOTIS & SKY-GARDEN PAVILION
+      // Chamfered upper gallery cantilevered forward on sculpted angled steel V-columns,
+      // teak timber soffit, vertical terracotta louver wing & front reflection pools!
       // -----------------------------------------------------------------------
-      const plinth = new THREE.Mesh(track(new THREE.BoxGeometry(11.8, 0.42, 9.2)), travertineMat);
-      plinth.position.set(0, 0.21, -0.35);
+      const plinth = new THREE.Mesh(
+        track(createChamferedVolumeGeometry(12.0, 0.44, 9.4, 0.55)),
+        travertineMat
+      );
+      plinth.position.set(0, 0.22, -0.35);
       plinth.receiveShadow = quality.shadowsEnabled;
 
-      // Ground-floor dark basalt structural wings flanking the wide walk-in studio interior cavity
-      const gfLeft = new THREE.Mesh(track(new THREE.BoxGeometry(2.6, 3.1, 8.2)), obsidianBasaltMat);
+      // Ground-floor dark graphite chamfered structural wings framing the walk-in studio interior cavity
+      const gfLeft = new THREE.Mesh(
+        track(createChamferedVolumeGeometry(2.6, 3.1, 8.2, 0.32)),
+        obsidianBasaltMat
+      );
       gfLeft.position.set(-4.12, 1.96, -0.15);
       gfLeft.castShadow = quality.shadowsEnabled;
       gfLeft.receiveShadow = quality.shadowsEnabled;
 
-      const gfRight = new THREE.Mesh(track(new THREE.BoxGeometry(2.6, 3.1, 8.2)), obsidianBasaltMat);
+      const gfRight = new THREE.Mesh(
+        track(createChamferedVolumeGeometry(2.6, 3.1, 8.2, 0.32)),
+        obsidianBasaltMat
+      );
       gfRight.position.set(4.12, 1.96, -0.15);
       gfRight.castShadow = quality.shadowsEnabled;
       gfRight.receiveShadow = quality.shadowsEnabled;
 
-      // Upper Cantilevered Glacier Travertine Gallery Box (dramatically projecting over the entry!)
-      const upperCantilever = new THREE.Mesh(track(new THREE.BoxGeometry(11.6, 3.35, 9.8)), wallMat);
+      // Sculpted Angled Structural Bronze V-Columns supporting the floating upper gallery
+      [-4.95, 5.15].forEach((px) => {
+        const vCol = new THREE.Mesh(track(new THREE.CylinderGeometry(0.08, 0.11, 3.45, 8)), bronzeMat);
+        vCol.position.set(px, 1.98, 4.95);
+        vCol.rotation.x = 0.26;
+        vCol.castShadow = quality.shadowsEnabled;
+        houseRoot.add(vCol);
+      });
+
+      // Upper Cantilevered Chamfered Sandstone Gallery Box
+      const upperCantilever = new THREE.Mesh(
+        track(createChamferedVolumeGeometry(11.8, 3.35, 9.8, 0.52)),
+        wallMat
+      );
       upperCantilever.position.set(0.3, 5.42, 0.85);
       upperCantilever.castShadow = quality.shadowsEnabled;
       upperCantilever.receiveShadow = quality.shadowsEnabled;
 
-      // Warm Teak Timber Soffit Lining & Recessed Linear Warm-White LED Strip beneath the Cantilever!
-      const soffit = new THREE.Mesh(track(new THREE.BoxGeometry(11.2, 0.14, 2.35)), teakWoodMat);
-      soffit.position.set(0.3, 3.68, 4.6);
-      const soffitLed = new THREE.Mesh(track(new THREE.BoxGeometry(10.8, 0.045, 0.08)), archWarmLedMat);
-      soffitLed.position.set(0.3, 3.62, 5.62);
+      // Warm Teak Timber Soffit Lining & Recessed Linear Warm-Amber Strip
+      const soffit = new THREE.Mesh(track(new THREE.BoxGeometry(11.0, 0.14, 2.35)), teakWoodMat);
+      soffit.position.set(0.3, 3.68, 4.55);
+      const soffitLed = new THREE.Mesh(track(new THREE.BoxGeometry(10.6, 0.045, 0.08)), archWarmLedMat);
+      soffitLed.position.set(0.3, 3.62, 5.58);
 
-      // Crisp Dark Titanium Roof Fascia & Recessed Penthouse Glass Skylight Studio
+      // Aerodynamic Cantilevered Graphite Roof Fascia & Recessed Penthouse Glass Skylight Studio
       const roofFascia = new THREE.Mesh(
-        track(new THREE.BoxGeometry(12.2, 0.28, 10.4)),
+        track(createCantileveredAeroRoofGeometry(12.6, 0.34, 10.6, 0.45)),
         brushedTitaniumMat
       );
-      roofFascia.position.set(0.3, 7.22, 0.85);
+      roofFascia.position.set(0.3, 7.12, 0.85);
       roofFascia.castShadow = quality.shadowsEnabled;
 
       const skyStudio = new THREE.Mesh(
-        track(new THREE.BoxGeometry(5.6, 1.75, 5.2)),
+        track(createChamferedVolumeGeometry(5.6, 1.75, 5.2, 0.36)),
         obsidianBasaltMat
       );
       skyStudio.position.set(-1.6, 8.22, -0.8);
       skyStudio.castShadow = quality.shadowsEnabled;
       const skyRoof = new THREE.Mesh(
-        track(new THREE.BoxGeometry(6.4, 0.2, 6.0)),
+        track(createCantileveredAeroRoofGeometry(6.6, 0.24, 6.2, 0.28)),
         brushedTitaniumMat
       );
-      skyRoof.position.set(-1.6, 9.18, -0.8);
+      skyRoof.position.set(-1.6, 9.1, -0.8);
       const skyLedCrown = new THREE.Mesh(
-        track(new THREE.BoxGeometry(6.3, 0.05, 0.06)),
+        track(new THREE.BoxGeometry(6.1, 0.05, 0.06)),
         poolEdgeGlowMat
       );
-      skyLedCrown.position.set(-1.6, 9.08, 2.22);
+      skyLedCrown.position.set(-1.6, 9.06, 2.22);
 
       houseRoot.add(
         plinth,
@@ -1501,9 +1791,10 @@ export function buildServiceHouses(
       addCurtainWallBay(-5.52, 5.42, 0.9, 5.4, 2.45, -Math.PI / 2, { mullions: 2 });
       addCurtainWallBay(6.12, 5.42, 0.9, 5.4, 2.45, Math.PI / 2, { mullions: 2 });
 
-      // Vertical Teak Architectural Brise-Soleil Privacy Louver Screen framing Right Wing
-      addLouverScreen(5.78, 5.42, 5.95, 1.35, 3.05, 7, teakWoodMat, 0);
+      // Terracotta Architectural Brise-Soleil Privacy Louver Wing & Sky-Garden Terrace
+      addLouverScreen(5.78, 5.42, 5.95, 1.45, 3.05, 7, terracottaMat, 0);
       addGlassBalustrade(2.8, 7.36, 5.85, 5.4, 0);
+      addPlantedRoofGarden(3.4, 7.38, 2.4, 4.4, 2.6);
 
       // Twin Front Mirror-Reflective Infinity Water Courtyards flanking the Floating Steps!
       addReflectionPool(-4.4, 6.2, 4.1, 2.5);
@@ -1514,59 +1805,83 @@ export function buildServiceHouses(
       roofPeakY = 9.75;
     } else if (placement.styleVariant === 'georgian_brick') {
       // -----------------------------------------------------------------------
-      // HOUSE 02 (E-Commerce): 3-LEVEL SCULPTED OBSIDIAN BASALT & SAPPHIRE GLASS ATELIER
-      // Stepped dark architectural stone monolith, double-height glazed showcase gallery,
-      // crisp white travertine cantilevered balcony slabs & rooftop titanium pergola!
+      // HOUSE 02 (E-Commerce): 3-LEVEL TERRACED GRAPHITE, BRONZE & BIOPHILIC EMERALD ATELIER
+      // Chamfered tiered monoliths, sweeping curved sandstone sky-balcony ribbons,
+      // vertical bronze brise-soleil fins & lush sky-garden pergola terrace!
       // -----------------------------------------------------------------------
-      const plinth = new THREE.Mesh(track(new THREE.BoxGeometry(11.6, 0.44, 9.2)), travertineMat);
+      const plinth = new THREE.Mesh(
+        track(createChamferedVolumeGeometry(11.8, 0.44, 9.4, 0.5)),
+        travertineMat
+      );
       plinth.position.set(0, 0.22, -0.35);
 
-      // Ground Floor Obsidian Basalt Base flanking the open walk-in studio interior
-      const gfLeft = new THREE.Mesh(track(new THREE.BoxGeometry(2.6, 3.15, 8.4)), wallMat);
+      // Ground Floor Chamfered Base flanking the open walk-in studio interior
+      const gfLeft = new THREE.Mesh(
+        track(createChamferedVolumeGeometry(2.6, 3.15, 8.4, 0.3)),
+        wallMat
+      );
       gfLeft.position.set(-4.12, 1.98, -0.2);
       gfLeft.castShadow = quality.shadowsEnabled;
       gfLeft.receiveShadow = quality.shadowsEnabled;
 
-      const gfRight = new THREE.Mesh(track(new THREE.BoxGeometry(2.6, 3.15, 8.4)), wallMat);
+      const gfRight = new THREE.Mesh(
+        track(createChamferedVolumeGeometry(2.6, 3.15, 8.4, 0.3)),
+        wallMat
+      );
       gfRight.position.set(4.12, 1.98, -0.2);
       gfRight.castShadow = quality.shadowsEnabled;
       gfRight.receiveShadow = quality.shadowsEnabled;
 
-      // Crisp Cantilevered White-Travertine Mid-Floor Ribbon Slabs with Under-Glow LEDs
-      const slab1 = new THREE.Mesh(track(new THREE.BoxGeometry(11.8, 0.34, 9.8)), travertineMat);
-      slab1.position.set(0, 3.68, 0.35);
+      // Sculpted Curved Sandstone Mid-Floor Balcony Slabs
+      const slab1 = new THREE.Mesh(
+        track(createCurvedRibbonCanopyGeometry(11.6, 0.36, 9.8)),
+        travertineMat
+      );
+      slab1.position.set(0, 3.52, 0.35);
       slab1.castShadow = quality.shadowsEnabled;
-      const slab1Led = new THREE.Mesh(track(new THREE.BoxGeometry(11.4, 0.045, 0.06)), archWarmLedMat);
-      slab1Led.position.set(0, 3.5, 5.22);
+      const slab1Led = new THREE.Mesh(track(new THREE.BoxGeometry(11.2, 0.045, 0.06)), archWarmLedMat);
+      slab1Led.position.set(0, 3.48, 5.22);
 
-      // Level 2 Obsidian Basalt Atelier Volume
-      const lvl2 = new THREE.Mesh(track(new THREE.BoxGeometry(11.0, 3.05, 8.6)), wallMat);
+      // Level 2 Chamfered Emerald-Bronze Atelier Volume
+      const lvl2 = new THREE.Mesh(
+        track(createChamferedVolumeGeometry(11.0, 3.05, 8.6, 0.48)),
+        wallMat
+      );
       lvl2.position.set(0, 5.36, -0.15);
       lvl2.castShadow = quality.shadowsEnabled;
       lvl2.receiveShadow = quality.shadowsEnabled;
 
-      const slab2 = new THREE.Mesh(track(new THREE.BoxGeometry(11.8, 0.34, 9.8)), travertineMat);
-      slab2.position.set(0, 7.02, 0.35);
+      const slab2 = new THREE.Mesh(
+        track(createCurvedRibbonCanopyGeometry(11.8, 0.38, 9.8)),
+        travertineMat
+      );
+      slab2.position.set(0, 6.86, 0.35);
       slab2.castShadow = quality.shadowsEnabled;
       const slab2Led = new THREE.Mesh(track(new THREE.BoxGeometry(11.4, 0.045, 0.06)), archWarmLedMat);
-      slab2Led.position.set(0, 6.84, 5.22);
+      slab2Led.position.set(0, 6.82, 5.22);
 
-      // Level 3 Stepped-Back Penthouse Glass Showcase & Brushed-Titanium Rooftop Louver Pergola
-      const lvl3 = new THREE.Mesh(track(new THREE.BoxGeometry(7.2, 2.55, 6.2)), wallMat);
+      // Level 3 Stepped-Back Penthouse Showcase & Rooftop Teak-Bronze Pergola Sky-Garden
+      const lvl3 = new THREE.Mesh(
+        track(createChamferedVolumeGeometry(7.2, 2.55, 6.2, 0.38)),
+        wallMat
+      );
       lvl3.position.set(-1.5, 8.45, -1.1);
       lvl3.castShadow = quality.shadowsEnabled;
-      const roofTop = new THREE.Mesh(track(new THREE.BoxGeometry(8.2, 0.24, 7.2)), travertineMat);
-      roofTop.position.set(-1.5, 9.82, -0.8);
+      const roofTop = new THREE.Mesh(
+        track(createCantileveredAeroRoofGeometry(8.4, 0.28, 7.4, 0.32)),
+        travertineMat
+      );
+      roofTop.position.set(-1.5, 9.72, -0.8);
 
-      // Architectural Steel Pergola Canopy spanning the Right Sky-Terrace!
+      // Architectural Bronze Pergola Canopy spanning the Right Sky-Terrace!
       const pergolaFront = new THREE.Mesh(
         track(new THREE.BoxGeometry(3.8, 0.16, 0.16)),
-        brushedTitaniumMat
+        bronzeMat
       );
       pergolaFront.position.set(3.8, 9.75, 2.3);
       const pergolaPost = new THREE.Mesh(
         track(new THREE.BoxGeometry(0.16, 2.65, 0.16)),
-        brushedTitaniumMat
+        bronzeMat
       );
       pergolaPost.position.set(5.55, 8.42, 2.3);
       houseRoot.add(pergolaFront, pergolaPost);
@@ -1578,12 +1893,13 @@ export function buildServiceHouses(
 
       houseRoot.add(plinth, gfLeft, gfRight, slab1, slab1Led, lvl2, slab2, slab2Led, lvl3, roofTop);
 
-      // Frameless Glass Terrace Balustrades on Level 2 & Level 3
-      addGlassBalustrade(-3.1, 3.86, 5.15, 5.1, 0);
-      addGlassBalustrade(3.1, 3.86, 5.15, 5.1, 0);
-      addGlassBalustrade(0, 7.2, 5.15, 11.2, 0);
+      // Frameless Smoked-Emerald Glass Terrace Balustrades & Sky-Terrace Planters
+      addGlassBalustrade(-3.1, 3.88, 5.15, 5.1, 0);
+      addGlassBalustrade(3.1, 3.88, 5.15, 5.1, 0);
+      addGlassBalustrade(0, 7.22, 5.15, 11.2, 0);
+      addPlantedRoofGarden(3.8, 7.24, 0.2, 3.2, 4.6);
 
-      // Dramatic Tall Showcase Windows & Vertical Titanium Fin Accents
+      // Dramatic Tall Showcase Windows & Vertical Bronze/Terracotta Fin Accents
       addCurtainWallBay(-3.3, 1.98, 4.02, 2.95, 2.45, 0, { mullions: 2, recessLed: true });
       addCurtainWallBay(3.45, 1.98, 4.02, 3.25, 2.45, 0, { mullions: 2, recessLed: true });
       addCurtainWallBay(-3.2, 5.36, 4.18, 3.3, 2.45, 0, { mullions: 2, recessLed: true });
@@ -1593,8 +1909,7 @@ export function buildServiceHouses(
       addCurtainWallBay(-5.54, 5.36, -0.1, 4.6, 2.35, -Math.PI / 2, { mullions: 2 });
       addCurtainWallBay(5.54, 5.36, -0.1, 4.6, 2.35, Math.PI / 2, { mullions: 2 });
 
-      // Sleek Vertical Architectural Fin Screen on Left Facade Corner
-      addLouverScreen(-5.45, 5.36, 4.45, 0.9, 6.6, 5, brushedTitaniumMat, 0);
+      addLouverScreen(-5.45, 5.36, 4.45, 0.95, 6.6, 5, bronzeMat, 0);
       addLinearPlanter(-4.4, 5.95, 3.9);
       addLinearPlanter(4.4, 5.95, 3.9);
       addSculpturalTree(-6.15, 7.2, 1.1);
@@ -1603,52 +1918,63 @@ export function buildServiceHouses(
       roofPeakY = 10.45;
     } else if (placement.styleVariant === 'courtyard_villa') {
       // -----------------------------------------------------------------------
-      // HOUSE 03 (Branding & Design): CURVED-CANOPY PEARL LIMESTONE & TEAK COURTYARD VILLA
-      // Sweeping custom-sculpted curved white architectural limestone ribbon fascia,
-      // L-shaped glazed courtyard gallery, sculptural reflection pool & warm walnut louvers!
+      // HOUSE 03 (Branding & Design): CURVED-CANOPY SANDSTONE, TERRACOTTA & TEAK COURTYARD VILLA
+      // Sweeping sculpted architectural ribbon fascia, projecting terracotta & teak gallery wing,
+      // sculptural jade reflection pool & planted sky-court!
       // -----------------------------------------------------------------------
-      const plinth = new THREE.Mesh(track(new THREE.BoxGeometry(12.2, 0.42, 9.6)), travertineMat);
+      const plinth = new THREE.Mesh(
+        track(createChamferedVolumeGeometry(12.4, 0.42, 9.6, 0.55)),
+        travertineMat
+      );
       plinth.position.set(0, 0.21, -0.2);
 
-      // Recessed Ground Floor Pearl Limestone & Teak Wings flanking the open studio interior
-      const gfLeft = new THREE.Mesh(track(new THREE.BoxGeometry(2.65, 3.05, 8.4)), wallMat);
+      // Recessed Ground Floor Sandstone & Terracotta Wings flanking the open studio interior
+      const gfLeft = new THREE.Mesh(
+        track(createChamferedVolumeGeometry(2.65, 3.05, 8.4, 0.3)),
+        wallMat
+      );
       gfLeft.position.set(-4.18, 1.94, -0.2);
       gfLeft.castShadow = quality.shadowsEnabled;
       gfLeft.receiveShadow = quality.shadowsEnabled;
 
-      // Projecting Right Courtyard Gallery Pavilion clad in Warm Architectural Teak!
-      const teakGallery = new THREE.Mesh(track(new THREE.BoxGeometry(2.9, 3.15, 10.2)), teakWoodMat);
+      // Projecting Right Courtyard Gallery Pavilion clad in Warm Terracotta & Teak
+      const teakGallery = new THREE.Mesh(
+        track(createChamferedVolumeGeometry(2.9, 3.15, 10.2, 0.35)),
+        terracottaMat
+      );
       teakGallery.position.set(4.32, 1.98, 0.7);
       teakGallery.castShadow = quality.shadowsEnabled;
       teakGallery.receiveShadow = quality.shadowsEnabled;
 
-      // Upper Sweeping Curved Pearl Limestone Ribbon Fascia (Custom Sculpted ExtrudeGeometry!)
+      // Sweeping Curved Sandstone Ribbon Fascias (Custom Sculpted ExtrudeGeometry!)
       const lowerRibbon = new THREE.Mesh(
         track(createCurvedRibbonCanopyGeometry(12.0, 0.42, 10.0)),
-        wallMat
+        travertineMat
       );
       lowerRibbon.position.set(0, 3.52, 0.55);
       lowerRibbon.castShadow = quality.shadowsEnabled;
 
-      const upperBody = new THREE.Mesh(track(new THREE.BoxGeometry(11.4, 2.95, 8.8)), wallMat);
+      const upperBody = new THREE.Mesh(
+        track(createChamferedVolumeGeometry(11.4, 2.95, 8.8, 0.46)),
+        wallMat
+      );
       upperBody.position.set(0, 5.4, 0.15);
       upperBody.castShadow = quality.shadowsEnabled;
       upperBody.receiveShadow = quality.shadowsEnabled;
 
       const upperRibbon = new THREE.Mesh(
         track(createCurvedRibbonCanopyGeometry(12.6, 0.48, 10.4)),
-        wallMat
+        travertineMat
       );
       upperRibbon.position.set(0, 6.86, 0.55);
       upperRibbon.castShadow = quality.shadowsEnabled;
 
-      // Subtle glowing glacier-blue architectural outline recessed beneath the sweeping top ribbon
       const ribbonLed = new THREE.Mesh(track(new THREE.BoxGeometry(11.8, 0.05, 0.07)), archWarmLedMat);
       ribbonLed.position.set(0, 6.84, 5.76);
 
       // Sculpted Rooftop Skylight Lantern Pavilion
       const skylightCore = new THREE.Mesh(
-        track(new THREE.BoxGeometry(5.8, 1.15, 4.4)),
+        track(createChamferedVolumeGeometry(5.8, 1.15, 4.4, 0.32)),
         brushedTitaniumMat
       );
       skylightCore.position.set(-0.8, 7.9, -0.6);
@@ -1670,7 +1996,6 @@ export function buildServiceHouses(
         skylightGlass
       );
 
-      // Full-Width Panoramic Studio Glazing & Teak Brise-Soleil Screen
       addCurtainWallBay(-3.45, 1.96, 4.04, 3.2, 2.4, 0, { mullions: 2, recessLed: true });
       addCurtainWallBay(3.75, 2.0, 5.84, 3.25, 2.45, 0, { mullions: 2, recessLed: true });
       addCurtainWallBay(-2.85, 5.4, 4.58, 4.6, 2.35, 0, { mullions: 3, recessLed: true });
@@ -1678,10 +2003,10 @@ export function buildServiceHouses(
       addCurtainWallBay(-5.74, 5.4, 0.2, 4.8, 2.25, -Math.PI / 2, { mullions: 2 });
       addCurtainWallBay(5.74, 5.4, 0.2, 4.8, 2.25, Math.PI / 2, { mullions: 2 });
 
-      addLouverScreen(-0.05, 5.4, 4.78, 1.0, 2.85, 6, teakWoodMat, 0);
+      addLouverScreen(-0.05, 5.4, 4.78, 1.05, 2.85, 6, teakWoodMat, 0);
       addGlassBalustrade(-2.4, 3.94, 5.42, 6.2, 0);
+      addPlantedRoofGarden(3.8, 7.36, 1.4, 3.8, 3.4);
 
-      // Front Left Architectural Infinity Reflection Pool + Sculpted Courtyard Trees
       addReflectionPool(-4.5, 6.3, 4.2, 2.8);
       addLinearPlanter(4.2, 7.1, 3.8);
       addSculpturalTree(-6.2, 8.1, 1.12);
@@ -1690,38 +2015,43 @@ export function buildServiceHouses(
       roofPeakY = 9.05;
     } else if (placement.styleVariant === 'executive_hip') {
       // -----------------------------------------------------------------------
-      // HOUSE 04 (Digital Marketing & SEO): GRAND DOUBLE-HEIGHT TITANIUM & QUARTZ EXECUTIVE VILLA
+      // HOUSE 04 (Digital Marketing & SEO): GRAND DOUBLE-HEIGHT CHAMPAGNE & EMERALD EXECUTIVE VILLA
       // Monumental symmetrical double-height central glass atrium tower, cantilevered aero-edge
-      // floating canopy roof, slender twin-blade stone columns & illuminated garden walls!
+      // bronze canopy roof, slender twin-blade stone & bronze columns + rooftop garden terrace!
       // -----------------------------------------------------------------------
-      const plinth = new THREE.Mesh(track(new THREE.BoxGeometry(12.6, 0.48, 9.8)), travertineMat);
+      const plinth = new THREE.Mesh(
+        track(createChamferedVolumeGeometry(12.8, 0.48, 9.8, 0.6)),
+        travertineMat
+      );
       plinth.position.set(0, 0.24, -0.35);
       plinth.receiveShadow = quality.shadowsEnabled;
 
-      // Twin Symmetrical Flanking Quartz-Limestone Wings cleanly flanking the walk-in studio atrium
+      // Twin Symmetrical Chamfered Flanking Wings cleanly framing the walk-in studio atrium
       [-4.55, 4.55].forEach((wx) => {
-        const wing = new THREE.Mesh(track(new THREE.BoxGeometry(3.2, 6.35, 8.6)), wallMat);
+        const wing = new THREE.Mesh(
+          track(createChamferedVolumeGeometry(3.2, 6.35, 8.6, 0.42)),
+          wallMat
+        );
         wing.position.set(wx, 3.62, -0.3);
         wing.castShadow = quality.shadowsEnabled;
         wing.receiveShadow = quality.shadowsEnabled;
         houseRoot.add(wing);
 
-        // Sleek Mid-Level Horizontal Titanium Band
-        const band = new THREE.Mesh(track(new THREE.BoxGeometry(3.42, 0.2, 8.85)), brushedTitaniumMat);
+        const band = new THREE.Mesh(track(new THREE.BoxGeometry(3.42, 0.2, 8.85)), bronzeMat);
         band.position.set(wx, 3.62, -0.3);
         houseRoot.add(band);
       });
 
       // Central Soaring Upper Atrium Core rising cleanly ABOVE the open ground-floor studio interior!
       const centralCore = new THREE.Mesh(
-        track(new THREE.BoxGeometry(5.8, 4.5, 8.8)),
+        track(createChamferedVolumeGeometry(5.8, 4.5, 8.8, 0.38)),
         obsidianBasaltMat
       );
       centralCore.position.set(0, 5.88, -0.2);
       centralCore.castShadow = quality.shadowsEnabled;
       houseRoot.add(centralCore);
 
-      // Dramatic Cantilevered Floating Aero-Edge Titanium Roof Wing spanning the entire Estate!
+      // Dramatic Cantilevered Floating Aero-Edge Bronze-Graphite Roof Wing spanning the Estate!
       const mainAeroRoof = new THREE.Mesh(
         track(createCantileveredAeroRoofGeometry(13.8, 0.65, 10.6, 0.72)),
         brushedTitaniumMat
@@ -1729,10 +2059,10 @@ export function buildServiceHouses(
       mainAeroRoof.position.set(0, 6.82, -0.1);
       mainAeroRoof.castShadow = quality.shadowsEnabled;
 
-      // Elevated Atrium Crown Canopy with Illuminated Glacier-Blue Skylight Halo!
+      // Elevated Atrium Crown Canopy with Champagne-Amber Skylight Halo!
       const atriumRoof = new THREE.Mesh(
-        track(createCantileveredAeroRoofGeometry(6.2, 0.52, 9.8, 0.45)),
-        brushedTitaniumMat
+        track(createCantileveredAeroRoofGeometry(6.4, 0.52, 9.8, 0.45)),
+        bronzeMat
       );
       atriumRoof.position.set(0, 8.22, 0.25);
       atriumRoof.castShadow = quality.shadowsEnabled;
@@ -1756,7 +2086,7 @@ export function buildServiceHouses(
       [-2.15, -1.75, 1.75, 2.15].forEach((cx) => {
         const blade = new THREE.Mesh(
           track(new THREE.BoxGeometry(0.14, 3.15, 0.46)),
-          brushedTitaniumMat
+          bronzeMat
         );
         blade.position.set(cx, 1.98, 5.85);
         blade.castShadow = quality.shadowsEnabled;
@@ -1765,17 +2095,16 @@ export function buildServiceHouses(
 
       houseRoot.add(mainAeroRoof, atriumRoof, atriumCrownLed, porticoCanopy, porticoLed);
 
-      // Symmetrical Floor-to-Ceiling Architectural Glazing + Soaring Central Atrium Glass!
       addCurtainWallBay(-4.1, 1.98, 4.04, 2.95, 2.45, 0, { mullions: 2, recessLed: true });
       addCurtainWallBay(4.1, 1.98, 4.04, 2.95, 2.45, 0, { mullions: 2, recessLed: true });
       addCurtainWallBay(-4.1, 5.25, 4.04, 2.95, 2.35, 0, { mullions: 2, recessLed: true });
       addCurtainWallBay(4.1, 5.25, 4.04, 2.95, 2.35, 0, { mullions: 2, recessLed: true });
-      // Soaring Double-Height Upper Central Atrium Window overlooking the Crescent!
       addCurtainWallBay(0, 5.95, 4.24, 3.7, 3.6, 0, { mullions: 2, transom: true, recessLed: true });
       addCurtainWallBay(-6.14, 5.2, -0.3, 4.8, 2.25, -Math.PI / 2, { mullions: 2 });
       addCurtainWallBay(6.14, 5.2, -0.3, 4.8, 2.25, Math.PI / 2, { mullions: 2 });
 
-      // Sleek Sculpted Linear Planters & Twin Flanking Ornamental Trees
+      addPlantedRoofGarden(-4.5, 7.24, 0.5, 2.8, 5.4);
+      addPlantedRoofGarden(4.5, 7.24, 0.5, 2.8, 5.4);
       addLinearPlanter(-4.4, 5.65, 3.8);
       addLinearPlanter(4.4, 5.65, 3.8);
       addSculpturalTree(-6.2, 6.8, 1.18);
@@ -1784,32 +2113,38 @@ export function buildServiceHouses(
       roofPeakY = 9.35;
     } else if (placement.styleVariant === 'contemporary_townhouse') {
       // -----------------------------------------------------------------------
-      // HOUSE 05 (Web Hosting & Maintenance): INTERLOCKING SLATE & GLASS CUBE RESIDENCE
-      // Bold offset geometric architectural volumes, exterior vertical titanium brise-soleil
-      // sun-shading fins, full-width sky-terrace & cantilevered solar-louver roof canopy!
+      // HOUSE 05 (Web Hosting & Maintenance): INTERLOCKING TERRACOTTA, OLIVE & GRAPHITE CUBE RESIDENCE
+      // Bold offset chamfered geometric volumes, exterior terracotta & teak brise-soleil
+      // sun-shading fins, full-width sky-terrace garden & cantilevered pergola canopy!
       // -----------------------------------------------------------------------
-      const plinth = new THREE.Mesh(track(new THREE.BoxGeometry(11.4, 0.44, 9.0)), travertineMat);
+      const plinth = new THREE.Mesh(
+        track(createChamferedVolumeGeometry(11.6, 0.44, 9.2, 0.48)),
+        travertineMat
+      );
       plinth.position.set(0, 0.22, -0.25);
 
-      // Ground Floor Dark Basalt Cubes cleanly flanking the open studio interior
       [-4.12, 4.12].forEach((lx) => {
-        const gf = new THREE.Mesh(track(new THREE.BoxGeometry(2.6, 3.05, 8.4)), obsidianBasaltMat);
+        const gf = new THREE.Mesh(
+          track(createChamferedVolumeGeometry(2.6, 3.05, 8.4, 0.3)),
+          obsidianBasaltMat
+        );
         gf.position.set(lx, 1.96, -0.2);
         gf.castShadow = quality.shadowsEnabled;
         gf.receiveShadow = quality.shadowsEnabled;
         houseRoot.add(gf);
       });
 
-      // Offset Cantilevered Level 2 Glacier-Slate Cube shifted dramatically to the Left!
-      const midCube = new THREE.Mesh(track(new THREE.BoxGeometry(11.4, 3.15, 9.2)), wallMat);
+      const midCube = new THREE.Mesh(
+        track(createChamferedVolumeGeometry(11.4, 3.15, 9.2, 0.44)),
+        wallMat
+      );
       midCube.position.set(-0.45, 5.18, 0.25);
       midCube.castShadow = quality.shadowsEnabled;
       midCube.receiveShadow = quality.shadowsEnabled;
 
-      // Crisp Dark Titanium Structural Slab Channels & Warm Under-Glow LEDs
       const midFloorTrim = new THREE.Mesh(
         track(new THREE.BoxGeometry(11.7, 0.26, 9.5)),
-        brushedTitaniumMat
+        bronzeMat
       );
       midFloorTrim.position.set(-0.45, 3.56, 0.25);
       const midLed = new THREE.Mesh(track(new THREE.BoxGeometry(11.2, 0.045, 0.06)), archWarmLedMat);
@@ -1817,37 +2152,35 @@ export function buildServiceHouses(
 
       const upperFloorTrim = new THREE.Mesh(
         track(new THREE.BoxGeometry(11.7, 0.28, 9.5)),
-        brushedTitaniumMat
+        bronzeMat
       );
       upperFloorTrim.position.set(-0.45, 6.86, 0.25);
 
-      // Level 3 Offset Glass Cube Penthouse shifted to the Right + Cantilevered Rooftop Canopy!
       const pentCube = new THREE.Mesh(
-        track(new THREE.BoxGeometry(6.8, 2.55, 6.2)),
-        obsidianBasaltMat
+        track(createChamferedVolumeGeometry(6.8, 2.55, 6.2, 0.38)),
+        terracottaMat
       );
       pentCube.position.set(1.25, 8.28, -0.85);
       pentCube.castShadow = quality.shadowsEnabled;
 
       const pentCanopy = new THREE.Mesh(
-        track(new THREE.BoxGeometry(10.6, 0.24, 7.6)),
+        track(createCantileveredAeroRoofGeometry(10.8, 0.28, 7.8, 0.42)),
         brushedTitaniumMat
       );
-      pentCanopy.position.set(-0.2, 9.65, -0.4);
+      pentCanopy.position.set(-0.2, 9.56, -0.4);
       pentCanopy.castShadow = quality.shadowsEnabled;
 
       const pentCanopyLed = new THREE.Mesh(
-        track(new THREE.BoxGeometry(10.2, 0.05, 0.06)),
+        track(new THREE.BoxGeometry(10.0, 0.05, 0.06)),
         poolEdgeGlowMat
       );
       pentCanopyLed.position.set(-0.2, 9.52, 3.42);
 
-      // Cantilevered Entrance Canopy
       const entryCanopy = new THREE.Mesh(
-        track(new THREE.BoxGeometry(3.5, 0.2, 1.75)),
+        track(createCantileveredAeroRoofGeometry(3.8, 0.24, 1.85, 0.22)),
         brushedTitaniumMat
       );
-      entryCanopy.position.set(0, 3.52, 5.05);
+      entryCanopy.position.set(0, 3.46, 5.05);
 
       houseRoot.add(
         plinth,
@@ -1861,12 +2194,11 @@ export function buildServiceHouses(
         entryCanopy
       );
 
-      // Full-Width Sky-Terrace Frameless Glass Rail & Teak Architectural Louver Wall on Left Roof Deck
       addGlassBalustrade(-0.45, 7.0, 4.86, 11.2, 0);
+      addPlantedRoofGarden(-3.8, 7.02, 1.5, 3.2, 4.6);
       addLouverScreen(-4.85, 8.25, 1.2, 2.4, 2.55, 10, teakWoodMat, 0);
-      addLouverScreen(5.15, 5.18, 4.95, 1.1, 3.05, 6, brushedTitaniumMat, 0);
+      addLouverScreen(5.15, 5.18, 4.95, 1.1, 3.05, 6, bronzeMat, 0);
 
-      // Contemporary Floor-to-Ceiling Curtain-Wall Glazing
       addCurtainWallBay(-3.35, 1.98, 4.04, 3.1, 2.45, 0, { mullions: 2, recessLed: true });
       addCurtainWallBay(3.35, 1.98, 4.04, 3.1, 2.45, 0, { mullions: 2, recessLed: true });
       addCurtainWallBay(-3.2, 5.18, 4.88, 4.2, 2.45, 0, { mullions: 3, recessLed: true });
@@ -1883,39 +2215,48 @@ export function buildServiceHouses(
       roofPeakY = 10.35;
     } else {
       // -----------------------------------------------------------------------
-      // HOUSE 06 (Custom Web Tools & Apps): SOARING BUTTERFLY-ROOF ARCHITECTURAL GLASS & WALNUT STUDIO
-      // Dramatic twin-wing sculpted V-butterfly brushed-titanium roof with full-width
-      // luminous clerestory ribbon glazing, warm horizontal walnut cladding & water court!
+      // HOUSE 06 (Custom Web Tools & Apps): SOARING BUTTERFLY-ROOF ARCHITECTURAL GLASS, TEAK & BRONZE STUDIO
+      // Dramatic twin-wing sculpted V-butterfly bronze-graphite roof with clerestory ribbon glazing,
+      // chamfered sandstone gallery, warm horizontal walnut cladding & reflection pool courtyard!
       // -----------------------------------------------------------------------
-      const plinth = new THREE.Mesh(track(new THREE.BoxGeometry(12.0, 0.44, 9.4)), travertineMat);
+      const plinth = new THREE.Mesh(
+        track(createChamferedVolumeGeometry(12.2, 0.44, 9.4, 0.52)),
+        travertineMat
+      );
       plinth.position.set(0, 0.22, -0.2);
 
-      // Left Glacier-White Concrete Ground Wing + Upper Span (keeps central walk-in studio cavity 100% open!)
-      const leftGroundWing = new THREE.Mesh(track(new THREE.BoxGeometry(2.7, 3.15, 8.4)), wallMat);
+      const leftGroundWing = new THREE.Mesh(
+        track(createChamferedVolumeGeometry(2.7, 3.15, 8.4, 0.3)),
+        wallMat
+      );
       leftGroundWing.position.set(-4.2, 2.0, -0.2);
       leftGroundWing.castShadow = quality.shadowsEnabled;
       leftGroundWing.receiveShadow = quality.shadowsEnabled;
       houseRoot.add(leftGroundWing);
 
-      const leftVolume = new THREE.Mesh(track(new THREE.BoxGeometry(7.2, 2.75, 8.4)), wallMat);
+      const leftVolume = new THREE.Mesh(
+        track(createChamferedVolumeGeometry(7.2, 2.75, 8.4, 0.36)),
+        wallMat
+      );
       leftVolume.position.set(-1.95, 4.92, -0.2);
       leftVolume.castShadow = quality.shadowsEnabled;
       leftVolume.receiveShadow = quality.shadowsEnabled;
 
-      // Projecting Right Double-Height Horizontal Walnut Architectural Studio Wing!
-      const walnutWing = new THREE.Mesh(track(new THREE.BoxGeometry(3.0, 6.25, 9.6)), teakWoodMat);
+      // Projecting Right Double-Height Architectural Teak & Bronze Studio Wing!
+      const walnutWing = new THREE.Mesh(
+        track(createChamferedVolumeGeometry(3.0, 6.25, 9.6, 0.38)),
+        teakWoodMat
+      );
       walnutWing.position.set(4.35, 3.55, 0.45);
       walnutWing.castShadow = quality.shadowsEnabled;
       walnutWing.receiveShadow = quality.shadowsEnabled;
 
-      // Full-Width Luminous Clerestory Ribbon Glass Band tucked right beneath the Soaring Butterfly Roof!
       const clerestoryBand = new THREE.Mesh(
         track(new THREE.BoxGeometry(11.4, 0.92, 8.5)),
         winGlassMat
       );
       clerestoryBand.position.set(0.3, 6.68, 0.05);
 
-      // Dramatic Sculpted Twin-Wing Angled Butterfly Titanium Roof (Custom ExtrudeGeometry!)
       const butterflyRoof = new THREE.Mesh(
         track(createButterflyRoofGeometry(13.4, 2.05, 11.2, 0.34)),
         brushedTitaniumMat
@@ -1924,7 +2265,6 @@ export function buildServiceHouses(
       butterflyRoof.castShadow = quality.shadowsEnabled;
       butterflyRoof.receiveShadow = quality.shadowsEnabled;
 
-      // Warm Teak Underside Soffit Fascia & Recessed Linear LED accent along the Front Overhang
       const overhangLedLeft = new THREE.Mesh(
         track(new THREE.BoxGeometry(6.3, 0.05, 0.07)),
         archWarmLedMat
@@ -1939,12 +2279,11 @@ export function buildServiceHouses(
       overhangLedRight.position.set(3.55, 7.98, 5.76);
       overhangLedRight.rotation.z = 0.345;
 
-      // Cantilevered Floating Porch Deck Canopy clad in Titanium & Warm Teak Soffit
       const porchCanopy = new THREE.Mesh(
-        track(new THREE.BoxGeometry(3.75, 0.22, 1.95)),
-        brushedTitaniumMat
+        track(createCantileveredAeroRoofGeometry(3.95, 0.24, 1.95, 0.22)),
+        bronzeMat
       );
-      porchCanopy.position.set(0, 3.48, 4.82);
+      porchCanopy.position.set(0, 3.44, 4.82);
       porchCanopy.castShadow = quality.shadowsEnabled;
       const porchSoffit = new THREE.Mesh(track(new THREE.BoxGeometry(3.45, 0.07, 1.75)), teakWoodMat);
       porchSoffit.position.set(0, 3.35, 4.8);
@@ -1964,11 +2303,9 @@ export function buildServiceHouses(
         porchLed
       );
 
-      // Floor-to-Ceiling Frameless Architectural Windows
       addCurtainWallBay(-3.5, 1.98, 4.04, 3.1, 2.45, 0, { mullions: 2, recessLed: true });
       addCurtainWallBay(-3.3, 4.85, 4.04, 3.6, 2.25, 0, { mullions: 2, recessLed: true });
       addCurtainWallBay(0.05, 4.85, 4.04, 2.35, 2.25, 0, { mullions: 1 });
-      // Soaring Double-Height Studio Glass Showcase in the Walnut Wing!
       addCurtainWallBay(3.55, 3.48, 5.28, 3.55, 5.15, 0, {
         mullions: 2,
         transom: true,
@@ -1977,7 +2314,6 @@ export function buildServiceHouses(
       addCurtainWallBay(-5.58, 4.85, -0.2, 4.8, 2.2, -Math.PI / 2, { mullions: 2 });
       addCurtainWallBay(5.88, 3.55, 0.5, 5.0, 4.8, Math.PI / 2, { mullions: 3, transom: true });
 
-      // Front Reflection Pool under the Left Wing + Sculpted Trees
       addReflectionPool(-4.4, 6.25, 4.1, 2.4);
       addLinearPlanter(4.2, 6.5, 3.8);
       addSculpturalTree(-6.2, 7.6, 1.18);
@@ -2037,28 +2373,42 @@ export function buildServiceHouses(
 
   const applyTheme = (isDark: boolean) => {
     contactMat.opacity = isDark ? 0.54 : 0.28;
-    travertineMat.color.setHex(isDark ? 0x3b4659 : 0xf2f0eb);
-    obsidianBasaltMat.color.setHex(isDark ? 0x161f2e : 0x2a3342);
-    brushedTitaniumMat.color.setHex(isDark ? 0x202c40 : 0x324156);
-    teakWoodMat.color.setHex(isDark ? 0x6b472b : 0xb37c4c);
-    archGlassRailMat.color.setHex(isDark ? 0x6ba8e5 : 0xcce6ff);
-    reflectionPoolMat.color.setHex(isDark ? 0x0b223d : 0x1b5c8a);
-    pebbleBedMat.color.setHex(isDark ? 0x1d2534 : 0x8e99a8);
-    foliageCardMat.color.setHex(isDark ? 0x1f3428 : 0x4f6846);
-    ornamentalGrassMat.color.setHex(isDark ? 0x1c3124 : 0x496141);
+    travertineMat.color.setHex(isDark ? 0x282d38 : 0xe8decb);
+    obsidianBasaltMat.color.setHex(isDark ? 0x0e131d : 0x1c2129);
+    terracottaMat.color.setHex(isDark ? 0x7a422b : 0xb86b4b);
+    brushedTitaniumMat.color.setHex(isDark ? 0x141a24 : 0x222730);
+    bronzeMat.color.setHex(isDark ? 0x6e4c2c : 0x8c6239);
+    teakWoodMat.color.setHex(isDark ? 0x5c3e26 : 0x8c5a34);
+    archGlassRailMat.color.setHex(isDark ? 0x142e28 : 0x1e4a3d);
+    reflectionPoolMat.color.setHex(isDark ? 0x071224 : 0x123a34);
+    pebbleBedMat.color.setHex(isDark ? 0x161a22 : 0x5c5b56);
+    foliageCardMat.color.setHex(isDark ? 0x16281c : 0x56643c);
+    ornamentalGrassMat.color.setHex(isDark ? 0x13241a : 0x1f4e37);
+    skyTerraceGardenMat.color.setHex(isDark ? 0x182b1e : 0x465a34);
+    courtyardBloomMat.color.setHex(isDark ? 0xb86b4b : 0xc97352);
 
-    poolEdgeGlowMat.color.setHex(isDark ? 0xbae6fd : 0x93c5fd);
-    poolEdgeGlowMat.emissiveIntensity = isDark ? 1.85 : 0.12;
+    poolEdgeGlowMat.color.setHex(isDark ? 0xf4cf84 : 0xd4ba8b);
+    poolEdgeGlowMat.emissive.setHex(isDark ? 0xe8a84a : 0x000000);
+    poolEdgeGlowMat.emissiveIntensity = isDark ? 1.45 : 0.0;
 
-    archWarmLedMat.color.setHex(isDark ? 0xfff8ea : 0xe2e8f0);
-    archWarmLedMat.emissiveIntensity = isDark ? 2.15 : 0.0;
+    archWarmLedMat.color.setHex(isDark ? 0xfce7b2 : 0xd4ba8b);
+    archWarmLedMat.emissiveIntensity = isDark ? 1.85 : 0.0;
 
-    interiorRoomMat.color.setHex(isDark ? 0xffe8c2 : 0x263448);
-    interiorRoomMat.emissive.setHex(isDark ? 0xffd79e : 0x000000);
-    interiorRoomMat.emissiveIntensity = isDark ? 0.55 : 0.0;
+    interiorRoomMat.color.setHex(isDark ? 0xfce2b0 : 0x1b242e);
+    interiorRoomMat.emissive.setHex(isDark ? 0xf6c978 : 0x000000);
+    interiorRoomMat.emissiveIntensity = isDark ? 0.62 : 0.0;
 
     lawnMat.map = isDark ? grassPbr.darkMap : grassPbr.lightMap;
     lawnMat.needsUpdate = true;
+
+    plaqueThemeEntries.forEach((p) => {
+      const nextTex = isDark ? p.nightTex : p.dayTex;
+      p.mat.map = nextTex;
+      p.mat.emissive.setHex(isDark ? 0xffffff : 0x000000);
+      p.mat.emissiveMap = isDark ? p.nightTex : null;
+      p.mat.emissiveIntensity = isDark ? 0.52 : 0.0;
+      p.mat.needsUpdate = true;
+    });
 
     houses.forEach((h, idx) => {
       const pal = SERVICE_HOUSE_PALETTES[idx % SERVICE_HOUSE_PALETTES.length];
@@ -2067,9 +2417,9 @@ export function buildServiceHouses(
       });
       h.windowMaterials.forEach((m) => {
         m.map = isDark ? winTex.nightMap : winTex.dayMap;
-        m.emissive.setHex(isDark ? 0xffe6bd : 0x000000);
+        m.emissive.setHex(isDark ? 0xf6c978 : 0x000000);
         m.emissiveMap = isDark ? winTex.nightEmissiveMap : null;
-        m.emissiveIntensity = isDark ? 0.92 : 0.0;
+        m.emissiveIntensity = isDark ? 0.88 : 0.0;
         m.needsUpdate = true;
       });
       h.portalGlowMat.color.setHex(isDark ? 0xffefd6 : 0xffffff);

@@ -39,7 +39,7 @@ function finalizeDataTexture(
 }
 
 /**
- * Generates a linear tangent-space RGB Normal Map from a grayscale height canvas (Sobel filter).
+ * Generates a linear tangent-space RGB Normal Map from a grayscale height canvas (fast Sobel filter).
  */
 function heightCanvasToNormalTexture(
   heightCanvas: HTMLCanvasElement,
@@ -53,33 +53,34 @@ function heightCanvasToNormalTexture(
   const ctx = heightCanvas.getContext('2d')!;
   const src = ctx.getImageData(0, 0, w, h).data;
   const out = new Uint8Array(w * h * 4);
-
-  const sample = (x: number, y: number) => {
-    const wx = ((x % w) + w) % w;
-    const wy = ((y % h) + h) % h;
-    return src[(wy * w + wx) * 4] / 255;
-  };
+  const scale = strength / 255;
 
   for (let y = 0; y < h; y++) {
+    const ym1 = (y === 0 ? h - 1 : y - 1) * w;
+    const y0 = y * w;
+    const yp1 = (y === h - 1 ? 0 : y + 1) * w;
+
     for (let x = 0; x < w; x++) {
-      const tl = sample(x - 1, y - 1);
-      const t = sample(x, y - 1);
-      const tr = sample(x + 1, y - 1);
-      const l = sample(x - 1, y);
-      const r = sample(x + 1, y);
-      const bl = sample(x - 1, y + 1);
-      const b = sample(x, y + 1);
-      const br = sample(x + 1, y + 1);
+      const xm1 = x === 0 ? w - 1 : x - 1;
+      const xp1 = x === w - 1 ? 0 : x + 1;
 
-      const dX = (tr + 2 * r + br - (tl + 2 * l + bl)) * strength;
-      const dY = (bl + 2 * b + br - (tl + 2 * t + tr)) * strength;
-      const dZ = 1.0;
-      const invLen = 1 / Math.hypot(dX, dY, dZ);
+      const tl = src[(ym1 + xm1) << 2];
+      const t = src[(ym1 + x) << 2];
+      const tr = src[(ym1 + xp1) << 2];
+      const l = src[(y0 + xm1) << 2];
+      const r = src[(y0 + xp1) << 2];
+      const bl = src[(yp1 + xm1) << 2];
+      const b = src[(yp1 + x) << 2];
+      const br = src[(yp1 + xp1) << 2];
 
-      const idx = (y * w + x) * 4;
+      const dX = (tr + 2 * r + br - (tl + 2 * l + bl)) * scale;
+      const dY = (bl + 2 * b + br - (tl + 2 * t + tr)) * scale;
+      const invLen = 1 / Math.hypot(dX, dY, 1.0);
+
+      const idx = (y0 + x) << 2;
       out[idx] = Math.round((-dX * invLen * 0.5 + 0.5) * 255);
       out[idx + 1] = Math.round((dY * invLen * 0.5 + 0.5) * 255);
-      out[idx + 2] = Math.round((dZ * invLen * 0.5 + 0.5) * 255);
+      out[idx + 2] = Math.round((invLen * 0.5 + 0.5) * 255);
       out[idx + 3] = 255;
     }
   }
@@ -100,17 +101,16 @@ export interface SkyscraperPbrSet {
 }
 
 /**
- * Ultra-Realistic Modern Office & Commercial Skyscraper Curtain-Wall PBR Set (Zero Neon):
- * - Daytime: Realistic sky-reflecting tinted architectural glass, anodized aluminum mullions, interior office blinds & ceiling slabs.
- * - Nighttime: Authentic warm-white, halogen & soft daylight illuminated office rooms with venetian blinds and interior depth.
+ * Neo-Luxury Architectural Smoked-Bronze & Graphite Curtain-Wall PBR Set:
+ * - Daytime: Variable-bay smoked bronze & graphite glass panes with champagne-metallic mullions,
+ *   sandstone/terracotta architectural spandrel bands & double-height sky-lounge galleries.
+ * - Nighttime: Warm amber-gold & honey interior illumination framed by dark graphite mullions (Zero cyan neon).
  */
-export function createSkyscraperPbrSet(anisotropy = 8): SkyscraperPbrSet {
-  const size = 1024;
-  const cols = 10;
+export function createSkyscraperPbrSet(anisotropy = 8, highRes = true): SkyscraperPbrSet {
+  const size = highRes ? 2048 : 1024;
   const rows = 20;
-  const padX = 8;
-  const padY = 6;
-  const cellW = size / cols;
+  const padX = Math.round(size * 0.0055);
+  const padY = Math.round(size * 0.006);
   const cellH = size / rows;
 
   const darkCanvas = document.createElement('canvas');
@@ -128,7 +128,7 @@ export function createSkyscraperPbrSet(anisotropy = 8): SkyscraperPbrSet {
   lightCanvas.height = size;
   const lCtx = lightCanvas.getContext('2d')!;
 
-  const mapSize = 512;
+  const mapSize = highRes ? 1024 : 512;
   const heightCanvas = document.createElement('canvas');
   heightCanvas.width = mapSize;
   heightCanvas.height = mapSize;
@@ -139,20 +139,20 @@ export function createSkyscraperPbrSet(anisotropy = 8): SkyscraperPbrSet {
   roughCanvas.height = mapSize;
   const rCtx = roughCanvas.getContext('2d')!;
 
-  // Sleek anodized titanium-silver & dark cobalt structural mullion grid
-  dCtx.fillStyle = '#0D1729';
+  // Dark graphite structural frame & champagne-bronze highlights
+  dCtx.fillStyle = '#0D1119';
   dCtx.fillRect(0, 0, size, size);
 
   eCtx.fillStyle = '#000000';
   eCtx.fillRect(0, 0, size, size);
 
-  lCtx.fillStyle = '#CFDCEB';
+  lCtx.fillStyle = '#252932';
   lCtx.fillRect(0, 0, size, size);
 
-  hCtx.fillStyle = '#EAEAEA';
+  hCtx.fillStyle = '#ECECEC';
   hCtx.fillRect(0, 0, mapSize, mapSize);
 
-  rCtx.fillStyle = '#A6A6A6';
+  rCtx.fillStyle = '#A8A8A8';
   rCtx.fillRect(0, 0, mapSize, mapSize);
 
   let seed = 3071;
@@ -161,206 +161,205 @@ export function createSkyscraperPbrSet(anisotropy = 8): SkyscraperPbrSet {
     return (seed - 1) / 2147483646;
   };
 
-  // Realistic futuristic modern night interiors: crisp architectural daylight-white, cool glacier-blue & refined warm executive accents
+  // Night interiors: rich warm amber, honey-champagne & soft candlelight executive suites
   const realisticNightOfficeLights = [
-    ['#E8F4FF', '#9EC7EC'],
-    ['#F2F8FF', '#B7D5F2'],
-    ['#DFF1FF', '#7EB8EA'],
-    ['#FFF8EB', '#E4C998'],
-    ['#EAF5FF', '#A7CBEB'],
+    ['#FFEBC2', '#D89A48'],
+    ['#FFE2AA', '#C47F32'],
+    ['#FFF2D6', '#CA9E5F'],
+    ['#F7D9A4', '#A86E34'],
+    ['#FFE8BC', '#D49242'],
   ];
 
-  // Photorealistic futuristic modern architectural blue-glass curtain-wall tones
+  // Daytime glazing: Smoked Bronze-Graphite & Deep Emerald-Smoke Architectural Glass
   const realisticDayGlass = [
-    ['#3A7EC9', '#1E4C88'],
-    ['#5499DE', '#285EA0'],
-    ['#2A65AD', '#163D72'],
-    ['#68ABE8', '#336EB5'],
-    ['#4488D1', '#1F518F'],
+    ['#2A333E', '#171C24'],
+    ['#36342F', '#1D1C19'],
+    ['#233934', '#13221F'],
+    ['#323942', '#1C2229'],
+    ['#3B352B', '#211E18'],
   ];
 
   const sc = mapSize / size;
+  // Asymmetric architectural bay layouts per tier to eliminate repetitive grids
+  const bayPatterns = [
+    [0.14, 0.11, 0.22, 0.11, 0.14, 0.16, 0.12],
+    [0.18, 0.12, 0.14, 0.12, 0.18, 0.14, 0.12],
+    [0.25, 0.12, 0.26, 0.12, 0.25],
+    [0.12, 0.18, 0.10, 0.20, 0.10, 0.18, 0.12],
+  ];
 
   for (let r = 0; r < rows; r++) {
-    const floorOccupancy = rand() > 0.26 ? 0.62 : 0.28;
+    const floorOccupancy = rand() > 0.26 ? 0.62 : 0.32;
     const floorTintIdx = Math.floor(rand() * realisticNightOfficeLights.length);
-    const isMechanicalFloor = r === 9 || r === 19;
-    const isSkyLounge = r === 5 || r === 14;
+    const isMechanicalFloor = r === 7 || r === 15;
+    const isSkyLounge = r === 4 || r === 12;
+    const pattern = bayPatterns[(Math.floor(r / 3) + (r === 12 ? 1 : 0)) % bayPatterns.length];
 
-    for (let c = 0; c < cols; c++) {
+    let curX = 0;
+    for (let c = 0; c < pattern.length; c++) {
+      const bayFrac = pattern[c];
+      const cellW = size * bayFrac;
       const litRoll = rand();
-      const x = Math.round(c * cellW + padX);
+      const x = Math.round(curX + padX);
       const y = Math.round(r * cellH + padY);
       const w = Math.round(cellW - padX * 2);
       const h = Math.round(cellH - padY * 2);
+      curX += cellW;
 
       const mx = Math.round(x * sc);
       const my = Math.round(y * sc);
       const mw = Math.max(2, Math.round(w * sc));
       const mh = Math.max(2, Math.round(h * sc));
 
-      hCtx.fillStyle = isMechanicalFloor ? '#9E9E9E' : '#242424';
+      hCtx.fillStyle = isMechanicalFloor ? '#9E9E9E' : '#222222';
       hCtx.fillRect(mx, my, mw, mh);
 
-      // Mirror-smooth high-gloss sapphire glass panes vs satin brushed-titanium frames
-      rCtx.fillStyle = isMechanicalFloor ? '#B8B8B8' : '#080808';
+      rCtx.fillStyle = isMechanicalFloor ? '#B8B8B8' : '#0B0B0B';
       rCtx.fillRect(mx, my, mw, mh);
 
       if (isMechanicalFloor) {
-        dCtx.fillStyle = '#0D192E';
+        // Architectural terracotta/bronze louver mechanical band with champagne trim
+        dCtx.fillStyle = '#101520';
         dCtx.fillRect(x, y, w, h);
-        lCtx.fillStyle = '#8AA7C7';
+        lCtx.fillStyle = '#332C28';
         lCtx.fillRect(x, y, w, h);
-        dCtx.fillStyle = '#060E1D';
-        lCtx.fillStyle = '#5E7C9E';
+        dCtx.fillStyle = '#070A10';
+        lCtx.fillStyle = '#1E1B1A';
         for (let ly = y + 4; ly < y + h; ly += 6) {
           dCtx.fillRect(x, ly, w, 2);
           lCtx.fillRect(x, ly, w, 2);
         }
-        // Refined architectural glacier-blue horizontal spandrel LED line along mechanical/sky-terrace floors at night
-        dCtx.fillStyle = '#38BDF8';
-        dCtx.fillRect(x, y + Math.round(h * 0.45), w, 3);
-        eCtx.fillStyle = '#7DD3FC';
-        eCtx.fillRect(x, y + Math.round(h * 0.45), w, 3);
+        lCtx.fillStyle = r === 7 ? '#B86B4B' : '#D4BA8B';
+        lCtx.fillRect(x, y + Math.round(h * 0.42), w, 5);
+        dCtx.fillStyle = '#D99E4E';
+        dCtx.fillRect(x, y + Math.round(h * 0.44), w, 2);
+        eCtx.fillStyle = '#B87A32';
+        eCtx.fillRect(x, y + Math.round(h * 0.44), w, 2);
         continue;
       }
 
-      // Dramatic continuous illuminated executive Sky-Lounge / Observation Gallery floor!
       if (isSkyLounge) {
+        // Double-aspect Warm Amber & Bronze Executive Sky-Lounge Gallery
         const slGrad = dCtx.createLinearGradient(x, y, x, y + h);
-        slGrad.addColorStop(0, '#FFF5E1');
-        slGrad.addColorStop(0.55, '#D7E9FA');
-        slGrad.addColorStop(1, '#365882');
+        slGrad.addColorStop(0, '#FFF1CF');
+        slGrad.addColorStop(0.55, '#DF9F4C');
+        slGrad.addColorStop(1, '#2B221A');
         dCtx.fillStyle = slGrad;
         dCtx.fillRect(x, y, w, h);
         eCtx.fillStyle = slGrad;
-        eCtx.fillRect(x + 1, y + 1, w - 2, h - 2);
-        // Subtle architectural ceiling grid & gallery columns
-        dCtx.fillStyle = 'rgba(10, 20, 38, 0.72)';
-        dCtx.fillRect(x + Math.round(w * 0.33), y, 3, h);
-        dCtx.fillRect(x + Math.round(w * 0.67), y, 3, h);
-        eCtx.fillStyle = '#000000';
-        eCtx.fillRect(x + Math.round(w * 0.33), y, 3, h);
-        eCtx.fillRect(x + Math.round(w * 0.67), y, 3, h);
+        eCtx.fillRect(x + 2, y + 2, w - 4, h - 4);
 
-        // Bright crystal-blue sky-lounge glass in daytime
         const lSl = lCtx.createLinearGradient(x, y, x + w, y + h);
-        lSl.addColorStop(0, '#72B4EE');
-        lSl.addColorStop(0.5, '#306DB8');
-        lSl.addColorStop(1, '#9FD0FA');
+        lSl.addColorStop(0, '#29493D');
+        lSl.addColorStop(0.55, '#1D2926');
+        lSl.addColorStop(1, '#484035');
         lCtx.fillStyle = lSl;
         lCtx.fillRect(x, y, w, h);
-        lCtx.fillStyle = 'rgba(255,255,255,0.34)';
-        lCtx.fillRect(x, y + 2, w, 3);
+        lCtx.fillStyle = '#D4BA8B';
+        lCtx.fillRect(x, y + 1, w, 4);
         continue;
       }
 
-      // NIGHT MODE: Realistic modern illuminated executive & tech offices inside deep sapphire glass
-      if (litRoll < floorOccupancy * 0.66) {
+      // NIGHT MODE: Deep midnight smoked glazing + warm amber executive interiors
+      if (litRoll < floorOccupancy * 0.62) {
         const [cTop, cBot] =
           realisticNightOfficeLights[
             (floorTintIdx + (c % 2)) % realisticNightOfficeLights.length
           ];
         const grad = dCtx.createLinearGradient(x, y, x, y + h);
         grad.addColorStop(0, cTop);
-        grad.addColorStop(0.56, cBot);
-        grad.addColorStop(1, '#26446B');
+        grad.addColorStop(0.62, cBot);
+        grad.addColorStop(1, '#261D17');
         dCtx.fillStyle = grad;
         dCtx.fillRect(x, y, w, h);
 
         eCtx.fillStyle = grad;
         eCtx.fillRect(x + 2, y + 2, w - 4, h - 4);
 
-        // Crisp recessed architectural ceiling linear LED bar
-        dCtx.fillStyle = 'rgba(240, 249, 255, 0.92)';
+        // Warm architectural linear ceiling cove bar
+        dCtx.fillStyle = 'rgba(255, 244, 214, 0.9)';
         dCtx.fillRect(x + 6, y + 3, w - 12, 3);
-        eCtx.fillStyle = '#F0F9FF';
+        eCtx.fillStyle = '#FFECC4';
         eCtx.fillRect(x + 6, y + 3, w - 12, 3);
 
-        // Subtle interior workstation/architecture silhouette along lower third
-        if (rand() > 0.32) {
-          const deskW = Math.round(w * (0.35 + rand() * 0.4));
+        if (rand() > 0.35) {
+          const deskW = Math.round(w * (0.35 + rand() * 0.35));
           const deskX = x + Math.round(rand() * (w - deskW));
-          dCtx.fillStyle = 'rgba(10, 22, 42, 0.5)';
+          dCtx.fillStyle = 'rgba(14, 16, 22, 0.62)';
           dCtx.fillRect(deskX, y + Math.round(h * 0.65), deskW, Math.round(h * 0.35));
-          eCtx.fillStyle = 'rgba(0, 0, 0, 0.6)';
+          eCtx.fillStyle = 'rgba(0, 0, 0, 0.72)';
           eCtx.fillRect(deskX, y + Math.round(h * 0.65), deskW, Math.round(h * 0.35));
         }
-
-        // Modern motorized roller shades on select bays
-        if (rand() > 0.46) {
-          const blindH = Math.round(h * (0.2 + rand() * 0.3));
-          dCtx.fillStyle = 'rgba(11, 21, 39, 0.58)';
+        if (rand() > 0.48) {
+          const blindH = Math.round(h * (0.2 + rand() * 0.28));
+          dCtx.fillStyle = 'rgba(12, 16, 26, 0.66)';
           dCtx.fillRect(x, y, w, blindH);
-          eCtx.fillStyle = 'rgba(0, 0, 0, 0.68)';
+          eCtx.fillStyle = 'rgba(0, 0, 0, 0.72)';
           eCtx.fillRect(x, y, w, blindH);
         }
-
-        // Sleek structural vertical window mullion
-        dCtx.fillStyle = 'rgba(8, 16, 30, 0.68)';
-        dCtx.fillRect(x + Math.round(w * 0.5) - 1, y, 2, h);
-        eCtx.fillStyle = '#000000';
-        eCtx.fillRect(x + Math.round(w * 0.5) - 1, y, 2, h);
       } else if (litRoll < floorOccupancy) {
-        dCtx.fillStyle = '#1E3354';
+        dCtx.fillStyle = '#2A2520';
         dCtx.fillRect(x, y, w, h);
-        eCtx.fillStyle = '#193257';
+        eCtx.fillStyle = '#543C20';
         eCtx.fillRect(x + 2, y + 2, w - 4, h - 4);
       } else {
         const unlitGrad = dCtx.createLinearGradient(x, y, x + w, y + h);
-        unlitGrad.addColorStop(0, '#132645');
-        unlitGrad.addColorStop(1, '#091428');
+        unlitGrad.addColorStop(0, '#121826');
+        unlitGrad.addColorStop(1, '#090D16');
         dCtx.fillStyle = unlitGrad;
         dCtx.fillRect(x, y, w, h);
       }
 
-      // DAY MODE: Photorealistic reflective futuristic sapphire & glacier-azure curtain-wall glass
+      // DAY MODE: Smoked bronze & graphite reflective curtain-wall glass with subtle warm sky gleam
       const [lTop, lBot] =
         realisticDayGlass[Math.floor(litRoll * realisticDayGlass.length) % realisticDayGlass.length];
-      const tiltShift = (rand() - 0.5) * w * 0.48;
-      const lGrad = lCtx.createLinearGradient(x + tiltShift, y, x + w * 0.68, y + h);
+      const tiltShift = (rand() - 0.5) * w * 0.42;
+      const lGrad = lCtx.createLinearGradient(x + tiltShift, y, x + w * 0.72, y + h);
       lGrad.addColorStop(0, lTop);
       lGrad.addColorStop(0.55, lBot);
-      lGrad.addColorStop(1, '#7DB7EA');
+      lGrad.addColorStop(1, '#4C473E');
       lCtx.fillStyle = lGrad;
       lCtx.fillRect(x, y, w, h);
 
-      // Crisp diagonal sky-cloud reflection sweep across select glazing panes
+      // Soft warm sunlit reflection sweep across smoked glass panes
       if (rand() > 0.42) {
-        lCtx.fillStyle = 'rgba(232, 244, 255, 0.28)';
+        lCtx.fillStyle = 'rgba(237, 228, 212, 0.16)';
         lCtx.beginPath();
-        lCtx.moveTo(x + w * 0.12, y);
-        lCtx.lineTo(x + w * 0.52, y);
-        lCtx.lineTo(x + w * 0.22, y + h);
+        lCtx.moveTo(x + w * 0.15, y);
+        lCtx.lineTo(x + w * 0.48, y);
+        lCtx.lineTo(x + w * 0.2, y + h);
         lCtx.lineTo(x, y + h);
         lCtx.closePath();
         lCtx.fill();
       }
 
-      // Subtle visible interior ceiling & floor slab shadow behind daylight sapphire glass
-      lCtx.fillStyle = 'rgba(10, 26, 52, 0.24)';
+      // Interior architectural slab shadow behind glazing
+      lCtx.fillStyle = 'rgba(10, 12, 16, 0.44)';
       lCtx.fillRect(x, y + Math.round(h * 0.68), w, Math.round(h * 0.32));
 
-      // Precision structural silicone joint + brushed aluminum mullion highlights
-      lCtx.strokeStyle = 'rgba(18, 38, 68, 0.5)';
+      // Patinated bronze & champagne structural mullion highlights
+      lCtx.strokeStyle = 'rgba(20, 22, 26, 0.76)';
       lCtx.lineWidth = 2;
       lCtx.strokeRect(x + 1, y + 1, w - 2, h - 2);
-      lCtx.fillStyle = 'rgba(236, 246, 255, 0.34)';
+      lCtx.fillStyle = 'rgba(212, 186, 139, 0.46)';
       lCtx.fillRect(x + 2, y + 2, w - 4, 2);
-      lCtx.fillStyle = 'rgba(54, 78, 108, 0.56)';
-      lCtx.fillRect(x + Math.round(w * 0.5) - 1, y, 2, h);
     }
   }
 
-  // Structural architectural steel-and-glass spandrel floor bands
-  dCtx.fillStyle = '#0A1324';
-  lCtx.fillStyle = '#D9E5F2';
+  // Champagne-metal & dark graphite architectural spandrel bands
+  dCtx.fillStyle = '#0A0E17';
+  lCtx.fillStyle = '#22262E';
   hCtx.fillStyle = '#FFFFFF';
+  const spandrelPx = Math.max(5, Math.round(size * 0.0065));
+  const mapSpandrelPx = Math.max(2, Math.round(spandrelPx * sc));
   for (let r = 0; r < rows; r++) {
     const ry = Math.round(r * cellH);
-    dCtx.fillRect(0, ry, size, 6);
-    lCtx.fillRect(0, ry, size, 6);
-    hCtx.fillRect(0, Math.round(ry * sc), mapSize, 3);
+    dCtx.fillRect(0, ry, size, spandrelPx);
+    lCtx.fillRect(0, ry, size, spandrelPx);
+    lCtx.fillStyle = r % 4 === 0 ? 'rgba(212, 186, 139, 0.8)' : 'rgba(140, 98, 57, 0.55)';
+    lCtx.fillRect(0, ry, size, Math.max(2, Math.round(spandrelPx * 0.45)));
+    lCtx.fillStyle = '#22262E';
+    hCtx.fillRect(0, Math.round(ry * sc), mapSize, mapSpandrelPx);
   }
 
   const darkMap = finalizeColorTexture(new THREE.CanvasTexture(darkCanvas), anisotropy, 1, 2);
@@ -371,7 +370,169 @@ export function createSkyscraperPbrSet(anisotropy = 8): SkyscraperPbrSet {
     2
   );
   const lightMap = finalizeColorTexture(new THREE.CanvasTexture(lightCanvas), anisotropy, 1, 2);
-  const normalMap = heightCanvasToNormalTexture(heightCanvas, 2.2, anisotropy, 1, 2);
+  const normalMap = heightCanvasToNormalTexture(heightCanvas, 2.5, anisotropy, 1, 2);
+  const roughnessMap = finalizeDataTexture(
+    new THREE.CanvasTexture(roughCanvas),
+    anisotropy,
+    1,
+    2
+  ) as THREE.CanvasTexture;
+
+  return {
+    darkMap,
+    darkEmissiveMap,
+    lightMap,
+    normalMap,
+    roughnessMap,
+    dispose: () => {
+      darkMap.dispose();
+      darkEmissiveMap.dispose();
+      lightMap.dispose();
+      normalMap.dispose();
+      roughnessMap.dispose();
+    },
+  };
+}
+
+/**
+ * Deep Emerald-Tinted Glass & Patinated Bronze Architectural Tower PBR Set (Singapore Biophilic Landmark Suite):
+ * - Daytime: Deep emerald glass ribbons alternating with warm sandstone/bronze vertical fins & sky-terrace recesses.
+ * - Nighttime: Deep midnight emerald glass punctuated with warm amber executive & garden terraces.
+ */
+export function createEmeraldSkyscraperPbrSet(
+  anisotropy = 8,
+  highRes = true
+): SkyscraperPbrSet {
+  const size = highRes ? 2048 : 1024;
+  const rows = 18;
+  const cols = 8;
+  const cellW = size / cols;
+  const cellH = size / rows;
+  const finW = Math.round(size * 0.011);
+  const spandrelH = Math.round(size * 0.012);
+
+  const darkCanvas = document.createElement('canvas');
+  darkCanvas.width = size;
+  darkCanvas.height = size;
+  const dCtx = darkCanvas.getContext('2d')!;
+
+  const emissiveCanvas = document.createElement('canvas');
+  emissiveCanvas.width = size;
+  emissiveCanvas.height = size;
+  const eCtx = emissiveCanvas.getContext('2d')!;
+
+  const lightCanvas = document.createElement('canvas');
+  lightCanvas.width = size;
+  lightCanvas.height = size;
+  const lCtx = lightCanvas.getContext('2d')!;
+
+  const mapSize = highRes ? 1024 : 512;
+  const heightCanvas = document.createElement('canvas');
+  heightCanvas.width = mapSize;
+  heightCanvas.height = mapSize;
+  const hCtx = heightCanvas.getContext('2d')!;
+
+  const roughCanvas = document.createElement('canvas');
+  roughCanvas.width = mapSize;
+  roughCanvas.height = mapSize;
+  const rCtx = roughCanvas.getContext('2d')!;
+
+  lCtx.fillStyle = '#382C22'; // Patinated bronze vertical structural mullions
+  lCtx.fillRect(0, 0, size, size);
+  dCtx.fillStyle = '#0B1218';
+  dCtx.fillRect(0, 0, size, size);
+  eCtx.fillStyle = '#000000';
+  eCtx.fillRect(0, 0, size, size);
+  hCtx.fillStyle = '#F2F2F2';
+  hCtx.fillRect(0, 0, mapSize, mapSize);
+  rCtx.fillStyle = '#9C9C9C';
+  rCtx.fillRect(0, 0, mapSize, mapSize);
+
+  let seed = 6129;
+  const rand = () => {
+    seed = (seed * 16807) % 2147483647;
+    return (seed - 1) / 2147483646;
+  };
+  const sc = mapSize / size;
+
+  for (let r = 0; r < rows; r++) {
+    const isTerraceBand = r === 5 || r === 11 || r === 16;
+    for (let c = 0; c < cols; c++) {
+      const x = Math.round(c * cellW + finW);
+      const y = Math.round(r * cellH + spandrelH);
+      const w = Math.round(cellW - finW * 2);
+      const h = Math.round(cellH - spandrelH * 2);
+
+      const mx = Math.round(x * sc);
+      const my = Math.round(y * sc);
+      const mw = Math.max(2, Math.round(w * sc));
+      const mh = Math.max(2, Math.round(h * sc));
+
+      if (isTerraceBand) {
+        // Biophilic sandstone & bronze sky-garden ribbon band
+        lCtx.fillStyle = '#D4BA8B';
+        lCtx.fillRect(c * cellW, y, cellW, h);
+        lCtx.fillStyle = '#53623A';
+        lCtx.fillRect(x, y + Math.round(h * 0.25), w, Math.round(h * 0.45));
+
+        dCtx.fillStyle = '#1B222C';
+        dCtx.fillRect(c * cellW, y, cellW, h);
+        dCtx.fillStyle = '#F0B65A';
+        dCtx.fillRect(x, y + Math.round(h * 0.68), w, 4);
+        eCtx.fillStyle = '#D9943B';
+        eCtx.fillRect(x, y + Math.round(h * 0.68), w, 4);
+        continue;
+      }
+
+      hCtx.fillStyle = '#1C1C1C';
+      hCtx.fillRect(mx, my, mw, mh);
+      rCtx.fillStyle = '#090909';
+      rCtx.fillRect(mx, my, mw, mh);
+
+      // Day: Deep emerald & smoky forest-jade curtain-wall glass
+      const dayG = lCtx.createLinearGradient(x, y, x + w, y + h);
+      dayG.addColorStop(0, '#225845');
+      dayG.addColorStop(0.5, '#163D30');
+      dayG.addColorStop(1, '#2B4C3E');
+      lCtx.fillStyle = dayG;
+      lCtx.fillRect(x, y, w, h);
+
+      // Warm sandstone sunlight reflection bar
+      if (rand() > 0.38) {
+        lCtx.fillStyle = 'rgba(237, 228, 212, 0.14)';
+        lCtx.fillRect(x + Math.round(w * 0.15), y, Math.round(w * 0.22), h);
+      }
+
+      // Champagne mullion pinstripe
+      lCtx.fillStyle = 'rgba(212, 186, 139, 0.6)';
+      lCtx.fillRect(x - 2, y, 2, h);
+
+      // Night: Warm amber Executive Glass suites
+      if (rand() > 0.36) {
+        const ng = dCtx.createLinearGradient(x, y, x, y + h);
+        ng.addColorStop(0, '#FFE8B8');
+        ng.addColorStop(0.55, '#D28E3E');
+        ng.addColorStop(1, '#1E2524');
+        dCtx.fillStyle = ng;
+        dCtx.fillRect(x, y, w, h);
+        eCtx.fillStyle = ng;
+        eCtx.fillRect(x + 2, y + 2, w - 4, h - 4);
+      } else {
+        dCtx.fillStyle = '#0D1E1B';
+        dCtx.fillRect(x, y, w, h);
+      }
+    }
+  }
+
+  const darkMap = finalizeColorTexture(new THREE.CanvasTexture(darkCanvas), anisotropy, 1, 2);
+  const darkEmissiveMap = finalizeColorTexture(
+    new THREE.CanvasTexture(emissiveCanvas),
+    anisotropy,
+    1,
+    2
+  );
+  const lightMap = finalizeColorTexture(new THREE.CanvasTexture(lightCanvas), anisotropy, 1, 2);
+  const normalMap = heightCanvasToNormalTexture(heightCanvas, 2.7, anisotropy, 1, 2);
   const roughnessMap = finalizeDataTexture(
     new THREE.CanvasTexture(roughCanvas),
     anisotropy,
@@ -406,8 +567,14 @@ export interface SurfacePbrSet {
 /**
  * Realistic Natural Grass & Parkland Turf PBR Set (High-frequency organic grass blades + normal & roughness depth).
  */
-export function createNaturalGrassPbrSet(anisotropy = 8, repeatX = 14, repeatY = 14): SurfacePbrSet {
-  const size = 512;
+export function createNaturalGrassPbrSet(
+  anisotropy = 8,
+  repeatX = 14,
+  repeatY = 14,
+  highRes = true
+): SurfacePbrSet {
+  const size = highRes ? 1024 : 512;
+  const bladeScale = size / 512;
 
   const darkCanvas = document.createElement('canvas');
   darkCanvas.width = size;
@@ -445,10 +612,10 @@ export function createNaturalGrassPbrSet(anisotropy = 8, repeatX = 14, repeatY =
   };
 
   // Soft natural British meadow soil, dry-straw & moss mottling patches
-  for (let i = 0; i < 65; i++) {
+  for (let i = 0; i < 95; i++) {
     const px = rand() * size;
     const py = rand() * size;
-    const rad = 24 + rand() * 58;
+    const rad = (24 + rand() * 58) * bladeScale;
     const dPatch = dCtx.createRadialGradient(px, py, 2, px, py, rad);
     dPatch.addColorStop(0, rand() > 0.5 ? 'rgba(24, 36, 27, 0.34)' : 'rgba(11, 17, 13, 0.34)');
     dPatch.addColorStop(1, 'rgba(0,0,0,0)');
@@ -467,10 +634,11 @@ export function createNaturalGrassPbrSet(anisotropy = 8, repeatX = 14, repeatY =
   }
 
   // Thousands of fine muted British parkland grass blades for photographic close-up realism
-  for (let i = 0; i < 6500; i++) {
+  const bladeCount = highRes ? 16000 : 6500;
+  for (let i = 0; i < bladeCount; i++) {
     const gx = Math.floor(rand() * size);
     const gy = Math.floor(rand() * size);
-    const len = 3 + Math.floor(rand() * 7);
+    const len = 3 + Math.floor(rand() * 8);
     const dx = Math.floor((rand() - 0.5) * 4);
     const bright = rand();
 
@@ -525,13 +693,13 @@ export function createNaturalGrassPbrSet(anisotropy = 8, repeatX = 14, repeatY =
 /**
  * Realistic Natural Wood Grain PBR Set (For Cedar Siding, Timber Front Doors, Porch Soffits & Benches).
  */
-export function createWoodGrainPbrSet(anisotropy = 8): {
+export function createWoodGrainPbrSet(anisotropy = 8, highRes = true): {
   map: THREE.CanvasTexture;
   normalMap: THREE.DataTexture;
   roughnessMap: THREE.CanvasTexture;
   dispose: () => void;
 } {
-  const size = 512;
+  const size = highRes ? 1024 : 512;
   const cCanvas = document.createElement('canvas');
   cCanvas.width = size;
   cCanvas.height = size;
@@ -560,9 +728,10 @@ export function createWoodGrainPbrSet(anisotropy = 8): {
     return (seed - 1) / 2147483646;
   };
 
-  // Horizontal planks with wood grain fibers
-  const planks = 8;
+  // Horizontal planks with crisp wood grain fibers & fine pores
+  const planks = 10;
   const plankH = size / planks;
+  const fiberCount = highRes ? 56 : 36;
   for (let p = 0; p < planks; p++) {
     const py = Math.round(p * plankH);
     const shade = Math.round((rand() - 0.5) * 26);
@@ -570,9 +739,9 @@ export function createWoodGrainPbrSet(anisotropy = 8): {
     cCtx.fillRect(0, py, size, plankH - 2);
 
     // Fine organic grain streaks
-    for (let g = 0; g < 36; g++) {
+    for (let g = 0; g < fiberCount; g++) {
       const gy = py + 2 + rand() * (plankH - 6);
-      const alpha = 0.06 + rand() * 0.14;
+      const alpha = 0.05 + rand() * 0.14;
       cCtx.fillStyle = rand() > 0.5 ? `rgba(72,42,18,${alpha})` : `rgba(245,228,200,${alpha * 0.6})`;
       cCtx.fillRect(0, gy, size, 1 + Math.floor(rand() * 2));
 
@@ -582,7 +751,7 @@ export function createWoodGrainPbrSet(anisotropy = 8): {
     }
 
     // Recessed plank seam
-    cCtx.fillStyle = 'rgba(42, 26, 14, 0.58)';
+    cCtx.fillStyle = 'rgba(42, 26, 14, 0.62)';
     cCtx.fillRect(0, py + plankH - 2, size, 2);
     hCtx.fillStyle = '#303030';
     hCtx.fillRect(0, py + plankH - 2, size, 2);
@@ -614,9 +783,9 @@ export function createWoodGrainPbrSet(anisotropy = 8): {
 /**
  * Realistic Natural Stone Paving (Warm Granite & Limestone Pavers for Courtyard & Sidewalks).
  */
-export function createPlazaStonePbrSet(anisotropy = 8): SurfacePbrSet {
-  const size = 1024;
-  const mapSize = 512;
+export function createPlazaStonePbrSet(anisotropy = 8, highRes = true): SurfacePbrSet {
+  const size = highRes ? 2048 : 1024;
+  const mapSize = highRes ? 1024 : 512;
 
   const darkCanvas = document.createElement('canvas');
   darkCanvas.width = size;
@@ -638,9 +807,10 @@ export function createPlazaStonePbrSet(anisotropy = 8): SurfacePbrSet {
   roughCanvas.height = mapSize;
   const rCtx = roughCanvas.getContext('2d')!;
 
-  dCtx.fillStyle = '#1B1F26';
+  // Dark graphite mortar vs sandstone beige, warm ivory & dark graphite architectural stone pavers
+  dCtx.fillStyle = '#0E121A';
   dCtx.fillRect(0, 0, size, size);
-  lCtx.fillStyle = '#C4BEB2';
+  lCtx.fillStyle = '#383430';
   lCtx.fillRect(0, 0, size, size);
   hCtx.fillStyle = '#282828';
   hCtx.fillRect(0, 0, mapSize, mapSize);
@@ -651,7 +821,7 @@ export function createPlazaStonePbrSet(anisotropy = 8): SurfacePbrSet {
   const rows = 8;
   const cellW = size / cols;
   const cellH = size / rows;
-  const gap = 4;
+  const gap = Math.round(size * 0.004);
   const sc = mapSize / size;
 
   let seed = 7711;
@@ -660,6 +830,7 @@ export function createPlazaStonePbrSet(anisotropy = 8): SurfacePbrSet {
     return (seed - 1) / 2147483646;
   };
 
+  const fleckCount = highRes ? 44 : 22;
   for (let r = 0; r < rows; r++) {
     const rowOffset = r % 2 === 1 ? cellW * 0.5 : 0;
     for (let c = -1; c <= cols; c++) {
@@ -668,32 +839,43 @@ export function createPlazaStonePbrSet(anisotropy = 8): SurfacePbrSet {
       const w = Math.round(cellW - gap * 2);
       const h = Math.round(cellH - gap * 2);
 
-      const tone = (rand() - 0.5) * 18;
-      const dR = Math.round(50 + tone * 0.5);
-      const dG = Math.round(54 + tone * 0.5);
-      const dB = Math.round(62 + tone * 0.55);
+      const tone = (rand() - 0.5) * 14;
+      const isDarkBand = (r + c) % 4 === 0;
+      const isWarmSand = (r + c) % 4 === 2;
+      const dR = Math.round((isDarkBand ? 24 : 34) + tone * 0.45);
+      const dG = Math.round((isDarkBand ? 28 : 39) + tone * 0.45);
+      const dB = Math.round((isDarkBand ? 38 : 49) + tone * 0.5);
       dCtx.fillStyle = `rgb(${dR},${dG},${dB})`;
       dCtx.fillRect(x, y, w, h);
 
-      const lR = Math.round(222 + tone * 0.45);
-      const lG = Math.round(216 + tone * 0.45);
-      const lB = Math.round(205 + tone * 0.4);
+      // Day Mode: Warm sandstone beige & ivory honed stone pavers bordered by dark graphite basalt tiles
+      const lR = Math.round((isDarkBand ? 58 : isWarmSand ? 214 : 196) + tone * 0.5);
+      const lG = Math.round((isDarkBand ? 62 : isWarmSand ? 194 : 182) + tone * 0.5);
+      const lB = Math.round((isDarkBand ? 70 : isWarmSand ? 162 : 158) + tone * 0.45);
       lCtx.fillStyle = `rgb(${lR},${lG},${lB})`;
       lCtx.fillRect(x, y, w, h);
 
+      // Champagne/bronze hairline stone chamfer highlight
+      lCtx.fillStyle = isDarkBand ? 'rgba(212,186,139,0.28)' : 'rgba(248,242,230,0.32)';
+      lCtx.fillRect(x, y, w, 2);
+      dCtx.fillStyle = 'rgba(220,180,116,0.14)';
+      dCtx.fillRect(x, y, w, 2);
+
       // Natural stone mineral fleck texture
-      for (let f = 0; f < 22; f++) {
+      for (let f = 0; f < fleckCount; f++) {
         const fx = x + Math.floor(rand() * w);
         const fy = y + Math.floor(rand() * h);
-        lCtx.fillStyle = rand() > 0.5 ? 'rgba(255,255,255,0.16)' : 'rgba(120,112,100,0.14)';
+        lCtx.fillStyle = rand() > 0.5 ? 'rgba(245,238,224,0.14)' : 'rgba(30,26,22,0.12)';
         lCtx.fillRect(fx, fy, 3, 2);
-        dCtx.fillStyle = rand() > 0.5 ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.12)';
+        dCtx.fillStyle = rand() > 0.5 ? 'rgba(212,186,139,0.06)' : 'rgba(0,0,0,0.16)';
         dCtx.fillRect(fx, fy, 3, 2);
       }
 
       const hVal = Math.round(212 + tone * 0.8);
-      hCtx.fillStyle = `rgb(${hVal},${hVal},${hVal})`;
+      hCtx.fillStyle = `rgb(${Math.round(hVal * 0.78)},${Math.round(hVal * 0.78)},${Math.round(hVal * 0.78)})`;
       hCtx.fillRect(Math.round(x * sc), Math.round(y * sc), Math.round(w * sc), Math.round(h * sc));
+      hCtx.fillStyle = `rgb(${hVal},${hVal},${hVal})`;
+      hCtx.fillRect(Math.round((x + 3) * sc), Math.round((y + 3) * sc), Math.round((w - 6) * sc), Math.round((h - 6) * sc));
 
       const rVal = Math.round(158 + rand() * 48);
       rCtx.fillStyle = `rgb(${rVal},${rVal},${rVal})`;
@@ -701,14 +883,14 @@ export function createPlazaStonePbrSet(anisotropy = 8): SurfacePbrSet {
     }
   }
 
-  const darkMap = finalizeColorTexture(new THREE.CanvasTexture(darkCanvas), anisotropy, 8, 8);
-  const lightMap = finalizeColorTexture(new THREE.CanvasTexture(lightCanvas), anisotropy, 8, 8);
-  const normalMap = heightCanvasToNormalTexture(heightCanvas, 1.65, anisotropy, 8, 8);
+  const darkMap = finalizeColorTexture(new THREE.CanvasTexture(darkCanvas), anisotropy, 10, 10);
+  const lightMap = finalizeColorTexture(new THREE.CanvasTexture(lightCanvas), anisotropy, 10, 10);
+  const normalMap = heightCanvasToNormalTexture(heightCanvas, 1.85, anisotropy, 10, 10);
   const roughnessMap = finalizeDataTexture(
     new THREE.CanvasTexture(roughCanvas),
     anisotropy,
-    8,
-    8
+    10,
+    10
   ) as THREE.CanvasTexture;
 
   return {
@@ -728,7 +910,7 @@ export function createPlazaStonePbrSet(anisotropy = 8): SurfacePbrSet {
 /**
  * Ultra-Realistic City Tarmac Asphalt Road PBR Set (Albedo + Asphalt Aggregate Normal Map + Tire-Lane Roughness Map).
  */
-export function createBoulevardRoadPbrSet(anisotropy = 8): {
+export function createBoulevardRoadPbrSet(anisotropy = 8, highRes = true): {
   darkMap: THREE.CanvasTexture;
   lightMap: THREE.CanvasTexture;
   normalMap: THREE.DataTexture;
@@ -736,8 +918,9 @@ export function createBoulevardRoadPbrSet(anisotropy = 8): {
   lightRoughnessMap: THREE.CanvasTexture;
   dispose: () => void;
 } {
-  const size = 1024;
-  const rSize = 512;
+  const size = highRes ? 2048 : 1024;
+  const rSize = highRes ? 1024 : 512;
+  const sc = size / 1024;
 
   const drawRoad = (isDark: boolean) => {
     const canvas = document.createElement('canvas');
@@ -745,65 +928,75 @@ export function createBoulevardRoadPbrSet(anisotropy = 8): {
     canvas.height = size;
     const ctx = canvas.getContext('2d')!;
 
-    ctx.fillStyle = isDark ? '#1D2129' : '#464A52';
+    ctx.fillStyle = isDark ? '#101622' : '#242B36';
     ctx.fillRect(0, 0, size, size);
 
-    // Subtle real-world dual tire-track polish along both lanes
-    ctx.fillStyle = isDark ? 'rgba(9, 11, 15, 0.34)' : 'rgba(34, 38, 44, 0.18)';
-    ctx.fillRect(188, 0, 190, size);
-    ctx.fillRect(size - 378, 0, 190, size);
+    // Subtle real-world dual tire-track satin polish along both lanes
+    ctx.fillStyle = isDark ? 'rgba(6, 9, 16, 0.36)' : 'rgba(18, 22, 29, 0.24)';
+    ctx.fillRect(Math.round(188 * sc), 0, Math.round(190 * sc), size);
+    ctx.fillRect(size - Math.round(378 * sc), 0, Math.round(190 * sc), size);
 
-    // Rich crushed-stone tarmac aggregate grain
+    // Rich crushed-basalt tarmac aggregate grain
     let seed = isDark ? 42 : 84;
     const rand = () => {
       seed = (seed * 16807) % 2147483647;
       return (seed - 1) / 2147483646;
     };
-    for (let i = 0; i < 9500; i++) {
+    const speckCount = highRes ? 26000 : 9500;
+    for (let i = 0; i < speckCount; i++) {
       const gx = Math.floor(rand() * size);
       const gy = Math.floor(rand() * size);
       const lightSpeck = rand() > 0.5;
       ctx.fillStyle = isDark
         ? lightSpeck
-          ? 'rgba(255,255,255,0.035)'
-          : 'rgba(0,0,0,0.09)'
+          ? 'rgba(180,210,240,0.04)'
+          : 'rgba(0,0,0,0.12)'
         : lightSpeck
-          ? 'rgba(255,255,255,0.065)'
-          : 'rgba(20,22,26,0.075)';
+          ? 'rgba(235,225,208,0.06)'
+          : 'rgba(14,18,24,0.1)';
       ctx.fillRect(gx, gy, 2, 2);
     }
 
-    // Real concrete street curbs & rainwater drainage gutter joints
-    ctx.fillStyle = isDark ? '#383E49' : '#D5D7DA';
-    ctx.fillRect(0, 0, 34, size);
-    ctx.fillRect(size - 34, 0, 34, size);
-    ctx.fillStyle = isDark ? '#12151B' : '#353940';
-    ctx.fillRect(34, 0, 8, size);
-    ctx.fillRect(size - 42, 0, 8, size);
+    // Dressed stone street curbs (warm honed ivory day / midnight granite night) & drainage gutter joints
+    const curbW = Math.round(34 * sc);
+    const gutterW = Math.round(8 * sc);
+    ctx.fillStyle = isDark ? '#273144' : '#CFC6B4';
+    ctx.fillRect(0, 0, curbW, size);
+    ctx.fillRect(size - curbW, 0, curbW, size);
+    ctx.fillStyle = isDark ? '#0B0F18' : '#1B2029';
+    ctx.fillRect(curbW, 0, gutterW, size);
+    ctx.fillRect(size - curbW - gutterW, 0, gutterW, size);
 
-    // Concrete curb expansion joints every 128px
-    ctx.fillStyle = isDark ? 'rgba(10,12,16,0.65)' : 'rgba(90,94,102,0.45)';
-    for (let y = 0; y < size; y += 128) {
-      ctx.fillRect(0, y, 34, 3);
-      ctx.fillRect(size - 34, y, 34, 3);
+    // Architectural bronze/cast-iron roadside drainage grates
+    ctx.fillStyle = isDark ? '#181E2B' : '#3C3226';
+    for (let y = Math.round(64 * sc); y < size; y += Math.round(512 * sc)) {
+      ctx.fillRect(curbW + 1, y, Math.round(14 * sc), Math.round(36 * sc));
+      ctx.fillRect(size - curbW - Math.round(15 * sc), y, Math.round(14 * sc), Math.round(36 * sc));
     }
 
-    // Crisp realistic painted road shoulder lines
-    ctx.fillStyle = isDark ? 'rgba(226, 232, 240, 0.56)' : 'rgba(248, 250, 252, 0.86)';
-    ctx.fillRect(68, 0, 10, size);
-    ctx.fillRect(size - 78, 0, 10, size);
+    // Curb expansion joints
+    ctx.fillStyle = isDark ? 'rgba(8,11,18,0.7)' : 'rgba(60,54,46,0.42)';
+    for (let y = 0; y < size; y += Math.round(128 * sc)) {
+      ctx.fillRect(0, y, curbW, Math.max(2, Math.round(3 * sc)));
+      ctx.fillRect(size - curbW, y, curbW, Math.max(2, Math.round(3 * sc)));
+    }
 
-    // Crisp realistic modern center dashed lane markings (cool reflective silver-white)
-    ctx.fillStyle = isDark ? 'rgba(203, 224, 248, 0.86)' : '#F8FAFC';
-    for (let y = 26; y < size; y += 160) {
-      ctx.fillRect(size / 2 - 11, y, 8, 84);
-      ctx.fillRect(size / 2 + 3, y, 8, 84);
+    // Champagne-ivory shoulder stripes
+    ctx.fillStyle = isDark ? 'rgba(235, 206, 152, 0.56)' : 'rgba(245, 238, 224, 0.84)';
+    ctx.fillRect(Math.round(68 * sc), 0, Math.round(10 * sc), size);
+    ctx.fillRect(size - Math.round(78 * sc), 0, Math.round(10 * sc), size);
+
+    // Crisp champagne-gold / turquoise-reflective center dashed lane markings
+    ctx.fillStyle = isDark ? 'rgba(240, 208, 140, 0.85)' : '#F5EFE2';
+    for (let y = Math.round(26 * sc); y < size; y += Math.round(160 * sc)) {
+      ctx.fillRect(size / 2 - Math.round(11 * sc), y, Math.round(8 * sc), Math.round(84 * sc));
+      ctx.fillRect(size / 2 + Math.round(3 * sc), y, Math.round(8 * sc), Math.round(84 * sc));
     }
 
     return finalizeColorTexture(new THREE.CanvasTexture(canvas), anisotropy, 1, 14);
   };
 
-  // Micro-granular asphalt normal map so streetlamps & headlights glint realistically off the tarmac
+  // Micro-granular asphalt normal map so streetlamps & sky speculars glint realistically off the tarmac
   const hCanvas = document.createElement('canvas');
   hCanvas.width = rSize;
   hCanvas.height = rSize;
@@ -815,16 +1008,18 @@ export function createBoulevardRoadPbrSet(anisotropy = 8): {
     nSeed = (nSeed * 16807) % 2147483647;
     return (nSeed - 1) / 2147483646;
   };
-  for (let i = 0; i < 14000; i++) {
-    const v = Math.round(92 + nRand() * 72);
+  const nSpecks = highRes ? 28000 : 14000;
+  for (let i = 0; i < nSpecks; i++) {
+    const v = Math.round(90 + nRand() * 76);
     hCtx.fillStyle = `rgb(${v},${v},${v})`;
     hCtx.fillRect(Math.floor(nRand() * rSize), Math.floor(nRand() * rSize), 2, 2);
   }
+  const rSc = rSize / 512;
   // Raised concrete curbs on edges
   hCtx.fillStyle = '#F0F0F0';
-  hCtx.fillRect(0, 0, 17, rSize);
-  hCtx.fillRect(rSize - 17, 0, 17, rSize);
-  const normalMap = heightCanvasToNormalTexture(hCanvas, 0.85, anisotropy, 1, 14);
+  hCtx.fillRect(0, 0, Math.round(17 * rSc), rSize);
+  hCtx.fillRect(rSize - Math.round(17 * rSc), 0, Math.round(17 * rSc), rSize);
+  const normalMap = heightCanvasToNormalTexture(hCanvas, 0.9, anisotropy, 1, 14);
 
   const drawRoughness = (isDark: boolean) => {
     const canvas = document.createElement('canvas');
@@ -837,19 +1032,19 @@ export function createBoulevardRoadPbrSet(anisotropy = 8): {
 
     if (isDark) {
       // Realistic damp evening asphalt specular sheen along vehicle tire tracks
-      const gradL = ctx.createLinearGradient(80, 0, 210, 0);
+      const gradL = ctx.createLinearGradient(80 * rSc, 0, 210 * rSc, 0);
       gradL.addColorStop(0, '#969696');
-      gradL.addColorStop(0.5, '#4A4A4A');
+      gradL.addColorStop(0.5, '#484848');
       gradL.addColorStop(1, '#969696');
       ctx.fillStyle = gradL;
-      ctx.fillRect(80, 0, 130, rSize);
+      ctx.fillRect(Math.round(80 * rSc), 0, Math.round(130 * rSc), rSize);
 
-      const gradR = ctx.createLinearGradient(302, 0, 432, 0);
+      const gradR = ctx.createLinearGradient(302 * rSc, 0, 432 * rSc, 0);
       gradR.addColorStop(0, '#969696');
-      gradR.addColorStop(0.5, '#4A4A4A');
+      gradR.addColorStop(0.5, '#484848');
       gradR.addColorStop(1, '#969696');
       ctx.fillStyle = gradR;
-      ctx.fillRect(302, 0, 130, rSize);
+      ctx.fillRect(Math.round(302 * rSc), 0, Math.round(130 * rSc), rSize);
     }
 
     return finalizeDataTexture(
@@ -1092,79 +1287,84 @@ export function createRoofTilePbr(anisotropy = 8): {
 /**
  * Architectural Stucco / Limestone Ashlar Cladding Albedo + Normal + Roughness Map.
  */
-export function createArchitecturalCladdingPbr(anisotropy = 8): {
+export function createArchitecturalCladdingPbr(anisotropy = 8, highRes = true): {
   map: THREE.CanvasTexture;
   normalMap: THREE.DataTexture;
   roughnessMap: THREE.CanvasTexture;
   dispose: () => void;
 } {
-  const size = 1024;
+  const size = highRes ? 2048 : 1024;
+  const mapSize = highRes ? 1024 : 512;
+  const sc = mapSize / size;
+
   const cCanvas = document.createElement('canvas');
   cCanvas.width = size;
   cCanvas.height = size;
   const cCtx = cCanvas.getContext('2d')!;
 
   const hCanvas = document.createElement('canvas');
-  hCanvas.width = size;
-  hCanvas.height = size;
+  hCanvas.width = mapSize;
+  hCanvas.height = mapSize;
   const hCtx = hCanvas.getContext('2d')!;
 
   const rCanvas = document.createElement('canvas');
-  rCanvas.width = size;
-  rCanvas.height = size;
+  rCanvas.width = mapSize;
+  rCanvas.height = mapSize;
   const rCtx = rCanvas.getContext('2d')!;
 
   cCtx.fillStyle = '#ECEAE5';
   cCtx.fillRect(0, 0, size, size);
   hCtx.fillStyle = '#D6D6D6';
-  hCtx.fillRect(0, 0, size, size);
+  hCtx.fillRect(0, 0, mapSize, mapSize);
   rCtx.fillStyle = '#B8B8B8';
-  rCtx.fillRect(0, 0, size, size);
+  rCtx.fillRect(0, 0, mapSize, mapSize);
 
   let seed = 2917;
   const rand = () => {
     seed = (seed * 16807) % 2147483647;
     return (seed - 1) / 2147483646;
   };
-  for (let i = 0; i < 14000; i++) {
+  const grainCount = highRes ? 28000 : 14000;
+  for (let i = 0; i < grainCount; i++) {
     const gx = Math.floor(rand() * size);
     const gy = Math.floor(rand() * size);
     const v = Math.round(226 + (rand() - 0.5) * 28);
     cCtx.fillStyle = `rgb(${v},${v},${v})`;
     cCtx.fillRect(gx, gy, 2, 2);
 
-    const hv = Math.round(212 + (rand() - 0.5) * 24);
+    const hv = Math.round(212 + (rand() - 0.5) * 26);
     hCtx.fillStyle = `rgb(${hv},${hv},${hv})`;
-    hCtx.fillRect(gx, gy, 2, 2);
+    hCtx.fillRect(Math.floor(gx * sc), Math.floor(gy * sc), 2, 2);
   }
 
-  const panelRows = 4;
+  const panelRows = 6;
+  const panelW = Math.round(size / 3);
   const rowH = size / panelRows;
   for (let r = 0; r < panelRows; r++) {
     const y = Math.round(r * rowH);
-    const offset = r % 2 === 0 ? 0 : 256;
-    for (let x = offset - 256; x < size; x += 512) {
+    const offset = r % 2 === 0 ? 0 : Math.round(panelW * 0.5);
+    for (let x = offset - panelW; x < size; x += panelW) {
       const shade = Math.round((rand() - 0.5) * 14);
-      cCtx.fillStyle = shade > 0 ? `rgba(255,255,255,${shade / 260})` : `rgba(80,74,64,${-shade / 260})`;
-      cCtx.fillRect(x, y, 512, rowH);
+      cCtx.fillStyle = shade > 0 ? `rgba(255,255,255,${shade / 240})` : `rgba(80,74,64,${-shade / 240})`;
+      cCtx.fillRect(x, y, panelW, rowH);
     }
     // Recessed ashlar shadow groove
-    cCtx.fillStyle = 'rgba(116,110,102,0.42)';
+    cCtx.fillStyle = 'rgba(116,110,102,0.44)';
     cCtx.fillRect(0, y, size, 4);
     hCtx.fillStyle = '#525252';
-    hCtx.fillRect(0, y, size, 4);
+    hCtx.fillRect(0, Math.round(y * sc), mapSize, Math.max(2, Math.round(4 * sc)));
     rCtx.fillStyle = '#DEDEDE';
-    rCtx.fillRect(0, y, size, 4);
+    rCtx.fillRect(0, Math.round(y * sc), mapSize, Math.max(2, Math.round(4 * sc)));
 
-    for (let x = offset; x < size; x += 512) {
+    for (let x = offset; x < size; x += panelW) {
       cCtx.fillRect(x, y, 4, rowH);
-      hCtx.fillRect(x, y, 4, rowH);
-      rCtx.fillRect(x, y, 4, rowH);
+      hCtx.fillRect(Math.round(x * sc), Math.round(y * sc), Math.max(2, Math.round(4 * sc)), Math.round(rowH * sc));
+      rCtx.fillRect(Math.round(x * sc), Math.round(y * sc), Math.max(2, Math.round(4 * sc)), Math.round(rowH * sc));
     }
   }
 
   const map = finalizeColorTexture(new THREE.CanvasTexture(cCanvas), anisotropy, 2, 2);
-  const normalMap = heightCanvasToNormalTexture(hCanvas, 1.4, anisotropy, 2, 2);
+  const normalMap = heightCanvasToNormalTexture(hCanvas, 1.55, anisotropy, 2, 2);
   const roughnessMap = finalizeDataTexture(
     new THREE.CanvasTexture(rCanvas),
     anisotropy,
@@ -1189,117 +1389,119 @@ export function createArchitecturalCladdingPbr(anisotropy = 8): {
  * - Daytime: Crystal-clear sapphire/azure sky & cloud reflection with subtle architectural interior ceiling coffers & dark floor depth.
  * - Nighttime: Architectural Digest luxury interior staging — recessed warm-white linear ceiling LED coves, modern gallery wall-wash, minimalist lounge & mezzanine depth!
  */
-export function createResidentialWindowTextures(anisotropy = 8): {
+export function createResidentialWindowTextures(anisotropy = 8, highRes = true): {
   dayMap: THREE.CanvasTexture;
   nightMap: THREE.CanvasTexture;
   nightEmissiveMap: THREE.CanvasTexture;
   dispose: () => void;
 } {
-  const size = 512;
+  const size = highRes ? 1024 : 512;
+  const sc = size / 512;
 
-  // Daytime realistic low-iron architectural sapphire glass with sky reflection & subtle interior shadow depth
+  // Daytime deep emerald-tinted & smoked-bronze architectural glazing with warm ivory sky sheen
   const dCanvas = document.createElement('canvas');
   dCanvas.width = size;
   dCanvas.height = size;
   const dCtx = dCanvas.getContext('2d')!;
-  const dayGrad = dCtx.createLinearGradient(0, 0, size * 0.35, size);
-  dayGrad.addColorStop(0, '#7AB6EA');
-  dayGrad.addColorStop(0.38, '#3B78BA');
-  dayGrad.addColorStop(0.74, '#1F4778');
-  dayGrad.addColorStop(1, '#122947');
+  const dayGrad = dCtx.createLinearGradient(0, 0, size * 0.42, size);
+  dayGrad.addColorStop(0, '#1D4939');
+  dayGrad.addColorStop(0.35, '#15342B');
+  dayGrad.addColorStop(0.72, '#1B2528');
+  dayGrad.addColorStop(1, '#10151A');
   dCtx.fillStyle = dayGrad;
   dCtx.fillRect(0, 0, size, size);
 
-  // Subtle architectural ceiling slab & recessed interior gallery visible behind glass
-  dCtx.fillStyle = 'rgba(225, 240, 255, 0.14)';
-  dCtx.fillRect(0, 0, size, 48);
-  dCtx.fillStyle = 'rgba(10, 22, 42, 0.28)';
+  // Subtle warm sandstone interior ceiling soffit & recessed depth behind glass
+  dCtx.fillStyle = 'rgba(237, 228, 212, 0.16)';
+  dCtx.fillRect(0, 0, size, 48 * sc);
+  dCtx.fillStyle = 'rgba(12, 16, 20, 0.42)';
   dCtx.fillRect(0, size * 0.72, size, size * 0.28);
 
-  // Crisp sunlit cloud reflection across upper pane
-  const cloudRef = dCtx.createRadialGradient(size * 0.68, size * 0.22, 16, size * 0.64, size * 0.22, 190);
-  cloudRef.addColorStop(0, 'rgba(248, 252, 255, 0.44)');
-  cloudRef.addColorStop(0.6, 'rgba(216, 238, 255, 0.18)');
+  // Crisp sunlit warm ivory reflection bloom across upper pane
+  const cloudRef = dCtx.createRadialGradient(size * 0.68, size * 0.22, 16 * sc, size * 0.64, size * 0.22, 190 * sc);
+  cloudRef.addColorStop(0, 'rgba(237, 228, 212, 0.28)');
+  cloudRef.addColorStop(0.6, 'rgba(212, 186, 139, 0.12)');
   cloudRef.addColorStop(1, 'rgba(255, 255, 255, 0)');
   dCtx.fillStyle = cloudRef;
   dCtx.fillRect(0, 0, size, size);
 
-  // Ultra-clean diagonal glass reflection sweep
-  dCtx.fillStyle = 'rgba(240, 249, 255, 0.28)';
+  // Diagonal architectural glass reflection sweep
+  dCtx.fillStyle = 'rgba(237, 228, 212, 0.18)';
   dCtx.beginPath();
-  dCtx.moveTo(56, 0);
-  dCtx.lineTo(188, 0);
-  dCtx.lineTo(74, size);
+  dCtx.moveTo(56 * sc, 0);
+  dCtx.lineTo(188 * sc, 0);
+  dCtx.lineTo(74 * sc, size);
   dCtx.lineTo(0, size);
   dCtx.closePath();
   dCtx.fill();
 
-  // Secondary narrow specular highlight streak
-  dCtx.fillStyle = 'rgba(255, 255, 255, 0.18)';
+  // Secondary narrow bronze specular highlight streak
+  dCtx.fillStyle = 'rgba(212, 186, 139, 0.16)';
   dCtx.beginPath();
-  dCtx.moveTo(222, 0);
-  dCtx.lineTo(256, 0);
-  dCtx.lineTo(142, size);
-  dCtx.lineTo(108, size);
+  dCtx.moveTo(222 * sc, 0);
+  dCtx.lineTo(256 * sc, 0);
+  dCtx.lineTo(142 * sc, size);
+  dCtx.lineTo(108 * sc, size);
   dCtx.closePath();
   dCtx.fill();
 
-  // Subtle modern sheer architectural side panels
-  dCtx.fillStyle = 'rgba(232, 242, 252, 0.16)';
-  dCtx.fillRect(0, 0, 38, size);
-  dCtx.fillRect(size - 38, 0, 38, size);
+  // Subtle modern sheer architectural side drapery
+  dCtx.fillStyle = 'rgba(237, 228, 212, 0.12)';
+  dCtx.fillRect(0, 0, 38 * sc, size);
+  dCtx.fillRect(size - 38 * sc, 0, 38 * sc, size);
 
-  // Nighttime Architectural Digest luxury interior: crisp warm-white architectural ceiling coves + sleek dark minimalist furniture
+  // Nighttime Architectural Digest luxury interior: warm amber ceiling coves + sleek dark lounge silhouette
   const nCanvas = document.createElement('canvas');
   nCanvas.width = size;
   nCanvas.height = size;
   const nCtx = nCanvas.getContext('2d')!;
   const nightGrad = nCtx.createLinearGradient(0, 0, 0, size);
-  nightGrad.addColorStop(0, '#FFFDF7');
-  nightGrad.addColorStop(0.22, '#F7E7CE');
-  nightGrad.addColorStop(0.62, '#C8A986');
-  nightGrad.addColorStop(0.86, '#5A4A3E');
-  nightGrad.addColorStop(1, '#262933');
+  nightGrad.addColorStop(0, '#FFF1D2');
+  nightGrad.addColorStop(0.24, '#ECC078');
+  nightGrad.addColorStop(0.62, '#A87436');
+  nightGrad.addColorStop(0.86, '#2E2622');
+  nightGrad.addColorStop(1, '#12151E');
   nCtx.fillStyle = nightGrad;
   nCtx.fillRect(0, 0, size, size);
 
-  // Warm recessed architectural ceiling linear LED light trough
-  nCtx.fillStyle = '#FFFFFF';
-  nCtx.fillRect(42, 24, size - 84, 14);
-  const coveGlow = nCtx.createLinearGradient(0, 24, 0, 180);
-  coveGlow.addColorStop(0, 'rgba(255, 252, 244, 0.92)');
-  coveGlow.addColorStop(0.45, 'rgba(255, 236, 204, 0.36)');
-  coveGlow.addColorStop(1, 'rgba(255, 236, 204, 0)');
+  // Warm recessed architectural ceiling linear cove trough
+  nCtx.fillStyle = '#FFF9E8';
+  nCtx.fillRect(42 * sc, 24 * sc, size - 84 * sc, 14 * sc);
+  const coveGlow = nCtx.createLinearGradient(0, 24 * sc, 0, 180 * sc);
+  coveGlow.addColorStop(0, 'rgba(255, 244, 218, 0.92)');
+  coveGlow.addColorStop(0.45, 'rgba(244, 200, 128, 0.36)');
+  coveGlow.addColorStop(1, 'rgba(244, 200, 128, 0)');
   nCtx.fillStyle = coveGlow;
-  nCtx.fillRect(0, 24, size, 156);
+  nCtx.fillRect(0, 24 * sc, size, 156 * sc);
 
-  // Architectural interior feature wall / minimalist gallery panel & illuminated vertical art niche
-  nCtx.fillStyle = 'rgba(34, 42, 58, 0.32)';
-  nCtx.fillRect(148, 128, 216, 174);
-  nCtx.strokeStyle = 'rgba(255, 244, 224, 0.55)';
-  nCtx.lineWidth = 4;
-  nCtx.strokeRect(158, 138, 196, 154);
+  // Architectural interior feature wall & illuminated vertical art niche
+  nCtx.fillStyle = 'rgba(28, 26, 28, 0.36)';
+  nCtx.fillRect(148 * sc, 128 * sc, 216 * sc, 174 * sc);
+  nCtx.strokeStyle = 'rgba(255, 234, 194, 0.55)';
+  nCtx.lineWidth = 4 * sc;
+  nCtx.strokeRect(158 * sc, 138 * sc, 196 * sc, 154 * sc);
 
   // Sleek low-profile contemporary lounge sofa & coffee table silhouette
-  nCtx.fillStyle = 'rgba(20, 26, 38, 0.68)';
-  nCtx.fillRect(96, 368, 320, 82);
-  nCtx.fillStyle = 'rgba(14, 18, 28, 0.82)';
-  nCtx.fillRect(72, 434, 368, 78);
+  nCtx.fillStyle = 'rgba(20, 22, 28, 0.7)';
+  nCtx.fillRect(96 * sc, 368 * sc, 320 * sc, 82 * sc);
+  nCtx.fillStyle = 'rgba(12, 14, 18, 0.85)';
+  nCtx.fillRect(72 * sc, 434 * sc, 368 * sc, 78 * sc);
 
   // Subtle recessed interior track downlight spots
   [124, 256, 388].forEach((lx) => {
-    const spot = nCtx.createRadialGradient(lx, 56, 4, lx, 90, 96);
-    spot.addColorStop(0, 'rgba(255, 254, 250, 0.88)');
-    spot.addColorStop(0.4, 'rgba(255, 242, 214, 0.32)');
-    spot.addColorStop(1, 'rgba(255, 242, 214, 0)');
+    const cx = lx * sc;
+    const spot = nCtx.createRadialGradient(cx, 56 * sc, 4 * sc, cx, 90 * sc, 96 * sc);
+    spot.addColorStop(0, 'rgba(255, 246, 222, 0.86)');
+    spot.addColorStop(0.4, 'rgba(244, 206, 136, 0.32)');
+    spot.addColorStop(1, 'rgba(244, 206, 136, 0)');
     nCtx.fillStyle = spot;
-    nCtx.fillRect(lx - 96, 0, 192, 210);
+    nCtx.fillRect(cx - 96 * sc, 0, 192 * sc, 210 * sc);
   });
 
-  // Subtle dark slate architectural mullions along edges
-  nCtx.fillStyle = 'rgba(12, 18, 30, 0.72)';
-  nCtx.fillRect(0, 0, 18, size);
-  nCtx.fillRect(size - 18, 0, 18, size);
+  // Dark bronze-graphite mullions along edges
+  nCtx.fillStyle = 'rgba(14, 16, 22, 0.78)';
+  nCtx.fillRect(0, 0, 18 * sc, size);
+  nCtx.fillRect(size - 18 * sc, 0, 18 * sc, size);
 
   const dayMap = finalizeColorTexture(new THREE.CanvasTexture(dCanvas), anisotropy);
   const nightMap = finalizeColorTexture(new THREE.CanvasTexture(nCanvas), anisotropy);
@@ -1333,20 +1535,20 @@ export function createSkyDomeTexture(isDarkMode = true): THREE.CanvasTexture {
   const grad = ctx.createLinearGradient(0, 0, 0, h);
   if (isDarkMode) {
     grad.addColorStop(0.0, '#030610');
-    grad.addColorStop(0.28, '#08132B');
-    grad.addColorStop(0.45, '#122548');
-    grad.addColorStop(0.51, '#1E3863');
-    grad.addColorStop(0.56, '#0E1930');
-    grad.addColorStop(1.0, '#060A15');
+    grad.addColorStop(0.28, '#081228');
+    grad.addColorStop(0.46, '#11203D');
+    grad.addColorStop(0.51, '#1A2D4F');
+    grad.addColorStop(0.56, '#0D1629');
+    grad.addColorStop(1.0, '#060A14');
   } else {
-    // Crisp high-altitude modern azure sky (powers radiant sapphire-glass reflections in equirectangular IBL)
-    grad.addColorStop(0.0, '#1D58A8');
-    grad.addColorStop(0.2, '#4E8ED6');
-    grad.addColorStop(0.38, '#95C2EB');
-    grad.addColorStop(0.49, '#D4E6F7');
-    grad.addColorStop(0.53, '#E5EFFA');
-    grad.addColorStop(0.65, '#B7CADC');
-    grad.addColorStop(1.0, '#6F8078');
+    // Natural crisp atmospheric daylight sky -> warm ivory/sandstone haze (zero cyan blowout)
+    grad.addColorStop(0.0, '#224C7E');
+    grad.addColorStop(0.22, '#4E7AA8');
+    grad.addColorStop(0.40, '#8BA9C7');
+    grad.addColorStop(0.49, '#DCD6C6');
+    grad.addColorStop(0.53, '#E8E0D0');
+    grad.addColorStop(0.66, '#A2A08D');
+    grad.addColorStop(1.0, '#59604B');
   }
 
   ctx.fillStyle = grad;
@@ -1359,8 +1561,7 @@ export function createSkyDomeTexture(isDarkMode = true): THREE.CanvasTexture {
   };
 
   if (isDarkMode) {
-    // Crisp realistic stars
-    const starColors = ['#FFFFFF', '#F8FAFC', '#DBEAFE', '#BAE6FD'];
+    const starColors = ['#FFFFFF', '#F8FAFC', '#FDEBD0', '#E2E8F0'];
     for (let i = 0; i < 520; i++) {
       const sx = rand() * w;
       const sy = rand() * (h * 0.44);
@@ -1373,15 +1574,14 @@ export function createSkyDomeTexture(isDarkMode = true): THREE.CanvasTexture {
     }
     ctx.globalAlpha = 1;
 
-    // Cool sapphire-silver futuristic metropolis horizon bounce (powers sleek night reflections on blue glass)
+    // Warm amber metropolitan horizon bounce (zero neon cyan)
     const glowGrad = ctx.createRadialGradient(w * 0.5, h * 0.52, 40, w * 0.5, h * 0.52, w * 0.52);
-    glowGrad.addColorStop(0, 'rgba(56, 189, 248, 0.22)');
-    glowGrad.addColorStop(0.55, 'rgba(59, 130, 246, 0.11)');
+    glowGrad.addColorStop(0, 'rgba(235, 168, 82, 0.22)');
+    glowGrad.addColorStop(0.55, 'rgba(184, 107, 75, 0.11)');
     glowGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
     ctx.fillStyle = glowGrad;
     ctx.fillRect(0, h * 0.25, w, h * 0.42);
 
-    // Realistic full moon with soft atmospheric corona
     const mx = w * 0.72;
     const my = h * 0.2;
     const moonHalo = ctx.createRadialGradient(mx, my, 12, mx, my, 150);
@@ -1398,20 +1598,18 @@ export function createSkyDomeTexture(isDarkMode = true): THREE.CanvasTexture {
     ctx.arc(mx, my, 20, 0, Math.PI * 2);
     ctx.fill();
   } else {
-    // Crisp sunlit atmospheric solar halo (powers strong bright sun glints in equirectangular IBL!)
     const sx = w * 0.68;
     const sy = h * 0.21;
     const sunHalo = ctx.createRadialGradient(sx, sy, 14, sx, sy, 280);
-    sunHalo.addColorStop(0, 'rgba(255, 253, 242, 0.98)');
-    sunHalo.addColorStop(0.18, 'rgba(255, 246, 212, 0.58)');
-    sunHalo.addColorStop(0.5, 'rgba(224, 242, 254, 0.2)');
-    sunHalo.addColorStop(1, 'rgba(224, 242, 254, 0)');
+    sunHalo.addColorStop(0, 'rgba(255, 250, 236, 0.96)');
+    sunHalo.addColorStop(0.18, 'rgba(255, 242, 204, 0.52)');
+    sunHalo.addColorStop(0.5, 'rgba(220, 214, 198, 0.18)');
+    sunHalo.addColorStop(1, 'rgba(220, 214, 198, 0)');
     ctx.fillStyle = sunHalo;
     ctx.beginPath();
     ctx.arc(sx, sy, 280, 0, Math.PI * 2);
     ctx.fill();
 
-    // Multi-layered realistic cumulus clouds with warm sunlit tops and soft blue-gray undersides
     for (let i = 0; i < 34; i++) {
       const cx = rand() * w;
       const cy = h * (0.2 + rand() * 0.23);
@@ -1419,10 +1617,10 @@ export function createSkyDomeTexture(isDarkMode = true): THREE.CanvasTexture {
       const ch = 15 + rand() * 36;
 
       const cGrad = ctx.createLinearGradient(cx, cy - ch, cx, cy + ch);
-      cGrad.addColorStop(0, 'rgba(255, 255, 255, 0.94)');
-      cGrad.addColorStop(0.58, 'rgba(241, 246, 252, 0.7)');
-      cGrad.addColorStop(0.85, 'rgba(195, 212, 232, 0.32)');
-      cGrad.addColorStop(1, 'rgba(185, 206, 228, 0.0)');
+      cGrad.addColorStop(0, 'rgba(252, 248, 240, 0.92)');
+      cGrad.addColorStop(0.58, 'rgba(236, 232, 224, 0.68)');
+      cGrad.addColorStop(0.85, 'rgba(182, 192, 204, 0.30)');
+      cGrad.addColorStop(1, 'rgba(170, 184, 200, 0.0)');
       ctx.fillStyle = cGrad;
 
       for (let p = 0; p < 5; p++) {
@@ -1436,6 +1634,93 @@ export function createSkyDomeTexture(isDarkMode = true): THREE.CanvasTexture {
       }
     }
   }
+
+  const tex = new THREE.CanvasTexture(canvas);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  tex.mapping = THREE.EquirectangularReflectionMapping;
+  tex.needsUpdate = true;
+  return tex;
+}
+
+/**
+ * Generates an ArchViz PMREM-ready Equirectangular Environment Map tuned specifically for
+ * smoked emerald/bronze glass, patinated bronze, champagne gold, and realistic river reflections.
+ */
+export function createArchVizEnvironmentTexture(
+  isDarkMode: boolean,
+  highRes = true
+): THREE.CanvasTexture {
+  const w = highRes ? 2048 : 1024;
+  const h = highRes ? 1024 : 512;
+  const canvas = document.createElement('canvas');
+  canvas.width = w;
+  canvas.height = h;
+  const ctx = canvas.getContext('2d')!;
+
+  const grad = ctx.createLinearGradient(0, 0, 0, h);
+  if (isDarkMode) {
+    // Deep midnight navy & warm amber-gold skyline bounce
+    grad.addColorStop(0.0, '#040814');
+    grad.addColorStop(0.24, '#0A142B');
+    grad.addColorStop(0.42, '#112242');
+    grad.addColorStop(0.495, '#1D2B42');
+    grad.addColorStop(0.525, '#2A2936');
+    grad.addColorStop(0.64, '#121824');
+    grad.addColorStop(1.0, '#080C16');
+  } else {
+    // Natural cerulean sky zenith to warm ivory/sandstone horizon & olive earth bounce
+    grad.addColorStop(0.0, '#1D4674');
+    grad.addColorStop(0.22, '#4373A2');
+    grad.addColorStop(0.41, '#8CA8BF');
+    grad.addColorStop(0.495, '#E4DDD0');
+    grad.addColorStop(0.53, '#D5C4A8');
+    grad.addColorStop(0.68, '#535C45');
+    grad.addColorStop(1.0, '#272F24');
+  }
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, w, h);
+
+  // City skyline silhouette reflection along equator (bronze & warm amber window reflections at night)
+  const horizonY = h * 0.505;
+  let seed = isDarkMode ? 739 : 419;
+  const rand = () => {
+    seed = (seed * 16807) % 2147483647;
+    return (seed - 1) / 2147483646;
+  };
+  for (let i = 0; i < 64; i++) {
+    const bx = (i / 64) * w;
+    const bw = (w / 64) * (0.7 + rand() * 0.6);
+    const bh = h * (0.024 + rand() * 0.06);
+    ctx.fillStyle = isDarkMode ? 'rgba(10, 18, 36, 0.78)' : 'rgba(42, 50, 56, 0.36)';
+    ctx.fillRect(bx, horizonY - bh, bw, bh);
+    if (isDarkMode) {
+      ctx.fillStyle = i % 3 === 0 ? 'rgba(212, 186, 139, 0.38)' : 'rgba(245, 185, 92, 0.44)';
+      for (let wy = horizonY - bh + 4; wy < horizonY - 4; wy += 6) {
+        if (rand() > 0.3) ctx.fillRect(bx + 3, wy, Math.max(2, bw - 6), 2);
+      }
+    }
+  }
+
+  // Primary directional solar / moonlight-amber specular hotspot
+  const sx = isDarkMode ? w * 0.58 : w * 0.66;
+  const sy = isDarkMode ? h * 0.36 : h * 0.24;
+  const sunRad = w * 0.14;
+  const sunGlow = ctx.createRadialGradient(sx, sy, 4, sx, sy, sunRad);
+  if (isDarkMode) {
+    sunGlow.addColorStop(0.0, 'rgba(246, 236, 220, 0.92)');
+    sunGlow.addColorStop(0.18, 'rgba(235, 178, 96, 0.52)');
+    sunGlow.addColorStop(0.5, 'rgba(108, 138, 188, 0.22)');
+    sunGlow.addColorStop(1.0, 'rgba(14, 24, 48, 0.0)');
+  } else {
+    sunGlow.addColorStop(0.0, 'rgba(255, 250, 236, 0.96)');
+    sunGlow.addColorStop(0.18, 'rgba(255, 236, 196, 0.72)');
+    sunGlow.addColorStop(0.5, 'rgba(216, 212, 200, 0.24)');
+    sunGlow.addColorStop(1.0, 'rgba(216, 212, 200, 0.0)');
+  }
+  ctx.fillStyle = sunGlow;
+  ctx.beginPath();
+  ctx.arc(sx, sy, sunRad, 0, Math.PI * 2);
+  ctx.fill();
 
   const tex = new THREE.CanvasTexture(canvas);
   tex.colorSpace = THREE.SRGBColorSpace;
@@ -1466,7 +1751,7 @@ export function createContactShadowTexture(): THREE.CanvasTexture {
 }
 
 /**
- * Crisp modern architectural cool-white / glacier-blue LED streetlamp ground light pool texture for Night Mode
+ * Warm champagne-gold & amber LED streetlamp ground light pool texture for Night Mode
  */
 export function createLightPoolTexture(): THREE.CanvasTexture {
   const canvas = document.createElement('canvas');
@@ -1475,9 +1760,9 @@ export function createLightPoolTexture(): THREE.CanvasTexture {
   const ctx = canvas.getContext('2d')!;
 
   const grad = ctx.createRadialGradient(128, 128, 6, 128, 128, 124);
-  grad.addColorStop(0, 'rgba(214, 238, 255, 0.44)');
-  grad.addColorStop(0.45, 'rgba(125, 200, 252, 0.16)');
-  grad.addColorStop(1, 'rgba(56, 189, 248, 0.0)');
+  grad.addColorStop(0, 'rgba(255, 232, 178, 0.52)');
+  grad.addColorStop(0.45, 'rgba(240, 184, 92, 0.22)');
+  grad.addColorStop(1, 'rgba(212, 152, 64, 0.0)');
   ctx.fillStyle = grad;
   ctx.fillRect(0, 0, 256, 256);
 
@@ -1520,13 +1805,13 @@ export function createCarHeadlightBeamTexture(): THREE.CanvasTexture {
 }
 
 /**
- * Sleek Futuristic Architectural Sapphire & Brushed-Slate Nameplate Plaque mounted on each Service House
+ * Sleek Luxury Champagne-Gold, Dark Graphite & Warm Ivory Architectural Nameplate Plaque on each Service House
  */
 export function createHousePlaqueTexture(
   num: string,
   title: string,
   categoryTag: string,
-  accentCss = '#1D4ED8',
+  accentCss = '#1F4E37',
   anisotropy = 8,
   isDarkMode = true
 ): THREE.CanvasTexture {
@@ -1537,37 +1822,37 @@ export function createHousePlaqueTexture(
   canvas.height = h;
   const ctx = canvas.getContext('2d')!;
 
-  ctx.fillStyle = isDarkMode ? '#0C1222' : '#FFFFFF';
+  ctx.fillStyle = isDarkMode ? '#101520' : '#F3ECE0';
   ctx.fillRect(0, 0, w, h);
 
-  // Architectural double sapphire/slate border
-  ctx.strokeStyle = isDarkMode ? '#38BDF8' : '#1D4ED8';
+  // Luxury double border: champagne metallic & patinated bronze
+  ctx.strokeStyle = isDarkMode ? '#D4BA8B' : '#8C6239';
   ctx.lineWidth = 8;
   ctx.strokeRect(12, 12, w - 24, h - 24);
 
-  ctx.strokeStyle = isDarkMode ? 'rgba(56,189,248,0.28)' : 'rgba(29,78,216,0.18)';
+  ctx.strokeStyle = isDarkMode ? 'rgba(212, 186, 139, 0.34)' : 'rgba(31, 78, 55, 0.32)';
   ctx.lineWidth = 2;
   ctx.strokeRect(26, 26, w - 52, h - 52);
 
   // House Number & Category Header
-  ctx.fillStyle = isDarkMode ? '#2563EB' : accentCss;
+  ctx.fillStyle = isDarkMode ? '#D4BA8B' : '#1E2229';
   ctx.fillRect(48, 52, 92, 44);
-  ctx.fillStyle = '#FFFFFF';
+  ctx.fillStyle = isDarkMode ? '#101520' : '#EDE4D4';
   ctx.font = '800 26px "JetBrains Mono", monospace';
   ctx.textBaseline = 'middle';
   ctx.fillText(`0${num.replace(/^0+/, '')}`.slice(-2), 75, 74);
 
-  ctx.fillStyle = isDarkMode ? '#94A3B8' : '#475569';
+  ctx.fillStyle = isDarkMode ? '#E8C688' : '#8C6239';
   ctx.font = '700 21px "Plus Jakarta Sans", sans-serif';
   const shortCat = categoryTag.split('·')[0]?.trim() || 'Service Studio';
   ctx.fillText(shortCat.toUpperCase(), 162, 74);
 
   // Hairline rule
-  ctx.fillStyle = isDarkMode ? 'rgba(56,189,248,0.22)' : 'rgba(15,23,42,0.12)';
+  ctx.fillStyle = isDarkMode ? 'rgba(212, 186, 139, 0.28)' : 'rgba(30, 34, 41, 0.16)';
   ctx.fillRect(48, 114, w - 96, 2);
 
   // Crisp Service Title
-  ctx.fillStyle = isDarkMode ? '#F1F5F9' : '#0F172A';
+  ctx.fillStyle = isDarkMode ? '#F7F1E5' : '#1E2229';
   ctx.font = '800 50px "Plus Jakarta Sans", sans-serif';
   const words = title.split(' ');
   let line1 = '';
@@ -1582,7 +1867,7 @@ export function createHousePlaqueTexture(
   if (line2) {
     ctx.fillText(line1, 48, 178);
     ctx.font = '700 42px "Plus Jakarta Sans", sans-serif';
-    ctx.fillStyle = isDarkMode ? '#7DD3FC' : '#1D4ED8';
+    ctx.fillStyle = isDarkMode ? '#E6BC72' : accentCss;
     ctx.fillText(line2, 48, 248);
   } else {
     ctx.fillText(line1, 48, 212);
@@ -1596,8 +1881,12 @@ export function createHousePlaqueTexture(
  * Replaces cartoonish blobby sphere trees with crisp multi-card architectural-visualization foliage
  * that casts authentic dappled leafy shadows on streets, parks, and building facades.
  */
-export function createBotanicalLeafClusterTexture(anisotropy = 8): THREE.CanvasTexture {
-  const size = 512;
+export function createBotanicalLeafClusterTexture(
+  anisotropy = 8,
+  highRes = true
+): THREE.CanvasTexture {
+  const size = highRes ? 1024 : 512;
+  const sc = size / 512;
   const canvas = document.createElement('canvas');
   canvas.width = size;
   canvas.height = size;
@@ -1625,20 +1914,24 @@ export function createBotanicalLeafClusterTexture(anisotropy = 8): THREE.CanvasT
     [256, 196, 302, 96, 2.6],
   ];
   branches.forEach(([x0, y0, x1, y1, lw]) => {
-    ctx.lineWidth = lw;
+    ctx.lineWidth = lw * sc;
     ctx.beginPath();
-    ctx.moveTo(x0, y0);
-    ctx.quadraticCurveTo((x0 + x1) * 0.5 + (rand() - 0.5) * 24, (y0 + y1) * 0.5, x1, y1);
+    ctx.moveTo(x0 * sc, y0 * sc);
+    ctx.quadraticCurveTo(
+      ((x0 + x1) * 0.5 + (rand() - 0.5) * 24) * sc,
+      ((y0 + y1) * 0.5) * sc,
+      x1 * sc,
+      y1 * sc
+    );
     ctx.stroke();
   });
 
-  // Helper to paint an individual botanical leaf with midrib vein & natural depth shading
+  // Helper to paint an individual botanical leaf with midrib & lateral veins
   const drawLeaf = (cx: number, cy: number, rx: number, ry: number, ang: number, light: number) => {
     ctx.save();
     ctx.translate(cx, cy);
     ctx.rotate(ang);
 
-    // Base natural muted British oak/beech leaf colors (white-biased for clean instanceColor tinting)
     const r = Math.round(145 + light * 62);
     const g = Math.round(162 + light * 68);
     const b = Math.round(118 + light * 48);
@@ -1654,12 +1947,11 @@ export function createBotanicalLeafClusterTexture(anisotropy = 8): THREE.CanvasT
     ctx.closePath();
     ctx.fill();
 
-    // Subtle dark edge definition + central botanical midrib vein
-    ctx.strokeStyle = 'rgba(28, 38, 22, 0.34)';
-    ctx.lineWidth = 1.2;
+    ctx.strokeStyle = 'rgba(28, 38, 22, 0.36)';
+    ctx.lineWidth = 1.2 * sc;
     ctx.stroke();
-    ctx.strokeStyle = 'rgba(220, 232, 195, 0.32)';
-    ctx.lineWidth = 1.0;
+    ctx.strokeStyle = 'rgba(220, 232, 195, 0.34)';
+    ctx.lineWidth = 1.0 * sc;
     ctx.beginPath();
     ctx.moveTo(0, -ry * 0.78);
     ctx.lineTo(0, ry * 0.82);
@@ -1668,23 +1960,97 @@ export function createBotanicalLeafClusterTexture(anisotropy = 8): THREE.CanvasT
     ctx.restore();
   };
 
-  // Paint 195 organically layered leaves (deeper shaded inner leaves first, sunlit outer tips last)
+  // Paint organically layered crisp leaves (higher density in highRes mode)
+  const leafFactor = highRes ? 1.5 : 1.0;
   for (let layer = 0; layer < 2; layer++) {
-    const count = layer === 0 ? 105 : 95;
+    const count = Math.round((layer === 0 ? 105 : 100) * leafFactor);
     for (let i = 0; i < count; i++) {
       const a = rand() * Math.PI * 2;
-      const dist = Math.pow(rand(), layer === 0 ? 0.65 : 0.48) * (layer === 0 ? 168 : 196);
-      const lx = 256 + Math.cos(a) * dist * 1.06;
-      const ly = 248 + Math.sin(a) * dist * 0.96;
-      if (lx < 28 || lx > size - 28 || ly < 24 || ly > size - 36) continue;
+      const dist = Math.pow(rand(), layer === 0 ? 0.65 : 0.48) * (layer === 0 ? 168 : 198) * sc;
+      const lx = 256 * sc + Math.cos(a) * dist * 1.06;
+      const ly = 248 * sc + Math.sin(a) * dist * 0.96;
+      if (lx < 28 * sc || lx > size - 28 * sc || ly < 24 * sc || ly > size - 36 * sc) continue;
 
-      const rx = 12 + rand() * 14;
-      const ry = 22 + rand() * 20;
-      const rot = Math.atan2(ly - 300, lx - 256) + Math.PI * 0.5 + (rand() - 0.5) * 1.15;
+      const rx = (11 + rand() * 13) * sc;
+      const ry = (20 + rand() * 19) * sc;
+      const rot = Math.atan2(ly - 300 * sc, lx - 256 * sc) + Math.PI * 0.5 + (rand() - 0.5) * 1.15;
       const topSunBias = Math.max(0, Math.min(1, 0.85 - ly / size));
       const light = Math.max(0, Math.min(1, (layer === 0 ? 0.16 : 0.45) + topSunBias * 0.45 + (rand() - 0.5) * 0.2));
       drawLeaf(lx, ly, rx, ry, rot, light);
     }
+  }
+
+  const tex = new THREE.CanvasTexture(canvas);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  tex.anisotropy = Math.min(Math.max(anisotropy, 4), 16);
+  tex.minFilter = THREE.LinearMipmapLinearFilter;
+  tex.magFilter = THREE.LinearFilter;
+  tex.needsUpdate = true;
+  return tex;
+}
+
+/**
+ * High-Resolution Botanical Tropical Date Palm Frond Alpha-Cutout Texture (Singapore & Dubai Waterfront Palms).
+ * Crisp curved central rachis with feathered deep-emerald and muted-olive leaflets.
+ */
+export function createPalmFrondTexture(
+  anisotropy = 8,
+  highRes = true
+): THREE.CanvasTexture {
+  const w = highRes ? 512 : 256;
+  const h = highRes ? 1024 : 512;
+  const sx = w / 512;
+  const sy = h / 1024;
+  const canvas = document.createElement('canvas');
+  canvas.width = w;
+  canvas.height = h;
+  const ctx = canvas.getContext('2d')!;
+  ctx.clearRect(0, 0, w, h);
+
+  // Central woody-olive palm frond rachis
+  ctx.strokeStyle = '#6A6E45';
+  ctx.lineWidth = 10 * sx;
+  ctx.lineCap = 'round';
+  ctx.beginPath();
+  ctx.moveTo(256 * sx, 1000 * sy);
+  ctx.quadraticCurveTo(252 * sx, 500 * sy, 256 * sx, 38 * sy);
+  ctx.stroke();
+
+  let seed = 4127;
+  const rand = () => {
+    seed = (seed * 16807) % 2147483647;
+    return (seed - 1) / 2147483646;
+  };
+
+  // Pairs of pointed tapering palm leaflets radiating upward along the rachis
+  const pairs = 28;
+  for (let i = 0; i < pairs; i++) {
+    const t = i / (pairs - 1); // 0 bottom -> 1 tip
+    const py = (940 - t * 880) * sy;
+    const spanFactor = Math.sin(t * Math.PI * 0.88 + 0.16);
+    const len = (55 + spanFactor * 168) * sx;
+    const width = (7 + spanFactor * 9) * sy;
+
+    [-1, 1].forEach((side) => {
+      const tipX = 256 * sx + side * len;
+      const tipY = py - (52 + t * 55 + rand() * 14) * sy;
+      const midX = 256 * sx + side * len * 0.56;
+      const midY = py - (32 + t * 28) * sy;
+
+      const grad = ctx.createLinearGradient(256 * sx, py, tipX, tipY);
+      const toneShift = Math.round((rand() - 0.5) * 18);
+      grad.addColorStop(0, `rgb(${44 + toneShift},${82 + toneShift},${52 + toneShift})`);
+      grad.addColorStop(0.65, `rgb(${68 + toneShift},${104 + toneShift},${62 + toneShift})`);
+      grad.addColorStop(1, `rgb(${112 + toneShift},${128 + toneShift},${76 + toneShift})`);
+      ctx.fillStyle = grad;
+
+      ctx.beginPath();
+      ctx.moveTo(256 * sx, py - width * 0.45);
+      ctx.quadraticCurveTo(midX, midY - width, tipX, tipY);
+      ctx.quadraticCurveTo(midX, midY + width * 0.65, 256 * sx, py + width * 0.55);
+      ctx.closePath();
+      ctx.fill();
+    });
   }
 
   const tex = new THREE.CanvasTexture(canvas);
@@ -1868,18 +2234,17 @@ export function createServiceEmblemTexture(
 }
 
 /**
- * Second Architectural Skyscraper Facade PBR Suite (1024x1024):
- * Warm Honed Limestone / Travertine Stone Piers + Recessed Bronze-Tinted Windows
- * Gives the redesigned city genuine architectural diversity alongside glass curtain-wall towers!
+ * Warm Sandstone, Ivory Limestone & Terracotta Architectural Tower PBR Set:
+ * Sculpted ashlar stone piers + recessed smoked-emerald/bronze glazing (Day) & warm amber interiors (Night).
  */
-export function createLimestoneTowerPbrSet(anisotropy = 8): SkyscraperPbrSet {
-  const size = 1024;
+export function createLimestoneTowerPbrSet(anisotropy = 8, highRes = true): SkyscraperPbrSet {
+  const size = highRes ? 2048 : 1024;
   const cols = 8;
   const rows = 18;
   const cellW = size / cols;
   const cellH = size / rows;
-  const pierW = 24;
-  const spandrelH = 14;
+  const pierW = Math.round(size * 0.024);
+  const spandrelH = Math.round(size * 0.015);
 
   const darkCanvas = document.createElement('canvas');
   darkCanvas.width = size;
@@ -1896,7 +2261,7 @@ export function createLimestoneTowerPbrSet(anisotropy = 8): SkyscraperPbrSet {
   lightCanvas.height = size;
   const lCtx = lightCanvas.getContext('2d')!;
 
-  const mapSize = 512;
+  const mapSize = highRes ? 1024 : 512;
   const heightCanvas = document.createElement('canvas');
   heightCanvas.width = mapSize;
   heightCanvas.height = mapSize;
@@ -1907,22 +2272,23 @@ export function createLimestoneTowerPbrSet(anisotropy = 8): SkyscraperPbrSet {
   roughCanvas.height = mapSize;
   const rCtx = roughCanvas.getContext('2d')!;
 
-  // Warm sculpted architectural stone base
-  lCtx.fillStyle = '#E6DDD0';
+  // Warm Ivory & Sandstone Beige stone (Day) vs Dark Graphite & Bronze stone (Night)
+  lCtx.fillStyle = '#E8DCC9';
   lCtx.fillRect(0, 0, size, size);
-  dCtx.fillStyle = '#2B2538';
+  dCtx.fillStyle = '#181E2B';
   dCtx.fillRect(0, 0, size, size);
   eCtx.fillStyle = '#000000';
   eCtx.fillRect(0, 0, size, size);
   hCtx.fillStyle = '#F0F0F0';
   hCtx.fillRect(0, 0, mapSize, mapSize);
-  rCtx.fillStyle = '#C8C8C8';
+  rCtx.fillStyle = '#CECECE';
   rCtx.fillRect(0, 0, mapSize, mapSize);
 
-  // Subtle horizontal stone ashlar courses
-  lCtx.fillStyle = 'rgba(130, 114, 96, 0.14)';
-  dCtx.fillStyle = 'rgba(14, 10, 22, 0.25)';
-  for (let y = 0; y < size; y += 28) {
+  // Crisp horizontal travertine/sandstone ashlar shadow grooves
+  lCtx.fillStyle = 'rgba(130, 102, 74, 0.18)';
+  dCtx.fillStyle = 'rgba(8, 12, 22, 0.36)';
+  const courseStep = Math.round(size / 36);
+  for (let y = 0; y < size; y += courseStep) {
     lCtx.fillRect(0, y, size, 2);
     dCtx.fillRect(0, y, size, 2);
   }
@@ -1948,71 +2314,70 @@ export function createLimestoneTowerPbrSet(anisotropy = 8): SkyscraperPbrSet {
       const mh = Math.max(2, Math.round(h * sc));
 
       if (isCorniceBand) {
-        // Horizontal architectural bronze/stone cornice molding
-        lCtx.fillStyle = '#CFC2B0';
+        lCtx.fillStyle = r === 6 ? '#B86B4B' : '#D4C2A5';
         lCtx.fillRect(c * cellW, y, cellW, h);
-        dCtx.fillStyle = '#3C324A';
+        dCtx.fillStyle = '#242A3A';
         dCtx.fillRect(c * cellW, y, cellW, h);
-        // Recessed warm cornice accent slot in dark sunset mode
-        if (r === 0) {
-          dCtx.fillStyle = '#FFC864';
-          dCtx.fillRect(x, y + Math.round(h * 0.4), w, 4);
-          eCtx.fillStyle = '#FFB648';
-          eCtx.fillRect(x, y + Math.round(h * 0.4), w, 4);
+        if (r === 0 || r === 12) {
+          lCtx.fillStyle = '#D4BA8B';
+          lCtx.fillRect(x, y + Math.round(h * 0.42), w, 5);
+          dCtx.fillStyle = '#F0C068';
+          dCtx.fillRect(x, y + Math.round(h * 0.42), w, 4);
+          eCtx.fillStyle = '#DE9E42';
+          eCtx.fillRect(x, y + Math.round(h * 0.42), w, 4);
         }
         continue;
       }
 
-      // Deeply recessed window cavity in height & mirror-smooth glass in roughness
       hCtx.fillStyle = '#181818';
       hCtx.fillRect(mx, my, mw, mh);
       rCtx.fillStyle = '#0C0C0C';
       rCtx.fillRect(mx, my, mw, mh);
 
-      // Daytime: crisp bronze-framed dark architectural glass catching azure sky reflections
+      // Day Mode: Deep emerald & smoked bronze recessed glazing with bronze mullions
       const dayGrad = lCtx.createLinearGradient(x, y, x + w, y + h);
-      dayGrad.addColorStop(0, '#36587C');
-      dayGrad.addColorStop(0.45, '#1D334D');
-      dayGrad.addColorStop(1, '#5882A8');
+      dayGrad.addColorStop(0, '#235240');
+      dayGrad.addColorStop(0.5, '#19322B');
+      dayGrad.addColorStop(1, '#313736');
       lCtx.fillStyle = dayGrad;
       lCtx.fillRect(x, y, w, h);
 
-      // Bronze central mullion bar
-      lCtx.fillStyle = '#5C4B3B';
-      lCtx.fillRect(x + Math.round(w * 0.48), y, 4, h);
-      lCtx.strokeStyle = '#6E5D4C';
-      lCtx.lineWidth = 3;
+      lCtx.fillStyle = '#8C6239';
+      lCtx.fillRect(x + Math.round(w * 0.48), y, Math.max(3, Math.round(size * 0.004)), h);
+      lCtx.strokeStyle = '#6E4C2C';
+      lCtx.lineWidth = Math.max(2, Math.round(size * 0.0025));
       lCtx.strokeRect(x + 1, y + 1, w - 2, h - 2);
 
-      // Night/Sunset: warm golden architectural interior glow
       const lit = rand() > 0.34;
       if (lit) {
         const warmGrad = dCtx.createLinearGradient(x, y, x, y + h);
-        warmGrad.addColorStop(0, '#FFEAB8');
-        warmGrad.addColorStop(0.6, '#FFBA5A');
-        warmGrad.addColorStop(1, '#C47032');
+        warmGrad.addColorStop(0, '#FFECC0');
+        warmGrad.addColorStop(0.6, '#E09D46');
+        warmGrad.addColorStop(1, '#8C5320');
         dCtx.fillStyle = warmGrad;
         dCtx.fillRect(x, y, w, h);
         eCtx.fillStyle = warmGrad;
         eCtx.fillRect(x + 2, y + 2, w - 4, h - 4);
       } else {
-        dCtx.fillStyle = '#131829';
+        dCtx.fillStyle = '#0E1524';
         dCtx.fillRect(x, y, w, h);
       }
-      dCtx.fillStyle = '#1D1828';
-      dCtx.fillRect(x + Math.round(w * 0.48), y, 4, h);
+      dCtx.fillStyle = '#161B26';
+      dCtx.fillRect(x + Math.round(w * 0.48), y, Math.max(3, Math.round(size * 0.004)), h);
       eCtx.fillStyle = '#000000';
-      eCtx.fillRect(x + Math.round(w * 0.48), y, 4, h);
+      eCtx.fillRect(x + Math.round(w * 0.48), y, Math.max(3, Math.round(size * 0.004)), h);
     }
   }
 
-  const darkMap = finalizeColorTexture(new THREE.CanvasTexture(darkCanvas), anisotropy);
-  const darkEmissiveMap = finalizeColorTexture(new THREE.CanvasTexture(emissiveCanvas), anisotropy);
-  const lightMap = finalizeColorTexture(new THREE.CanvasTexture(lightCanvas), anisotropy);
-  const normalMap = heightCanvasToNormalTexture(heightCanvas, 2.8, anisotropy);
+  const darkMap = finalizeColorTexture(new THREE.CanvasTexture(darkCanvas), anisotropy, 1, 2);
+  const darkEmissiveMap = finalizeColorTexture(new THREE.CanvasTexture(emissiveCanvas), anisotropy, 1, 2);
+  const lightMap = finalizeColorTexture(new THREE.CanvasTexture(lightCanvas), anisotropy, 1, 2);
+  const normalMap = heightCanvasToNormalTexture(heightCanvas, 2.8, anisotropy, 1, 2);
   const roughnessMap = finalizeDataTexture(
     new THREE.CanvasTexture(roughCanvas),
-    anisotropy
+    anisotropy,
+    1,
+    2
   ) as THREE.CanvasTexture;
 
   return {
@@ -2042,8 +2407,12 @@ export interface HerringboneFloorPbrSet {
  * High-Craft Architectural Herringbone Oak Parquet Flooring PBR Set (512x512 tiled)
  * for the bespoke walk-in 3D Service House Interiors!
  */
-export function createHerringboneFloorPbrSet(anisotropy = 8): HerringboneFloorPbrSet {
-  const size = 512;
+export function createHerringboneFloorPbrSet(
+  anisotropy = 8,
+  highRes = true
+): HerringboneFloorPbrSet {
+  const size = highRes ? 1024 : 512;
+  const sc = size / 512;
   const colorCanvas = document.createElement('canvas');
   colorCanvas.width = size;
   colorCanvas.height = size;
@@ -2067,7 +2436,7 @@ export function createHerringboneFloorPbrSet(anisotropy = 8): HerringboneFloorPb
   rCtx.fillRect(0, 0, size, size);
 
   const tones = ['#A37B54', '#926B46', '#B18860', '#845F3E', '#9C744E'];
-  const step = 32;
+  const step = 32 * sc;
   let idx = 0;
 
   for (let row = -2; row < size / step + 4; row++) {
@@ -2080,19 +2449,19 @@ export function createHerringboneFloorPbrSet(anisotropy = 8): HerringboneFloorPb
       cCtx.fillStyle = tones[idx % tones.length];
       cCtx.fillRect(x + 1, y + 1, pw - 2, ph - 2);
 
-      // Subtle wood-grain streaks
-      cCtx.fillStyle = 'rgba(60, 38, 20, 0.08)';
+      // Crisp wood-grain streaks
+      cCtx.fillStyle = 'rgba(60, 38, 20, 0.09)';
       if (horiz) {
-        cCtx.fillRect(x + 2, y + 8, pw - 4, 2);
-        cCtx.fillRect(x + 2, y + 20, pw - 4, 1);
+        cCtx.fillRect(x + 2, y + 8 * sc, pw - 4, 2);
+        cCtx.fillRect(x + 2, y + 20 * sc, pw - 4, 1);
       } else {
-        cCtx.fillRect(x + 8, y + 2, 2, ph - 4);
-        cCtx.fillRect(x + 20, y + 2, 1, ph - 4);
+        cCtx.fillRect(x + 8 * sc, y + 2, 2, ph - 4);
+        cCtx.fillRect(x + 20 * sc, y + 2, 1, ph - 4);
       }
 
       // Plank seams in height & roughness
       hCtx.strokeStyle = '#383838';
-      hCtx.lineWidth = 2;
+      hCtx.lineWidth = Math.max(2, Math.round(2 * sc));
       hCtx.strokeRect(x, y, pw, ph);
 
       rCtx.fillStyle = idx % 2 === 0 ? '#505050' : '#646464';
@@ -2102,7 +2471,7 @@ export function createHerringboneFloorPbrSet(anisotropy = 8): HerringboneFloorPb
   }
 
   const map = finalizeColorTexture(new THREE.CanvasTexture(colorCanvas), anisotropy, 3, 3);
-  const normalMap = heightCanvasToNormalTexture(heightCanvas, 1.4, anisotropy, 3, 3);
+  const normalMap = heightCanvasToNormalTexture(heightCanvas, 1.5, anisotropy, 3, 3);
   const roughnessMap = finalizeDataTexture(
     new THREE.CanvasTexture(roughCanvas),
     anisotropy,
@@ -2319,16 +2688,20 @@ export function createStudioInteriorDisplayTexture(
 }
 
 /**
- * High-Craft Bookmatched Calacatta Oro Marble PBR Set (512x512)
+ * High-Craft Bookmatched Calacatta Oro Marble PBR Set (1024x1024 in highRes mode)
  * Creamy warm alabaster stone with sweeping smoky-graphite and warm gold mineral veining.
  */
-export function createCalacattaMarblePbrSet(anisotropy = 8): {
+export function createCalacattaMarblePbrSet(
+  anisotropy = 8,
+  highRes = true
+): {
   map: THREE.CanvasTexture;
   normalMap: THREE.DataTexture;
   roughnessMap: THREE.CanvasTexture;
   dispose: () => void;
 } {
-  const size = 512;
+  const size = highRes ? 1024 : 512;
+  const sc = size / 512;
   const cCanvas = document.createElement('canvas');
   cCanvas.width = size;
   cCanvas.height = size;
@@ -2364,11 +2737,11 @@ export function createCalacattaMarblePbrSet(anisotropy = 8): {
   };
 
   // Soft cloudy mineral undertones
-  for (let i = 0; i < 28; i++) {
+  for (let i = 0; i < 32; i++) {
     const px = rand() * size;
     const py = rand() * size;
-    const rad = 40 + rand() * 90;
-    const g = cCtx.createRadialGradient(px, py, 4, px, py, rad);
+    const rad = (40 + rand() * 90) * sc;
+    const g = cCtx.createRadialGradient(px, py, 4 * sc, px, py, rad);
     g.addColorStop(0, 'rgba(182, 174, 162, 0.14)');
     g.addColorStop(1, 'rgba(247, 243, 235, 0)');
     cCtx.fillStyle = g;
@@ -2381,25 +2754,25 @@ export function createCalacattaMarblePbrSet(anisotropy = 8): {
   const drawVein = (startX: number, startY: number, isGold: boolean, width: number) => {
     let x = startX;
     let y = startY;
-    cCtx.strokeStyle = isGold ? 'rgba(196, 152, 82, 0.42)' : 'rgba(96, 98, 108, 0.34)';
-    cCtx.lineWidth = width;
+    cCtx.strokeStyle = isGold ? 'rgba(196, 152, 82, 0.44)' : 'rgba(96, 98, 108, 0.36)';
+    cCtx.lineWidth = width * sc;
     cCtx.lineCap = 'round';
     cCtx.beginPath();
     cCtx.moveTo(x, y);
 
     hCtx.strokeStyle = '#BDBDBD';
-    hCtx.lineWidth = width;
+    hCtx.lineWidth = width * sc;
     hCtx.beginPath();
     hCtx.moveTo(x, y);
 
     rCtx.strokeStyle = '#565656';
-    rCtx.lineWidth = width;
+    rCtx.lineWidth = width * sc;
     rCtx.beginPath();
     rCtx.moveTo(x, y);
 
-    for (let step = 0; step < 18; step++) {
-      x += 26 + (rand() - 0.3) * 26;
-      y += (rand() - 0.45) * 44;
+    for (let step = 0; step < 24; step++) {
+      x += (20 + (rand() - 0.3) * 22) * sc;
+      y += (rand() - 0.45) * 38 * sc;
       cCtx.lineTo(x, y);
       hCtx.lineTo(x, y);
       rCtx.lineTo(x, y);
@@ -2409,13 +2782,13 @@ export function createCalacattaMarblePbrSet(anisotropy = 8): {
     rCtx.stroke();
   };
 
-  for (let v = 0; v < 9; v++) {
-    drawVein(-30, rand() * size, v % 3 === 0, v % 2 === 0 ? 3.2 : 1.5);
+  for (let v = 0; v < 13; v++) {
+    drawVein(-30 * sc, rand() * size, v % 3 === 0, v % 2 === 0 ? 3.0 : 1.35);
   }
 
   // Bookmatched slab seam joint subtly centered
   cCtx.strokeStyle = 'rgba(140, 132, 120, 0.22)';
-  cCtx.lineWidth = 2;
+  cCtx.lineWidth = Math.max(2, Math.round(2 * sc));
   cCtx.strokeRect(1, 1, size - 2, size - 2);
 
   const map = finalizeColorTexture(new THREE.CanvasTexture(cCanvas), anisotropy, 1, 1);
@@ -2440,13 +2813,15 @@ export function createCalacattaMarblePbrSet(anisotropy = 8): {
 }
 
 /**
- * Tailored Silk & Cashmere-Wool Luxury Area Rug Texture (512x512)
+ * Tailored Silk & Cashmere-Wool Luxury Area Rug Texture (1024x1024 in highRes mode)
  */
 export function createLuxuryAreaRugTexture(
   accentCss = '#C89B4B',
-  anisotropy = 8
+  anisotropy = 8,
+  highRes = true
 ): THREE.CanvasTexture {
-  const size = 512;
+  const size = highRes ? 1024 : 512;
+  const sc = size / 512;
   const canvas = document.createElement('canvas');
   canvas.width = size;
   canvas.height = size;
@@ -2463,51 +2838,55 @@ export function createLuxuryAreaRugTexture(
   };
 
   // Fine tactile textile boucle-silk weave grain
-  for (let y = 0; y < size; y += 3) {
-    ctx.fillStyle = y % 6 === 0 ? 'rgba(120, 108, 92, 0.055)' : 'rgba(255, 252, 246, 0.14)';
-    ctx.fillRect(0, y, size, 1.5);
+  const stepY = Math.max(2, Math.round(3 * sc));
+  for (let y = 0; y < size; y += stepY) {
+    ctx.fillStyle = y % (stepY * 2) === 0 ? 'rgba(120, 108, 92, 0.055)' : 'rgba(255, 252, 246, 0.14)';
+    ctx.fillRect(0, y, size, Math.max(1, 1.5 * sc));
   }
-  for (let i = 0; i < 4200; i++) {
-    ctx.fillStyle = rand() > 0.5 ? 'rgba(140, 126, 108, 0.06)' : 'rgba(255, 255, 255, 0.08)';
-    ctx.fillRect(Math.floor(rand() * size), Math.floor(rand() * size), 2, 2);
+  const fleckCount = highRes ? 9000 : 4200;
+  for (let i = 0; i < fleckCount; i++) {
+    ctx.fillStyle = rand() > 0.5 ? 'rgba(140, 126, 108, 0.065)' : 'rgba(255, 255, 255, 0.085)';
+    ctx.fillRect(Math.floor(rand() * size), Math.floor(rand() * size), Math.max(2, Math.round(2 * sc)), Math.max(2, Math.round(2 * sc)));
   }
 
   // Outer charcoal architectural border + brushed-gold inner Greek-key / geometric hairline trim
   ctx.strokeStyle = '#312E2B';
-  ctx.lineWidth = 14;
-  ctx.strokeRect(22, 22, size - 44, size - 44);
+  ctx.lineWidth = 14 * sc;
+  ctx.strokeRect(22 * sc, 22 * sc, size - 44 * sc, size - 44 * sc);
 
   ctx.strokeStyle = accentCss;
-  ctx.lineWidth = 4;
-  ctx.strokeRect(42, 42, size - 84, size - 84);
+  ctx.lineWidth = 4 * sc;
+  ctx.strokeRect(42 * sc, 42 * sc, size - 84 * sc, size - 84 * sc);
 
   ctx.strokeStyle = 'rgba(72, 65, 58, 0.24)';
-  ctx.lineWidth = 2;
-  ctx.strokeRect(56, 56, size - 112, size - 112);
+  ctx.lineWidth = 2 * sc;
+  ctx.strokeRect(56 * sc, 56 * sc, size - 112 * sc, size - 112 * sc);
 
   // Subtle modernist concentric geometric centerpiece medallion
   ctx.strokeStyle = 'rgba(49, 46, 43, 0.16)';
-  ctx.lineWidth = 2;
+  ctx.lineWidth = 2 * sc;
   ctx.beginPath();
-  ctx.arc(size / 2, size / 2, 118, 0, Math.PI * 2);
+  ctx.arc(size / 2, size / 2, 118 * sc, 0, Math.PI * 2);
   ctx.stroke();
   ctx.strokeStyle = accentCss + '66';
   ctx.beginPath();
-  ctx.arc(size / 2, size / 2, 92, 0, Math.PI * 2);
+  ctx.arc(size / 2, size / 2, 92 * sc, 0, Math.PI * 2);
   ctx.stroke();
 
   return finalizeColorTexture(new THREE.CanvasTexture(canvas), anisotropy, 1, 1);
 }
 
 /**
- * Framed Minimalist Contemporary Gallery Canvas Artwork Texture (512x512)
+ * Framed Minimalist Contemporary Gallery Canvas Artwork Texture (1024x1024 in highRes mode)
  */
 export function createGalleryArtTexture(
   serviceIndex: number,
   sideIndex: number,
-  anisotropy = 8
+  anisotropy = 8,
+  highRes = true
 ): THREE.CanvasTexture {
-  const size = 512;
+  const size = highRes ? 1024 : 512;
+  const sc = size / 512;
   const canvas = document.createElement('canvas');
   canvas.width = size;
   canvas.height = size;
@@ -2518,7 +2897,7 @@ export function createGalleryArtTexture(
   ctx.fillRect(0, 0, size, size);
 
   // Recessed inner art paper canvas
-  const pad = 48;
+  const pad = 48 * sc;
   const inner = size - pad * 2;
   ctx.fillStyle = sideIndex === 0 ? '#1C222E' : '#EAE2D3';
   ctx.fillRect(pad, pad, inner, inner);
@@ -2528,54 +2907,50 @@ export function createGalleryArtTexture(
 
   if (sideIndex === 0) {
     // Sculptural Gold-Leaf Horizon Sun & Architectural Arch over Obsidian Canvas
-    const glow = ctx.createRadialGradient(size / 2, size * 0.44, 14, size / 2, size * 0.44, 150);
+    const glow = ctx.createRadialGradient(size / 2, size * 0.44, 14 * sc, size / 2, size * 0.44, 150 * sc);
     glow.addColorStop(0, gold);
     glow.addColorStop(0.55, gold + '55');
     glow.addColorStop(1, 'rgba(28,34,46,0)');
     ctx.fillStyle = glow;
     ctx.beginPath();
-    ctx.arc(size / 2, size * 0.44, 148, 0, Math.PI * 2);
+    ctx.arc(size / 2, size * 0.44, 148 * sc, 0, Math.PI * 2);
     ctx.fill();
 
     ctx.fillStyle = gold;
     ctx.beginPath();
-    ctx.arc(size / 2, size * 0.42, 64, 0, Math.PI * 2);
+    ctx.arc(size / 2, size * 0.42, 64 * sc, 0, Math.PI * 2);
     ctx.fill();
 
     ctx.fillStyle = '#E8DFD1';
-    ctx.fillRect(pad + 54, size * 0.62, inner - 108, 10);
+    ctx.fillRect(pad + 54 * sc, size * 0.62, inner - 108 * sc, 10 * sc);
     ctx.fillStyle = 'rgba(255,255,255,0.22)';
-    ctx.fillRect(pad + 92, size * 0.68, inner - 184, 5);
+    ctx.fillRect(pad + 92 * sc, size * 0.68, inner - 184 * sc, 5 * sc);
   } else {
     // Bauhaus Travertine & Terracotta Overlapping Relief Arches
     ctx.fillStyle = '#C26D48';
     ctx.beginPath();
-    ctx.arc(size * 0.44, size * 0.54, 104, Math.PI, 0, false);
-    ctx.lineTo(size * 0.44 + 104, size - pad - 44);
-    ctx.lineTo(size * 0.44 - 104, size - pad - 44);
+    ctx.arc(size * 0.44, size * 0.54, 104 * sc, Math.PI, 0, false);
+    ctx.lineTo(size * 0.44 + 104 * sc, size - pad - 44 * sc);
+    ctx.lineTo(size * 0.44 - 104 * sc, size - pad - 44 * sc);
     ctx.closePath();
     ctx.fill();
 
     ctx.strokeStyle = '#1E2430';
-    ctx.lineWidth = 6;
+    ctx.lineWidth = 6 * sc;
     ctx.beginPath();
-    ctx.arc(size * 0.58, size * 0.42, 74, 0, Math.PI * 2);
+    ctx.arc(size * 0.58, size * 0.42, 74 * sc, 0, Math.PI * 2);
     ctx.stroke();
 
     ctx.fillStyle = gold;
     ctx.beginPath();
-    ctx.arc(size * 0.58, size * 0.42, 24, 0, Math.PI * 2);
+    ctx.arc(size * 0.58, size * 0.42, 24 * sc, 0, Math.PI * 2);
     ctx.fill();
   }
 
   // Subtle shadow edge around passe-partout cutout
   ctx.strokeStyle = 'rgba(20, 20, 20, 0.25)';
-  ctx.lineWidth = 3;
+  ctx.lineWidth = 3 * sc;
   ctx.strokeRect(pad, pad, inner, inner);
 
   return finalizeColorTexture(new THREE.CanvasTexture(canvas), anisotropy, 1, 1);
 }
-
-
-
-
