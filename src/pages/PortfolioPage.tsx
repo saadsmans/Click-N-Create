@@ -1,4 +1,4 @@
-import React, { useState, Suspense } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   Download,
@@ -23,15 +23,10 @@ import {
 } from 'lucide-react';
 import { SAAD_PORTFOLIO } from '../data/portfolio.ts';
 import { ClickNCreateLogo } from '../components/ClickNCreateLogo.tsx';
+import { SaadPortrait } from '../components/SaadPortrait.tsx';
 import { useTheme } from '../context/ThemeContext.tsx';
 import { SITE_CONFIG } from '../data/site.ts';
 import { SEOHead } from '../components/SEOHead.tsx';
-
-const InteractivePortfolioAvatar3D = React.lazy(() =>
-  import('../components/InteractivePortfolioAvatar3D.tsx').then((m) => ({
-    default: m.InteractivePortfolioAvatar3D,
-  }))
-);
 
 interface PortfolioPageProps {
   onNavigate: (path: string) => void;
@@ -449,7 +444,7 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
 
           <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
             {/* Hero Profile Content */}
-            <div className="lg:col-span-12 space-y-6">
+            <div className="lg:col-span-8 space-y-6">
               <div>
                 <div
                   className={`inline-flex items-center gap-2 px-3.5 py-1 rounded-md border text-xs font-mono uppercase tracking-wider mb-3 ${
@@ -567,6 +562,10 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
               </div>
             </div>
 
+            {/* Original Saad Portrait Card */}
+            <div className="lg:col-span-4 flex justify-center lg:justify-end">
+              <SaadPortrait size="hero" showUploadBadge={true} />
+            </div>
           </div>
         </div>
 
@@ -1247,32 +1246,6 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
           </div>
         </div>
       </div>
-
-      {/* ===================== STICKY BOTTOM-RIGHT 3D AVATAR ===================== */}
-      {!showCvModal && (
-        <div className="fixed bottom-3 right-3 sm:bottom-5 sm:right-6 z-40 flex flex-col items-center pointer-events-none select-none">
-          <Suspense fallback={null}>
-            <InteractivePortfolioAvatar3D isDark={isDark} />
-          </Suspense>
-          <div
-            className={`-mt-3 relative z-10 px-3 py-1 rounded-md border shadow-lg flex items-center gap-1.5 whitespace-nowrap text-[11px] font-mono font-bold ${
-              isDark
-                ? 'border-emerald-500/40 bg-[#0C1222]/95 text-emerald-400'
-                : 'border-emerald-600/35 bg-white/95 text-emerald-700'
-            }`}
-          >
-            <span className="w-2 h-2 rounded-full bg-emerald-500" />
-            <span>Available For Work</span>
-          </div>
-          <span
-            className={`mt-1 text-[10px] font-mono ${
-              isDark ? 'text-[#94A3B8]' : 'text-[#475569]'
-            }`}
-          >
-            Verified Web Developer
-          </span>
-        </div>
-      )}
 
       {/* ===================== FULL AUTHENTIC DIGITAL CV RESUME MODAL (FULL WHITE ONLY) ===================== */}
       <AnimatePresence>

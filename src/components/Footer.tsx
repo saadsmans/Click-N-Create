@@ -66,8 +66,8 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                 title={social.label}
                 className={`w-11 h-11 sm:w-12 sm:h-12 rounded-full flex items-center justify-center hover:scale-110 active:scale-95 transition-all duration-200 cursor-pointer ${
                   isDark
-                    ? 'bg-[#F59E0B] hover:bg-[#FBBF24] text-[#0B0D18] shadow-[0_8px_22px_rgba(245,158,11,0.32)]'
-                    : 'bg-[#1D6FD8] hover:bg-[#1E40AF] text-white shadow-[0_8px_22px_rgba(29,111,216,0.26)]'
+                    ? 'bg-[#00F0FF] hover:bg-[#38BDF8] text-[#05050A] shadow-[0_8px_22px_rgba(0,240,255,0.32)]'
+                    : 'bg-cyan-600 hover:bg-cyan-700 text-white shadow-[0_8px_22px_rgba(8,145,178,0.26)]'
                 }`}
               >
                 <Icon className="w-5 h-5 stroke-[2.2]" />
@@ -76,23 +76,23 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
           })}
         </div>
 
-        {/* Main Architectural Card */}
+        {/* Main Card */}
         <div
           className={`flex-1 w-full border relative overflow-hidden transition-all duration-300 rounded-3xl p-7 sm:p-10 lg:p-12 ${
             isDark
-              ? 'bg-[#131627] border-[#F59E0B]/24 shadow-[0_24px_64px_rgba(4,5,12,0.72)]'
+              ? 'bg-[#0A0A16] border-[#00F0FF]/20 shadow-[0_24px_64px_rgba(0,0,0,0.72)]'
               : 'bg-white border-slate-200 shadow-[0_18px_48px_rgba(15,23,42,0.07)]'
           }`}
         >
-          {/* Subtle Golden Sunset / Azure Architectural Glow */}
+          {/* Subtle Cyber-Cyan / Space-Violet Glow */}
           <div
             className={`absolute top-0 right-0 w-80 h-80 rounded-full blur-3xl pointer-events-none ${
-              isDark ? 'bg-[#F59E0B]/12' : 'bg-[#1D6FD8]/8'
+              isDark ? 'bg-[#00F0FF]/10' : 'bg-cyan-500/8'
             }`}
           />
           <div
             className={`absolute bottom-0 left-1/3 w-96 h-96 rounded-full blur-3xl pointer-events-none ${
-              isDark ? 'bg-[#EA580C]/10' : 'bg-sky-200/28'
+              isDark ? 'bg-[#7000FF]/12' : 'bg-indigo-200/28'
             }`}
           />
 
@@ -106,11 +106,11 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
               <div>
                 <h2
                   className={`text-3xl sm:text-5xl font-black font-display tracking-tight leading-[1.1] ${
-                    isDark ? 'text-[#FAF6F0]' : 'text-slate-900'
+                    isDark ? 'text-white' : 'text-slate-900'
                   }`}
                 >
                   Do you like <br />
-                  <span className={isDark ? 'text-[#F59E0B]' : 'text-[#1D6FD8]'}>what you see?</span>
+                  <span className={isDark ? 'text-[#00F0FF]' : 'text-cyan-700'}>what you see?</span>
                 </h2>
               </div>
 
@@ -121,8 +121,8 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                   onClick={() => onNavigate('/contact')}
                   className={`group relative inline-flex items-center gap-3.5 px-8 py-4 sm:py-4.5 rounded-full font-display font-black text-base sm:text-lg tracking-tight hover:scale-[1.02] active:scale-95 transition-all duration-200 cursor-pointer ${
                     isDark
-                      ? 'bg-[#F59E0B] hover:bg-[#FBBF24] text-[#0B0D18] shadow-[0_12px_30px_rgba(245,158,11,0.34)]'
-                      : 'bg-[#1D6FD8] hover:bg-[#1E40AF] text-white shadow-[0_12px_30px_rgba(29,111,216,0.28)]'
+                      ? 'bg-[#00F0FF] hover:bg-[#38BDF8] text-[#05050A] shadow-[0_12px_30px_rgba(0,240,255,0.34)]'
+                      : 'bg-cyan-600 hover:bg-cyan-700 text-white shadow-[0_12px_30px_rgba(8,145,178,0.28)]'
                   }`}
                 >
                   <span>Start a project</span>
@@ -145,7 +145,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
               <a
                 href="/"
                 onClick={(e) => handleNav(e, '/')}
-                className="inline-block cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#F59E0B] rounded-lg"
+                className="inline-block cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#00F0FF] rounded-lg"
               >
                 <ClickNCreateLogo
                   size="lg"
@@ -159,7 +159,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
 
               <p className={`text-sm max-w-sm leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
                 Freelance Web Development operated by Saad M. Offering high-impact websites, e-commerce storefronts, and custom web applications. Standard rate:{' '}
-                <strong className={isDark ? 'text-[#F59E0B]' : 'text-[#1D6FD8]'}>£35/hr</strong> or fixed project scope.
+                <strong className={isDark ? 'text-[#00F0FF]' : 'text-cyan-700'}>£35/hr</strong> or fixed project scope.
               </p>
             </div>
 
@@ -179,13 +179,13 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                       href={item.href}
                       onClick={(e) => handleNav(e, item.href)}
                       className={`transition-colors flex items-center gap-1.5 group cursor-pointer font-medium ${
-                        isDark ? 'text-slate-200 hover:text-[#F59E0B]' : 'text-slate-700 hover:text-[#1D6FD8]'
+                        isDark ? 'text-slate-200 hover:text-[#00F0FF]' : 'text-slate-700 hover:text-cyan-700'
                       }`}
                     >
                       <span>{item.label}</span>
                       <ArrowUpRight
                         className={`w-3 h-3 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all ${
-                          isDark ? 'text-[#F59E0B]' : 'text-[#1D6FD8]'
+                          isDark ? 'text-[#00F0FF]' : 'text-cyan-700'
                         }`}
                       />
                     </a>
@@ -201,7 +201,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                   isDark ? 'text-slate-400' : 'text-slate-500'
                 }`}
               >
-                Services &amp; Houses
+                Core Services
               </span>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
                 {SERVICES.map((s) => (
@@ -213,12 +213,12 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                       onNavigate(`/services/${s.slug}`);
                     }}
                     className={`transition-colors flex items-center gap-1.5 group cursor-pointer font-medium ${
-                      isDark ? 'text-slate-200 hover:text-[#F59E0B]' : 'text-slate-700 hover:text-[#1D6FD8]'
+                      isDark ? 'text-slate-200 hover:text-[#00F0FF]' : 'text-slate-700 hover:text-cyan-700'
                     }`}
                   >
                     <span
                       className={`w-1.5 h-1.5 rounded-full shrink-0 ${
-                        isDark ? 'bg-[#F59E0B]' : 'bg-[#1D6FD8]'
+                        isDark ? 'bg-[#00F0FF]' : 'bg-cyan-600'
                       }`}
                     />
                     <span className="truncate">{s.title}</span>
@@ -247,7 +247,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                 href="/privacy-policy"
                 onClick={(e) => handleNav(e, '/privacy-policy')}
                 className={`transition-colors cursor-pointer ${
-                  isDark ? 'hover:text-[#F59E0B] text-slate-300' : 'hover:text-[#1D6FD8] text-slate-600'
+                  isDark ? 'hover:text-[#00F0FF] text-slate-300' : 'hover:text-cyan-700 text-slate-600'
                 }`}
               >
                 Privacy Policy
@@ -256,7 +256,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                 href="/terms"
                 onClick={(e) => handleNav(e, '/terms')}
                 className={`transition-colors cursor-pointer ${
-                  isDark ? 'hover:text-[#F59E0B] text-slate-300' : 'hover:text-[#1D6FD8] text-slate-600'
+                  isDark ? 'hover:text-[#00F0FF] text-slate-300' : 'hover:text-cyan-700 text-slate-600'
                 }`}
               >
                 Terms &amp; Conditions
@@ -265,7 +265,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                 href="/admin"
                 onClick={(e) => handleNav(e, '/admin')}
                 className={`hover:underline transition-colors flex items-center gap-1.5 font-bold cursor-pointer ${
-                  isDark ? 'text-[#F59E0B]' : 'text-[#1D6FD8]'
+                  isDark ? 'text-[#00F0FF]' : 'text-cyan-700'
                 }`}
               >
                 <ShieldCheck className="w-3.5 h-3.5" />

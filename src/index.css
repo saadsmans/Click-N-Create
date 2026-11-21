@@ -10,40 +10,40 @@
 
 @layer base {
   :root {
-    --bg-main: #F4F8FC;
+    --bg-main: #F8FAFC;
     --bg-secondary: #FFFFFF;
     --card-bg: #FFFFFF;
-    --card-bg-subtle: #E6F0FA;
+    --card-bg-subtle: #ECFEFF;
     --text-main: #0F172A;
     --text-muted: #475569;
     --border-main: rgba(15, 23, 42, 0.12);
     --border-subtle: rgba(15, 23, 42, 0.06);
-    --border-hover: var(--accent-cyan, #1D6FD8);
-    --accent-cyan: #1D6FD8;
-    --accent-purple: #0284C7;
-    --accent-gradient: linear-gradient(135deg, #1D6FD8 0%, #0EA5E9 55%, #1E40AF 100%);
-    --cyber-cyan: #1D6FD8;
-    --cyber-purple: #0284C7;
-    --glow-color: rgba(29, 111, 216, 0.24);
+    --border-hover: var(--accent-cyan, #0891B2);
+    --accent-cyan: #0891B2;
+    --accent-purple: #6366F1;
+    --accent-gradient: linear-gradient(135deg, #06B6D4 0%, #0891B2 50%, #4F46E5 100%);
+    --cyber-cyan: #0891B2;
+    --cyber-purple: #6366F1;
+    --glow-color: rgba(8, 145, 178, 0.24);
     --border-radius: 16px;
   }
 
   :root.dark {
-    --bg-main: #0B0D18;
-    --bg-secondary: #131627;
-    --card-bg: #131627;
-    --card-bg-subtle: #1B1F35;
-    --text-main: #FAF6F0;
-    --text-muted: #B8B2C8;
-    --border-main: rgba(245, 158, 11, 0.24);
-    --border-subtle: rgba(250, 246, 240, 0.07);
-    --border-hover: var(--accent-cyan, #F59E0B);
-    --accent-cyan: #F59E0B;
-    --accent-purple: #FB923C;
-    --accent-gradient: linear-gradient(135deg, #FDE68A 0%, #F59E0B 48%, #EA580C 100%);
-    --cyber-cyan: #F59E0B;
-    --cyber-purple: #FB923C;
-    --glow-color: rgba(245, 158, 11, 0.34);
+    --bg-main: #05050A;
+    --bg-secondary: #0A0A16;
+    --card-bg: #0A0A16;
+    --card-bg-subtle: #101022;
+    --text-main: #F8FAFC;
+    --text-muted: #94A3B8;
+    --border-main: rgba(0, 240, 255, 0.2);
+    --border-subtle: rgba(248, 250, 252, 0.07);
+    --border-hover: var(--accent-cyan, #00F0FF);
+    --accent-cyan: #00F0FF;
+    --accent-purple: #7000FF;
+    --accent-gradient: linear-gradient(135deg, #00F0FF 0%, #38BDF8 50%, #7000FF 100%);
+    --cyber-cyan: #00F0FF;
+    --cyber-purple: #7000FF;
+    --glow-color: rgba(0, 240, 255, 0.34);
     --border-radius: 16px;
   }
 

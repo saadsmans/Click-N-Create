@@ -22,6 +22,7 @@ import { HomePage } from './pages/HomePage.tsx';
 const ServicesPage = lazy(() => import('./pages/ServicesPage.tsx').then((m) => ({ default: m.ServicesPage })));
 const ServiceDetailPage = lazy(() => import('./pages/ServiceDetailPage.tsx').then((m) => ({ default: m.ServiceDetailPage })));
 const AboutPage = lazy(() => import('./pages/AboutPage.tsx').then((m) => ({ default: m.AboutPage })));
+const MyWorksPage = lazy(() => import('./pages/MyWorksPage.tsx').then((m) => ({ default: m.MyWorksPage })));
 const PortfolioPage = lazy(() => import('./pages/PortfolioPage.tsx').then((m) => ({ default: m.PortfolioPage })));
 const PricingPage = lazy(() => import('./pages/PricingPage.tsx').then((m) => ({ default: m.PricingPage })));
 const ProcessPage = lazy(() => import('./pages/ProcessPage.tsx').then((m) => ({ default: m.ProcessPage })));
@@ -64,6 +65,7 @@ function AppContent() {
   // Idle-prefetch primary navigation chunks so route transitions feel instant
   useEffect(() => {
     const prefetchCoreRoutes = () => {
+      import('./pages/MyWorksPage.tsx').catch(() => {});
       import('./pages/PortfolioPage.tsx').catch(() => {});
       import('./pages/ServicesPage.tsx').catch(() => {});
       import('./pages/EstimatorPage.tsx').catch(() => {});
@@ -145,6 +147,10 @@ function AppContent() {
 
     if (path === '/about') {
       return <AboutPage onNavigate={handleNavigate} />;
+    }
+
+    if (path === '/my-works' || path === '/works') {
+      return <MyWorksPage onNavigate={handleNavigate} />;
     }
 
     if (path === '/portfolio') {

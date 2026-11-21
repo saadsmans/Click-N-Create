@@ -46,7 +46,20 @@ export const RecentWorksSection: React.FC<RecentWorksSectionProps> = ({ onNaviga
             className="mb-0"
           />
 
-          <div className="flex items-center gap-3 shrink-0 self-start md:self-end">
+          <div className="flex flex-wrap items-center gap-3 shrink-0 self-start md:self-end">
+            <button
+              type="button"
+              onClick={() => onNavigate('/my-works')}
+              className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border text-xs font-mono font-bold transition-all cursor-pointer ${
+                isDark
+                  ? 'border-[#00F0FF]/50 bg-[#00F0FF] hover:bg-[#5CF6FF] text-[#05050A] shadow-[0_8px_24px_rgba(0,240,255,0.2)]'
+                  : 'border-slate-950 bg-slate-950 hover:bg-cyan-700 text-white shadow-2xs'
+              }`}
+            >
+              <span>View My Works</span>
+              <ArrowUpRight className="w-4 h-4" />
+            </button>
+
             <button
               type="button"
               onClick={() => onNavigate('/portfolio')}

@@ -53,6 +53,7 @@ export const SITE_CONFIG = {
 
 export const NAV_ITEMS: NavItem[] = [
   { label: 'Home', href: '/' },
+  { label: 'My Works', href: '/my-works' },
   { label: 'Portfolio', href: '/portfolio' },
   { label: 'Services', href: '/services' },
   { label: 'Pricing', href: '/pricing' },

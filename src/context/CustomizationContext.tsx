@@ -164,32 +164,32 @@ export interface SiteCustomization {
 
 export const DEFAULT_CUSTOMIZATION: SiteCustomization = {
   theme: {
-    presetId: 'golden_horizon_metropolis',
-    presetName: 'Azure Day & Golden Sunset Metropolis',
+    presetId: 'cyber_cyan',
+    presetName: 'Cyber Solar Matrix',
     fontDisplay: 'Syne',
     fontSans: 'Plus Jakarta Sans',
     fontMono: 'JetBrains Mono',
-    accentCyan: '#F59E0B',
-    accentPurple: '#EA580C',
-    accentGradient: 'linear-gradient(135deg, #FDE68A 0%, #F59E0B 48%, #EA580C 100%)',
-    bgTone: 'navy',
-    bgMainDark: '#0B0D18',
-    bgSecondaryDark: '#131627',
-    bgMainLight: '#F4F8FC',
+    accentCyan: '#00F0FF',
+    accentPurple: '#7000FF',
+    accentGradient: 'linear-gradient(135deg, #00F0FF 0%, #38BDF8 50%, #7000FF 100%)',
+    bgTone: 'obsidian',
+    bgMainDark: '#05050A',
+    bgSecondaryDark: '#0A0A16',
+    bgMainLight: '#F8FAFC',
     bgSecondaryLight: '#FFFFFF',
-    textColorDark: '#FAF6F0',
+    textColorDark: '#F8FAFC',
     textColorLight: '#0F172A',
     borderRadius: 'modern',
     borderWidth: 'thin',
     glowEffect: true,
-    glowIntensity: 'subtle',
+    glowIntensity: 'medium',
     buttonStyle: 'glow',
-    headerStyle: 'hdr_futuristic_sapphire',
-    footerStyle: 'ftr_futuristic_sapphire',
-    dropdownStyle: 'dd_futuristic_sapphire',
-    backgroundPattern: 'clean',
+    headerStyle: 'floating_glass',
+    footerStyle: 'modern_columns',
+    dropdownStyle: 'glass_blur',
+    backgroundPattern: 'grid',
     showGame: true,
-    showGrid: false,
+    showGrid: true,
     customBadge: 'AVAILABLE FOR 2026 CLIENT PROJECTS · £35/HR',
     customLogoUrl: '/uploads/header-logo-1791033749583.png',
     logoDisplayMode: 'image_text',
@@ -641,15 +641,15 @@ export const CustomizationProvider: React.FC<{ children: React.ReactNode }> = ({
         --bg-main: ${bgMainLight};
         --bg-secondary: ${bgSecondaryLight};
         --card-bg: ${bgSecondaryLight};
-        --card-bg-subtle: #E6F0FA;
+        --card-bg-subtle: #ECFEFF;
         --text-main: ${textColorLight};
         --text-muted: ${textMutedLight};
         --border-main: ${borderColorLight};
         --border-subtle: rgba(15, 23, 42, 0.05);
-        --accent-cyan: #1D6FD8;
-        --accent-purple: #0284C7;
-        --accent-gradient: linear-gradient(135deg, #1D6FD8 0%, #0EA5E9 55%, #1E40AF 100%);
-        --glow-color: rgba(29, 111, 216, 0.22);
+        --accent-cyan: #0891B2;
+        --accent-purple: #6366F1;
+        --accent-gradient: linear-gradient(135deg, #06B6D4 0%, #0891B2 50%, #4F46E5 100%);
+        --glow-color: rgba(8, 145, 178, 0.22);
         color-scheme: light;
       }
 
@@ -749,7 +749,7 @@ export const CustomizationProvider: React.FC<{ children: React.ReactNode }> = ({
         -webkit-text-fill-color: transparent !important;
       }
       html:not(.dark) .text-cyber-gradient, html:not(.dark) .text-luxury-gradient {
-        background: linear-gradient(135deg, #1D6FD8 0%, #0284C7 55%, #1E40AF 100%) !important;
+        background: linear-gradient(135deg, #06B6D4 0%, #0891B2 50%, #4F46E5 100%) !important;
         -webkit-background-clip: text !important;
         -webkit-text-fill-color: transparent !important;
       }
@@ -889,7 +889,7 @@ export const CustomizationProvider: React.FC<{ children: React.ReactNode }> = ({
             if (
               parsed &&
               typeof parsed === 'object' &&
-              parsed.presetId !== 'cyber_cyan' &&
+              parsed.presetId !== 'golden_horizon_metropolis' &&
               parsed.presetId !== 'architectural_amber' &&
               parsed.presetId !== 'futuristic_sapphire'
             ) {
@@ -919,7 +919,7 @@ export const CustomizationProvider: React.FC<{ children: React.ReactNode }> = ({
         const rawTheme = data.customization.theme;
         const themeToUse =
           !rawTheme ||
-          rawTheme.presetId === 'cyber_cyan' ||
+          rawTheme.presetId === 'golden_horizon_metropolis' ||
           rawTheme.presetId === 'architectural_amber' ||
           rawTheme.presetId === 'futuristic_sapphire'
             ? DEFAULT_CUSTOMIZATION.theme
