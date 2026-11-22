@@ -22,6 +22,7 @@ import {
   Printer,
 } from 'lucide-react';
 import { SAAD_PORTFOLIO } from '../data/portfolio.ts';
+import { ENGINEERING_COURSEWORK_MODULES, WORK_ARCHITECTURAL_SPECS } from '../data/websiteContent.ts';
 import { ClickNCreateLogo } from '../components/ClickNCreateLogo.tsx';
 import { SaadPortrait } from '../components/SaadPortrait.tsx';
 import { useTheme } from '../context/ThemeContext.tsx';
@@ -562,9 +563,9 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
               </div>
             </div>
 
-            {/* Original Saad Portrait Card */}
+            {/* Permanent Saad Portrait Card */}
             <div className="lg:col-span-4 flex justify-center lg:justify-end">
-              <SaadPortrait size="hero" showUploadBadge={true} />
+              <SaadPortrait size="hero" />
             </div>
           </div>
         </div>
@@ -718,6 +719,54 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
                   </div>
                 </div>
               ))}
+            </div>
+
+            {/* Technical Specs & Live Gallery Callout */}
+            <div
+              className={`p-6 sm:p-8 rounded-3xl border space-y-6 ${
+                isDark ? 'border-[#252A36] bg-[#0C1222]/90' : 'border-[#E6E2D8] bg-white shadow-xs'
+              }`}
+            >
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-black/[0.08] dark:border-white/[0.08]">
+                <div>
+                  <span className={`text-xs font-mono uppercase tracking-wider font-bold ${isDark ? 'text-[#7DD3FC]' : 'text-[#1D4ED8]'}`}>
+                    Architecture Notes
+                  </span>
+                  <h3 className={`text-xl font-bold font-display mt-0.5 ${isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'}`}>
+                    Engineering Breakdown of Live Client Deliveries
+                  </h3>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => onNavigate('/my-works')}
+                  className="px-4 py-2 rounded-xl bg-[#38BDF8] hover:bg-[#7DD3FC] text-[#111318] font-mono text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer self-start sm:self-auto"
+                >
+                  <span>Inspect Live Captures</span>
+                  <ArrowUpRight className="w-3.5 h-3.5" />
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {WORK_ARCHITECTURAL_SPECS.map((spec) => (
+                  <div
+                    key={spec.id}
+                    className={`p-5 rounded-2xl border space-y-3 ${
+                      isDark ? 'border-white/10 bg-white/[0.03]' : 'border-[#E6E2D8] bg-[#F8FAFC]'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between text-xs font-mono">
+                      <span className={`font-bold ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`}>{spec.client}</span>
+                      <span className={isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}>{spec.deliveryWindow}</span>
+                    </div>
+                    <p className={`text-xs leading-relaxed ${isDark ? 'text-[#F1F5F9]/85' : 'text-[#3A3832]'}`}>
+                      <strong>Challenge:</strong> {spec.problemSolved}
+                    </p>
+                    <p className={`text-xs leading-relaxed ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>
+                      <strong>Solution:</strong> {spec.architectureDecision}
+                    </p>
+                  </div>
+                ))}
+              </div>
             </div>
           </motion.div>
         )}
@@ -1196,6 +1245,40 @@ export const PortfolioPage: React.FC<PortfolioPageProps> = ({ onNavigate }) => {
                   </div>
                 </div>
               ))}
+            </div>
+
+            {/* Academic & ECE Foundation Applied to Software Engineering */}
+            <div
+              className={`p-6 sm:p-8 rounded-3xl border space-y-6 ${
+                isDark ? 'border-[#252A36] bg-[#0C1222]/90' : 'border-[#E6E2D8] bg-white shadow-xs'
+              }`}
+            >
+              <div>
+                <span className={`text-xs font-mono uppercase tracking-wider font-bold ${isDark ? 'text-[#7DD3FC]' : 'text-[#1D4ED8]'}`}>
+                  Academic Foundation · GEC Bharuch &amp; IIT Bombay
+                </span>
+                <h3 className={`text-xl font-bold font-display mt-1 ${isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'}`}>
+                  How Electronics &amp; Communication Engineering Shapes My Web Code
+                </h3>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                {ENGINEERING_COURSEWORK_MODULES.map((mod) => (
+                  <div
+                    key={mod.area}
+                    className={`p-5 rounded-2xl border space-y-2 ${
+                      isDark ? 'border-white/10 bg-white/[0.03]' : 'border-[#E6E2D8] bg-[#F8FAFC]'
+                    }`}
+                  >
+                    <h4 className={`text-sm font-bold font-display ${isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'}`}>
+                      {mod.area}
+                    </h4>
+                    <p className={`text-xs leading-relaxed ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>
+                      {mod.relevance}
+                    </p>
+                  </div>
+                ))}
+              </div>
             </div>
           </motion.div>
         )}

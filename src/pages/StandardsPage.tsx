@@ -10,6 +10,11 @@ import {
   Terminal,
 } from 'lucide-react';
 import { SectionHeading } from '../components/SectionHeading.tsx';
+import {
+  DEVICE_TESTING_MATRIX,
+  SEO_SCHEMA_CHECKLIST,
+  SECURITY_HEADER_SPECS,
+} from '../data/websiteContent.ts';
 import { useTheme } from '../context/ThemeContext.tsx';
 import { useCustomization } from '../context/CustomizationContext.tsx';
 import { SEOHead } from '../components/SEOHead.tsx';
@@ -260,6 +265,83 @@ export const StandardsPage: React.FC<StandardsPageProps> = ({ onNavigate }) => {
                 </div>
               );
             })}
+          </div>
+        </div>
+
+        {/* ===================== DEVICE QA, SEO SCHEMA & SECURITY SPECS ===================== */}
+        <div className="mt-20 pt-16 border-t border-black/[0.08] dark:border-white/[0.08] space-y-12">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            {/* Device & Viewport Testing Matrix */}
+            <div className="lg:col-span-7 space-y-4">
+              <span className={`text-xs font-mono uppercase tracking-wider font-bold ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`}>
+                Multi-Viewport QA Protocol
+              </span>
+              <h2 className={`text-2xl font-extrabold font-display tracking-tight ${isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'}`}>
+                Devices &amp; Screen Widths Tested Before Launch
+              </h2>
+
+              <div className={`rounded-2xl border overflow-hidden ${isDark ? 'border-white/10 bg-[#0C1222]/85' : 'border-black/10 bg-white shadow-2xs'}`}>
+                <table className="w-full text-left border-collapse">
+                  <thead>
+                    <tr className={`border-b text-xs font-mono uppercase ${isDark ? 'border-white/10 bg-white/[0.03] text-slate-300' : 'border-black/10 bg-slate-50 text-slate-700'}`}>
+                      <th className="py-3.5 px-4 font-bold">Device Tier</th>
+                      <th className="py-3.5 px-4 font-bold">Viewport Width</th>
+                      <th className="py-3.5 px-4 font-bold">Reference Targets</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-black/10 dark:divide-white/10 text-xs sm:text-sm">
+                    {DEVICE_TESTING_MATRIX.map((row) => (
+                      <tr key={row.category}>
+                        <td className={`py-3.5 px-4 font-semibold ${isDark ? 'text-white' : 'text-slate-900'}`}>{row.category}</td>
+                        <td className={`py-3.5 px-4 font-mono tabular-nums ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`}>{row.width}</td>
+                        <td className={`py-3.5 px-4 ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>{row.targets}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Technical SEO Verification Checklist */}
+            <div className="lg:col-span-5 space-y-4">
+              <span className={`text-xs font-mono uppercase tracking-wider font-bold ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`}>
+                Search &amp; Social Previews
+              </span>
+              <h2 className={`text-2xl font-extrabold font-display tracking-tight ${isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'}`}>
+                Technical SEO Sign-Off List
+              </h2>
+
+              <ul className={`p-6 rounded-2xl border space-y-3 text-xs sm:text-sm ${isDark ? 'border-white/10 bg-[#0C1222]/85' : 'border-black/10 bg-white shadow-2xs'}`}>
+                {SEO_SCHEMA_CHECKLIST.map((item) => (
+                  <li key={item} className="flex items-start gap-2.5">
+                    <CheckCircle2 className={`w-4 h-4 shrink-0 mt-0.5 ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`} />
+                    <span className={isDark ? 'text-[#F1F5F9]/85' : 'text-[#334155]'}>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          {/* Security Controls Matrix */}
+          <div className="space-y-4">
+            <h3 className={`text-xl font-bold font-display ${isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'}`}>
+              Security &amp; Header Hardening Baseline
+            </h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {SECURITY_HEADER_SPECS.map((sec) => (
+                <div
+                  key={sec.control}
+                  className={`p-5 rounded-2xl border space-y-2 ${isDark ? 'border-white/10 bg-[#0C1222]/85' : 'border-black/10 bg-white shadow-2xs'}`}
+                >
+                  <div className={`text-xs font-mono font-bold ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`}>
+                    {sec.control}
+                  </div>
+                  <p className={`text-xs leading-relaxed ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>
+                    {sec.spec}
+                  </p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 

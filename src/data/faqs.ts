@@ -6,7 +6,7 @@ export interface FaqItem {
 }
 
 export const FAQS: FaqItem[] = [
-  // ===================== PRICING & RATES =====================
+  // ===================== PRICING & RATES (6) =====================
   {
     id: 'hourly-rate-details',
     category: 'Pricing & Rates',
@@ -37,8 +37,14 @@ export const FAQS: FaqItem[] = [
     question: 'Are there any hidden costs or surprise monthly bills?',
     answer: 'None from Click N Create. You only pay for the work we agree on. Standard small third-party costs (like registering your web domain name for ~£10/year) are registered directly in your name so you retain full ownership.'
   },
+  {
+    id: 'small-fixes-and-budget-options',
+    category: 'Pricing & Rates',
+    question: 'Do you take on smaller jobs or quick fixes without a full redesign?',
+    answer: 'Yes! Whether you need a broken layout fixed, a new landing page added, speed optimization, or a fresh logo, you can book just a few hours at £35/hr without committing to a large package.'
+  },
 
-  // ===================== SERVICES & SCOPE =====================
+  // ===================== SERVICES & SCOPE (6) =====================
   {
     id: 'services-breakdown-summary',
     category: 'Services & Scope',
@@ -69,19 +75,25 @@ export const FAQS: FaqItem[] = [
     question: 'Can you build custom online calculators or tools for my business?',
     answer: 'Yes! If you want an instant quote calculator on your website so clients can calculate a price, an online booking form, or a private client portal, I can build it specifically for your business workflow.'
   },
+  {
+    id: 'portfolios-and-brand-identity',
+    category: 'Services & Scope',
+    question: 'Do you also design logos, social graphics, and personal portfolios?',
+    answer: 'Absolutely. Alongside business websites and online stores, I create clean vector logos, social media banners, and standout personal or engineering portfolios (such as academic dashboards and interactive showcases) tailored to help you get hired or win clients.'
+  },
 
-  // ===================== PROCESS & DELIVERY =====================
+  // ===================== PROCESS & DELIVERY (6) =====================
   {
     id: 'live-preview-and-prototypes',
     category: 'Process & Delivery',
     question: 'How do I know what my website will look like before I commit?',
-    answer: 'You can explore the interactive live showcases and tech blueprints right on this website. When we begin your project, I also provide design layout previews and a private, interactive testing link so you can test everything on your own phone before the site goes live.'
+    answer: 'You can explore the live client works and interactive previews right on this website. When we begin your project, I also provide design layout previews and a private, interactive testing link so you can test everything on your own phone before the site goes live.'
   },
   {
     id: 'project-timeline-expectations',
     category: 'Process & Delivery',
     question: 'How long does it take to build a website?',
-    answer: 'A single-page website usually takes 5 to 7 days. A complete 4–8 page business website takes around 2 to 3 weeks. An online store or custom web tool usually takes 3 to 4 weeks.'
+    answer: 'A single-page website or personal portfolio usually takes 5 to 7 days. A complete 4–8 page business website takes around 2 to 3 weeks. An online store or custom web tool usually takes 3 to 4 weeks.'
   },
   {
     id: 'how-to-kickoff-project',
@@ -99,16 +111,16 @@ export const FAQS: FaqItem[] = [
     id: 'what-client-needs-to-provide',
     category: 'Process & Delivery',
     question: 'What do I need to give you before we begin?',
-    answer: 'Just your company name, any logo you have, photos of your work, and the basic information about your services. If you do not have photos or text ready yet, don\'t worry—I can help write the text and provide high-quality professional photos for you.'
+    answer: 'Just your company name, any logo you have, photos of your work, and the basic information about your services. If you do not have photos or text ready yet, don\'t worry—I can help write the text and source clean, professional imagery for you.'
   },
   {
     id: 'post-launch-warranty',
     category: 'Process & Delivery',
     question: 'Do you offer support after the website is launched?',
-    answer: 'Yes! Every project comes with 30 days of free post-launch support. If you spot anything that needs adjusting or have a question, I fix it right away at zero extra cost.'
+    answer: 'Yes! Every project comes with 30 days of free post-launch support. If you spot anything that needs adjusting or have a question after going live, I fix it right away at zero extra cost.'
   },
 
-  // ===================== COMMUNICATION & AVAILABILITY =====================
+  // ===================== COMMUNICATION & AVAILABILITY (5) =====================
   {
     id: 'direct-communication-channels',
     category: 'Communication & Availability',
@@ -119,33 +131,39 @@ export const FAQS: FaqItem[] = [
     id: 'freelancer-vs-agency-difference',
     category: 'Communication & Availability',
     question: 'Why choose Click N Create instead of an expensive agency?',
-    answer: 'Agencies charge thousands extra just to pay for overhead, office rent, and account managers. With Click N Create, you get the dedicated attention of a passionate developer who personally builds your website from scratch with modern technologies, transparent milestone progress, and a fair £35/hr rate.'
+    answer: 'Agencies charge thousands extra just to pay for overhead, office rent, and account managers. With Click N Create, you get the dedicated attention of the developer personally building your website from scratch with modern technologies, transparent milestone progress, and a fair £35/hr rate.'
   },
   {
     id: 'timezone-and-response-time',
     category: 'Communication & Availability',
     question: 'How quickly do you reply to messages?',
-    answer: 'I reply promptly on WhatsApp and email during the day, typically within a couple of hours.'
+    answer: 'I reply promptly on WhatsApp and email throughout the day, typically within a couple of hours, and keep you updated with clear progress previews at every milestone.'
   },
   {
     id: 'current-availability-slots',
     category: 'Communication & Availability',
     question: 'Are you currently available to take on new projects?',
-    answer: 'Yes! I am currently accepting new website projects, redesigns, and graphic design packages. Reach out on WhatsApp to check schedule availability.'
+    answer: 'Yes! I am currently accepting new website projects, portfolios, redesigns, and online store builds. Reach out on WhatsApp or the Contact page to lock in your start date.'
+  },
+  {
+    id: 'international-remote-clients',
+    category: 'Communication & Availability',
+    question: 'Do you work with clients outside the United Kingdom?',
+    answer: 'Yes! I work remotely with clients across the UK, Europe, the Middle East, India, North America, and worldwide. Everything from planning and design reviews to final launch is handled smoothly online.'
   },
 
-  // ===================== TECHNICAL & TECHNOLOGY =====================
+  // ===================== TECHNICAL & TECHNOLOGY (6) =====================
   {
     id: 'tech-stack-advantages',
     category: 'Technical & Technology',
     question: 'Why do you build clean custom websites instead of slow templates?',
-    answer: 'Heavy template builders are stuffed with messy code that makes websites slow and clunky on phones. By building clean, custom code, your website opens in under 1 second, looks super sharp on iPhones and Androids, and never crashes when updates happen.'
+    answer: 'Heavy template builders are stuffed with messy code that makes websites slow and clunky on phones. By building clean, custom code (or lean WordPress/Shopify themes), your website opens in under 1 second, looks crisp on iPhones and Androids, and never breaks when updates happen.'
   },
   {
     id: 'dark-light-mode-architecture',
     category: 'Technical & Technology',
     question: 'Can visitors read my website in dark mode and light mode?',
-    answer: 'Yes! Your website includes a simple toggle button that lets visitors switch between a comfortable dark mode and a crisp light mode, making it easy to read in any lighting.'
+    answer: 'Yes! If you would like dual-theme support, I can include a clean toggle button that lets visitors switch seamlessly between a comfortable dark mode and a crisp light mode.'
   },
   {
     id: 'mobile-responsiveness-standards',
@@ -157,26 +175,45 @@ export const FAQS: FaqItem[] = [
     id: 'performance-speed-seo',
     category: 'Technical & Technology',
     question: 'Will my website load fast and show up on Google?',
-    answer: 'Yes! Every website is built to load in under 1 to 2 seconds, and includes built-in Google search settings (page titles, descriptions, and sitemaps) so search engines can easily find and list your business.'
+    answer: 'Yes! Every website is built to load in under 1 to 2 seconds, and includes technical Google search settings (meta titles, descriptions, OpenGraph preview cards, sitemaps, and structured schema) so search engines can easily index and rank your site.'
+  },
+  {
+    id: 'domain-hosting-ssl-email',
+    category: 'Technical & Technology',
+    question: 'Do you help set up my domain name, hosting, SSL security, and business email?',
+    answer: 'Yes! I handle connecting your custom domain (like yourbusiness.co.uk or .com), configuring fast cloud hosting (such as Vercel or managed WordPress), activating free HTTPS/SSL security padlocks, and pointing your professional email address.'
+  },
+  {
+    id: 'self-editing-content-handover',
+    category: 'Technical & Technology',
+    question: 'Can I edit text, prices, and photos myself after launch?',
+    answer: 'Yes! For WordPress and Shopify sites—and custom sites with editable sections—you get a simple dashboard plus a short walkthrough guide showing how to update wording, swap photos, or adjust prices anytime with zero coding.'
   },
 
-  // ===================== OWNERSHIP & LEGAL =====================
+  // ===================== OWNERSHIP & LEGAL (4) =====================
   {
     id: 'intellectual-property-ownership',
     category: 'Ownership & Legal',
     question: 'Who owns the website and domain once it is finished?',
-    answer: 'You own 100% of everything. Your website files, images, graphics, and domain name belong completely to you. There are no monthly lock-in contracts or penalty fees.'
+    answer: 'You own 100% of everything. Your website source code, files, images, graphics, and domain name belong completely to you. There are no monthly lock-in contracts or penalty fees.'
   },
   {
     id: 'contracts-and-ndas',
     category: 'Ownership & Legal',
-    question: 'Do you provide a written agreement or contract?',
-    answer: 'Yes. Before we start, we have a clear written scope showing exactly what is included, the agreed price, and the completion deadline so both of us are completely protected.'
+    question: 'Do you provide a written agreement or sign an NDA if needed?',
+    answer: 'Yes. Before we start, we agree on a clear written scope detailing everything included, the exact price, and the completion deadline. If your project involves confidential business ideas, I am happy to sign a Non-Disclosure Agreement (NDA).'
   },
   {
-    id: 'ongoing-maintenance-retianers',
+    id: 'ongoing-maintenance-retainers',
     category: 'Ownership & Legal',
-    question: 'Can you help update the website in the future?',
-    answer: 'Yes! You can message me on WhatsApp anytime you need a text change or new photos added at my simple £35/hr rate, or choose an affordable monthly care plan where I handle updates and daily backups for you.'
+    question: 'Can you help update and maintain the website in the future?',
+    answer: 'Yes! You can message me on WhatsApp anytime you need a text change, new section, or fresh photos at my simple £35/hr rate, or opt into an affordable monthly care plan where I handle updates, monitoring, and backups for you.'
+  },
+  {
+    id: 'gdpr-privacy-security-backups',
+    category: 'Ownership & Legal',
+    question: 'Are your websites secure and GDPR / UK privacy compliant?',
+    answer: 'Yes. Every website is deployed over encrypted HTTPS, hardened against common form spam and vulnerabilities, and can include clean GDPR / UK DPA cookie consent banners, privacy policy pages, and automated backups.'
   }
 ];
+

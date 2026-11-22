@@ -1022,7 +1022,7 @@ export const HeroMotionGraphics: React.FC<HeroMotionGraphicsProps> = ({ onNaviga
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.94 }}
             transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
-            className={`absolute bottom-20 left-4 right-4 sm:left-auto sm:right-6 sm:bottom-20 sm:w-96 p-5 rounded-3xl border shadow-2xl backdrop-blur-2xl z-30 pointer-events-auto ${
+            className={`absolute bottom-20 left-4 right-4 sm:right-auto sm:left-6 sm:bottom-20 sm:w-96 p-5 rounded-3xl border shadow-2xl backdrop-blur-2xl z-40 pointer-events-auto ${
               isDark
                 ? 'border-[#00F0FF]/45 bg-[#080816]/95 text-white shadow-[0_20px_60px_rgba(0,240,255,0.28)]'
                 : 'border-cyan-500/50 bg-white/95 text-zinc-950 shadow-[0_20px_50px_rgba(0,180,216,0.22)]'

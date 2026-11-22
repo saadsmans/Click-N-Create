@@ -19,6 +19,11 @@ import { FinalCTA } from '../components/FinalCTA.tsx';
 import { SectionHeading } from '../components/SectionHeading.tsx';
 import { FAQS } from '../data/faqs.ts';
 import { SITE_CONFIG } from '../data/site.ts';
+import {
+  PLATFORM_COMPARISON_ROWS,
+  INDUSTRIES_SERVED,
+  HANDOVER_DELIVERABLES,
+} from '../data/websiteContent.ts';
 import { useTheme } from '../context/ThemeContext.tsx';
 import { useCustomization } from '../context/CustomizationContext.tsx';
 import { SEOHead } from '../components/SEOHead.tsx';
@@ -282,16 +287,12 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
             })}
           </div>
         </div>
-      </section>
 
-      {/* Quick Connect Strip (Direct Access Card with Saad's Avatar) */}
-      <div
-        className={`py-8 px-4 flex justify-center border-y transition-colors ${
-          isDark ? 'bg-[#070712] border-white/[0.06]' : 'bg-[#F8FAFC] border-slate-200'
-        }`}
-      >
-        <HeroEmojiActionWidget onNavigate={onNavigate} />
-      </div>
+        {/* Bottom-Right Hero Floating Remote Availability Box */}
+        <div className="relative z-20 mt-8 px-4 w-full flex justify-center sm:justify-end lg:mt-0 lg:px-0 lg:w-auto lg:absolute lg:bottom-20 lg:right-6 xl:right-8 pointer-events-none">
+          <HeroEmojiActionWidget onNavigate={onNavigate} />
+        </div>
+      </section>
 
       {/* ===================== CORE SERVICES SHOWCASE ===================== */}
       <StickyStackingServices
@@ -383,11 +384,222 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
               </button>
             </div>
           </div>
+
+          {/* Engineering Benchmark Strip */}
+          <div
+            className={`mt-10 pt-8 border-t grid grid-cols-2 md:grid-cols-4 gap-6 ${
+              isDark ? 'border-white/10' : 'border-slate-200/80'
+            }`}
+          >
+            {[
+              { value: '< 0.8s', label: 'Mobile Speed Target', note: 'Vite & React edge builds' },
+              { value: '£35 / hr', label: 'Direct Hourly Rate', note: 'Or fixed milestone quote' },
+              { value: '30 Days', label: 'Post-Launch Support', note: 'Included bug & QA warranty' },
+              { value: '100%', label: 'Code & Domain Ownership', note: 'Zero lock-in or retainers' },
+            ].map((stat) => (
+              <div key={stat.label} className="space-y-1">
+                <div
+                  className={`text-2xl sm:text-3xl font-black font-display tabular-nums ${
+                    isDark ? 'text-[#00F0FF]' : 'text-cyan-700'
+                  }`}
+                >
+                  {stat.value}
+                </div>
+                <div
+                  className={`text-xs font-semibold ${
+                    isDark ? 'text-white' : 'text-slate-900'
+                  }`}
+                >
+                  {stat.label}
+                </div>
+                <div className={`text-[11px] ${isDark ? 'text-zinc-400' : 'text-slate-500'}`}>
+                  {stat.note}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ===================== PLATFORM COMPARISON MATRIX ===================== */}
+      <section className="py-20 md:py-24 relative">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
+            <SectionHeading
+              category="Platform Selection"
+              title="BUILT ON THE RIGHT STACK FOR YOUR BUSINESS"
+              subtitle="Not every company needs the same platform. Compare custom React, WordPress, and Shopify side by side before choosing."
+              className="mb-0"
+            />
+            <button
+              type="button"
+              onClick={() => onNavigate('/estimator')}
+              className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border text-xs font-mono font-semibold transition-colors cursor-pointer shrink-0 self-start md:self-end ${
+                isDark
+                  ? 'border-[#00F0FF]/40 bg-[#00F0FF]/10 hover:bg-[#00F0FF]/20 text-[#00F0FF]'
+                  : 'border-cyan-600/30 bg-cyan-50 hover:bg-cyan-100 text-cyan-800'
+              }`}
+            >
+              <span>Calculate Your Platform Cost</span>
+              <ArrowUpRight className="w-3.5 h-3.5" />
+            </button>
+          </div>
+
+          <div
+            className={`rounded-2xl border overflow-hidden ${
+              isDark ? 'border-white/10 bg-[#0A0A18]/85' : 'border-slate-200 bg-white shadow-sm'
+            }`}
+          >
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse min-w-[680px]">
+                <thead>
+                  <tr
+                    className={`border-b text-xs font-mono uppercase tracking-wider ${
+                      isDark
+                        ? 'border-white/10 bg-white/[0.03] text-slate-300'
+                        : 'border-slate-200 bg-slate-50 text-slate-700'
+                    }`}
+                  >
+                    <th className="py-4 px-5 font-bold w-1/4">Comparison Area</th>
+                    <th className={`py-4 px-5 font-bold w-1/4 ${isDark ? 'text-[#00F0FF]' : 'text-cyan-700'}`}>
+                      Custom React &amp; TypeScript
+                    </th>
+                    <th className="py-4 px-5 font-bold w-1/4">WordPress &amp; Custom Theme</th>
+                    <th className="py-4 px-5 font-bold w-1/4">Shopify / WooCommerce</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-black/10 dark:divide-white/10 text-xs sm:text-sm">
+                  {PLATFORM_COMPARISON_ROWS.map((row) => (
+                    <tr
+                      key={row.criterion}
+                      className={isDark ? 'hover:bg-white/[0.02]' : 'hover:bg-slate-50/70'}
+                    >
+                      <td className={`py-4 px-5 font-semibold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                        {row.criterion}
+                      </td>
+                      <td className={`py-4 px-5 leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                        {row.reactCustom}
+                      </td>
+                      <td className={`py-4 px-5 leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                        {row.wordpress}
+                      </td>
+                      <td className={`py-4 px-5 leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                        {row.shopifyWoo}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </section>
 
       {/* ===================== WHAT I CAN BUILD SECTION ===================== */}
       <CapabilitiesSection onEnquire={() => onNavigate('/contact')} />
+
+      {/* ===================== INDUSTRIES & BUSINESS BLUEPRINTS ===================== */}
+      <section
+        className={`py-20 md:py-28 border-y transition-colors ${
+          isDark ? 'bg-[#080816]/60 border-white/[0.06]' : 'bg-slate-50/80 border-slate-200/80'
+        }`}
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+            <SectionHeading
+              category="Tailored Industry Solutions"
+              title="WHO WE BUILD WEBSITES FOR"
+              subtitle="Practical website structures, booking flows, and payment tools designed around how different businesses win customers."
+              className="mb-0"
+            />
+            <button
+              type="button"
+              onClick={() => onNavigate('/services')}
+              className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border text-xs font-mono font-semibold transition-colors cursor-pointer shrink-0 self-start md:self-end ${
+                isDark
+                  ? 'border-white/15 bg-white/5 hover:bg-white/10 text-white'
+                  : 'border-slate-300 bg-white hover:bg-slate-100 text-slate-900'
+              }`}
+            >
+              <span>Browse All 6 Services</span>
+              <ArrowUpRight className="w-3.5 h-3.5" />
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {INDUSTRIES_SERVED.map((ind) => (
+              <article
+                key={ind.id}
+                className={`p-6 sm:p-7 rounded-2xl border flex flex-col justify-between transition-colors ${
+                  isDark
+                    ? 'border-white/10 bg-[#0B0B19]/90 hover:border-[#00F0FF]/35'
+                    : 'border-slate-200 bg-white hover:border-cyan-600/35 shadow-2xs'
+                }`}
+              >
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between text-xs font-mono">
+                    <span className={`font-bold tabular-nums ${isDark ? 'text-[#00F0FF]' : 'text-cyan-700'}`}>
+                      {ind.index}.
+                    </span>
+                    <span className={`tabular-nums ${isDark ? 'text-zinc-400' : 'text-slate-500'}`}>
+                      {ind.estimatedTurnaround}
+                    </span>
+                  </div>
+
+                  <div>
+                    <h3 className={`text-lg font-bold font-display ${isDark ? 'text-white' : 'text-slate-950'}`}>
+                      {ind.sector}
+                    </h3>
+                    <p className={`text-xs font-medium mt-1 ${isDark ? 'text-cyan-300/80' : 'text-cyan-700'}`}>
+                      {ind.idealFor}
+                    </p>
+                  </div>
+
+                  <p className={`text-xs sm:text-sm leading-relaxed ${isDark ? 'text-zinc-300' : 'text-slate-600'}`}>
+                    {ind.summary}
+                  </p>
+
+                  <ul className="space-y-2 pt-2 border-t border-black/10 dark:border-white/10">
+                    {ind.keyFeatures.map((feat) => (
+                      <li
+                        key={feat}
+                        className={`text-xs leading-snug flex items-start gap-2 ${
+                          isDark ? 'text-zinc-300' : 'text-slate-700'
+                        }`}
+                      >
+                        <span className={isDark ? 'text-[#00F0FF]' : 'text-cyan-700'}>+</span>
+                        <span>{feat}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="pt-5 mt-5 border-t border-black/10 dark:border-white/10 flex items-center justify-between">
+                  <button
+                    type="button"
+                    onClick={() => onNavigate(`/services/${ind.recommendedServiceSlug}`)}
+                    className={`text-xs font-mono font-semibold inline-flex items-center gap-1 hover:underline cursor-pointer ${
+                      isDark ? 'text-[#00F0FF]' : 'text-cyan-700'
+                    }`}
+                  >
+                    <span>Explore Solution</span>
+                    <ArrowUpRight className="w-3.5 h-3.5" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => onNavigate('/estimator')}
+                    className={`text-xs font-mono hover:underline cursor-pointer ${
+                      isDark ? 'text-zinc-400 hover:text-white' : 'text-slate-500 hover:text-slate-900'
+                    }`}
+                  >
+                    Estimate Cost
+                  </button>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* ===================== RECENT CLIENT WORKS & DELIVERIES ===================== */}
       <RecentWorksSection onNavigate={onNavigate} />
@@ -397,6 +609,47 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
 
       {/* ===================== PROCESS SECTION ===================== */}
       <ProcessSection />
+
+      {/* ===================== LAUNCH & HANDOVER DELIVERABLES ===================== */}
+      <section className="py-20 md:py-24 relative">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-3xl mb-12">
+            <SectionHeading
+              category="Launch & Handover Checklist"
+              title="EVERYTHING YOU RECEIVE WHEN YOUR WEBSITE GOES LIVE"
+              subtitle="No half-finished handovers or locked accounts. Every Click N Create website ships with these six guarantees built in."
+              className="mb-0"
+            />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {HANDOVER_DELIVERABLES.map((item) => (
+              <div
+                key={item.number}
+                className={`p-6 rounded-2xl border space-y-3 transition-colors ${
+                  isDark
+                    ? 'border-white/10 bg-[#0A0A18]/85'
+                    : 'border-slate-200 bg-white shadow-2xs'
+                }`}
+              >
+                <span
+                  className={`font-mono text-xs font-bold tabular-nums block ${
+                    isDark ? 'text-[#00F0FF]' : 'text-cyan-700'
+                  }`}
+                >
+                  {item.number}.
+                </span>
+                <h3 className={`text-base font-bold font-display ${isDark ? 'text-white' : 'text-slate-950'}`}>
+                  {item.title}
+                </h3>
+                <p className={`text-xs sm:text-sm leading-relaxed ${isDark ? 'text-zinc-300' : 'text-slate-600'}`}>
+                  {item.description}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* ===================== CYBER BREAKOUT ARCADE SECTION ===================== */}
       <Suspense fallback={<div className="py-24" />}>
@@ -427,7 +680,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
                   : 'border-slate-300 bg-white hover:bg-slate-50 text-[#0F172A] shadow-2xs'
               }`}
             >
-              <span>View All 25+ FAQs</span>
+              <span>View All {FAQS.length} FAQs</span>
               <ArrowUpRight className={`w-3.5 h-3.5 ${isDark ? 'text-[#00F0FF]' : 'text-cyan-700'}`} />
             </button>
           </div>

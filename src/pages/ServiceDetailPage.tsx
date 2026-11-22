@@ -10,6 +10,7 @@ import {
   PoundSterling,
 } from 'lucide-react';
 import { SERVICES } from '../data/services.ts';
+import { SERVICE_LAUNCH_TIMELINES } from '../data/websiteContent.ts';
 import { AdaptiveServiceImage } from '../components/AdaptiveServiceImage.tsx';
 import { FAQAccordion } from '../components/FAQAccordion.tsx';
 import { useTheme } from '../context/ThemeContext.tsx';
@@ -713,6 +714,70 @@ export const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({ slug, onNa
                     <li key={idx}>– {exc}</li>
                   ))}
                 </ul>
+              </div>
+            </div>
+          </div>
+
+          {/* Suitable For & Launch Roadmap */}
+          <div
+            className={`mt-12 pt-12 border-t grid grid-cols-1 lg:grid-cols-12 gap-8 ${
+              isDark ? 'border-white/10' : 'border-slate-200'
+            }`}
+          >
+            <div className="lg:col-span-5 space-y-4">
+              <div className="space-y-1">
+                <p className={`text-xs font-semibold tracking-wide ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`}>
+                  Ideal Fit
+                </p>
+                <h3 className={`text-xl font-extrabold font-display ${isDark ? 'text-white' : 'text-slate-950'}`}>
+                  Who Benefits Most From This Service
+                </h3>
+              </div>
+
+              <ul className="space-y-3">
+                {service.suitableFor.map((audience, idx) => (
+                  <li
+                    key={idx}
+                    className={`p-3.5 rounded-xl border text-sm flex items-start gap-2.5 ${
+                      isDark ? 'bg-[#0C1222]/75 border-white/10 text-slate-200' : 'bg-white border-slate-200 text-slate-800'
+                    }`}
+                  >
+                    <CheckCircle2 className={`w-4 h-4 shrink-0 mt-0.5 ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`} />
+                    <span>{audience}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="lg:col-span-7 space-y-4">
+              <div className="space-y-1">
+                <p className={`text-xs font-semibold tracking-wide ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`}>
+                  Delivery Milestones ({service.typicalTimeline})
+                </p>
+                <h3 className={`text-xl font-extrabold font-display ${isDark ? 'text-white' : 'text-slate-950'}`}>
+                  Step-by-Step Build &amp; Launch Roadmap
+                </h3>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                {(SERVICE_LAUNCH_TIMELINES[service.slug] || []).map((milestone) => (
+                  <div
+                    key={milestone.phase}
+                    className={`p-5 rounded-xl border space-y-2 ${
+                      isDark ? 'bg-[#0C1222]/75 border-white/10' : 'bg-white border-slate-200'
+                    }`}
+                  >
+                    <span className={`text-xs font-mono font-bold tabular-nums block ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`}>
+                      {milestone.window}
+                    </span>
+                    <h4 className={`text-sm font-bold font-display ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                      {milestone.phase}
+                    </h4>
+                    <p className={`text-xs leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
+                      {milestone.detail}
+                    </p>
+                  </div>
+                ))}
               </div>
             </div>
           </div>

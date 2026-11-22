@@ -1,7 +1,8 @@
 import React from 'react';
-import { MessageSquare, Mail, Linkedin, Instagram, Sparkles, ArrowUpRight } from 'lucide-react';
+import { MessageSquare, Mail, Linkedin, Instagram, Sparkles, ArrowUpRight, CheckCircle2, Clock } from 'lucide-react';
 import { ContactForm } from '../components/ContactForm.tsx';
 import { SITE_CONFIG } from '../data/site.ts';
+import { CONTACT_NEXT_STEPS, INQUIRY_PREP_CHECKLIST } from '../data/websiteContent.ts';
 import { useTheme } from '../context/ThemeContext.tsx';
 import { useCustomization } from '../context/CustomizationContext.tsx';
 import { SEOHead } from '../components/SEOHead.tsx';
@@ -186,6 +187,64 @@ export const ContactPage: React.FC = () => {
           {/* Right Column: Project Enquiry Form (Dispatches to saadm.clickncreate@gmail.com) */}
           <div className="lg:col-span-7">
             <ContactForm />
+          </div>
+        </div>
+
+        {/* ===================== WHAT HAPPENS NEXT & BRIEF CHECKLIST ===================== */}
+        <div className="mt-16 pt-16 border-t border-black/[0.08] dark:border-white/[0.08] grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          <div className="lg:col-span-7 space-y-5">
+            <div>
+              <span className={`text-xs font-mono uppercase tracking-wider font-bold ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`}>
+                Clear Response Process
+              </span>
+              <h2 className={`text-2xl sm:text-3xl font-extrabold font-display tracking-tight mt-1 ${isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'}`}>
+                What Happens After You Send Your Message
+              </h2>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              {CONTACT_NEXT_STEPS.map((item) => (
+                <div
+                  key={item.step}
+                  className={`p-5 rounded-2xl border space-y-2 ${
+                    isDark ? 'border-white/10 bg-[#0C1222]/85' : 'border-black/10 bg-white shadow-2xs'
+                  }`}
+                >
+                  <span className={`text-xs font-mono font-bold tabular-nums ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`}>
+                    {item.step}.
+                  </span>
+                  <h3 className={`text-sm font-bold font-display ${isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'}`}>
+                    {item.title}
+                  </h3>
+                  <p className={`text-xs leading-relaxed ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>
+                    {item.detail}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className={`lg:col-span-5 p-6 sm:p-7 rounded-3xl border space-y-4 ${
+            isDark ? 'border-white/10 bg-[#0C1222]/85' : 'border-black/10 bg-white shadow-2xs'
+          }`}>
+            <div className="flex items-center justify-between">
+              <h3 className={`text-base font-bold font-display ${isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'}`}>
+                Helpful Details to Mention
+              </h3>
+              <span className={`inline-flex items-center gap-1 text-[11px] font-mono ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>
+                <Clock className="w-3.5 h-3.5" />
+                <span>Mon–Sat · UK/EU/IN</span>
+              </span>
+            </div>
+
+            <ul className="space-y-2.5 text-xs sm:text-sm">
+              {INQUIRY_PREP_CHECKLIST.map((point) => (
+                <li key={point} className="flex items-start gap-2.5">
+                  <CheckCircle2 className={`w-4 h-4 shrink-0 mt-0.5 ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`} />
+                  <span className={isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}>{point}</span>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       </div>

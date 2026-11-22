@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ArrowUpRight, ChevronDown, ChevronUp, MessageSquare } from 'lucide-react';
 import { SERVICES, ServiceItem } from '../data/services.ts';
+import { SERVICE_SELECTION_MATRIX, ADDON_CAPABILITIES } from '../data/websiteContent.ts';
 import { AdaptiveServiceImage } from '../components/AdaptiveServiceImage.tsx';
 import { FinalCTA } from '../components/FinalCTA.tsx';
 import { useTheme } from '../context/ThemeContext.tsx';
@@ -638,6 +639,126 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({ onNavigate }) => {
             );
           })}
         </div>
+
+        {/* ===================== SERVICE SELECTION MATRIX ===================== */}
+        <section className="mt-20 sm:mt-24 space-y-6">
+          <div className="max-w-3xl space-y-2">
+            <p className={`text-xs font-semibold tracking-wide ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`}>
+              Quick Service Finder
+            </p>
+            <h2 className={`text-2xl sm:text-3xl font-extrabold font-display tracking-tight ${isDark ? 'text-[#F8FAFC]' : 'text-[#0F172A]'}`}>
+              Not Sure Which Service Fits Your Goal?
+            </h2>
+            <p className={`text-sm sm:text-base ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
+              Match your immediate business objective to the right discipline, typical hour budget, and expected launch timeframe.
+            </p>
+          </div>
+
+          <div
+            className={`rounded-2xl border overflow-hidden ${
+              isDark ? 'border-white/10 bg-[#0C1222]/85' : 'border-slate-200 bg-white shadow-xs'
+            }`}
+          >
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse min-w-[680px]">
+                <thead>
+                  <tr
+                    className={`border-b text-xs font-mono uppercase tracking-wider ${
+                      isDark ? 'border-white/10 bg-white/[0.03] text-slate-300' : 'border-slate-200 bg-slate-50 text-slate-700'
+                    }`}
+                  >
+                    <th className="py-4 px-5 font-bold">If Your Goal Is...</th>
+                    <th className="py-4 px-5 font-bold">Recommended Service</th>
+                    <th className="py-4 px-5 font-bold">Typical Effort</th>
+                    <th className="py-4 px-5 font-bold">Timeline</th>
+                    <th className="py-4 px-5 font-bold">Primary Deliverable</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-black/10 dark:divide-white/10 text-xs sm:text-sm">
+                  {SERVICE_SELECTION_MATRIX.map((row) => (
+                    <tr
+                      key={row.slug}
+                      className={isDark ? 'hover:bg-white/[0.02]' : 'hover:bg-slate-50/70'}
+                    >
+                      <td className={`py-4 px-5 font-medium ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                        {row.goal}
+                      </td>
+                      <td className="py-4 px-5">
+                        <button
+                          type="button"
+                          onClick={() => onNavigate(`/services/${row.slug}`)}
+                          className={`font-semibold inline-flex items-center gap-1 hover:underline cursor-pointer ${
+                            isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'
+                          }`}
+                        >
+                          <span>{row.recommendedService}</span>
+                          <ArrowUpRight className="w-3.5 h-3.5" />
+                        </button>
+                      </td>
+                      <td className={`py-4 px-5 font-mono tabular-nums ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                        {row.typicalHours}
+                      </td>
+                      <td className={`py-4 px-5 font-mono tabular-nums ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                        {row.typicalTimeline}
+                      </td>
+                      <td className={`py-4 px-5 ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
+                        {row.keyOutcome}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        {/* ===================== STANDALONE ADD-ON CAPABILITIES ===================== */}
+        <section className="mt-16 sm:mt-20 space-y-8">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+            <div className="max-w-2xl space-y-2">
+              <p className={`text-xs font-semibold tracking-wide ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`}>
+                Modular Upgrades (£35/hr)
+              </p>
+              <h2 className={`text-2xl sm:text-3xl font-extrabold font-display tracking-tight ${isDark ? 'text-[#F8FAFC]' : 'text-[#0F172A]'}`}>
+                Standalone Improvements &amp; Technical Add-Ons
+              </h2>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => onNavigate('/estimator')}
+              className={`px-4 py-2.5 rounded-xl border text-xs font-semibold inline-flex items-center gap-1.5 cursor-pointer self-start sm:self-auto ${
+                isDark
+                  ? 'border-white/15 bg-white/[0.04] hover:bg-white/[0.09] text-white'
+                  : 'border-slate-300 bg-white hover:bg-slate-50 text-slate-900'
+              }`}
+            >
+              <span>Combine in Cost Estimator</span>
+              <ArrowUpRight className="w-3.5 h-3.5" />
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {ADDON_CAPABILITIES.map((addon) => (
+              <div
+                key={addon.title}
+                className={`p-6 rounded-2xl border space-y-2.5 ${
+                  isDark ? 'border-white/10 bg-[#0C1222]/85' : 'border-slate-200 bg-white shadow-2xs'
+                }`}
+              >
+                <div className={`text-xs font-mono font-bold tabular-nums ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`}>
+                  {addon.estimate}
+                </div>
+                <h3 className={`text-base font-bold font-display ${isDark ? 'text-white' : 'text-slate-950'}`}>
+                  {addon.title}
+                </h3>
+                <p className={`text-xs sm:text-sm leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
+                  {addon.summary}
+                </p>
+              </div>
+            ))}
+          </div>
+        </section>
       </div>
 
       {/* Final CTA */}

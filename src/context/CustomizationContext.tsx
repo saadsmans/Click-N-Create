@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { loadGoogleFont, loadGoogleFontsBatch, FONT_CATALOG } from '../data/themeCatalog.ts';
 import { SeoConfig, Invoice, ThemeTokens } from '../types/index.ts';
 import { safeParseJson } from '../utils/api.ts';
+import { FAQS } from '../data/faqs.ts';
 
 export type { ThemeTokens };
 
@@ -446,32 +447,7 @@ export const DEFAULT_CUSTOMIZATION: SiteCustomization = {
       heroTitle: 'FREQUENTLY ASKED',
       heroHighlight: 'QUESTIONS & ANSWERS',
       heroSubtitle: 'Straightforward answers regarding rates, delivery timelines, payment terms, and working directly with Saad M.',
-      faqsList: [
-        {
-          id: 'faq-1',
-          question: 'What is your standard rate and how do payments work?',
-          answer: 'My standard rate is £35/hour. For defined projects, I offer fixed milestone packages (e.g. 50% deposit upon start, 50% upon successful launch). All prices are completely transparent with zero hidden fees.',
-          category: 'Pricing',
-        },
-        {
-          id: 'faq-2',
-          question: 'How long does it take to build a website?',
-          answer: 'A standard 5-page business website typically takes 1 to 2 weeks. E-commerce shops take roughly 2 to 3 weeks. Express rush delivery is also available if you have an urgent launch deadline.',
-          category: 'Timeline',
-        },
-        {
-          id: 'faq-3',
-          question: 'Can I easily edit words and prices myself after launch?',
-          answer: 'Yes! Every project includes a personalized video walkthrough showing you exactly how to edit text, update prices, or add new photos yourself anytime without needing to write code.',
-          category: 'Management',
-        },
-        {
-          id: 'faq-4',
-          question: 'Do you provide website hosting and domain setup?',
-          answer: 'Yes, I handle connecting your domain, setting up high-speed cloud hosting, free SSL security locks, and automated daily backups.',
-          category: 'Hosting',
-        },
-      ],
+      faqsList: FAQS,
     },
   },
   updatedAt: new Date().toISOString(),

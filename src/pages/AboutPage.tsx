@@ -12,6 +12,7 @@ import {
 import { SectionHeading } from '../components/SectionHeading.tsx';
 import { MagneticButton } from '../components/MagneticButton.tsx';
 import { SITE_CONFIG } from '../data/site.ts';
+import { ENGINEERING_COURSEWORK_MODULES, TIMEZONE_AVAILABILITY } from '../data/websiteContent.ts';
 import { useTheme } from '../context/ThemeContext.tsx';
 import { useCustomization } from '../context/CustomizationContext.tsx';
 import { SEOHead } from '../components/SEOHead.tsx';
@@ -373,6 +374,70 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
               <p className={`text-xs leading-relaxed ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>
                 Structured Schema.org JSON-LD, OpenGraph share previews, and Core Web Vitals speed optimization.
               </p>
+            </div>
+          </div>
+        </div>
+
+        {/* ===================== ENGINEERING BACKGROUND & GLOBAL TIMEZONE AVAILABILITY ===================== */}
+        <div className="py-20 border-b border-black/[0.08] dark:border-white/[0.08] space-y-16">
+          <div className="space-y-6">
+            <SectionHeading
+              category="Education & Academic Track"
+              title="ENGINEERING RIGOUR APPLIED TO WEB SOFTWARE"
+              subtitle="Studying BE Electronics & Communication Engineering at GEC Bharuch (2023–2027) alongside circuit simulation training with IIT Bombay Spoken Tutorial."
+              className="mb-4"
+            />
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+              {ENGINEERING_COURSEWORK_MODULES.map((mod) => (
+                <div
+                  key={mod.area}
+                  className={`p-6 rounded-2xl border space-y-2.5 ${
+                    isDark ? 'border-white/10 bg-[#0C1222]/85' : 'border-black/10 bg-white shadow-2xs'
+                  }`}
+                >
+                  <h4 className={`text-sm font-bold font-display ${isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'}`}>
+                    {mod.area}
+                  </h4>
+                  <p className={`text-xs leading-relaxed ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>
+                    {mod.relevance}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="space-y-6">
+            <SectionHeading
+              category="Working Hours & Overlapping Support"
+              title="TIMEZONE COVERAGE & RESPONSE WINDOWS"
+              subtitle="Full business-day overlap with clients across the United Kingdom, Europe, Middle East, and India."
+              className="mb-4"
+            />
+
+            <div className={`rounded-2xl border overflow-hidden ${isDark ? 'border-white/10 bg-[#0C1222]/85' : 'border-black/10 bg-white shadow-2xs'}`}>
+              <div className="overflow-x-auto">
+                <table className="w-full text-left border-collapse min-w-[620px]">
+                  <thead>
+                    <tr className={`border-b text-xs font-mono uppercase tracking-wider ${isDark ? 'border-white/10 bg-white/[0.03] text-slate-300' : 'border-black/10 bg-slate-50 text-slate-700'}`}>
+                      <th className="py-3.5 px-5 font-bold">Client Region</th>
+                      <th className="py-3.5 px-5 font-bold">Timezone</th>
+                      <th className="py-3.5 px-5 font-bold">Live Collaboration Window</th>
+                      <th className="py-3.5 px-5 font-bold">Primary Channel</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-black/10 dark:divide-white/10 text-xs sm:text-sm">
+                    {TIMEZONE_AVAILABILITY.map((tz) => (
+                      <tr key={tz.region}>
+                        <td className={`py-3.5 px-5 font-semibold ${isDark ? 'text-white' : 'text-slate-900'}`}>{tz.region}</td>
+                        <td className={`py-3.5 px-5 font-mono ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`}>{tz.timezone}</td>
+                        <td className={`py-3.5 px-5 ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>{tz.overlapWindow}</td>
+                        <td className={`py-3.5 px-5 font-mono text-xs ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>{tz.supportChannel}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>

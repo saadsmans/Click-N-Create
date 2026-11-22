@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { HelpCircle, Search } from 'lucide-react';
+import { ArrowUpRight, CheckCircle2, HelpCircle, Search } from 'lucide-react';
 import { FAQS, FaqItem } from '../data/faqs.ts';
+import { INQUIRY_PREP_CHECKLIST } from '../data/websiteContent.ts';
 import { FAQAccordion } from '../components/FAQAccordion.tsx';
 import { MagneticButton } from '../components/MagneticButton.tsx';
 import { useTheme } from '../context/ThemeContext.tsx';
@@ -19,7 +20,13 @@ export const FAQPage: React.FC<FAQPageProps> = ({ onNavigate }) => {
   const { getPageContent } = useCustomization();
   const cms = getPageContent('faq') || {};
 
-  const activeFaqs: FaqItem[] = (cms.faqsList && cms.faqsList.length > 0) ? cms.faqsList : FAQS;
+  const isLegacyStub =
+    Array.isArray(cms.faqsList) &&
+    cms.faqsList.length <= 4 &&
+    cms.faqsList.every((item: any) => typeof item?.id === 'string' && /^faq-[1-4]$/.test(item.id));
+
+  const activeFaqs: FaqItem[] =
+    cms.faqsList && cms.faqsList.length > 0 && !isLegacyStub ? cms.faqsList : FAQS;
 
   const categories = [
     'All',
@@ -30,6 +37,15 @@ export const FAQPage: React.FC<FAQPageProps> = ({ onNavigate }) => {
     'Technical & Technology',
     'Ownership & Legal',
   ];
+
+  const getCategoryCount = (cat: string) => {
+    if (cat === 'All') return activeFaqs.length;
+    return activeFaqs.filter(
+      (faq: any) =>
+        faq?.category === cat ||
+        (cat === 'Pricing & Rates' && (faq?.category === 'Pricing' || faq?.category === 'Pricing & Rates'))
+    ).length;
+  };
 
   const filteredFaqs = (activeFaqs || []).filter((faq: any) => {
     if (!faq || !faq.question) return false;
@@ -43,7 +59,7 @@ export const FAQPage: React.FC<FAQPageProps> = ({ onNavigate }) => {
     return matchesCategory && matchesQuery;
   });
 
-  const schemaFaqItems = (activeFaqs || []).slice(0, 10).map((f) => ({
+  const schemaFaqItems = (activeFaqs || []).slice(0, 15).map((f) => ({
     '@type': 'Question',
     name: f.question || '',
     acceptedAnswer: {
@@ -56,7 +72,7 @@ export const FAQPage: React.FC<FAQPageProps> = ({ onNavigate }) => {
     <div className="pt-28 pb-20 md:pt-36 relative overflow-x-clip w-full max-w-full">
       <SEOHead
         title="Frequently Asked Questions (FAQ) | Click N Create — Saad M"
-        description="Get instant answers about pricing (£35/hr), turnarounds, contracts, intellectual property rights, maintenance, and working directly with Saad M."
+        description="Get instant answers to 33 frequently asked questions about pricing (£35/hr), turnarounds, contracts, intellectual property rights, maintenance, and working directly with Saad M."
         canonicalPath="/faq"
         keywords={[
           'freelance web development FAQ',
@@ -80,7 +96,7 @@ export const FAQPage: React.FC<FAQPageProps> = ({ onNavigate }) => {
               : 'border-[#1D4ED8]/30 bg-[#F3E9DC]/75 text-[#1E40AF] shadow-2xs font-semibold'
           }`}>
             <HelpCircle className="w-3.5 h-3.5" />
-            <span>{cms.badgeText || 'Transparency & Answers'}</span>
+            <span>{cms.badgeText || `${activeFaqs.length} Questions Answered`}</span>
           </div>
 
           <h1 className={`text-4xl sm:text-5xl font-black font-display tracking-tight leading-[1.1] ${
@@ -105,7 +121,7 @@ export const FAQPage: React.FC<FAQPageProps> = ({ onNavigate }) => {
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search questions (e.g., cost, e-commerce, timeline)..."
+              placeholder="Search questions (e.g., cost, e-commerce, timeline, domain)..."
               className={`w-full pl-11 pr-4 py-3.5 rounded-2xl border text-sm transition-all focus:outline-none focus:ring-2 ${
                 isDark
                   ? 'border-white/10 bg-[#0C1222]/85 text-[#F1F5F9] placeholder:text-[#94A3B8] focus:border-[#38BDF8] focus:ring-[#38BDF8]/20'
@@ -121,7 +137,7 @@ export const FAQPage: React.FC<FAQPageProps> = ({ onNavigate }) => {
                 key={cat}
                 type="button"
                 onClick={() => setActiveCategory(cat)}
-                className={`px-4 py-1.5 rounded-xl text-xs font-mono transition-all cursor-pointer ${
+                className={`px-3.5 py-1.5 rounded-xl text-xs font-mono transition-all cursor-pointer ${
                   activeCategory === cat
                     ? isDark
                       ? 'bg-[#38BDF8] text-[#060913] font-bold border border-[#38BDF8] shadow-xs'
@@ -131,10 +147,14 @@ export const FAQPage: React.FC<FAQPageProps> = ({ onNavigate }) => {
                     : 'bg-white text-[#475569] border border-black/10 hover:text-[#0F172A]'
                 }`}
               >
-                {cat}
+                {cat} ({getCategoryCount(cat)})
               </button>
             ))}
           </div>
+
+          <p className={`text-xs font-mono ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>
+            Showing {filteredFaqs.length} of {activeFaqs.length} questions
+          </p>
         </div>
 
         {/* FAQ Accordion List */}
@@ -157,6 +177,57 @@ export const FAQPage: React.FC<FAQPageProps> = ({ onNavigate }) => {
             </button>
           </div>
         )}
+
+        {/* Quick Resource Directory & Pre-Inquiry Checklist */}
+        <div className="mt-14 grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className={`p-6 rounded-3xl border space-y-4 ${
+            isDark ? 'border-white/10 bg-[#0C1222]/85' : 'border-black/10 bg-white shadow-2xs'
+          }`}>
+            <h3 className={`text-base font-bold font-display ${isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'}`}>
+              Explore Helpful Pages &amp; Tools
+            </h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs font-mono">
+              {[
+                { label: 'Instant Cost Calculator', path: '/estimator' },
+                { label: 'Transparent Pricing (£35/hr)', path: '/pricing' },
+                { label: 'My Works (Live Previews)', path: '/my-works' },
+                { label: '5-Stage Build Process', path: '/process' },
+                { label: 'Speed & Security Standards', path: '/standards' },
+                { label: 'Full Portfolio & CV', path: '/portfolio' },
+              ].map((link) => (
+                <button
+                  key={link.path}
+                  type="button"
+                  onClick={() => onNavigate(link.path)}
+                  className={`p-3 rounded-xl border text-left flex items-center justify-between transition-colors cursor-pointer ${
+                    isDark
+                      ? 'border-white/10 bg-white/[0.03] hover:border-[#38BDF8]/40 text-slate-200'
+                      : 'border-black/10 bg-slate-50 hover:border-[#1D4ED8]/40 text-slate-800'
+                  }`}
+                >
+                  <span>{link.label}</span>
+                  <ArrowUpRight className={`w-3.5 h-3.5 shrink-0 ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`} />
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className={`p-6 rounded-3xl border space-y-4 ${
+            isDark ? 'border-white/10 bg-[#0C1222]/85' : 'border-black/10 bg-white shadow-2xs'
+          }`}>
+            <h3 className={`text-base font-bold font-display ${isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'}`}>
+              Helpful Details Before Requesting a Quote
+            </h3>
+            <ul className="space-y-2.5 text-xs sm:text-sm">
+              {INQUIRY_PREP_CHECKLIST.map((item) => (
+                <li key={item} className="flex items-start gap-2.5">
+                  <CheckCircle2 className={`w-4 h-4 shrink-0 mt-0.5 ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`} />
+                  <span className={isDark ? 'text-slate-300' : 'text-slate-600'}>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
 
         {/* Still Have Questions Box */}
         <div className={`mt-16 p-8 rounded-3xl border text-center space-y-4 backdrop-blur-xl ${

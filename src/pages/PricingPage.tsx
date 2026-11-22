@@ -2,6 +2,12 @@ import React, { useState } from 'react';
 import { CheckCircle2, ArrowUpRight, Calculator, Sparkles, MessageSquare } from 'lucide-react';
 import { SectionHeading } from '../components/SectionHeading.tsx';
 import { SITE_CONFIG } from '../data/site.ts';
+import {
+  PRICING_COMPARISON_MODELS,
+  MAINTENANCE_PLANS,
+  INCLUDED_VS_THIRD_PARTY,
+  EXTRA_BILLING_FAQS,
+} from '../data/websiteContent.ts';
 import { useTheme } from '../context/ThemeContext.tsx';
 import { useCustomization } from '../context/CustomizationContext.tsx';
 import { SEOHead } from '../components/SEOHead.tsx';
@@ -423,6 +429,139 @@ export const PricingPage: React.FC<PricingPageProps> = ({ onNavigate }) => {
           </div>
         </div>
 
+        {/* ===================== HOURLY VS FIXED COMPARISON ===================== */}
+        <div className="mb-20">
+          <SectionHeading
+            category="Choosing How to Engage"
+            title="HOURLY (£35/HR) VS. FIXED MILESTONE PACKAGES"
+            subtitle="Pick flexible hourly billing for updates and consulting, or lock in a predictable fixed project total upfront."
+          />
+
+          <div
+            className={`mt-6 rounded-2xl border overflow-hidden ${
+              isDark ? 'border-white/10 bg-[#0C1222]/85' : 'border-black/10 bg-white shadow-xs'
+            }`}
+          >
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse min-w-[620px]">
+                <thead>
+                  <tr
+                    className={`border-b text-xs font-mono uppercase tracking-wider ${
+                      isDark ? 'border-white/10 bg-white/[0.03] text-slate-300' : 'border-black/10 bg-slate-50 text-slate-700'
+                    }`}
+                  >
+                    <th className="py-4 px-5 font-bold w-1/3">Comparison Aspect</th>
+                    <th className={`py-4 px-5 font-bold w-1/3 ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`}>
+                      Hourly Rate (£35/hr)
+                    </th>
+                    <th className="py-4 px-5 font-bold w-1/3">Fixed Milestone Package</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-black/10 dark:divide-white/10 text-xs sm:text-sm">
+                  {PRICING_COMPARISON_MODELS.map((row) => (
+                    <tr key={row.feature} className={isDark ? 'hover:bg-white/[0.02]' : 'hover:bg-slate-50/70'}>
+                      <td className={`py-4 px-5 font-semibold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                        {row.feature}
+                      </td>
+                      <td className={`py-4 px-5 leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
+                        {row.hourly}
+                      </td>
+                      <td className={`py-4 px-5 leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
+                        {row.fixed}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        {/* ===================== ONGOING MAINTENANCE & SUPPORT PLANS ===================== */}
+        <div className="mb-20">
+          <SectionHeading
+            category="After Your Site Launches"
+            title="OPTIONAL MAINTENANCE & SUPPORT PLANS"
+            subtitle="Zero mandatory retainers. Stay on free pay-as-you-go hourly support or pick a monthly care tier for routine backups and edits."
+            align="center"
+          />
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6">
+            {MAINTENANCE_PLANS.map((plan) => (
+              <div
+                key={plan.name}
+                className={`p-7 rounded-3xl border flex flex-col justify-between ${
+                  isDark ? 'border-white/10 bg-[#0C1222]/85' : 'border-black/10 bg-white shadow-2xs'
+                }`}
+              >
+                <div className="space-y-4">
+                  <div>
+                    <span className={`text-xs font-mono uppercase ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`}>
+                      {plan.cadence}
+                    </span>
+                    <h3 className="text-xl font-bold font-display mt-1">{plan.name}</h3>
+                    <div className={`text-2xl font-extrabold font-display tabular-nums mt-2 ${isDark ? 'text-white' : 'text-slate-950'}`}>
+                      {plan.price}
+                    </div>
+                  </div>
+                  <p className={`text-xs leading-relaxed ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>
+                    {plan.idealFor}
+                  </p>
+                  <ul className="space-y-2 pt-2 border-t border-black/10 dark:border-white/10">
+                    {plan.features.map((feat) => (
+                      <li key={feat} className="flex items-start gap-2 text-xs">
+                        <CheckCircle2 className={`w-4 h-4 shrink-0 mt-0.5 ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`} />
+                        <span className={isDark ? 'text-slate-200' : 'text-slate-700'}>{feat}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => onNavigate('/contact')}
+                  className={`mt-6 w-full py-2.5 rounded-xl border text-xs font-mono transition-colors cursor-pointer ${
+                    isDark ? 'border-white/15 hover:bg-white/10 text-white' : 'border-black/15 hover:bg-slate-50 text-slate-900'
+                  }`}
+                >
+                  Select {plan.name}
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* ===================== INCLUDED VS THIRD-PARTY BREAKDOWN ===================== */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-20">
+          <div className={`p-7 rounded-3xl border space-y-4 ${isDark ? 'border-white/10 bg-[#0C1222]/85' : 'border-black/10 bg-white shadow-2xs'}`}>
+            <h3 className={`text-lg font-bold font-display ${isDark ? 'text-white' : 'text-slate-950'}`}>
+              Always Included in Your Project Quote
+            </h3>
+            <ul className="space-y-2.5 text-xs sm:text-sm">
+              {INCLUDED_VS_THIRD_PARTY.included.map((item) => (
+                <li key={item} className="flex items-start gap-2.5">
+                  <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5 text-emerald-500" />
+                  <span className={isDark ? 'text-slate-300' : 'text-slate-700'}>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className={`p-7 rounded-3xl border space-y-4 ${isDark ? 'border-white/10 bg-[#0C1222]/85' : 'border-black/10 bg-white shadow-2xs'}`}>
+            <h3 className={`text-lg font-bold font-display ${isDark ? 'text-white' : 'text-slate-950'}`}>
+              Direct Third-Party Account Costs (No Markup)
+            </h3>
+            <ul className="space-y-2.5 text-xs sm:text-sm">
+              {INCLUDED_VS_THIRD_PARTY.thirdParty.map((item) => (
+                <li key={item} className={`flex items-start gap-2.5 ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
+                  <span className={`font-mono font-bold shrink-0 ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`}>·</span>
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
         {/* ===================== PRICING FAQ SECTION ===================== */}
         <div className="max-w-4xl mx-auto py-12">
           <SectionHeading
@@ -452,6 +591,15 @@ export const PricingPage: React.FC<PricingPageProps> = ({ onNavigate }) => {
                 None. Any third-party costs (such as your domain registration ~£10/year or specialized paid API accounts) are registered directly in your name so you retain permanent ownership without agency markup.
               </p>
             </div>
+
+            {EXTRA_BILLING_FAQS.map((item) => (
+              <div key={item.question} className={`p-6 rounded-2xl border ${isDark ? 'border-white/10 bg-[#0C1222]/85' : 'border-black/10 bg-white'}`}>
+                <h4 className="text-base font-bold font-display mb-2">{item.question}</h4>
+                <p className={`text-sm leading-relaxed ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>
+                  {item.answer}
+                </p>
+              </div>
+            ))}
           </div>
         </div>
       </div>

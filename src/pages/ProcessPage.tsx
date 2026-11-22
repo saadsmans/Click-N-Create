@@ -4,6 +4,7 @@ import { CheckCircle2, Sparkles, Clock, ShieldCheck, Terminal } from 'lucide-rea
 import { SectionHeading } from '../components/SectionHeading.tsx';
 import { MagneticButton } from '../components/MagneticButton.tsx';
 import { PROCESS_STAGES } from '../data/site.ts';
+import { WEEKLY_CADENCE, CLIENT_LAUNCH_CHECKLIST } from '../data/websiteContent.ts';
 import { useTheme } from '../context/ThemeContext.tsx';
 import { useCustomization } from '../context/CustomizationContext.tsx';
 import { SEOHead } from '../components/SEOHead.tsx';
@@ -173,6 +174,69 @@ export const ProcessPage: React.FC<ProcessPageProps> = ({ onNavigate }) => {
               <p className={`text-xs leading-relaxed ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>
                 Clear milestone updates delivered directly via WhatsApp or email so you always know current progress.
               </p>
+            </div>
+          </div>
+        </div>
+
+        {/* ===================== COMMUNICATION CADENCE & CLIENT READINESS ===================== */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 pb-16 border-b border-black/[0.08] dark:border-white/[0.08] mb-16">
+          <div className="lg:col-span-6 space-y-5">
+            <SectionHeading
+              category="Live Collaboration Rhythm"
+              title="STAYING IN SYNC DURING THE BUILD"
+              subtitle="Zero week-long radio silence. You review working staging links every 48 hours and message Saad directly."
+              className="mb-4"
+            />
+            <div className="space-y-4">
+              {WEEKLY_CADENCE.map((item) => (
+                <div
+                  key={item.cadence}
+                  className={`p-5 rounded-2xl border space-y-1.5 ${
+                    isDark ? 'border-white/10 bg-[#0C1222]/85' : 'border-black/10 bg-white shadow-2xs'
+                  }`}
+                >
+                  <span className={`text-xs font-mono font-bold uppercase ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`}>
+                    {item.cadence}
+                  </span>
+                  <h4 className={`text-base font-bold font-display ${isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'}`}>
+                    {item.title}
+                  </h4>
+                  <p className={`text-xs sm:text-sm leading-relaxed ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>
+                    {item.detail}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="lg:col-span-6 space-y-5">
+            <SectionHeading
+              category="Launch Faster"
+              title="WHAT HELPS US KICK OFF QUICKLY"
+              subtitle="Having these four items roughly ready speeds up Stage 01 & Stage 02 — though Saad can help prepare any missing piece."
+              className="mb-4"
+            />
+            <div className="space-y-4">
+              {CLIENT_LAUNCH_CHECKLIST.map((entry, idx) => (
+                <div
+                  key={entry.item}
+                  className={`p-5 rounded-2xl border flex items-start gap-3.5 ${
+                    isDark ? 'border-white/10 bg-[#0C1222]/85' : 'border-black/10 bg-white shadow-2xs'
+                  }`}
+                >
+                  <span className={`font-mono text-xs font-bold tabular-nums mt-0.5 ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`}>
+                    0{idx + 1}.
+                  </span>
+                  <div className="space-y-1">
+                    <h4 className={`text-sm font-bold font-display ${isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'}`}>
+                      {entry.item}
+                    </h4>
+                    <p className={`text-xs leading-relaxed ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>
+                      {entry.note}
+                    </p>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>

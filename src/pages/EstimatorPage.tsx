@@ -15,6 +15,7 @@ import {
   Check,
 } from 'lucide-react';
 import { SITE_CONFIG } from '../data/site.ts';
+import { BUDGET_BENCHMARKS, ESTIMATE_TO_QUOTE_STEPS } from '../data/websiteContent.ts';
 import { useTheme } from '../context/ThemeContext.tsx';
 import { useCustomization } from '../context/CustomizationContext.tsx';
 import { SEOHead } from '../components/SEOHead.tsx';
@@ -1379,6 +1380,97 @@ WhatsApp: +44 7927 548123`;
             </div>
           </div>
         </div>
+
+        {/* ===================== REAL-WORLD BUDGET BENCHMARKS ===================== */}
+        <section className="mt-20 pt-16 border-t border-black/[0.08] dark:border-white/[0.08] space-y-10">
+          <div className="max-w-3xl space-y-2">
+            <span className={`text-xs font-mono uppercase tracking-widest font-bold ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`}>
+              Reference Benchmarks
+            </span>
+            <h2 className={`text-2xl sm:text-3xl font-extrabold font-display tracking-tight ${isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'}`}>
+              Typical Real-World Project Budgets
+            </h2>
+            <p className={`text-sm sm:text-base ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>
+              Compare your calculated estimate above with four common scope benchmarks delivered at £35/hr or locked fixed milestone pricing.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+            {BUDGET_BENCHMARKS.map((item) => (
+              <div
+                key={item.tier}
+                className={`p-6 rounded-2xl border flex flex-col justify-between space-y-4 ${
+                  isDark ? 'border-white/10 bg-[#0C1222]/85' : 'border-stone-200 bg-white shadow-2xs'
+                }`}
+              >
+                <div className="space-y-2.5">
+                  <div className="flex items-center justify-between text-xs font-mono">
+                    <span className={`font-bold ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`}>{item.tier}</span>
+                    <span className={`tabular-nums ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>{item.timeline}</span>
+                  </div>
+                  <h3 className={`text-base font-bold font-display ${isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'}`}>
+                    {item.title}
+                  </h3>
+                  <div className={`text-xl font-black font-display tabular-nums ${isDark ? 'text-[#BAE6FD]' : 'text-[#1E40AF]'}`}>
+                    {item.priceRange}
+                  </div>
+                  <div className={`text-xs font-mono tabular-nums ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>
+                    Approx. {item.hoursRange} @ £35/hr
+                  </div>
+                  <p className={`text-xs leading-relaxed pt-1 ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>
+                    {item.bestFor}
+                  </p>
+                </div>
+
+                <ul className="space-y-1.5 pt-3 border-t border-black/10 dark:border-white/10 text-xs">
+                  {item.includes.map((inc) => (
+                    <li key={inc} className="flex items-start gap-2">
+                      <CheckCircle2 className={`w-3.5 h-3.5 shrink-0 mt-0.5 ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`} />
+                      <span className={isDark ? 'text-[#F1F5F9]/85' : 'text-[#334155]'}>{inc}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+
+          {/* From Calculator Estimate to Fixed Quote */}
+          <div
+            className={`p-6 sm:p-8 rounded-3xl border space-y-6 ${
+              isDark ? 'border-white/10 bg-[#0C1222]/85' : 'border-stone-200 bg-[#F8FAFC]'
+            }`}
+          >
+            <div>
+              <span className={`text-xs font-mono uppercase tracking-wider font-bold ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`}>
+                What Happens Next
+              </span>
+              <h3 className={`text-xl font-bold font-display mt-1 ${isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'}`}>
+                How Your Instant Estimate Becomes a Locked Fixed-Price Quote
+              </h3>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+              {ESTIMATE_TO_QUOTE_STEPS.map((step) => (
+                <div
+                  key={step.step}
+                  className={`p-5 rounded-2xl border space-y-2 ${
+                    isDark ? 'border-white/10 bg-[#070B16]' : 'border-stone-200 bg-white'
+                  }`}
+                >
+                  <span className={`text-xs font-mono font-bold tabular-nums ${isDark ? 'text-[#38BDF8]' : 'text-[#1D4ED8]'}`}>
+                    Step {step.step}
+                  </span>
+                  <h4 className={`text-sm font-bold font-display ${isDark ? 'text-[#F1F5F9]' : 'text-[#0F172A]'}`}>
+                    {step.title}
+                  </h4>
+                  <p className={`text-xs leading-relaxed ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>
+                    {step.detail}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
       </div>
     </div>
   );

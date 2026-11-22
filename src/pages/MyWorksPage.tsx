@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { SEOHead } from '../components/SEOHead.tsx';
 import { useTheme } from '../context/ThemeContext.tsx';
+import { WORK_ARCHITECTURAL_SPECS, PORTFOLIO_LAUNCH_SPRINT } from '../data/websiteContent.ts';
 
 interface MyWorksPageProps {
   onNavigate: (path: string) => void;
@@ -449,9 +450,119 @@ export const MyWorksPage: React.FC<MyWorksPageProps> = ({ onNavigate }) => {
           })}
         </div>
 
+        {/* Architectural Breakdown & Delivery Workflow */}
+        <section className="mt-20 sm:mt-24 space-y-12">
+          <div className="max-w-3xl">
+            <p
+              className={`text-xs font-mono font-semibold uppercase tracking-[0.2em] mb-3 ${
+                isDark ? 'text-[#00F0FF]' : 'text-cyan-700'
+              }`}
+            >
+              Engineering Specifications
+            </p>
+            <h2
+              className={`text-2xl sm:text-3xl md:text-4xl font-black font-display tracking-tight text-balance ${
+                isDark ? 'text-white' : 'text-slate-950'
+              }`}
+            >
+              How Each Client Website Was Architected
+            </h2>
+            <p className={`mt-3 text-sm sm:text-base leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
+              Beyond visual screenshots, every project is structured around clear performance targets, mobile readability, and purpose-built interactive tooling.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {WORK_ARCHITECTURAL_SPECS.map((spec, idx) => (
+              <div
+                key={spec.id}
+                className={`p-6 sm:p-8 rounded-2xl border space-y-5 ${
+                  isDark ? 'border-white/10 bg-[#0A0A16]/85' : 'border-slate-200 bg-white shadow-xs'
+                }`}
+              >
+                <div className="flex items-center justify-between gap-4 pb-4 border-b border-black/10 dark:border-white/10">
+                  <div>
+                    <span className={`text-xs font-mono font-bold tabular-nums ${isDark ? 'text-[#00F0FF]' : 'text-cyan-700'}`}>
+                      Project 0{idx + 1} · {spec.deliveryWindow}
+                    </span>
+                    <h3 className={`text-lg font-bold font-display mt-0.5 ${isDark ? 'text-white' : 'text-slate-950'}`}>
+                      {spec.client}
+                    </h3>
+                  </div>
+                  <span className={`text-xs font-mono ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                    {spec.domain}
+                  </span>
+                </div>
+
+                <div className="space-y-4 text-xs sm:text-sm">
+                  <div>
+                    <span className={`font-semibold block mb-1 ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                      Core Challenge Solved
+                    </span>
+                    <p className={isDark ? 'text-slate-300' : 'text-slate-600'}>{spec.problemSolved}</p>
+                  </div>
+                  <div>
+                    <span className={`font-semibold block mb-1 ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                      Architectural Decision
+                    </span>
+                    <p className={isDark ? 'text-slate-300' : 'text-slate-600'}>{spec.architectureDecision}</p>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-black/10 dark:border-white/10 text-xs">
+                    <div>
+                      <span className={`block font-mono ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Performance</span>
+                      <span className={`font-medium ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>{spec.performanceTarget}</span>
+                    </div>
+                    <div>
+                      <span className={`block font-mono ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Viewport QA</span>
+                      <span className={`font-medium ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>{spec.responsiveScope}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* 5-7 Day Launch Sprint Timeline */}
+          <div
+            className={`p-6 sm:p-8 rounded-3xl border ${
+              isDark ? 'border-white/10 bg-[#0A0A16]/75' : 'border-slate-200 bg-slate-50/80'
+            }`}
+          >
+            <div className="mb-6">
+              <span className={`text-xs font-mono font-semibold uppercase tracking-wider ${isDark ? 'text-[#00F0FF]' : 'text-cyan-700'}`}>
+                5 – 7 Day Delivery Workflow
+              </span>
+              <h3 className={`text-xl sm:text-2xl font-bold font-display mt-1 ${isDark ? 'text-white' : 'text-slate-950'}`}>
+                How Custom Client Websites Go From Brief to Live Domain
+              </h3>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+              {PORTFOLIO_LAUNCH_SPRINT.map((item) => (
+                <div
+                  key={item.step}
+                  className={`p-5 rounded-2xl border space-y-2 ${
+                    isDark ? 'border-white/10 bg-[#0E101D]' : 'border-slate-200 bg-white'
+                  }`}
+                >
+                  <span className={`text-xs font-mono font-bold tabular-nums ${isDark ? 'text-[#00F0FF]' : 'text-cyan-700'}`}>
+                    {item.step}
+                  </span>
+                  <h4 className={`text-sm font-bold font-display ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                    {item.title}
+                  </h4>
+                  <p className={`text-xs leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
+                    {item.detail}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* Bottom Project CTA */}
         <section
-          className={`mt-20 sm:mt-24 rounded-3xl border p-8 sm:p-12 flex flex-col lg:flex-row lg:items-center justify-between gap-8 ${
+          className={`mt-16 sm:mt-20 rounded-3xl border p-8 sm:p-12 flex flex-col lg:flex-row lg:items-center justify-between gap-8 ${
             isDark
               ? 'border-white/10 bg-[#0A0A16]/85'
               : 'border-slate-200 bg-white shadow-sm'
